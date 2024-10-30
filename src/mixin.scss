@@ -1,0 +1,28 @@
+@mixin dFlex($ai: center, $jc: center) {
+display: flex;
+justify-content: $ai;
+align-items: $jc;
+}
+
+@mixin aLinks() {}
+
+@mixin btn() {}
+
+@mixin input() {}
+
+@mixin nunito($fw: 400) {
+    font-family: 'Nunito';
+    font-weight: $fw;
+}
+
+@mixin figtree($fw: 400) {
+    font-family: 'Figtree';
+    font-weight: $fw;
+}
+
+@mixin heightWidth($w: 100%, $h: 100%) {
+height: 100%;
+width: 100%;
+}
+
+@mixin image() {}
