@@ -15,6 +15,7 @@ section {
     box-sizing: border-box;
     padding: 10px;
     background-color: var(--secundary-bg);
+    position: relative;
 
     textarea {
         @include heightWidth($w: 99%);
@@ -62,5 +63,11 @@ section {
         &:hover {
             background-color: var(--primary-bg);
         }
+    }
+
+    .emojis-container {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
     }
 }

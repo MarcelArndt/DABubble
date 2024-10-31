@@ -8,13 +8,16 @@
             <div class="options-btn">
                 <button><mat-icon>add</mat-icon></button>
                 <div class="between-line"></div>
-                <button><mat-icon>sentiment_satisfied</mat-icon></button>
+                <button (click)="toggleEmojis($event)"><mat-icon>sentiment_satisfied</mat-icon></button>
                 <button><mat-icon>alternate_email</mat-icon></button>
             </div>
 
             <button class="send-btn"><mat-icon>send</mat-icon></button>
         </div>
-        
+
+        <div class="emojis-container" *ngIf="openEmojis">
+            <emoji-mart title="Pick your emoji…" emoji="point_up"></emoji-mart>
+        </div>
     </div>
 
 </section>
