@@ -22,6 +22,7 @@ section {
         border: none;
         outline: none;
         resize: none;
+        background-color: var(--secundary-bg);
         @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
     }
 
