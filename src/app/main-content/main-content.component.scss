@@ -1,0 +1,20 @@
+@import '../../mixin.scss';
+
+.main-content {
+    @include dFlex($ai: center, $jc: space-between);
+    @include heightWidth($h: 85vh);
+    @include padding($pt: 0px);
+}
+
+app-devspace {
+    @include heightWidth($w: 25%);
+}
+
+app-chat {
+    @include heightWidth($w: 50%);
+    margin: 0 20px;
+}
+
+app-thread {
+    @include heightWidth($w: 25%);
+}

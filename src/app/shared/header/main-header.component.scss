@@ -1,7 +1,8 @@
 @import '../../../mixin.scss';
 
 .headerComponent{
-    @include dFlex;    
+    @include dFlex;
+    height: 15vh   
 }
 
 .headerMainWrapper{

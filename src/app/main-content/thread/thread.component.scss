@@ -1,0 +1,7 @@
+@import '../../../mixin.scss';
+
+section {
+    @include heightWidth($w: 100%, $h: 100%);
+    background-color: rgba(0, 0, 255, 0.164);
+    border-radius: 20px;
+}

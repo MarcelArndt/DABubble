@@ -12,15 +12,18 @@
     border: none;
     background-color: var(--secundary-bg);
     border: none;
-        &:active, &:focus, &:hover{
-            border: none;
-            background-color: none;
-            outline: none;
-        }
 
-        &::placeholder{
-            color: var(--btn-gray);
-        }
+    &:active,
+    &:focus,
+    &:hover {
+        border: none;
+        background-color: none;
+        outline: none;
+    }
+
+    &::placeholder {
+        color: var(--btn-gray);
+    }
 }
 
 @mixin nunito($fw: 400, $fs: 16px, $c: var(--text-black)) {
@@ -69,9 +72,17 @@
     font-size: $fs;
     padding: $p;
 
-    &:hover{
+    &:hover {
         cursor: pointer;
-        color: $chover; 
+        color: $chover;
         transform: scale($scale);
     }
+}
+
+@mixin padding($pt: 20px, $pb: 20px, $pl: 20px, $pr: 20px) {
+    box-sizing: border-box;
+    padding-top: $pt;
+    padding-bottom: $pb;
+    padding-left: $pl;
+    padding-right: $pr;
 }
