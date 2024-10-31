@@ -1,0 +1,36 @@
+@import '../../../../mixin.scss';
+
+.profil{
+    @include dFlex;
+    flex-wrap: nowrap;
+
+    .name{
+        @include figtree($fw: 500, $fs: 24px, $c: var(--text-black));
+        text-wrap: nowrap;
+        padding-right: 24px;
+    }
+
+    .profilButton{
+        width: 100%;
+        padding: 0px 16px;
+    }
+
+    mat-icon{
+        @include matIcon(); 
+    }
+}
+
+.profilPicture{
+   @include heightWidth($w: 70px, $h: 70px);
+    position: relative;
+
+
+    img{
+        @include image($br: 50%);
+        height: 100%;
+    }
+
+    .statusSymbol{
+        @include statusSymbol;
+    }
+}

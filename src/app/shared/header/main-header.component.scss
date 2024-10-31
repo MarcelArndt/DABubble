@@ -1,0 +1,37 @@
+@import '../../../mixin.scss';
+
+.headerComponent{
+    @include dFlex;
+    height: 15vh   
+}
+
+.headerMainWrapper{
+    @include heightWidth;
+    @include dFlex;  
+    padding:  24px 24px; 
+}
+
+.headerContentWrapper{
+    width: 100%;
+    @include dFlex($jc: space-between);
+    
+}
+
+.logo{
+    @include heightWidth;
+    max-width: 243px;
+    img{
+      @include image();
+    }
+
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+app-searchbar {
+width: 50%;
+}
+
+
+

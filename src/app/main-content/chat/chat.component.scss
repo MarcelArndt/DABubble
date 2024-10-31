@@ -1,0 +1,28 @@
+@import '../../../mixin.scss';
+
+section {
+    @include heightWidth($w: 100%, $h: 100%);
+    @include dFlex($jc: space-between);
+    flex-direction: column;
+    background-color: var(--secundary-bg);
+    border-radius: 20px;
+}
+
+.main-message-container {
+    @include heightWidth($h: 70%);
+    box-sizing: border-box;
+    padding: 50px 20px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+app-chat-header {
+    @include heightWidth($h: 10%);
+    border-radius: 20px 20px 0 0;
+}
+
+app-chat-message-field {
+    @include heightWidth($h: 20%);
+    background-color: rgba(255, 0, 0, 0.158);
+    border-radius: 0 0 20px 20px;
+}

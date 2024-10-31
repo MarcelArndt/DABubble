@@ -24,5 +24,5 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()), provideAnimationsAsync()]
+    provideStorage(() => getStorage()), provideAnimationsAsync(), provideAnimationsAsync()]
 };

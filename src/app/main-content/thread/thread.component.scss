@@ -1,0 +1,26 @@
+@import '../../../mixin.scss';
+
+section {
+    @include heightWidth($w: 100%, $h: 100%);
+    @include dFlex($jc: space-between);
+    flex-direction: column;
+    background-color: rgba(0, 0, 255, 0.164);
+    border-radius: 20px;
+}
+
+.main-message-container {
+    background-color: rgba(0, 128, 0, 0.295);
+    @include heightWidth($h: 70%);
+}
+
+app-thread-header {
+    @include heightWidth($h: 10%);
+    background-color: rgba(255, 0, 0, 0.205);
+    border-radius: 20px 20px 0 0;
+}
+
+app-thread-message-field {
+    @include heightWidth($h: 20%);
+    background-color: rgba(255, 0, 0, 0.158);
+    border-radius: 0 0 20px 20px;
+}
