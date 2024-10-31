@@ -2,11 +2,12 @@ import { Component, HostListener, Renderer2, ElementRef } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-main-header',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [MatIconModule, MatButtonModule, MatMenuModule, CommonModule],
   templateUrl: './main-header.component.html',
   styleUrl: './main-header.component.scss'
 })
