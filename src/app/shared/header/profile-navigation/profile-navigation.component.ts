@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { DarkModeService } from '../../../../service/dark-mode.service';
 
 @Component({
   selector: 'app-profile-navigation',
@@ -15,5 +16,13 @@ import { MatMenuModule } from '@angular/material/menu';
   styleUrl: './profile-navigation.component.scss'
 })
 export class ProfileNavigationComponent {
+  constructor(private darkMode: DarkModeService) { }
 
+  toggleTheme() {
+    this.darkMode.toggleDarkMode();
+  }
+
+  isDarkMode(): boolean {
+    return this.darkMode.isDarkMode();
+  }
 }

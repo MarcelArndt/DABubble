@@ -7,5 +7,6 @@
     <mat-menu #profilMenu="matMenu">
         <button mat-menu-item>Profil</button>
         <button mat-menu-item>Log-Out</button>
+        <button mat-menu-item (click)="toggleTheme()">{{ isDarkMode() ? 'Hell' : 'Dunkel' }}</button>
     </mat-menu>
 </nav>

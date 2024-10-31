@@ -23,6 +23,5 @@ app-chat-header {
 
 app-chat-message-field {
     @include heightWidth($h: 20%);
-    background-color: rgba(255, 0, 0, 0.158);
     border-radius: 0 0 20px 20px;
 }

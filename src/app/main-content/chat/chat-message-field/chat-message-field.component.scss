@@ -1,0 +1,66 @@
+@import '../../../../mixin.scss';
+
+section {
+    box-sizing: border-box;
+    padding: 20px;
+    @include heightWidth();
+}
+
+.message-field-container {
+    @include heightWidth($w: 100%, $h: 100%);
+    @include dFlex($ai: space-between, $jc: space-between);
+    flex-direction: column;
+    border: 1px solid var(--purple-2);
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: var(--secundary-bg);
+
+    textarea {
+        @include heightWidth($w: 99%);
+        border: none;
+        outline: none;
+        resize: none;
+        @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
+    }
+
+    .message-options-container {
+        @include dFlex($ai: center, $jc: space-between);
+    }
+
+    .options-btn {
+        @include dFlex();
+
+        .between-line {
+            border: 1px solid var(--purple-2);
+            height: 30px;
+            margin: 0 10px;
+        }
+
+        button {
+            @include heightWidth($w: 35px, $h: 35px);
+            @include dFlex();
+            border: none;
+            background-color: var(--secundary-bg);
+            border-radius: 50%;
+            color: var(--text-gray);
+
+            &:hover {
+                background-color: var(--primary-bg);
+            }
+        }
+    }
+
+    .send-btn {
+        @include heightWidth($w: 35px, $h: 35px);
+        @include dFlex();
+        border: none;
+        background-color: var(--secundary-bg);
+        border-radius: 50%;
+        color: var(--purple-1);
+
+        &:hover {
+            background-color: var(--primary-bg);
+        }
+    }
+}

@@ -22,14 +22,20 @@ import { MatIcon } from '@angular/material/icon';
 export class ChatHeaderComponent {
   readonly dialog = inject(MatDialog);
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(EditChannelComponent, {
-     
-    });
-
+  openEditeChannel(): void {
+    const dialogRef = this.dialog.open(EditChannelComponent);
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
 
     });
   }
+
+  addMembersToChannel(): void {
+    const dialogRef = this.dialog.open(EditChannelComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    });
+  }
+  
 }
