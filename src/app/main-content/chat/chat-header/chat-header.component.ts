@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-chat-header',
   standalone: true,
-  imports: [],
+  imports: [
+    MatIconModule,
+  ],
   templateUrl: './chat-header.component.html',
   styleUrl: './chat-header.component.scss'
 })

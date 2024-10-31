@@ -1,0 +1,56 @@
+@import '../../../../mixin.scss';
+
+section {
+    @include heightWidth($w: 100%, $h: 100%);
+    @include dFlex($ai: center, $jc: space-between);
+    box-sizing: border-box;
+    padding: 0 30px;
+}
+
+.creator-team-btn {
+    @include dFlex($ai: center, $jc: space-between);
+    border: none;
+    border-radius: 20px;
+    background-color: var(--secundary-bg);
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--primary-bg);
+    }
+
+    p {
+        @include nunito($fw: 700, $fs: 24px);
+        margin: 0 15px;
+    }
+}
+
+.add-members-container {
+    @include heightWidth($w: auto, $h: 100%);
+    @include dFlex($ai: center, $jc: space-between);
+
+    .active-members-image-container {
+
+        img {
+            @include heightWidth($w: 35px, $h: 50%);
+            @include image($br: 50%);
+            border: 3px solid white;
+        }
+    }
+
+    p {
+        @include nunito($fw: 600, $fs: 20px);
+        margin: 0 15px;
+    }
+
+    button {
+        @include heightWidth($w: 40px, $h: 40px);
+        @include dFlex();
+        border: none;
+        background-color: var(--secundary-bg);
+        border-radius: 100%;
+
+        &:hover {
+            background-color: var(--primary-bg);
+        }
+    }
+}
