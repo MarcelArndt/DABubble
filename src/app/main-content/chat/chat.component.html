@@ -2,10 +2,10 @@
     <app-chat-header></app-chat-header>
 
     <div class="main-message-container">
-        <app-my-message></app-my-message>
-        <app-member-message></app-member-message>
-        <app-my-message></app-my-message>
-        <app-member-message></app-member-message>
+        <div *ngFor="let msg of messages">
+            <app-my-message *ngIf="msg.user === 'myself'" [message]="msg"></app-my-message>
+            <app-member-message *ngIf="msg.user === 'member'" [message]="msg"></app-member-message>
+          </div>
     </div>
 
     <app-chat-message-field></app-chat-message-field>

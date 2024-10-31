@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import {MatMenuModule} from '@angular/material/menu';
 
 @Component({
   selector: 'app-chat-message-field',
@@ -10,6 +11,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
     MatIcon,
     PickerComponent,
     CommonModule,
+    MatMenuModule
   ],
   templateUrl: './chat-message-field.component.html',
   styleUrl: './chat-message-field.component.scss'

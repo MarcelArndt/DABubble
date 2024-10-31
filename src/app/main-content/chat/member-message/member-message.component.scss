@@ -72,11 +72,11 @@
         @include dFlex();
         position: absolute;
         top: -18px;
-        left: 45%;
+        left: 38%;
         border-radius: 20px;
         border: 1px solid var(--border-light-purple);
         box-sizing: border-box;
-        padding: 5px;
+        padding: 5px 10px;
         background-color: var(--secundary-bg);
 
         p {

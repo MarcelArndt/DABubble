@@ -6,7 +6,11 @@
         <div class="message-options-container">
 
             <div class="options-btn">
-                <button><mat-icon>add</mat-icon></button>
+                <button [matMenuTriggerFor]="menu"><mat-icon>add</mat-icon></button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>Item 1</button>
+                    <button mat-menu-item>Item 2</button>
+                  </mat-menu>
                 <div class="between-line"></div>
                 <button (click)="toggleEmojis($event)"><mat-icon>sentiment_satisfied</mat-icon></button>
                 <button><mat-icon>alternate_email</mat-icon></button>
