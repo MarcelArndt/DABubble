@@ -12,5 +12,4 @@ import { ThreadComponent } from "./thread/thread.component";
   styleUrl: './main-content.component.scss'
 })
 export class MainContentComponent {
-
 }

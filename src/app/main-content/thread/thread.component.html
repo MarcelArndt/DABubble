@@ -1,5 +1,12 @@
 <section>
     <app-thread-header></app-thread-header>
-    <div class="main-message-container"></div>
+    <div class="main-message-container">
+
+        <div *ngFor="let msg of messages">
+            <app-thread-my-message *ngIf="msg.user === 'myself'" [message]="msg"></app-thread-my-message>
+            <app-thread-members-message *ngIf="msg.user === 'member'" [message]="msg"></app-thread-members-message>
+        </div>
+        
+    </div>
     <app-thread-message-field></app-thread-message-field>
 </section>
