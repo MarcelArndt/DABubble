@@ -1,0 +1,38 @@
+@import '../../../../mixin.scss';
+
+.searchbar{
+    @include dFlex;  
+    background-color: var(--secundary-bg);
+    width: 100%;
+    max-width: 989px;
+    height: 70px;
+    border-radius: 46px;
+    border: 3px solid var(--secundary-bg);
+
+    &:hover{
+        border-color: var(--purple-2);
+    }
+
+    .inputFrame{
+        @include dFlex; 
+        padding: 0px 24px;
+        width: 100%; 
+
+
+        mat-icon{
+            @include heightWidth($w: 32px, $h: 70px);
+            @include dFlex;  
+            @include matIcon($scale: 110%);    
+        }
+    }
+
+    input{
+        @include heightWidth($h: 26px);
+        @include figtree($fw: 300, $fs: 24px);
+        @include input;
+    }
+}
+
+.active{
+    border-color: var(--purple-2);
+}
