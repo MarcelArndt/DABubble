@@ -9,6 +9,7 @@
         --purple-2: #797EF3;
         --purple-3: #535AF1;
         --btn-gray: #686868;
+        --green: #92C83E;
 }
 
 :root.dark-theme {
@@ -22,11 +23,14 @@
         --purple-2: #A4A8FF;
         --purple-3: #8E95FF;
         --btn-gray: #A1A1A1;
+        --green: #92C83E;
 }
-
+  
 body {
 margin: 0;
+font-weight: 'Nunito';
 }
+
 html, body { height: 100%; }
 body { 
     margin: 0; 
