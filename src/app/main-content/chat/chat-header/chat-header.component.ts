@@ -1,25 +1,35 @@
-import { Component } from '@angular/core';
-import {MatIconModule} from '@angular/material/icon';
-import {FormsModule} from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule, MatDialogTitle} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { EditChannelComponent } from '../../devspace/edit-channel/edit-channel.component';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-chat-header',
   standalone: true,
   imports: [
-    MatIconModule,
-    FormsModule,
+    MatDialogModule,
     MatButtonModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogTitle,
+    MatIcon
   ],
   templateUrl: './chat-header.component.html',
   styleUrl: './chat-header.component.scss'
 })
 export class ChatHeaderComponent {
+  readonly dialog = inject(MatDialog);
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(EditChannelComponent, {
+     
+    });
 
-  openDialog() {
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
 
+    });
   }
 }
