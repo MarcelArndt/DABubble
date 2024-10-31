@@ -48,6 +48,7 @@ section {
         border: none;
         background-color: var(--secundary-bg);
         border-radius: 100%;
+        cursor: pointer;
 
         &:hover {
             background-color: var(--primary-bg);
