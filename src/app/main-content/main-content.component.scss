@@ -7,11 +7,11 @@
 }
 
 app-devspace {
-    @include heightWidth($w: 25%);
+    @include heightWidth($w: 20%);
 }
 
 app-chat {
-    @include heightWidth($w: 50%);
+    @include heightWidth($w: 55%);
     margin: 0 20px;
 }
 
