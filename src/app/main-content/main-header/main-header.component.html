@@ -1,0 +1,32 @@
+<div class="headerComponent">
+    <div class="headerMainWrapper">
+        <div class="headerContentWrapper">
+
+            <div class="logo"><img src="./img/main_assets/main-logo.svg"></div>
+            <div class="searchbar">
+
+                <div class="inputFrame">
+                    <input placeholder="Devspace durchsuchen">
+                    <mat-icon>search</mat-icon>
+                </div>
+
+            </div>
+
+
+            <div class="profil">
+                <div>
+                    <div class="profilPicture"></div>
+                    <div>
+                        <button mat-button [matMenuTriggerFor]="profilMenu"><mat-icon>menu</mat-icon></button>
+                        <mat-menu #profilMenu="matMenu">
+                            <button mat-menu-item>Profil</button>
+                            <button mat-menu-item>Log-Out</button>
+                        </mat-menu>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+@import '../../../mixin.scss';
+@import '../../../styles.scss';
+
+.headerComponent{
+    @include dFlex;    
+}
+
+.headerMainWrapper{
+    @include heightWidth;
+    @include dFlex;  
+    padding:  24px 24px; 
+}
+
+.headerContentWrapper{
+    width: 100%;
+    display: flex;   
+    justify-content: space-between;
+}
+
+.logo{
+    @include heightWidth;
+    max-width: 243px;
+    img{
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.searchbar{
+    @include dFlex;  
+    background-color: var(--secundary-bg);
+    width: 100%;
+    max-width: 989px;
+    height: 70px;
+    border-radius: 46px;
+    border: 3px solid var(--secundary-bg);
+
+    &:hover{
+        border-color: var(--purple-2);
+    }
+
+    .inputFrame{
+        padding: 0px 24px;
+        width: 100%;
+        @include dFlex;  
+        justify-content: space-between;
+
+
+        mat-icon{
+            width: 32px;
+            height: 70px;
+            @include dFlex;  
+            color: var(--btn-gray);
+            font-size: 32px;
+            padding: 0px 12px;
+            position: relative;
+
+            &:hover{
+                cursor: pointer;
+                color: var(--purple-2); 
+                font-size: 36px;
+            }
+        }
+    }
+
+    input{
+        width: 100%;
+        height: 26px;
+        font-size: 24px;
+        border: none;
+        &:active, &:focus, &:hover{
+            border: none;
+            background-color: none;
+            outline: none;
+        }
+
+        &::placeholder{
+            color: var(--btn-gray);
+        }
+
+    }
+}
+
+.active{
+    border-color: var(--purple-2);
+}
+
+

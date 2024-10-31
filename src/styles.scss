@@ -1,31 +1,35 @@
 :root {
-    --primary-bg: #ECEEFE,
-        --secundary-bg: #FFFFFF,
-        --text-black: #000000,
-        --text-gray: #686868,
-        --text-blue: #1381FF,
-        --text-red: #ED1E79,
-        --purple-1: #444DF2,
-        --purple-2: #797EF3,
-        --purple-3: #535AF1,
-        --btn-gray: #686868,
+    --primary-bg: #ECEEFE;
+        --secundary-bg: #FFFFFF;
+        --text-black: #000000;
+        --text-gray: #686868;
+        --text-blue: #1381FF;
+        --text-red: #ED1E79;
+        --purple-1: #444DF2;
+        --purple-2: #797EF3;
+        --purple-3: #535AF1;
+        --btn-gray: #686868;
 }
 
 :root.dark-theme {
-    --primary-bg: #1E1E2E,
-        --secundary-bg: #2A2A3B,
-        --text-black: #FFFFFF,
-        --text-gray: #A1A1A1,
-        --text-blue: #339BFF,
-        --text-red: #FF5C8D,
-        --purple-1: #7B83FF,
-        --purple-2: #A4A8FF,
-        --purple-3: #8E95FF,
-        --btn-gray: #A1A1A1,
+    --primary-bg: #1E1E2E;
+        --secundary-bg: #2A2A3B;
+        --text-black: #FFFFFF;
+        --text-gray: #A1A1A1;
+        --text-blue: #339BFF;
+        --text-red: #FF5C8D;
+        --purple-1: #7B83FF;
+        --purple-2: #A4A8FF;
+        --purple-3: #8E95FF;
+        --btn-gray: #A1A1A1;
 }
 
 body {
 margin: 0;
 }
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+    background-color: var(--primary-bg); 
+}

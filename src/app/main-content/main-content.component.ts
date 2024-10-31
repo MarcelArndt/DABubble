@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { MainHeaderComponent } from './main-header/main-header.component';
 
 @Component({
   selector: 'app-main-content',
   standalone: true,
-  imports: [],
+  imports: [ MainHeaderComponent],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss'
 })
