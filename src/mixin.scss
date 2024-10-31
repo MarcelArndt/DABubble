@@ -86,3 +86,8 @@
     padding-left: $pl;
     padding-right: $pr;
 }
+
+@mixin materialSymbols($c: var(--text-black)) {
+    font-family: 'Material Symbols Outlined';
+    color: $c;
+}

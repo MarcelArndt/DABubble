@@ -57,3 +57,11 @@ section {
         }
     }
 }
+
+.add-members {
+    @include materialSymbols();
+}
+
+.hashtag {
+    @include materialSymbols();
+}
