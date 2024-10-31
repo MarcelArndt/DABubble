@@ -13,6 +13,7 @@ app-devspace {
 app-chat {
     @include heightWidth($w: 55%);
     margin: 0 20px;
+    flex: auto;
 }
 
 app-thread {
