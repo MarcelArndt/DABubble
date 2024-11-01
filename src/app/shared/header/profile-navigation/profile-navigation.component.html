@@ -3,7 +3,13 @@
 
     <div class="profilPicture"><img src="./img/profil-pic/006.svg">   <div class="statusSymbol"></div> </div>
      
-    <div class="profilButton" mat-button [matMenuTriggerFor]="profilMenu"><mat-icon>keyboard_arrow_down</mat-icon></div>
+    <div class="profilButton" mat-button [matMenuTriggerFor]="profilMenu">
+        @if(switchMobilOn){
+            <mat-icon>keyboard_arrow_down</mat-icon>
+        } @else {
+            <img src="./img/profil-pic/006.svg">
+        }
+    </div>
     <mat-menu #profilMenu="matMenu">
         <button mat-menu-item>Profil</button>
         <button mat-menu-item>Log-Out</button>

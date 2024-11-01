@@ -16,4 +16,5 @@ import { DarkModeService } from '../../../services/dark-mode.service';
 })
 export class MainHeaderComponent {
   constructor(private renderer: Renderer2, private elRef: ElementRef, public darkmode : DarkModeService){}
+
 }
