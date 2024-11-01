@@ -1,7 +1,7 @@
 <section>
 
     <div class="message-field-container">
-        <textarea placeholder="Naricht an #Entwicklerteam"></textarea>
+        <textarea placeholder="Naricht an #Entwicklerteam" [(ngModel)]="messageField"></textarea>
 
         <div class="message-options-container">
 
@@ -16,7 +16,7 @@
                 <button><mat-icon>alternate_email</mat-icon></button>
             </div>
 
-            <button class="send-btn"><mat-icon>send</mat-icon></button>
+            <button class="send-btn" (click)="sendMessage()"><mat-icon>send</mat-icon></button>
         </div>
 
         <div class="emojis-container" *ngIf="openEmojis">
