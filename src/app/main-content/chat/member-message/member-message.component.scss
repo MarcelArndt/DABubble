@@ -95,20 +95,18 @@
 
 
     .options-btn {
+        @include heightWidth($w: 40px, $h: 40px);
         border: none;
         margin-right: 5px;
         margin-left: 5px;
         border-radius: 50%;
-        height: 40px;
-        width: 40px;
         background-color: white;
         cursor: pointer;
 
-        
+
 
         img {
-            height: 100%;
-            width: 100%;
+            @include heightWidth();
 
         }
 

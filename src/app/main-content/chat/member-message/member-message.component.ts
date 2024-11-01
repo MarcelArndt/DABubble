@@ -16,5 +16,5 @@ import { CommonModule } from '@angular/common';
 })
 export class MemberMessageComponent {
   @Input() message: any;
-  isMessageHover: boolean = true;
+  isMessageHover: boolean = false;
 }
