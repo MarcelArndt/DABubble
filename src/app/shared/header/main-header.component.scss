@@ -44,7 +44,7 @@
     }
 
     .mat-mdc-menu-content {
-        padding-bottom: 36px;
+
         border-radius: 36px 0px 36px 36px;
         background-color: var( --secundary-bg);
         @include dFlex;
@@ -52,6 +52,7 @@
 
         @include  respond-to-maxWidth(large){  
             opacity: 0;
+            padding-bottom: 36px;
             border-radius: 36px 36px 0px 0px;
             padding-top: 56px;
             animation: fade-in 0.25s linear forwards;
