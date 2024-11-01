@@ -44,6 +44,7 @@
     }
 
     .mat-mdc-menu-content {
+        padding-bottom: 36px;
         border-radius: 36px 0px 36px 36px;
         background-color: var( --secundary-bg);
         @include dFlex;
