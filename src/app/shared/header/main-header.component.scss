@@ -1,5 +1,50 @@
 @import '../../../mixin.scss';
 
+::ng-deep .cdk-overlay-container {
+    background-color: rgba(7, 4, 29, 0.65);
+    @include heightWidth;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+::ng-deep .mat-elevation-z2, .mat-mdc-elevation-specific.mat-elevation-z2 {
+    box-shadow: none !important;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+    margin-top: 8px;
+    width: 275px;
+    background-color: transparent !important;
+
+    .mat-mdc-menu-content {
+        border-radius: 36px 0px 36px 36px;
+        background-color: var( --secundary-bg);
+        @include dFlex;
+        flex-direction: column;
+    }
+
+    .mat-mdc-menu-item-text{
+        padding: 4px 0px;
+        font-size: 21px !important;
+    }
+
+    .mat-mdc-menu-item{
+        margin: 4px 0px;
+        width: 75%;
+        border-radius: 36px;
+        color: var(--text-black) ;
+
+        &:hover{
+            background-color: var(--primary-bg) !important;
+            color: var(--text-blue) ;
+        }
+
+        span{
+            @include dFlex;
+        }
+    }
+}
+
 .headerComponent{
     @include dFlex;
     height: 15vh;
@@ -60,5 +105,3 @@
 app-searchbar {
 width: 50%;
 }
-
-
