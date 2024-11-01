@@ -2,6 +2,8 @@
 
 .searchbar{
     @include dFlex;  
+    margin-left: auto;
+    margin-right: auto;
     background-color: var(--secundary-bg);
     width: 100%;
     max-width: 989px;

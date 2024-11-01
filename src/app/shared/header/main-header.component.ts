@@ -5,6 +5,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { SearchbarComponent } from "./searchbar/searchbar.component";
 import { ProfileNavigationComponent } from "./profile-navigation/profile-navigation.component";
+import { DarkModeService } from '../../../services/dark-mode.service';
 
 @Component({
   selector: 'app-main-header',
@@ -14,9 +15,5 @@ import { ProfileNavigationComponent } from "./profile-navigation/profile-navigat
   styleUrl: './main-header.component.scss'
 })
 export class MainHeaderComponent {
-  constructor(private renderer: Renderer2, private elRef: ElementRef){}
-
-
-
-  
+  constructor(private renderer: Renderer2, private elRef: ElementRef, public darkmode : DarkModeService){}
 }
