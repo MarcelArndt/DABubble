@@ -11,6 +11,14 @@
     border-radius: 46px;
     border: 3px solid var(--secundary-bg);
 
+    @include respond-to-maxWidth(large) {
+        height: 45px;
+    }
+
+    @include respond-to-maxWidth(smallMedium) {
+        display: none;
+    }
+
     &:hover{
         border-color: var(--purple-2);
     }
@@ -20,9 +28,17 @@
         padding: 0px 24px;
         width: 100%; 
 
+        @include respond-to-maxWidth(large) {
+            padding: 0px 0px 0px 12px;
+         }
+
 
         mat-icon{
             @include heightWidth($w: 32px, $h: 70px);
+            @include respond-to-maxWidth(large) {
+               font-size: 24px;
+               padding: 0px 12px 0px 0px;
+            }
             @include dFlex;  
             @include matIcon($scale: 110%);    
         }
@@ -31,6 +47,9 @@
     input{
         @include heightWidth($h: 26px);
         @include figtree($fw: 300, $fs: 24px);
+        @include respond-to-maxWidth(large) {
+            @include figtree($fw: 300, $fs: 18px);
+        }
         @include input;
     }
 }
