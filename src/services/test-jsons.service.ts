@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
+import { Message } from '../interface/message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TestJasonsService {
 
- public message = [
+ public message: Message[] = [
     {
-      user: 'myself',
+      user: 'member',
       name: 'Max Mustermann',
       time: '16:10',
       message: 'Angular ist ein Framework von Google',
@@ -18,7 +19,7 @@ export class TestJasonsService {
         rocket: []
       },
       answers: {
-        answer: ['',''],
+        answer: [],
       }
     },
 
