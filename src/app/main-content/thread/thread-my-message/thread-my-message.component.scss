@@ -1,24 +1,25 @@
 @import '../../../../mixin.scss';
 
 .new-message-container {
-    @include dFlex($ai: start, $jc: start);
+    @include dFlex($ai: start, $jc: end);
+    flex-direction: row-reverse;
     box-sizing: border-box;
-    padding: 40px 10px;
+    padding: 50px 10px;
     position: relative;
-    border-bottom: 1px solid var(--border-light-purple);
 
-    img {
+    .profile-image {
         @include image($br: 50%);
         @include heightWidth($w: auto, $h: 60px);
-        margin-right: 30px;
+        margin-left: 30px;
     }
 
     .name {
-        @include dFlex($jc: start);
+        @include dFlex($jc: end);
+        flex-direction: row-reverse;
 
         h5 {
             @include nunito($fw: 700, $fs: 18px);
-            margin-right: 20px;
+            margin-left: 20px;
         }
 
         p {
@@ -27,43 +28,44 @@
     }
 
     .message {
-        background-color: var(--primary-bg);
+        background-color: var(--purple-2);
         box-sizing: border-box;
         padding: 10px;
-        border-radius: 0 20px 20px 20px;
+        border-radius: 20px 0px 20px 20px;
         margin: 10px 0;
 
         p {
+            @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
+        }
+    }
+
+    .reaction-container {
+        @include dFlex($jc: end);
+        flex-direction: row-reverse;
+
+        button {
+            @include dFlex();
+            border: none;
+            border: 1px solid var(--purple-2);
+            border-radius: 20px;
+            padding: 5px 10px;
+            background-color: var(--secundary-bg);
+            margin-left: 10px;
+
+            img {
+                height: 100%
+            }
+
+            p {
             @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+            margin-left: 10px;
+            }
+        }
+
+        .add-reaction-btn {
+            margin-left: 10px;
         }
     }
 
-    .answer-container {
-        @include dFlex($jc: start);
-
-        .answer {
-            @include nunito($fw: 400, $fs: 18px, $c: var(--purple-3));
-            margin-right: 20px;
-        }
-
-        .answer-time {
-            @include nunito($fw: 400, $fs: 14px, $c: var(--text-gray));
-        }
-    }
-
-    .answer-date-time-container {
-        @include dFlex();
-        position: absolute;
-        bottom: -18px;
-        left: 0;
-        border-radius: 20px;
-        box-sizing: border-box;
-        padding: 5px 10px;
-        background-color: var(--secundary-bg);
-
-        p {
-            @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
-        }
-    }
 
 }

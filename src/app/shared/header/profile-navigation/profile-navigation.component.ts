@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { DarkModeService } from '../../../../services/dark-mode.service';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-profile-navigation',
@@ -16,7 +17,12 @@ import { DarkModeService } from '../../../../services/dark-mode.service';
   styleUrl: './profile-navigation.component.scss'
 })
 export class ProfileNavigationComponent {
-  constructor(private darkMode: DarkModeService) { }
+  constructor(public darkMode: DarkModeService) { }
+
+  toInnerHTML = '';
+  sizeThreshold = 1285;
+  currentImgPath = './img/profil-pic/006.svg'
+  switchMobilOn = false
 
   toggleTheme() {
     this.darkMode.toggleDarkMode();
@@ -25,4 +31,17 @@ export class ProfileNavigationComponent {
   isDarkMode(): boolean {
     return this.darkMode.isDarkMode();
   }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    let windowWidth = window.innerWidth;
+    this.toInnerHTML = windowWidth < this.sizeThreshold ? `<mat-icon> keyboard_arrow_down </mat-icon>` : `<img src="${this.currentImgPath}">`;
+    this.switchMobilOn = windowWidth < this.sizeThreshold ? false : true;
+  }
+
+  ngOnInit(){
+    let windowWidth = window.innerWidth;
+    this.switchMobilOn = windowWidth < this.sizeThreshold ? false : true;
+  }
+
 }

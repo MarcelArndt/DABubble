@@ -11,7 +11,7 @@ section {
 .main-message-container {
     @include heightWidth($h: 70%);
     box-sizing: border-box;
-    padding: 50px 20px;
+    padding: 50px 0px;
     overflow-y: auto;
     scrollbar-width: none;
 }

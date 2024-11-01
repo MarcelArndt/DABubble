@@ -1,24 +1,26 @@
 @import '../../../../mixin.scss';
 
 .new-message-container {
-    @include dFlex($ai: start, $jc: start);
+    @include dFlex($ai: start, $jc: end);
+    flex-direction: row-reverse;
     box-sizing: border-box;
-    padding: 40px 10px;
+    padding: 50px 0px;
     position: relative;
     border-top: 1px solid var(--border-light-purple);
 
-    img {
+    .profile-image {
         @include image($br: 50%);
         @include heightWidth($w: auto, $h: 60px);
-        margin-right: 30px;
+        margin-left: 30px;
     }
 
     .name {
-        @include dFlex($jc: start);
+        @include dFlex($jc: end);
+        flex-direction: row-reverse;
 
         h5 {
             @include nunito($fw: 700, $fs: 18px);
-            margin-right: 20px;
+            margin-left: 20px;
         }
 
         p {
@@ -27,27 +29,42 @@
     }
 
     .message {
-        background-color: var(--primary-bg);
+        background-color: var(--purple-2);
         box-sizing: border-box;
         padding: 10px;
-        border-radius: 0 20px 20px 20px;
+        border-radius: 20px 0px 20px 20px;
         margin: 10px 0;
 
         p {
-            @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+            @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
         }
     }
 
-    .answer-container {
-        @include dFlex($jc: start);
+    .reaction-container {
+        @include dFlex($jc: end);
+        flex-direction: row-reverse;
 
-        .answer {
-            @include nunito($fw: 400, $fs: 18px, $c: var(--purple-3));
-            margin-right: 20px;
+        button {
+            @include dFlex();
+            border: none;
+            border: 1px solid var(--purple-2);
+            border-radius: 20px;
+            padding: 5px 10px;
+            background-color: var(--secundary-bg);
+            margin-left: 10px;
+
+            img {
+                height: 100%
+            }
+
+            p {
+                @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+                margin-left: 10px;
+            }
         }
 
-        .answer-time {
-            @include nunito($fw: 400, $fs: 14px, $c: var(--text-gray));
+        .add-reaction-btn {
+            margin-left: 10px;
         }
     }
 
@@ -67,4 +84,75 @@
         }
     }
 
+}
+
+.hover {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 30px;
+
+    &:hover {
+        background-color: var(--primary-bg);
+    }
+}
+
+.options {
+    background-color: white;
+    box-sizing: border-box;
+    padding: 0px 10px;
+    position: absolute;
+    left: 50px;
+    top: 25px;
+    border-radius: 20px 20px 0px 20px;
+    border: 2px solid var(--border-light-purple);
+    @include dFlex();
+
+
+    .options-btn {
+        border: none;
+        margin-right: 5px;
+        margin-left: 5px;
+        text-align: center;
+        border-radius: 50%;
+        height: 40px;
+        width: 40px;
+        background-color: white;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--border-light-purple);
+        }
+    }
+
+    .optionsMenu {
+        background-color: white;
+        margin-top: 20px;
+    }
+}
+
+.edit-message-menu {
+    background-color: white;
+    position: absolute;
+    bottom: -79px;
+    right: -2px;
+    @include dFlex($ai: start);
+    flex-direction: column;
+    border-radius: 0px 0px 0px 10px;
+    box-sizing: border-box;
+    padding: 5px;
+    border: 2px solid var(--border-light-purple);
+
+    button {
+        border: none;
+        background-color: white;
+        @include nunito($fw: 400, $fs: 16px, $c: black);
+        padding: 5px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--border-light-purple);
+        }
+    }
 }

@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 export class ThreadComponent {
   messages = [
     {
-      user: 'myself',
+      user: 'member',
       name: 'Max Mustermann',
       time: '16:10',
       message: 'Angular ist ein Framework von Google',
@@ -39,7 +39,7 @@ export class ThreadComponent {
     },
     
     {
-      user: 'member',
+      user: 'myself',
       name: 'Adrian Enßlin',
       time: '11:15',
       message: 'Welche Version ist aktuell von Angular',
@@ -55,7 +55,7 @@ export class ThreadComponent {
     },
 
     {
-      user: 'member',
+      user: 'myself',
       name: 'Noah Braun',
       time: '14:25',
       message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos cumque sit fugiat labore quaerat a fuga consequuntur eligendi! Temporibus laudantium tempora sequi, non excepturi minus modi? Dolor voluptatum eaque doloribus!',

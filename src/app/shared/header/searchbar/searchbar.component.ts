@@ -25,4 +25,6 @@ export class SearchbarComponent {
     const parent = this.elRef.nativeElement.querySelector('.searchbar');
     this.renderer.removeClass(parent, 'active');
   }
+
+
 }

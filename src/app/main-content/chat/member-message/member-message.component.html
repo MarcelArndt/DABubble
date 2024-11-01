@@ -1,19 +1,26 @@
 <div class="new-message-container">
-    <img class="profile-image" src="{{message.profileImage}}" alt="">
+    <div class="hover" (mousemove)="isMessageHover = true" (mouseleave)="isMessageHover = false">
+    <img src="{{message.profileImage}}" alt="">
     <div class="message-container">
         <div class="name">
             <h5>{{message.name}}</h5>
-            <p>{{message.time}}</p>
+            <p>{{message.time}} Uhr</p>
         </div>
         <div class="message"><p>{{message.message}}</p></div>
-        <div class="reaction-container">
-            <img class="add-reaction-btn" src="/img/reactions/add_reaction.svg" alt="">
-            <button><img src="/img/reactions/like.svg" alt=""><p>{{message.reactions.like.length}}</p></button>
-            <button><img src="/img/reactions/rocket.svg" alt=""><p>{{message.reactions.rocket.length}}</p></button>
+        <div class="answer-container">
+            <p class="answer">{{message.answers.answer.length}} Anwtorten</p>
+            <p class="answer-time">Letze Antwort 14:56</p>
         </div>
     </div>
-    
     <div class="answer-date-time-container">
         <p>{{message.createdAt}}</p>
     </div>
+
+    <div class="options" *ngIf="isMessageHover">
+        <button class="options-btn"><img src="/img/reactions/like.svg" alt=""></button>
+        <button class="options-btn"><img src="/img/reactions/arm.svg" alt=""></button>
+        <button class="options-btn"><mat-icon>sentiment_satisfied</mat-icon></button>
+        <button class="options-btn"><mat-icon>comment</mat-icon></button>
+    </div>
+</div>
 </div>

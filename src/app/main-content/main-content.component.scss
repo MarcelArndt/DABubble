@@ -3,6 +3,12 @@
 .main-content {
     @include dFlex($ai: center, $jc: space-between);
     @include heightWidth($h: 85vh);
+
+    @include respond-to-maxWidth(large) {
+        @include heightWidth($h: calc(100vh - 80px));
+    }
+
+
     @include padding($pt: 0px);
 }
 
