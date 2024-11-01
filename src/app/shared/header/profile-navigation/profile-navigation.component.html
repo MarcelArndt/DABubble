@@ -11,8 +11,9 @@
         }
     </div>
     <mat-menu #profilMenu="matMenu">
-        <button mat-menu-item>Profil</button>
-        <button mat-menu-item>Log-Out</button>
-        <button mat-menu-item (click)="toggleTheme()">{{ isDarkMode() ? 'Hell' : 'Dunkel' }}</button>
+        <div class="mobilDekor"></div>
+        <div class="matMenu-item"><mat-icon class="outline">account_circle</mat-icon><button mat-menu-item>Profil</button></div>
+        <div class="matMenu-item"><mat-icon class="outline">logout</mat-icon><button mat-menu-item>Log-Out</button></div>
+        <div class="matMenu-item"><mat-icon class="outline">{{ isDarkMode() ? 'wb_sunny' : 'dark_mode' }}</mat-icon><button mat-menu-item (click)="toggleTheme()">{{ isDarkMode() ? 'Hell' : 'Dunkel' }}</button></div>
     </mat-menu>
 </nav>

@@ -17,7 +17,7 @@ import { HostListener } from '@angular/core';
   styleUrl: './profile-navigation.component.scss'
 })
 export class ProfileNavigationComponent {
-  constructor(private darkMode: DarkModeService) { }
+  constructor(public darkMode: DarkModeService) { }
 
   toInnerHTML = '';
   sizeThreshold = 1285;
