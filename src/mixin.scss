@@ -1,3 +1,31 @@
+$breakpoints: (
+  small: 450px,
+  smallMedium: 600px,
+  medium: 900px,
+  large: 1285px,
+  XL: 1440px,
+);
+
+@mixin respond-to-maxWidth($breakpoint) {
+    $max-width: map-get($breakpoints, $breakpoint); // Wert aus der Map abrufen
+
+    @if $max-width {
+      @media (max-width: $max-width) {
+        @content; // Die Inhalte, die in das Mixin übergeben werden
+      }
+    }
+}
+
+@mixin respond-to-minWidth($breakpoint) {
+    $min-width: map-get($breakpoints, $breakpoint); // Wert aus der Map abrufen
+
+    @if $min-width {
+      @media (min-width: $min-width) {
+        @content; // Die Inhalte, die in das Mixin übergeben werden
+      }
+    }
+}
+
 @mixin dFlex($ai: center, $jc: center) {
     display: flex;
     justify-content: $jc;
