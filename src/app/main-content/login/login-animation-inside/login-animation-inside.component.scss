@@ -1,7 +1,7 @@
 @import '../../../../mixin.scss';
 .Logo-Wrapper{
     position: fixed;
-    @include heightWidth($w:40%, $h: 100%);
+    @include heightWidth($w:33%, $h: 100%);
     @include dFlex;
     animation: shrink-width 0.75s ease-out forwards;
     animation-delay: 2.0s;

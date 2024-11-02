@@ -9,7 +9,7 @@ import { MainContentComponent } from '../main-content.component';
   standalone: true,
   imports: [LoginAnimationComponent, LoginAnimationInsideComponent, RouterModule, MainContentComponent ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss', './animation.inside.login.scss']
+  styleUrls: ['./login.component.scss',]
 })
 export class LoginComponent {
 
