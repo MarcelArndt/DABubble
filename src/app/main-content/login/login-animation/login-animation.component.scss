@@ -68,6 +68,7 @@
 
 .mask{
     width: 0px;
+    padding: clamp(1px, 1vw, 10px);
     overflow: hidden;
     height:clamp(24px, 12vw, 156px);
     animation: take-place 0.75s ease-in-out forwards;
@@ -76,6 +77,6 @@
 
 @keyframes take-place{
    to{
-    width: 100%;
+    width: calc(100%);
    }
 }
