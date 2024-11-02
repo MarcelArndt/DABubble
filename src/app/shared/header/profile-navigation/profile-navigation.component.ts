@@ -4,6 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { DarkModeService } from '../../../../services/dark-mode.service';
 import { HostListener } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile-navigation',
@@ -11,7 +12,8 @@ import { HostListener } from '@angular/core';
   imports: [
     MatButtonModule, 
     MatMenuModule,
-    MatIcon
+    MatIcon,
+    RouterModule,
   ],
   templateUrl: './profile-navigation.component.html',
   styleUrl: './profile-navigation.component.scss'
