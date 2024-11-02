@@ -1,6 +1,7 @@
 @import '../../../../mixin.scss';
 
 .background{
+    z-index: 100;
     position: fixed;
     top: 0px;
     left: 0px;
@@ -8,8 +9,8 @@
     @include heightWidth($w: 100%, $h: 100dvh);
     background: rgb(74,50,230);
     background: linear-gradient(-15deg, rgba(74,50,230,1) 0%, rgba(85,191,251,1) 100%);
-    animation: take-off 0.75s linear forwards;
-    animation-delay: 2s;
+    animation: take-off 0.35s linear forwards;
+    animation-delay: 1.75s;
     opacity: 1;
 }
 
@@ -35,13 +36,14 @@
 }
 
 .DABubbleFont{
-    padding-left: clamp(1px, 1vw, 10px);
+    padding-left: clamp(1px, 1vw, 8px);
     @include heightWidth($w: 100%, $h: 100%);
     @include dFlex($ai: center, $jc: center);
-    @include nunito($fw: 700, $fs: clamp(18px, 6vw, 100px), $c: var(--secundary-bg));
+    @include nunito($fw: 650, $fs: clamp(16px, 6vw, 92px), $c: var(--secundary-bg));
     transform: translateX(-800px);
-    animation: slide-in 1.0s ease-out forwards;
-    animation-delay: 1.0s;
+    animation: slide-in 0.75s ease-out forwards;
+    animation-delay: 0.75s;
+    letter-spacing: 0px;
 }
 
 @keyframes slide-in {
@@ -68,11 +70,11 @@
 
 .mask{
     width: 0px;
-    padding: clamp(1px, 1vw, 10px);
+    padding: clamp(1px, 1vw, 8px);
     overflow: hidden;
     height:clamp(24px, 12vw, 156px);
-    animation: take-place 0.75s ease-in-out forwards;
-    animation-delay: 0.75s;
+    animation: take-place 0.25s ease-in-out forwards;
+    animation-delay: 0.5s;
 }
 
 @keyframes take-place{

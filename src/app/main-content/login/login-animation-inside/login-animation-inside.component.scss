@@ -1,0 +1,42 @@
+@import '../../../../mixin.scss';
+.Logo-Wrapper{
+    position: fixed;
+    @include heightWidth($w:40%, $h: 100%);
+    @include dFlex;
+    animation: shrink-width 0.75s ease-out forwards;
+    animation-delay: 2.0s;
+}
+
+@keyframes shrink-width {
+    to{
+        width: 256px;
+        height: 70px;
+    }
+}
+
+
+.logo{
+    @include heightWidth($w: 100%, $h: auto);
+    @include dFlex($ai: center, $jc: center);
+    img{
+        width: 100%;
+    }
+}
+
+.animationContainer{
+    z-index: 80;
+    position: fixed;
+    top: 28px;
+    left: 24px;
+    @include heightWidth($w: 100%, $h: 100%);
+    @include dFlex;
+    animation: shrink 0.75s ease-out forwards;
+    animation-delay: 2.0s;
+}
+
+@keyframes shrink {
+    to{
+        height: 80px;
+        width: 256px;
+    }
+}

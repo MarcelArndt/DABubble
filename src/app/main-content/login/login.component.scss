@@ -1,0 +1,6 @@
+@import '../../../mixin.scss';
+.MainWrapper{
+    z-index: 70;
+    @include heightWidth($w: 100%, $h: 100%);
+    position: fixed;
+}
