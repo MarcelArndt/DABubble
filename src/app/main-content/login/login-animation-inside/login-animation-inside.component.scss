@@ -3,17 +3,17 @@
     position: fixed;
     @include heightWidth($w:33%, $h: 100%);
     @include dFlex;
-    animation: shrink-width 0.75s ease-out forwards;
+    animation: shrink-width 0.75s ease-out forwards 2.0s;
     animation-delay: 2.0s;
 }
 
 @keyframes shrink-width {
     to{
+
         width: 256px;
         height: 70px;
     }
 }
-
 
 .logo{
     @include heightWidth($w: 100%, $h: auto);
