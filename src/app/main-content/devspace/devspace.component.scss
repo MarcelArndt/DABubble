@@ -7,19 +7,19 @@
     font-family: 'Nunito';
 }
 
-.serverNavContent{
-    background-color: var(--secundary-bg) ;
+.serverNavContent {
+    background-color: var(--secundary-bg);
     @include padding(32px, 30px 32px, 30px);
-    overflow: hidden ;
+    overflow: hidden;
     border-radius: 30px;
-    color: var(--text-black) ;
+    color: var(--text-black);
 }
 
-.toggleNavBarButton{
+.toggleNavBarButton {
     position: fixed;
     transform: translateY(-30%);
     left: 0px;
-    bottom:5vh;
+    bottom: 5vh;
     z-index: 10;
     transform: rotate(90deg) scaleX(-1) scaleY(-1);
     transform-origin: left top;
@@ -41,138 +41,154 @@
     box-sizing: border-box;
 
 
-    svg{
+    svg {
         transition: color 0.125s ease-in-out;
-        path, rect{
-        stroke: var(--text-black);
-        transition: color 0.125s ease-in-out;
+
+        path,
+        rect {
+            stroke: var(--text-black);
+            transition: color 0.125s ease-in-out;
         }
     }
 
     &:hover {
         cursor: pointer;
         color: var(--purple-2);
-        svg{
-            path, rect{
-            stroke: var(--purple-2);
+
+        svg {
+
+            path,
+            rect {
+                stroke: var(--purple-2);
             }
         }
     }
 }
 
-.titleRow{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.titleRow {
+    @include dFlex($jc: space-between);
     margin-bottom: 25px;
 }
 
-.titleAndServerSvg{
+.titleAndServerSvg {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
-h2{
-    font-size: 24px ;
-    margin: 0px ;
+h2 {
+    font-size: 24px;
+    margin: 0px;
     font-weight: 700;
     font-family: 'Nunito';
 }
 
-h3{
-    margin: 0px ;
-    font-size: 20px ;
+h3 {
+    margin: 0px;
+    font-size: 20px;
 }
 
-.mat-drawer-inner-container{
+.mat-drawer-inner-container {
     overflow: visible;
 }
 
-.writeMessageButton, 
+.writeMessageButton,
 .addChannelPlus {
-        outline: none;
-        border: 0px;
-        background-color: transparent;
-        border-radius: 30px;
-        @include dFlex(center, center);
-    svg{
+    outline: none;
+    border: 0px;
+    background-color: transparent;
+    border-radius: 30px;
+    @include dFlex(center, center);
+
+    svg {
         stroke: var(--text-light-black);
         stroke-width: 0.1px;
     }
+
     transition: background-color 0.125s ease-in-out;
-    path{
+
+    path {
         fill: var(--text-light-black);
         stroke-width: 0.1px;
     }
+
     &:hover {
         cursor: pointer;
         background-color: var(--primary-bg);
-        svg, path{
+
+        svg,
+        path {
             stroke: var(--purple-3);
-            path{
+
+            path {
                 fill: var(--purple-3);
             }
         }
     }
+
     &:active {
         background-color: var(--purple-2);
     }
 }
 
-.addChannelPlus{
+.addChannelPlus {
     padding: 10px;
     box-sizing: border-box;
-    path{
+
+    path {
         stroke-width: 0.1px;
     }
 }
 
-.dropDownArrow{
+.dropDownArrow {
     margin-right: 15px;
     padding: 10px;
     transform: rotate(-90deg);
 }
 
-.dropwDownTopRow{
+.dropwDownTopRow {
     display: flex;
     align-items: center;
     margin-bottom: 25px;
     justify-content: space-between;
-    &:hover{
+
+    &:hover {
         cursor: pointer;
-        .dFlex{
+
+        .dFlex {
             color: var(--purple-1);
         }
-        svg{
-            path{
+
+        svg {
+            path {
                 fill: var(--purple-1);
             }
         }
     }
 }
 
-.folderTitle{
+.folderTitle {
     margin-left: 10px;
     font-weight: 500;
 }
 
-.dFlex{
+.dFlex {
     display: flex;
     align-items: center;
 }
 
-.addChannelButton{
+.addChannelButton {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 25px;
 }
 
-.channel, .contact{
+.channel,
+.contact {
     margin-bottom: 25px;
     margin-left: 25px;
-    transition:  background-color 0.125s ease-in-out;
+    transition: background-color 0.125s ease-in-out;
     border-radius: 20px;
     padding: 4px 20px 4px 20px;
     width: fit-content;
@@ -180,54 +196,60 @@ h3{
     font-weight: 500;
     font-size: 18px;
 
-    &:hover{
+    &:hover {
         background-color: var(--primary-bg);
         color: var(--purple-1);
         cursor: pointer;
     }
 }
 
-.contact{
+.contact {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 13px;    
+    margin-bottom: 13px;
     padding: 4px, 20px, 4px, 20px;
     font-size: 18px;
     border-radius: 60px;
 }
 
-.addChannelButton{
+.addChannelButton {
     color: var(--text-black);
     display: flex;
     gap: 10px;
     transition: transform 0.125s ease-in-out, color 0.125s ease-in-out;
-    &:hover{
+
+    &:hover {
         color: var(--purple-1);
         cursor: pointer;
-        .material-icons{
+
+        .material-icons {
             transform: scale(1.1);
         }
     }
 }
 
-.rotateArrow{
+.rotateArrow {
     transform: rotate(0deg);
 }
 
 ::ng-deep .mat-drawer-inner-container {
-    overflow: visible!important;
+    overflow: visible !important;
 }
 
-.contactPicture{
+.contactPicture {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.onlineStatus{
+.onlineStatus {
     position: absolute;
     right: 0px;
     bottom: 6px;
+}
+
+.mat-icon {
+    @include materialSymbols($c: var(--text-black));
 }
