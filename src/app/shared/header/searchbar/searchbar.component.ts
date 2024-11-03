@@ -1,11 +1,13 @@
-import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Component, ElementRef, HostListener, Renderer2, Input} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-searchbar',
   standalone: true,
   imports: [
-    MatIconModule
+    MatIconModule,
+    CommonModule 
   ],
   templateUrl: './searchbar.component.html',
   styleUrl: './searchbar.component.scss'
@@ -13,6 +15,11 @@ import { MatIconModule } from '@angular/material/icon';
 export class SearchbarComponent {
 
   constructor(private renderer: Renderer2, private elRef: ElementRef) {}
+
+  @Input() icon: string = 'search'; 
+  @Input() addClass: string[] = [];
+  @Input() placeholder: string = 'Search in Devspace'; 
+  @Input() align_reverse: boolean = false;
 
   @HostListener('focusin', ['$event'])
   onFocusIn(event: Event): void {

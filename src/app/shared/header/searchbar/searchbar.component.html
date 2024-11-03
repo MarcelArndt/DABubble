@@ -1,8 +1,8 @@
-<div class="searchbar">
+<div class="searchbar" [ngClass]="addClass">
 
-    <div class="inputFrame">
-        <input placeholder="Devspace durchsuchen">
-        <mat-icon>search</mat-icon>
+    <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
+        <input [placeholder]="placeholder">
+        <mat-icon>{{icon}}</mat-icon>
     </div>
 
 </div>

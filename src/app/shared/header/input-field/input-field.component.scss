@@ -1,23 +1,16 @@
 @import '../../../../mixin.scss';
 
-.searchbar{
+.custom-input{
+    position: relative;
+    margin: 16px;
     @include dFlex;  
     margin-left: auto;
     margin-right: auto;
-    background-color: var(--secundary-bg);
+    background-color: var(--primary-bg);
     width: 100%;
-    max-width: 989px;
-    height: 70px;
+    height: 60px;
     border-radius: 46px;
-    border: 1px solid var(--secundary-bg);
-
-    @include respond-to-maxWidth(large) {
-        height: 45px;
-    }
-
-    @include respond-to-maxWidth(smallMedium) {
-        display: none;
-    }
+    border: 1px solid transparent;
 
     &:hover{
         border-color: var(--purple-2);
@@ -37,31 +30,41 @@
         mat-icon{
             @include heightWidth($w: 32px, $h: 70px);
             @include respond-to-maxWidth(large) {
-               font-size: 24px;
+               font-size: 21px;
                padding: 0px 12px 0px 0px;
+
             }
             @include dFlex;  
-            @include matIcon($scale: 110%);    
+            color: var(--btn-gray);
+            margin: 0px 16px;
         }
     }
 
     input{
-        @include heightWidth($h: 26px);
-        @include figtree($fw: 300, $fs: 24px);
-        @include respond-to-maxWidth(large) {
+        @include heightWidth($h: 36px);
         @include figtree($fw: 300, $fs: 18px);
+        @include respond-to-maxWidth(large) {
+            @include figtree($fw: 300, $fs: 18px);
         }
         @include input;
+        background-color: transparent;
     }
 }
 
 .align-reverse{
     flex-direction: row-reverse;
+
+    .inputFrame{
+        mat-icon{  
+            padding: 0px 12px 0px 0px;
+            margin: 0px 0px;
+        }
+    }
 }
 
 .active{
     border-color: var(--purple-2);
-
+    background-color: var(--secundary-bg);
     .inputFrame{
         mat-icon{  
             color: var(--text-black);
@@ -69,3 +72,12 @@
     }
     
 }
+
+.error-messages {
+    position: absolute;
+    @include figtree($fw: 400, $fs: 18px);
+    color: red;
+    width: 100%;
+    top: -26px;
+    left: 16px;
+  }

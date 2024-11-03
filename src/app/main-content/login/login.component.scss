@@ -1,6 +1,24 @@
 @import '../../../mixin.scss';
 .MainWrapper{
-
     @include heightWidth($w: 100%, $h: 100%);
     @include dFlex;
+    flex-direction: column;
+}
+
+app-input-field{
+    @include heightWidth($w: 75%, $h: auto);
+}
+
+.input-area{
+    width: 100%;
+    @include dFlex ();
+    flex-direction: column;
+}
+
+.whiteBox{
+    @include heightWidth($w: 100%, $h: 100%);
+    @include dFlex;
+    max-width: 600px;
+    max-height: 800px;
+    background-color: var(--secundary-bg);
 }

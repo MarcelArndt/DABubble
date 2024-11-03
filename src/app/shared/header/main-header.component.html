@@ -2,7 +2,7 @@
     <div class="headerMainWrapper">
         <div class="headerContentWrapper">
             <div class="logo"><img [src]="darkmode.isDarkMode() ? './img/main-assets/main-logo-dark.svg' : './img/main-assets/main-logo.svg'"></div>
-            <app-searchbar class="nonMobilSearchbar"></app-searchbar>
+            <app-searchbar class="nonMobilSearchbar" icon="search" placeholder="Search in Devspace" [align_reverse]='true'></app-searchbar>
             <app-profile-navigation></app-profile-navigation>
         </div>
     </div>

@@ -1,0 +1,12 @@
+<div class="custom-input" [ngClass]="addClass">
+
+    <div *ngIf="inputControl.invalid && inputControl.touched" class="error-messages">
+        <span *ngIf="inputControl.hasError('required')">This field is required.</span>
+        <span *ngIf="inputControl.hasError('pattern')">Invalid format.</span>
+      </div>
+
+    <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
+        <input [formControl]="inputControl" type="text" [placeholder]="placeholder"/>
+        <mat-icon>{{icon}}</mat-icon>
+    </div>
+</div>
