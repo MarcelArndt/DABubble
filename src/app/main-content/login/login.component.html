@@ -4,16 +4,34 @@
 
 <section class="MainWrapper">
 
-    <button routerLink="/start">Guest -></button>
-
+ 
     <div class='whiteBox'>
 
-
+        <h1>Login</h1>
+        <p>We recommend that you use the email address you use at work.</p>
         <div class="input-area">   
             <app-input-field icon="mail" placeholder="example@email.com"  [required]="true"  pattern="^[a-zA-Z ]+$">> ></app-input-field>
             <app-input-field icon="lock" placeholder="Password" [required]="true"  pattern="^[a-zA-Z ]+$">>  ></app-input-field>
         </div>
-     
+
+        <a>Forgot Password?</a>
+
+        <div class="hrElement"><span>Or Else</span></div>
+
+        <button class="google-button" routerLink="/start"><img src="./img/main-assets/google.svg"><span>Sign in with Google</span></button>
+
+        <div class="button-collection">
+            <button routerLink="/start">Log In</button>
+            <button class="specialButton" routerLink="/start">Guest-Login</button>
+        </div>
+
     </div>
+
+    <nav class="submenu">
+            <ul>
+                <li><a>imprint</a></li>
+                <li><a>Data-Protection</a></li>
+            </ul>
+    </nav>
 
 </section>

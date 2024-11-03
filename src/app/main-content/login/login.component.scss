@@ -3,22 +3,170 @@
     @include heightWidth($w: 100%, $h: 100%);
     @include dFlex;
     flex-direction: column;
+    justify-content: space-around;
 }
 
 app-input-field{
     @include heightWidth($w: 75%, $h: auto);
 }
 
+
+button{
+    @include figtree($fw: 400, $fs: 18px, $c: var(--secundary-bg));
+    min-width: 150px;
+    margin: 16px 16px;
+    height: calc(60px - 16px);
+    border-radius: 36px;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    background-color: var(--text-blue);
+
+    &:hover{
+        background-color: var(--purple-2);
+        cursor: pointer;
+    }
+}
+
+
+.specialButton{
+    background-color: transparent;
+    border-color: var(--purple-2);
+    color: var(--text-blue);
+    &:hover{
+        color: var(--secundary-bg);
+        background-color: var(--purple-2);
+        cursor: pointer;
+    }
+}
+
+.button-collection{
+    @include dFlex ($jc: center);
+    gap: 5%;
+    @include heightWidth($w: 75%, $h: auto);
+}
+
 .input-area{
-    width: 100%;
+    @include heightWidth($w: 100%, $h: auto);
     @include dFlex ();
     flex-direction: column;
 }
 
 .whiteBox{
+    margin-top: 10dvh;
     @include heightWidth($w: 100%, $h: 100%);
-    @include dFlex;
+    @include dFlex($jc: space-between);
     max-width: 600px;
-    max-height: 800px;
     background-color: var(--secundary-bg);
+    border-radius: 36px;
+    flex-direction: column;
+    padding: 36px 0px;
+    max-height: 65dvh;
+    box-shadow: 0px 2px 3px rgba(16, 0, 159, 0.1);
+    gap: 1.5%;
+
+    h1{
+        @include figtree($fw: 600, $fs: 56px, $c: var(--purple-3));
+        margin-bottom: 16px;
+    }
+
+    p{
+        @include heightWidth($w: 75%, $h: auto);
+        @include figtree($fw: 400, $fs: 18px, $c: var(--text-black));
+        text-align: center;
+    }
+
+    a{
+        @include figtree($fw: 400, $fs: 18px, $c: var(--purple-2));
+        margin: 0px 16px;
+        padding: 8px 16px;
+        border: 1px solid  transparent;
+        border-radius: 36px;
+
+        &:hover{
+            cursor: pointer;
+            border-color: var(--primary-bg);
+            background-color: var(--primary-bg);
+            color: var(--text-blue);
+            font-weight: 600;
+        }
+
+    }
+}
+
+.hrElement{
+    @include heightWidth($w: 90%, $h: auto);
+    @include dFlex;
+    position: relative;
+
+    span{
+        @include figtree($fw: 400, $fs: 18px, $c: var(--text-black));
+        background-color: var(--secundary-bg);
+        z-index: 1;
+        padding: 8px 16px;
+        border-radius: 36px;
+    }
+
+    &::after{
+        content: "";
+        position: absolute;
+        top: calc(50% - 2px);
+        z-index: 0;
+        @include heightWidth($w: 100%, $h: 100%);
+        border-top: 2px solid var(--primary-bg);
+    }
+}
+
+.google-button{
+    @include dFlex;
+    @include heightWidth($w: 75%, $h: 60px);
+    background-color: var(--primary-bg);
+    border-radius: 36px;
+    border: 1px solid transparent;
+
+    img{
+        @include heightWidth($w: 36px, $h: 36px); 
+        margin-right: 18px;
+    }
+
+    span{
+        @include figtree($fw: 400, $fs: 18px, $c: var(--text-blue));
+    }
+
+    &:hover{
+        background-color: var(--primary-bg);
+        border-color: var(--purple-2);
+        cursor: pointer;
+        span{
+            font-weight: 600;
+        }
+    }
+}
+
+
+.submenu{
+    @include heightWidth($w: 90%, $h: auto);
+    @include dFlex;
+    padding-top: 16px;
+    ul{
+        @include dFlex;
+        list-style: none;
+        margin-block-start: 0px;
+        margin-block-end: 0px;
+        padding-inline-start: 0px;
+
+        a{          
+            @include figtree($fw: 400, $fs: 18px, $c: var(--purple-2));
+            margin: 0px 16px;
+            padding: 8px 16px;
+            border: 1px solid  transparent;
+            border-radius: 36px;
+            text-wrap: nowrap;
+
+            &:hover{
+                cursor: pointer;
+                border-color: var(--purple-3);
+                color: var(--text-blue);
+            }
+        }
+    }
 }
