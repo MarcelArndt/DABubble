@@ -6,6 +6,7 @@ import { MyMessageComponent } from "./my-message/my-message.component";
 import { CommonModule } from '@angular/common';
 import { TestJasonsService } from '../../../services/test-jsons.service';
 import { Message } from '../../../interface/message';
+import { EventService } from '../../../services/event.service';
 
 @Component({
   selector: 'app-chat',
@@ -20,7 +21,7 @@ export class ChatComponent {
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   private shouldScroll: boolean = true;
 
-  constructor(public object: TestJasonsService) { }
+  constructor(public object: TestJasonsService, private eventService: EventService) { }
 
   ngOnInit(): void {
     this.message = this.object.message;
@@ -52,4 +53,8 @@ export class ChatComponent {
     this.shouldScroll = false;
   }
 
+  openThread(){
+    
+    this.eventService.emitEvent('openThread');
+  }
 }

@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatTreeModule} from '@angular/material/tree';
-import { trigger, style, animate, transition } from '@angular/animations';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { trigger, style, animate, transition, query } from '@angular/animations';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateChannelComponent } from '../../dialog/create-channel/create-channel.component';
 
 
@@ -13,11 +13,9 @@ import { CreateChannelComponent } from '../../dialog/create-channel/create-chann
   selector: 'app-devspace',
   standalone: true,
   imports: [
-    MatSidenavModule,
     CommonModule,
     MatButtonModule,
     MatIcon,
-    MatTreeModule,
     MatDialogModule
   ],
   templateUrl: './devspace.component.html',
@@ -25,23 +23,60 @@ import { CreateChannelComponent } from '../../dialog/create-channel/create-chann
   animations: [
     trigger('slideDown', [
       transition(':enter', [
-        style({ height: 0, opacity: 0, overflow: 'hidden' }), // Initial state: hidden and collapsed
-        animate('125ms ease-out', style({ height: '*', opacity: 1 })) // Animate to visible and full height
+        style({ height: 0, opacity: 0, overflow: 'hidden' }),
+        animate('125ms ease-out', style({ height: '*', opacity: 1 }))
       ]),
       transition(':leave', [
-        animate('125ms ease-in', style({ height: 0, opacity: 0, overflow: 'hidden' })) // Animate to hidden and collapsed
+        animate('125ms ease-in', style({ height: 0, opacity: 0, overflow: 'hidden' }))
+      ])
+    ]),
+    trigger('toggleNavBar', [
+      transition(':enter', [
+        style({
+          width: '0px',
+          opacity: 0,
+          overflow: 'hidden',
+          transform: 'translateX(-100%)' 
+        }),
+        animate(
+          '125ms ease-out',
+          style({
+            width: '318.33px', 
+            opacity: 1,
+            transform: 'translateX(0)'
+          })
+        ),
+        query('.nav-item', [
+          style({ opacity: 0, display: 'none' }),
+          animate('125ms ease-out', style({ opacity: 1, display: 'block' })) 
+        ])
+      ]),
+      transition(':leave', [
+        query('.nav-item', [
+          style({ opacity: 1, display: 'block' }),
+          animate('125ms ease-out', style({ opacity: 0, display: 'none' })) 
+        ]),
+        animate(
+          '125ms ease-in',
+          style({
+            width: '0px', 
+            opacity: 0,
+            overflow: 'hidden',
+            transform: 'translateX(-100%)'
+          })
+        )
       ])
     ])
   ]
 })
 export class DevspaceComponent {
-  navBarIsClosed: boolean = false;
+  navBarIsClosed: boolean = true;
   contactsAreVisible: boolean = true;
   channelsAreVisible: boolean = true;
   readonly dialog = inject(MatDialog);
 
 
-  closeNavBar() { 
+  toggleNavBar() { 
     this.navBarIsClosed = !this.navBarIsClosed;
   }
 

@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ThreadHeaderComponent } from "./thread-header/thread-header.component";
 import { ThreadMessageFieldComponent } from "./thread-message-field/thread-message-field.component";
 import { MemberMessageComponent } from "../chat/member-message/member-message.component";
 import { ThreadMembersMessageComponent } from "./thread-members-message/thread-members-message.component";
 import { ThreadMyMessageComponent } from "./thread-my-message/thread-my-message.component";
 import { CommonModule } from '@angular/common';
+import { animate, query, style, transition, trigger } from '@angular/animations';
+import { EventService } from '../../../services/event.service';
 
 @Component({
   selector: 'app-thread',
@@ -18,9 +20,52 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ],
   templateUrl: './thread.component.html',
-  styleUrl: './thread.component.scss'
+  styleUrl: './thread.component.scss',
+  animations: [
+      trigger('toggleThread', [
+        transition(':enter', [
+          style({
+            width: '0px',
+            opacity: 0,
+            overflow: 'hidden',
+            transform: 'translateX(-100%)' 
+          }),
+          animate(
+            '125ms ease-out',
+            style({
+              width: '485px', 
+              opacity: 1,
+              transform: 'translateX(0)'
+            })
+          ),
+          query('.thread-item', [
+            style({ opacity: 0, display: 'none' }),
+            animate('125ms ease-out', style({ opacity: 1, display: 'block' })) 
+          ])
+        ]),
+        transition(':leave', [
+          query('.thread-item', [
+            style({ opacity: 1, display: 'block' }),
+            animate('125ms ease-out', style({ opacity: 0, display: 'none' })) 
+          ]),
+          animate(
+            '125ms ease-in',
+            style({
+              width: '0px', 
+              opacity: 0,
+              overflow: 'hidden',
+              transform: 'translateX(100%)'
+            })
+          )
+        ])
+      ])
+  ]
 })
-export class ThreadComponent {
+export class ThreadComponent implements OnInit {
+  threadIsOpen: boolean = false;
+
+  constructor(private eventService: EventService){}
+
   messages = [
     {
       user: 'member',
@@ -69,6 +114,19 @@ export class ThreadComponent {
         answer: [],
       }
     }
-
   ]
+
+  ngOnInit() {
+    this.eventService.event$.subscribe(event => {
+      if (event.eventType === 'openThread') {
+        this.threadIsOpen = true; 
+      } else if (event.eventType === 'closeThread') {
+        this.threadIsOpen = false;
+      }
+    });
+  }
+
+  toggleThread() { 
+    this.threadIsOpen = !this.threadIsOpen;
+  }
 }

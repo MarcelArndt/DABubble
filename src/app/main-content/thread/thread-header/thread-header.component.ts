@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -11,5 +11,9 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './thread-header.component.scss'
 })
 export class ThreadHeaderComponent {
+  @Output() closeThreadEvent = new EventEmitter();
 
+  closeThread() {
+    this.closeThreadEvent.emit();
+  }
 }

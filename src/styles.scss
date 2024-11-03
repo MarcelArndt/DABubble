@@ -1,5 +1,6 @@
 @import '@ctrl/ngx-emoji-mart/picker';
 
+
 :root {
     --primary-bg: #ECEEFE;
         --secundary-bg: #FFFFFF;
@@ -34,15 +35,11 @@
   
 body {
 margin: 0;
-font-weight: 'Nunito';
+font-family: 'Nunito', Roboto, "Helvetica Neue", sans-serif;
+background-color: var(--primary-bg);
 }
 
-html, body { height: 100%; }
-body { 
-    margin: 0; 
-    font-family: Roboto, "Helvetica Neue", sans-serif; 
-    background-color: var(--primary-bg); 
-}
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { 
+    height: 100%;
+    overflow: hidden;
+ }

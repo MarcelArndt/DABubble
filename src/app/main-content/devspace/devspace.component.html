@@ -1,5 +1,5 @@
-<mat-drawer-container class="serverNav" autosize>
-    <mat-drawer [opened]="true" #drawer class="serverNavContent" mode="side">
+<div  *ngIf="navBarIsClosed" @toggleNavBar class="serverNav">
+    <div class="serverNavContent nav-item" mode="side">
         <div class="titleRow">
             <div class="titleAndServerSvg">
                 <img src="/img/devspace/titleAndServerSvg.svg">
@@ -136,11 +136,11 @@
             </div>
         </div>
         }
-    </mat-drawer>
-</mat-drawer-container>
+    </div>
+</div>
 
 
-<button type="button" class="toggleNavBarButton" (click)="drawer.toggle(); closeNavBar();">
+<button type="button" class="toggleNavBarButton" (click)="toggleNavBar()">
 
     @if (navBarIsClosed) {
     <span>Workspace Menü öffnen</span>

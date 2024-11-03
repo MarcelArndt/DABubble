@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChatComponent } from '../chat.component';
 import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { EventService } from '../../../../services/event.service';
 
 @Component({
   selector: 'app-member-message',
@@ -17,4 +18,5 @@ import { CommonModule } from '@angular/common';
 export class MemberMessageComponent {
   @Input() message: any;
   isMessageHover: boolean = false;
+
 }
