@@ -1,0 +1,65 @@
+@import '../../../../mixin.scss';
+
+.dialogWindow{
+    @include nunito(400, 24px, black);
+    @include dFlex(center, start);
+    flex-direction: column;
+    gap: 20px;
+    @include padding(40px, 40px, 40px, 40px);
+    width: 560px;
+}
+
+.optionContainer{
+    @include dFlex(center, start);
+    flex-direction: column;
+    font-size: 24px;
+    gap: 20px;
+}
+
+h3{
+    @include nunito(700, 24px, black)
+}
+
+.closeIcon{
+    @include matIcon(24px, 8px 8px, black, $chover: var(--purple-1), $scale: 1.1);
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    border-radius: 50px;
+    @include dFlex(center, center);
+    transition: background-color 0.100s ease-in-out, color 0.100s ease-in-out, transform 0.100s ease-in-out;
+    &:hover {
+        background-color: var(--dg-btn-bg);
+    }
+}
+
+.buttonContainer{
+    width: 100%;
+    @include dFlex(end, center)
+}
+
+input, textarea {
+    @include padding(18px, 20px, 18px, 20px);
+    border: 1px solid var(--border-light-purple);
+    transition: border ease-in-out 0.3s;
+    outline: none;
+    border-radius: 40px;
+    @include nunito(400, 18px, black);
+    &:focus{
+        border: 1.6px solid var(--purple-1);
+    }
+    resize: none; 
+    scrollbar-width: none;    
+    line-height: 24px; 
+    min-height: calc(24px * 1 + 36px); 
+    max-height: calc(24px * 3 + 36px);
+    @include nunito(400, 18px, black)
+}
+
+.button{
+    background-color: var(--purple-1) !important;
+    @include nunito(400, 18px, --text-black);
+    @include padding(12px, 25px, 12px, 25px);
+    @include dFlex(center, center);
+    width: fit-content;
+}

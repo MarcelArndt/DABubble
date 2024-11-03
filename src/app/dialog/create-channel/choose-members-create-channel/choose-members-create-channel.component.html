@@ -1,0 +1,31 @@
+<div class="dialogWindow">
+    <mat-icon (click)="dialogRef.close()" class="closeIcon">close</mat-icon>
+    <h3>Adding People</h3>
+    <mat-radio-group class="optionContainer">
+        <mat-radio-button>Add all members of {{ 'server' }}</mat-radio-button>
+        <mat-radio-button>Add certain people</mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field class="member-input" appearance="fill">
+        <textarea
+            matInput
+            [(ngModel)]="newMembersInput"
+            (input)="filterMembers()"
+            placeholder="Enter member names"
+            (keydown.enter)="$event.preventDefault()"
+        ></textarea>
+    </mat-form-field> 
+    <div class="selected-members">
+        <mat-chip *ngFor="let member of selectedMembers" [removable]="true" (removed)="removeMember(member)">
+            {{ member.name }}
+            <button matChipRemove >Remove</button>
+        </mat-chip>
+    </div>
+    <div *ngIf="filteredMembers.length > 0" class="member-suggestions">
+        <div *ngFor="let member of filteredMembers" class="suggestion" (click)="selectMember(member)">
+            {{ member.name }}
+        </div>
+    </div>
+    <div class="buttonContainer">
+        <button class="button" mat-flat-button (click)="createChannel()">Create</button>
+    </div>
+</div>

@@ -12,7 +12,6 @@ export class EventService {
   constructor() {}
 
   emitEvent(eventType: string) {
-    console.log(`Event emitted: ${eventType}`)
     this.eventSubject.next({ eventType });
   }
 

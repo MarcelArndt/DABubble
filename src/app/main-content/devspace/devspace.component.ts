@@ -75,7 +75,6 @@ export class DevspaceComponent {
   channelsAreVisible: boolean = true;
   readonly dialog = inject(MatDialog);
 
-
   toggleNavBar() { 
     this.navBarIsClosed = !this.navBarIsClosed;
   }

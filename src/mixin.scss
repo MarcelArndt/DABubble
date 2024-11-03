@@ -26,7 +26,7 @@ $breakpoints: (
     }
 }
 
-@mixin dFlex($ai: center, $jc: center) {
+@mixin dFlex($jc: center, $ai: center) {
     display: flex;
     justify-content: $jc;
     align-items: $ai;
@@ -40,7 +40,6 @@ $breakpoints: (
     border: none;
     background-color: var(--secundary-bg);
     border: none;
-
     &:active,
     &:focus,
     &:hover {
@@ -48,7 +47,6 @@ $breakpoints: (
         background-color: none;
         outline: none;
     }
-
     &::placeholder {
         color: var(--btn-gray);
     }
@@ -99,7 +97,6 @@ $breakpoints: (
     color: $c;
     font-size: $fs;
     padding: $p;
-
     &:hover {
         cursor: pointer;
         color: $chover;
@@ -107,11 +104,11 @@ $breakpoints: (
     }
 }
 
-@mixin padding($pt: 20px, $pb: 20px, $pl: 20px, $pr: 20px) {
+@mixin padding($pt: 20px, $pl: 20px, $pb: 20px, $pr: 20px) {
     box-sizing: border-box;
     padding-top: $pt;
-    padding-bottom: $pb;
     padding-left: $pl;
+    padding-bottom: $pb;
     padding-right: $pr;
 }
 

@@ -1,14 +1,15 @@
 <div class="dialogWindow">
+    <mat-icon (click)="dialogRef.close()" class="closeIcon">close</mat-icon>
     <h2>Create Channel</h2>
     <p>Channels are for your team’s communication. Ideally, they should be topic-based — for example, #marketing.</p>
     <h3>Channel Name</h3>
     <div class="input-container">
         <span class="hash-symbol">#</span>
-        <input  required placeholder="Office-Team" type="text" class="input-field">
+        <input [(ngModel)]="channel.title" required placeholder="Office-Team" type="text" class="input-field">
     </div>
     <h3>Description <span> (optional)</span></h3>
-    <textarea placeholder="Your description here" type="text" class="text-field"></textarea>
+    <textarea placeholder="Your description here" type="text" class="text-field" [(ngModel)]="channel.description"></textarea>
     <div class="buttonContainer">
-        <button mat-flat-button>Create</button>
+        <button mat-flat-button (click)="openChooseMembers()">Create</button>
     </div>
 </div>

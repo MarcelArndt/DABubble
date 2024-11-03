@@ -54,17 +54,17 @@ input, textarea {
 }
 
 .text-field {
-    resize: none; /* Prevent manual resizing */
+    resize: none; 
     scrollbar-width: none;    
-    line-height: 24px; /* Line height for clear spacing between lines */
-    min-height: calc(24px * 1 + 36px); /* Minimum height for one line + padding */
-    max-height: calc(24px * 3 + 36px); /* Maximum height for three lines + padding */
+    line-height: 24px; 
+    min-height: calc(24px * 1 + 36px); 
+    max-height: calc(24px * 3 + 36px);
     font-family: 'Nunito';
 }
 
 .buttonContainer{
     width: 100%;
-    @include dFlex(center, end)
+    @include dFlex(end, center)
 }
 
 button{
@@ -74,3 +74,17 @@ button{
     font-weight: 400;
     padding: 12px 25px 12px 25px;
 }
+
+.closeIcon{
+    @include matIcon(24px, 8px 8px, black, $chover: var(--purple-1), $scale: 1.1);
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    border-radius: 50px;
+    @include dFlex(center, center);
+    transition: background-color 0.100s ease-in-out, color 0.100s ease-in-out, transform 0.100s ease-in-out;
+    &:hover {
+        background-color: var(--dg-btn-bg);
+    }
+}
+
