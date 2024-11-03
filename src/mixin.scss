@@ -107,9 +107,9 @@ $breakpoints: (
 @mixin padding($pt: 20px, $pl: 20px, $pb: 20px, $pr: 20px) {
     box-sizing: border-box;
     padding-top: $pt;
-    padding-left: $pl;
-    padding-bottom: $pb;
     padding-right: $pr;
+    padding-bottom: $pb;
+    padding-left: $pl;
 }
 
 @mixin materialSymbols($c: var(--text-black)) {
