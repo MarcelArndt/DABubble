@@ -86,4 +86,6 @@ export class MyMessageComponent {
   deleteImage(i: any) {
     this.message.attachmen.splice(i, 1);
   }
+
+
 }

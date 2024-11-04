@@ -5,6 +5,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 import { TestJasonsService } from '../../../../services/test-jsons.service';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-chat-message-field',
@@ -15,6 +16,7 @@ import { TestJasonsService } from '../../../../services/test-jsons.service';
     CommonModule,
     MatMenuModule,
     FormsModule,
+    MatAutocompleteModule
   ],
   templateUrl: './chat-message-field.component.html',
   styleUrl: './chat-message-field.component.scss'
@@ -26,6 +28,10 @@ export class ChatMessageFieldComponent {
   openData: boolean = false;
   imageUploads: string[] = [];
   imagePreviews: (string | ArrayBuffer | null)[] = [];
+
+  users = ['JohnDoe', 'JaneSmith', 'AlexMiller', 'ChrisJohnson'];
+  showUserList: boolean = false;
+  filteredUsers: string[] = [];
 
   constructor(public object: TestJasonsService) { }
 
@@ -44,7 +50,7 @@ export class ChatMessageFieldComponent {
       answers: {
         answer: [],
       },
-      attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string') // Filter nur für `string`
+      attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
     };
 
     this.object.message.push(userMessage);
@@ -52,8 +58,6 @@ export class ChatMessageFieldComponent {
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
-    console.log(userMessage)
-    console.log(this.imagePreviews)
   }
 
   toggleEmojis(event: Event): void {
@@ -84,6 +88,40 @@ export class ChatMessageFieldComponent {
 
   deleteImage(i: any) {
     this.imagePreviews.splice(i, 1);
+  }
+
+  addEmoji(event: any) {
+    this.messageField += event.emoji.native;
+    this.openEmojis = false;
+  }
+
+  addTag() {
+    this.messageField += '@';
+    this.showUserList = true;
+    this.filteredUsers = this.users; 
+  }
+
+  selectUser(user: string) {
+    const lastAtSignIndex = this.messageField.lastIndexOf('@');
+    this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
+    this.showUserList = false;
+  }
+
+  onInput(event: any) {
+    const lastAtSignIndex = this.messageField.lastIndexOf('@');
+    if (lastAtSignIndex > -1) {
+      const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
+      if (searchQuery && !searchQuery.includes(' ')) {
+        this.filteredUsers = this.users.filter(user =>
+          user.toLowerCase().startsWith(searchQuery.toLowerCase())
+        );
+        this.showUserList = true;
+      } else {
+        this.showUserList = false;
+      }
+    } else {
+      this.showUserList = false; 
+    }
   }
 
 }

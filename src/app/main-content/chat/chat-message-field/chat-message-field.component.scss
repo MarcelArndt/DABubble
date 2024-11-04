@@ -133,3 +133,33 @@ input[type="file"] {
         }
     }
 }
+
+.user-list {
+    position: absolute;
+    background: var(--primary-bg);
+    border: 1px solid #ddd;
+    overflow-y: auto;
+    top: -200px;
+    left: 20px;
+    right: 20px;
+    height: 235px;
+    border-radius: 20px 20px 0 0;
+    overflow-y: scroll;
+    scrollbar-width: none;
+  }
+  
+  .user-list ul {
+    @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .user-list li {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .user-list li:hover {
+    background-color: var(--purple-2);
+  }
