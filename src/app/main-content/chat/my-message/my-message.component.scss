@@ -35,7 +35,6 @@
         border-radius: 20px 0px 20px 20px;
         margin: 10px 0;
         width: 100%;
-        position: relative;
 
         .message-text {
             @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
@@ -47,17 +46,18 @@
             height: 100%;
             resize: none;
             outline: none;
-            background-color: rgba(160, 160, 160, 0.486);
             border: none;
             border-radius: 20px 0px 20px 20px;
             box-sizing: border-box;
             padding: 10px;
+            background-color: var(--purple-2);
 
         }
 
         .edit-info-text {
             position: absolute;
-            bottom: -25px;
+            bottom: 50px;
+            left: 30px;
             @include nunito($fw: 400, $fs: 12px, $c: var(--text-black));
 
             span {
@@ -192,6 +192,7 @@
     margin-bottom: 10px;
     gap: 10px;
     flex-wrap: wrap;
+    position: relative;
 }
 
 .image {
@@ -200,4 +201,19 @@
     border-radius: 5px;
     object-fit: cover;
     object-position: center;
+    
+}
+
+.image-container {
+    position: relative;
+}
+
+.edit-images {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    color: rgba(255, 0, 0, 0.753);
+    background-color: var(--btn-gray);
+    cursor: pointer;
 }

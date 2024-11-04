@@ -82,4 +82,8 @@ export class MyMessageComponent {
   openThread() {
     this.eventService.emitEvent('openThread');
   }
+
+  deleteImage(i: any) {
+    this.message.attachmen.splice(i, 1);
+  }
 }

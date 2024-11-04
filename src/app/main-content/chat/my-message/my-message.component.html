@@ -16,7 +16,10 @@
             </div>
 
             <div class="postet-image-container">
-                <img *ngFor="let attachmen of message.attachmen" class="image" src="{{attachmen}}">
+                <div class="image-container" *ngFor="let attachmen of message.attachmen; let i = index">
+                    <img class="image" [src]="attachmen">
+                    <button *ngIf="isEdit" (click)="deleteImage(i)" class="edit-images"><mat-icon>delete</mat-icon></button>
+                </div>
             </div>
 
             <div class="reaction-container">
