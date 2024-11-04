@@ -5,7 +5,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 import { TestJasonsService } from '../../../../services/test-jsons.service';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 
 @Component({
   selector: 'app-chat-message-field',
@@ -16,7 +16,6 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     CommonModule,
     MatMenuModule,
     FormsModule,
-    MatAutocompleteModule
   ],
   templateUrl: './chat-message-field.component.html',
   styleUrl: './chat-message-field.component.scss'

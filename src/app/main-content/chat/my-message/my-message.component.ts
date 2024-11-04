@@ -87,5 +87,22 @@ export class MyMessageComponent {
     this.message.attachmen.splice(i, 1);
   }
 
+  likeMessage() {
+    const userIdIndex = this.message.reactions.like.indexOf(this.object.userId);
+    if (userIdIndex === -1) {
+      this.message.reactions.like.push(this.object.userId);
+    } else {
+      this.message.reactions.like.splice(userIdIndex, 1);
+    }
+  }
+
+  rocketMessage() {
+    const userIdIndex = this.message.reactions.rocket.indexOf(this.object.userId);
+    if (userIdIndex === -1) {
+      this.message.reactions.rocket.push(this.object.userId);
+    } else {
+      this.message.reactions.rocket.splice(userIdIndex, 1);
+    }
+  }
 
 }

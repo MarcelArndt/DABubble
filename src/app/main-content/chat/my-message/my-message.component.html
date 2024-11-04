@@ -23,14 +23,14 @@
             </div>
 
             <div class="reaction-container">
-                <img class="add-reaction-btn" src="/img/reactions/add_reaction.svg" alt="">
-                <button><img src="/img/reactions/like.svg" alt="">
+                <button *ngIf="message.reactions.like.length" (click)="likeMessage()"><img src="/img/reactions/like.svg" alt="">
                     <p>{{message.reactions.like.length}}</p>
                 </button>
-                <button><img src="/img/reactions/rocket.svg" alt="">
+                <button *ngIf="message.reactions.rocket.length" (click)="rocketMessage()"><img src="/img/reactions/rocket.svg" alt="">
                     <p>{{message.reactions.rocket.length}}</p>
                 </button>
             </div>
+
 
         </div>
 
@@ -39,8 +39,8 @@
         </div>
 
         <div class="options" *ngIf="isMessageHover">
-            <button class="options-btn"><img src="/img/reactions/rocket.svg" alt=""></button>
-            <button class="options-btn"><mat-icon><img src="/img/reactions/like.svg" alt=""></mat-icon></button>
+            <button class="options-btn" (click)="rocketMessage()"><img src="/img/reactions/rocket.svg" alt=""></button>
+            <button class="options-btn" (click)="likeMessage()"><mat-icon><img src="/img/reactions/like.svg" alt=""></mat-icon></button>
             <button class="options-btn"><mat-icon>sentiment_satisfied</mat-icon></button>
             <button class="options-btn" (click)="openThread()"><mat-icon>comment</mat-icon></button>
             <button class="options-btn" (click)="openEditMenu()"><mat-icon>more_vert</mat-icon></button>

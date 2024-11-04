@@ -5,6 +5,7 @@ import { Message } from '../interface/message';
   providedIn: 'root'
 })
 export class TestJasonsService {
+  userId: string = 'uidTestId';
 
  public message: Message[] = [
     {
@@ -15,7 +16,7 @@ export class TestJasonsService {
       profileImage: '/img/profil-pic/001.svg',
       createdAt: 'Mittwoch, 15 Januar',
       reactions: {
-        like: [],
+        like: ['1', '2', '3'],
         rocket: []
       },
       answers: {

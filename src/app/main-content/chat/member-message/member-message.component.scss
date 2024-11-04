@@ -133,3 +133,39 @@
     object-fit: cover;
     object-position: center;
 }
+
+.reaction-container {
+    @include dFlex($jc: start);
+    margin-top: 10px;
+
+
+    button {
+        @include dFlex();
+        border: none;
+        border: 1px solid var(--purple-2);
+        border-radius: 20px;
+        padding: 5px 10px;
+        background-color: var(--secundary-bg);
+        margin-right: 10px;
+        cursor: pointer;
+
+        img {
+            height: 100%
+        }
+
+        p {
+            @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+            margin-left: 10px;
+        }
+    }
+
+    .add-reaction-btn {
+        margin-left: 10px;
+    }
+}
+
+.emojis-container {
+    position: absolute;
+    top: 45px;
+    right: -5px;
+}

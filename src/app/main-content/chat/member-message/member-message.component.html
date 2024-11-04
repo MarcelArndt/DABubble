@@ -18,16 +18,32 @@
                 <p class="answer" (click)="openThread()">{{message.answers.answer.length}} Anwtorten</p>
                 <p class="answer-time">Letze Antwort 14:56</p>
             </div>
+
+            <div class="reaction-container">
+                <button *ngIf="message.reactions.like.length" (click)="likeMessage()"><img src="/img/reactions/like.svg" alt="">
+                    <p>{{message.reactions.like.length}}</p>
+                </button>
+                <button *ngIf="message.reactions.rocket.length" (click)="rocketMessage()"><img src="/img/reactions/rocket.svg" alt="">
+                    <p>{{message.reactions.rocket.length}}</p>
+                </button>
+            </div>
+
         </div>
         <div class="answer-date-time-container">
             <p>{{message.createdAt}}</p>
         </div>
 
+        
+
         <div class="options" *ngIf="isMessageHover">
-            <button class="options-btn"><img src="/img/reactions/like.svg" alt=""></button>
-            <button class="options-btn"><img src="/img/reactions/arm.svg" alt=""></button>
-            <button class="options-btn"><mat-icon>sentiment_satisfied</mat-icon></button>
+            <button class="options-btn" (click)="likeMessage()"><img src="/img/reactions/like.svg" alt=""></button>
+            <button class="options-btn" (click)="rocketMessage()"><img src="/img/reactions/rocket.svg" alt=""></button>
+            <button class="options-btn" (click)="toggleEmojis($event)"><mat-icon>sentiment_satisfied</mat-icon></button>
             <button class="options-btn" (click)="openThread()"><mat-icon>comment</mat-icon></button>
+
+            <div class="emojis-container" *ngIf="openEmojis">
+                <emoji-mart title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"></emoji-mart>
+            </div>
         </div>
     </div>
 </div>
