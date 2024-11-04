@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { TestJasonsService } from '../../../services/test-jsons.service';
 import { Message } from '../../../interface/message';
 import { EventService } from '../../../services/event.service';
+import { MessageComponent } from "./message/message.component";
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [ChatHeaderComponent, ChatMessageFieldComponent, MemberMessageComponent, MyMessageComponent, CommonModule],
+  imports: [ChatHeaderComponent, ChatMessageFieldComponent, MemberMessageComponent, MyMessageComponent, CommonModule, MessageComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })

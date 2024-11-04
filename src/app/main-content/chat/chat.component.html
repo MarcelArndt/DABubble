@@ -2,10 +2,11 @@
     <app-chat-header></app-chat-header>
 
     <div class="main-message-container"  #messageContainer>
-        <div *ngFor="let msg of message; index as i">
+        <!-- <div *ngFor="let msg of message; index as i">
             <app-my-message  *ngIf="msg.user === currentUserId" [message]="msg" (delete)="deleteMessage(i)"></app-my-message>
             <app-member-message *ngIf="msg.user !== currentUserId" [message]="msg"></app-member-message>
-        </div>
+        </div> -->
+        <app-message *ngFor="let msg of message; index as i" [message]="msg"></app-message>
     </div>
 
     <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"></app-chat-message-field>

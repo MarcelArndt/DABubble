@@ -6,44 +6,49 @@ import { Message } from '../interface/message';
 })
 export class TestJasonsService {
   userId: string = 'uidTestId';
+  profileImage: string = '/img/profil-pic/003.svg';
 
  public message: Message[] = [
-    {
-      user: 'member',
-      name: 'Max Mustermann',
-      time: '16:10',
-      message: 'Angular ist ein Framework von Google',
-      profileImage: '/img/profil-pic/001.svg',
-      createdAt: 'Mittwoch, 15 Januar',
-      reactions: {
-        like: ['1', '2', '3'],
-        rocket: []
-      },
-      answers: {
-        answer: [],
-      },
-      attachmen: ['/img/profil-pic/004.svg',]
+  {
+    user: 'member',
+    name: 'Ma Mustermann',
+    time: '16:10',
+    message: 'Angular ist ein Framework von Google',
+    profileImage: '/img/profil-pic/001.svg',
+    createdAt: 'Mittwoch, 15 Januar',
+    reactions: {
+      like: ['1', '2', '3'],
+      rocket: []
     },
-    {
-      user: 'uidTestId',
-      name: 'Max Mustermann',
-      time: '16:10',
-      message: 'Angular ist ein Framework von Google',
-      profileImage: '/img/profil-pic/001.svg',
-      createdAt: 'Mittwoch, 15 Januar',
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      answers: {
-        answer: [],
-      },
-      attachmen: [
-        '/img/profil-pic/004.svg',
-      ]
+    answers: {
+      answer: [],
     },
+    attachmen: [
+      '/img/profil-pic/004.svg',
+      '/img/profil-pic/004.svg',
+    ]
+  },
+  {
+    user: 'uidTestId',
+    name: 'Max Mustermann',
+    time: '16:10',
+    message: 'Angular ist ein Framework von Google kjsdhf ',
+    profileImage: '/img/profil-pic/001.svg',
+    createdAt: 'Mittwoch, 15 Januar',
+    reactions: {
+      like: [],
+      rocket: []
+    },
+    answers: {
+      answer: [],
+    },
+    attachmen: [
+      '/img/profil-pic/004.svg',
+    ]
+  },
 
-  ]
+]
 
+// public user:any []
   
 }

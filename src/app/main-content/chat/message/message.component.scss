@@ -1,8 +1,9 @@
 @import '../../../../mixin.scss';
 
+@import '../../../../mixin.scss';
+
 .new-message-container {
-    @include dFlex($ai: start, $jc: end);
-    flex-direction: row-reverse;
+    @include dFlex($ai: start, $jc: start);
     box-sizing: border-box;
     padding: 50px 0px;
     position: relative;
@@ -11,16 +12,11 @@
     .profile-image {
         @include image($br: 50%);
         @include heightWidth($w: auto, $h: 60px);
-        margin-left: 30px;
     }
 
     .name {
-        @include dFlex($jc: end);
-        flex-direction: row-reverse;
-
         h5 {
             @include nunito($fw: 700, $fs: 18px);
-            margin-left: 20px;
         }
 
         p {
@@ -29,19 +25,13 @@
     }
 
     .message {
-        background-color: var(--purple-2);
         box-sizing: border-box;
         padding: 10px;
-        border-radius: 20px 0px 20px 20px;
         margin: 10px 0;
         width: 100%;
 
-        .message-text {
-            @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
-        }
-
         textarea {
-            @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
+            @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
             width: 100%;
             height: 100%;
             resize: none;
@@ -72,8 +62,6 @@
     }
 
     .reaction-container {
-        @include dFlex($jc: end);
-        flex-direction: row-reverse;
 
         button {
             @include dFlex();
@@ -82,7 +70,8 @@
             border-radius: 20px;
             padding: 5px 10px;
             background-color: var(--secundary-bg);
-            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 10px;
 
             img {
                 height: 100%
@@ -100,7 +89,6 @@
     }
 
     .answer-date-time-container {
-        @include dFlex();
         position: absolute;
         top: -18px;
         left: 40%;
@@ -119,7 +107,6 @@
 
 .hover {
     display: flex;
-    flex-direction: row-reverse;
     width: 100%;
     box-sizing: border-box;
     padding: 5px 30px;
@@ -188,7 +175,7 @@
 
 .postet-image-container {
     width: 100%;
-    @include dFlex($jc: end);
+    @include dFlex($jc: start);
     margin-bottom: 10px;
     gap: 10px;
     flex-wrap: wrap;
@@ -201,7 +188,7 @@
     border-radius: 5px;
     object-fit: cover;
     object-position: center;
-    
+
 }
 
 .image-container {
@@ -231,8 +218,8 @@
 }
 
 .answer-container {
-    @include dFlex($jc: end);
-    
+    @include dFlex($jc: start);
+
 
     .answer {
         @include nunito($fw: 400, $fs: 18px, $c: var(--purple-3));
@@ -261,3 +248,50 @@
     }
 }
 
+.row {
+    flex-direction: row;
+}
+
+.row-reverse {
+    flex-direction: row-reverse;
+}
+
+.flex-end {
+    @include dFlex($jc: end);
+}
+
+.flex-start {
+    @include dFlex($jc: start);
+}
+
+.mr {
+    margin-right: 20px;
+}
+
+.ml {
+    margin-left: 20px;
+}
+
+.option-menu {
+    right: 50px;
+    left: auto;
+    border-radius: 20px 20px 20px 0px;
+}
+
+.myMessage {
+    background-color: var(--purple-2);
+    border-radius: 20px 0px 20px 20px;
+}
+
+.memberMessage {
+    background-color: var(--primary-bg);
+    border-radius: 0 20px 20px 20px;
+}
+
+.text-dark {
+    @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+}
+
+.text.light {
+    @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
+}

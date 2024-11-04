@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MatMenuModule } from '@angular/material/menu';
@@ -31,17 +31,21 @@ export class ChatMessageFieldComponent {
   users = ['JohnDoe', 'JaneSmith', 'AlexMiller', 'ChrisJohnson'];
   showUserList: boolean = false;
   filteredUsers: string[] = [];
+  selectedIndex = -1;
+  @ViewChild('userListContainer') userListContainer!: ElementRef;
+
 
   constructor(public object: TestJasonsService) { }
 
   sendMessage() {
+    const now = new Date();
     const userMessage = {
       user: 'uidTestId',
       name: 'Max Mustermann',
-      time: '14:20',
+      time: `${now.getHours()}:${now.getMinutes()}`,
       message: this.messageField,
-      profileImage: '/img/profil-pic/003.svg',
-      createdAt: 'Freitag, 01 November',
+      profileImage: this.object.profileImage,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
       reactions: {
         like: [],
         rocket: []
@@ -104,6 +108,7 @@ export class ChatMessageFieldComponent {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
     this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
     this.showUserList = false;
+    this.selectedIndex = -1;
   }
 
   onInput(event: any) {
@@ -114,7 +119,8 @@ export class ChatMessageFieldComponent {
         this.filteredUsers = this.users.filter(user =>
           user.toLowerCase().startsWith(searchQuery.toLowerCase())
         );
-        this.showUserList = true;
+        this.showUserList = this.filteredUsers.length > 0;
+        this.selectedIndex = 0;
       } else {
         this.showUserList = false;
       }
@@ -123,4 +129,33 @@ export class ChatMessageFieldComponent {
     }
   }
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (!this.showUserList) return;
+
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.filteredUsers.length;
+      this.scrollToSelected();
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.filteredUsers.length) % this.filteredUsers.length;
+      this.scrollToSelected();
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectUser(this.filteredUsers[this.selectedIndex]);
+      event.preventDefault();
+    } else if (event.key === ' ') {  // Leerzeichen schließt die Liste
+      this.showUserList = false;
+    }
+  }
+
+  private scrollToSelected() {
+    setTimeout(() => {
+      const items = this.userListContainer.nativeElement.querySelectorAll('li');
+      if (items[this.selectedIndex]) {
+        items[this.selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
 }
+
