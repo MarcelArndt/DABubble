@@ -8,7 +8,9 @@ export class Channel {
     } = { name: '', id: '' };
     members: Array<{ 
         name: string; 
-        id: string 
+        id: string;
+        img: string;
+        isOnline: boolean;
     }> = [];
     description: string = '';
     isPublic: boolean = true;

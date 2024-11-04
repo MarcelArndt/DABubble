@@ -1,31 +1,54 @@
-<div class="dialogWindow">
+<form class="dialogWindow" #channelForm="ngForm">
     <mat-icon (click)="dialogRef.close()" class="closeIcon">close</mat-icon>
     <h3>Adding People</h3>
-    <mat-radio-group class="optionContainer">
-        <mat-radio-button>Add all members of {{ 'server' }}</mat-radio-button>
-        <mat-radio-button>Add certain people</mat-radio-button>
+
+    <!-- Radio Group Selection -->
+    <mat-radio-group [(ngModel)]="selectAllPeople" name="selectAllPeople" class="optionContainer">
+        <mat-radio-button [value]="true" checked="true">Add all members of Devspace</mat-radio-button>
+        <mat-radio-button [value]="false">Add certain people</mat-radio-button>
     </mat-radio-group>
-    <mat-form-field class="member-input" appearance="fill">
-        <textarea
-            matInput
-            [(ngModel)]="newMembersInput"
-            (input)="filterMembers()"
-            placeholder="Enter member names"
-            (keydown.enter)="$event.preventDefault()"
-        ></textarea>
-    </mat-form-field> 
-    <div class="selected-members">
-        <mat-chip *ngFor="let member of selectedMembers" [removable]="true" (removed)="removeMember(member)">
-            {{ member.name }}
-            <button matChipRemove >Remove</button>
-        </mat-chip>
-    </div>
-    <div *ngIf="filteredMembers.length > 0" class="member-suggestions">
-        <div *ngFor="let member of filteredMembers" class="suggestion" (click)="selectMember(member)">
-            {{ member.name }}
-        </div>
-    </div>
+
+    <!-- Eingabefeld für bestimmte Mitglieder, nur wenn nötig angezeigt -->
+    <mat-form-field *ngIf="!selectAllPeople">
+        <mat-chip-grid #chipGrid>
+            <mat-chip-row
+                *ngFor="let member of selectedMembers; let i = index"
+                (removed)="remove(member)"
+                [editable]="true"
+                (edited)="edit(member, $event)">
+                <div class="contactAsChip">
+                    <img class="contactPictureInChip" src="{{ member.img }}" alt="User picture">
+                    <span>{{ member.name }}</span>
+                    <button class="matChipRemove" matChipRemove>
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </mat-chip-row>
+            <input
+                placeholder="Neues Mitglied..."
+                [matChipInputFor]="chipGrid"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="add($event)"
+                [formControl]="myControl"
+                [matAutocomplete]="auto" />
+        </mat-chip-grid>
+
+        <!-- Autocomplete für Mitglieder hinzufügen -->
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let member of filteredMembers$ | async" [value]="member">
+                <div class="contact">
+                    <div class="contactPictureContainer">
+                        <img class="contactPicture" src="{{ member.img }}" alt="User picture">
+                        <img class="onlineStatus" [src]="member.isOnline ? '/img/profil-pic/online.svg' : '/img/profil-pic/offline.svg'" alt="User picture">
+                    </div>
+                    <span>{{ member.name }}</span>
+                </div>
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
     <div class="buttonContainer">
         <button class="button" mat-flat-button (click)="createChannel()">Create</button>
     </div>
-</div>
+</form>

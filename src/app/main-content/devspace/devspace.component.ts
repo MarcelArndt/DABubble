@@ -2,8 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatTreeModule} from '@angular/material/tree';
 import { trigger, style, animate, transition, query } from '@angular/animations';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateChannelComponent } from '../../dialog/create-channel/create-channel.component';

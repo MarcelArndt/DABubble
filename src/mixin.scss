@@ -53,10 +53,10 @@ $breakpoints: (
 }
 
 @mixin nunito($fw: 400, $fs: 16px, $c: var(--text-black)) {
-    font-family: 'Nunito';
-    font-weight: $fw;
-    font-size: $fs;
-    color: $c;
+    font-family: 'Nunito' !important;
+    font-weight: $fw !important;
+    font-size: $fs !important;
+    color: $c !important;
     margin-block-end: 0;
     margin-block-start: 0;
 }

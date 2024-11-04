@@ -8,6 +8,7 @@ import { ChooseMembersCreateChannelComponent } from './choose-members-create-cha
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../classes/channel.class';
 import { MatInputModule } from '@angular/material/input';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-channel',
@@ -19,7 +20,8 @@ import { MatInputModule } from '@angular/material/input';
     MatIcon,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    CommonModule
   ],
   templateUrl: './create-channel.component.html',
   styleUrl: './create-channel.component.scss'
