@@ -2,15 +2,17 @@
     <div class="hover" (mousemove)="isMessageHover = true" (mouseleave)="resetHoverAndMenu()">
         <img class="profile-image" src="{{message.profileImage}}" alt="">
 
-        <div class="message-container">
+        <div class="message-container" [ngStyle]="isEdit ? { 'width': '100%' } : {}">
 
             <div class="name">
                 <h5>{{message.name}}</h5>
                 <p>{{message.time}}</p>
             </div>
 
-            <div class="message">
-                <p>{{message.message}}</p>
+            <div class="message" (keydown)="handleKeydown($event)">
+                <p class="message-text" *ngIf="isEdit == false">{{message.message}}</p>
+                <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()" value="{{message.message}}"></textarea>
+                <p *ngIf="isEdit" class="edit-info-text">Esc zum <span (click)="cancelEdit()">Abbrechen</span> • Enter zum <span (click)="saveText()">Speichern</span></p>
             </div>
 
             <div class="reaction-container">
@@ -33,11 +35,11 @@
             <button class="options-btn"><img src="/img/reactions/rocket.svg" alt=""></button>
             <button class="options-btn"><mat-icon><img src="/img/reactions/like.svg" alt=""></mat-icon></button>
             <button class="options-btn"><mat-icon>sentiment_satisfied</mat-icon></button>
-            <button class="options-btn"><mat-icon>comment</mat-icon></button>
+            <button class="options-btn" (click)="openThread()"><mat-icon>comment</mat-icon></button>
             <button class="options-btn" (click)="openEditMenu()"><mat-icon>more_vert</mat-icon></button>
 
             <div class="edit-message-menu" *ngIf="isMessageEditMenuOpen">
-              <button>Bearbeiten</button>
+              <button (click)="editMessage()">Bearbeiten</button>
               <button (click)="deleteMessage()">Löschen</button>
             </div>
         </div>

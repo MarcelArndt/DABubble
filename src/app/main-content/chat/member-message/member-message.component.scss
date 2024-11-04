@@ -44,6 +44,7 @@
         .answer {
             @include nunito($fw: 400, $fs: 18px, $c: var(--purple-3));
             margin-right: 20px;
+            cursor: pointer;
         }
 
         .answer-time {

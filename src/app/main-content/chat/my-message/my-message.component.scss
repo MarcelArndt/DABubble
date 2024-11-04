@@ -34,9 +34,40 @@
         padding: 10px;
         border-radius: 20px 0px 20px 20px;
         margin: 10px 0;
+        width: 100%;
+        position: relative;
 
-        p {
+        .message-text {
             @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
+        }
+
+        textarea {
+            @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
+            width: 100%;
+            height: 100%;
+            resize: none;
+            outline: none;
+            background-color: rgba(160, 160, 160, 0.486);
+            border: none;
+            border-radius: 20px 0px 20px 20px;
+            box-sizing: border-box;
+            padding: 10px;
+
+        }
+
+        .edit-info-text {
+            position: absolute;
+            bottom: -25px;
+            @include nunito($fw: 400, $fs: 12px, $c: var(--text-black));
+
+            span {
+                color: var(--text-blue);
+                cursor: pointer;
+
+                &:hover {
+                text-decoration: underline;
+                }
+            }
         }
     }
 

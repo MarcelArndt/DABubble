@@ -53,8 +53,4 @@ export class ChatComponent {
     this.shouldScroll = false;
   }
 
-  openThread(){
-    
-    this.eventService.emitEvent('openThread');
-  }
 }

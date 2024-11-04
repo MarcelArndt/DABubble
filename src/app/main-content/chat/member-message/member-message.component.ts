@@ -19,4 +19,9 @@ export class MemberMessageComponent {
   @Input() message: any;
   isMessageHover: boolean = false;
 
+  constructor(private eventService: EventService) {}
+
+  openThread(){
+    this.eventService.emitEvent('openThread');
+  }
 }

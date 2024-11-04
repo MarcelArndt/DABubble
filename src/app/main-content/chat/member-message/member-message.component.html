@@ -9,7 +9,7 @@
             <div class="message"><p>{{message.message}}</p>
             </div>
             <div class="answer-container">
-                <p class="answer">{{message.answers.answer.length}} Anwtorten</p>
+                <p class="answer" (click)="openThread()">{{message.answers.answer.length}} Anwtorten</p>
                 <p class="answer-time">Letze Antwort 14:56</p>
             </div>
         </div>
@@ -21,7 +21,7 @@
             <button class="options-btn"><img src="/img/reactions/like.svg" alt=""></button>
             <button class="options-btn"><img src="/img/reactions/arm.svg" alt=""></button>
             <button class="options-btn"><mat-icon>sentiment_satisfied</mat-icon></button>
-            <button class="options-btn"><mat-icon>comment</mat-icon></button>
+            <button class="options-btn" (click)="openThread()"><mat-icon>comment</mat-icon></button>
         </div>
     </div>
 </div>

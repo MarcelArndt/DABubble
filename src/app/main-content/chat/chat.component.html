@@ -3,7 +3,7 @@
 
     <div class="main-message-container"  #messageContainer>
         <div *ngFor="let msg of message; index as i">
-            <app-my-message  (click)="openThread()" *ngIf="msg.user === currentUserId" [message]="msg" (delete)="deleteMessage(i)"></app-my-message>
+            <app-my-message  *ngIf="msg.user === currentUserId" [message]="msg" (delete)="deleteMessage(i)"></app-my-message>
             <app-member-message *ngIf="msg.user !== currentUserId" [message]="msg"></app-member-message>
         </div>
     </div>
