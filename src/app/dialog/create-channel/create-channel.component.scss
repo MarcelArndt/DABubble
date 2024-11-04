@@ -88,3 +88,6 @@ button{
     }
 }
 
+.validation-error{
+    @include nunito(400, 18px, rgba(255, 0, 0, 0.582));
+}

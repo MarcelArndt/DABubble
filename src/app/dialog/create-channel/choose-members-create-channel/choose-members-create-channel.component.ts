@@ -1,20 +1,29 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import { DevspaceComponent } from '../../../main-content/devspace/devspace.component';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Channel } from '../../../classes/channel.class';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatFormField, MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import {MatChipEditedEvent, MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { MatOptionModule } from '@angular/material/core';
+import {MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { map, Observable, startWith } from 'rxjs';
+
+
 
 
 interface Member {
   name: string;
   id: string;
+  img: string;
+  isOnline: boolean;
 }
 
 @Component({
@@ -29,54 +38,111 @@ interface Member {
     MatFormField,
     MatChipsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatOptionModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   templateUrl: './choose-members-create-channel.component.html',
   styleUrl: './choose-members-create-channel.component.scss'
 })
-export class ChooseMembersCreateChannelComponent {
+export class ChooseMembersCreateChannelComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<DevspaceComponent>);
-  channel: Channel;
+  readonly addOnBlur = true;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  readonly announcer = inject(LiveAnnouncer);
+  selectAllPeople = true; // Setzt den Standardwert auf den ersten Radio-Button
+  myControl = new FormControl('');
+  filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); // Leeres Observable initialisieren
 
-  newMembersInput: string = ''; // Eingabe für neue Mitglieder
-  members: Member[] = []; // Hier sollten deine Mitglieder vom Server geladen werden
-  filteredMembers: Member[] = []; // Gefilterte Mitglieder basierend auf der Eingabe
-  selectedMembers: Member[] = []; // Ausgewählte Mitglieder
+  channel: Channel;
+  members: Member[] = [
+    { name: 'Alice', id: '1', img: '/img/profil-pic/001.svg', isOnline: false},
+    { name: 'Bob', id: '2', img: '/img/profil-pic/002.svg', isOnline: true},
+    { name: 'Charlie', id: '3', img: '/img/profil-pic/003.svg', isOnline: true},
+    { name: 'David', id: '4', img: '/img/profil-pic/004.svg', isOnline: false},
+  ];
+  selectedMembers: Member[] = [];
+  filteredMembers: Member[] = [];
+
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: Channel) {
-    this.channel = data; // Setze das übergebene Channel-Objekt
-    this.loadMembers(); // Lädt die Mitglieder vom Server
+    this.channel = data; 
   }
 
-  loadMembers() {
-    // Hier solltest du die Mitglieder vom Server laden. Zum Beispiel:
-    this.members = [
-      { name: 'Alice', id: '1' },
-      { name: 'Bob', id: '2' },
-      { name: 'Charlie', id: '3' },
-      { name: 'David', id: '4' },
-      // Füge hier weitere Mitglieder hinzu
-    ];
+  ngOnInit() {
+    // Beobachten Sie Änderungen im Eingabefeld und filtern Sie die Mitglieder entsprechend
+    this.filteredMembers$ = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || ''))
+    );
   }
 
-  filterMembers() {
-    const searchTerm = this.newMembersInput.toLowerCase();
-    this.filteredMembers = this.members.filter(member => member.name.toLowerCase().includes(searchTerm) && !this.selectedMembers.includes(member));
+  private _filter(value: string): Member[] {
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
+
+    // Filtere die Mitgliederliste, um nur Mitglieder einzuschließen, die noch nicht ausgewählt sind
+    return this.members.filter(
+      member => 
+        member.name.toLowerCase().includes(filterValue) &&
+        !this.selectedMembers.some(selected => selected.id === member.id)
+    );
   }
 
-  selectMember(member: Member) {
-    if (!this.selectedMembers.includes(member)) {
-      this.selectedMembers.push(member);
-      this.newMembersInput = ''; // Reset the input field
-      this.filteredMembers = []; // Clear filtered members
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Überprüfen, ob der eingegebene Wert in der Mitgliederliste vorhanden und noch nicht ausgewählt ist
+    const memberToAdd = this.members.find(
+      member => 
+        member.name.toLowerCase() === value.toLowerCase() &&
+        !this.selectedMembers.some(selected => selected.id === member.id)
+    );
+
+    if (memberToAdd) {
+      this.selectedMembers.push(memberToAdd);
     }
+
+    // Leere das Eingabefeld
+    event.chipInput!.clear();
   }
 
-  removeMember(member: Member) {
+  selected(event: MatAutocompleteSelectedEvent): void {
+    const selectedMember: Member = event.option.value;
+
+    // Überprüfen, ob das Mitglied noch nicht ausgewählt wurde
+    if (!this.selectedMembers.some(member => member.id === selectedMember.id)) {
+      this.selectedMembers.push(selectedMember);
+    }
+
+    // Leere das Eingabefeld
+    this.myControl.setValue('');
+  }
+
+  remove(member: Member): void {
     const index = this.selectedMembers.indexOf(member);
     if (index >= 0) {
       this.selectedMembers.splice(index, 1);
+      this.announcer.announce(`Mitglied ${member.name} entfernt`);
     }
+  }
+
+  edit(member: Member, event: MatChipEditedEvent): void {
+    const value = event.value.trim();
+    // Entferne das Mitglied, wenn es keinen Namen mehr hat
+    if (!value) {
+      this.remove(member);
+      return;
+    }
+    // Bearbeite das bestehende Mitglied
+    const index = this.selectedMembers.indexOf(member);
+    if (index >= 0) {
+      this.selectedMembers[index].name = value;
+    }
+  }
+
+  generateId(): string {
+    return (this.selectedMembers.length + 1).toString();
   }
 
   addSelectedMembers() {
@@ -87,7 +153,6 @@ export class ChooseMembersCreateChannelComponent {
       }
     });
     this.selectedMembers = []; // Reset selected members after adding
-    console.log(this.channel); // Überprüfe das aktualisierte Channel-Objekt
   }
 
   onNoClick(): void {
@@ -95,10 +160,25 @@ export class ChooseMembersCreateChannelComponent {
   };
 
   createChannel(){
-    this.addSelectedMembers();
+    if (this.selectAllPeople) {
+      this.members.forEach(member => {
+          this.channel.members.push(member);
+        })
+        if (this.selectedMembers.length > 0) {
+          this.selectedMembers = [];
+        }
+    } else if (!this.selectAllPeople) {
+      this.addSelectedMembers();
+    }
+    this.dialogRef.close();
+    console.log(this.channel); // Überprüfe das aktualisierte Channel-Objekt
   }
 
-  addMember(memberName: string){
-
+  isFormValid(): boolean {
+      if (this.selectAllPeople) {
+          return true; // 'Add all members' gewählt
+      } else {
+          return this.selectedMembers.length > 0; // Nur valide, wenn bestimmte Mitglieder ausgewählt wurden
+      }
   }
 }
