@@ -1,15 +1,37 @@
 @import '../../../../mixin.scss';
+
+.main-wrapper{
+    position: absolute;
+    z-index: 99;
+    @include heightWidth($w:100%, $h: 100%);
+    @include dFlex;
+    background-color: transparent;
+}
+
+.content-wrapper{
+    @include heightWidth($w:100%, $h: 100%);
+    position: relative;
+    background-color: transparent;
+
+    @include respond-to-maxWidth(smallMedium) {
+        @include heightWidth($w:256px, $h: 100%);
+    }
+}
+
 .Logo-Wrapper{
-    position: fixed;
     @include heightWidth($w:33%, $h: 100%);
     @include dFlex;
     animation: shrink-width 0.75s ease-out forwards 2.0s;
     animation-delay: 2.0s;
+    @include respond-to-maxWidth(smallMedium) {
+        @include heightWidth($w:100%, $h: 100%);
+        max-width: 256px;
+    }
+
 }
 
 @keyframes shrink-width {
     to{
-
         width: 256px;
         height: 70px;
     }
@@ -25,14 +47,25 @@
 
 .animationContainer{
     z-index: 80;
-    position: fixed;
-    top: 28px;
-    left: 24px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
     @include heightWidth($w: 100%, $h: 100%);
     @include dFlex;
     animation: shrink 0.75s ease-out forwards;
     animation-delay: 2.0s;
 }
+
+.animation-to-middle {
+    animation: shrink-to-middle 0.75s ease-out forwards;
+    animation-delay: 2.0s;
+}
+
+.animation-to-left {
+    animation: shrink 0.75s ease-out forwards;
+    animation-delay: 2.0s;
+}
+
 
 @keyframes shrink {
     to{

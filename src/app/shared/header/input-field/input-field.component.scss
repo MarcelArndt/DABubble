@@ -37,6 +37,10 @@
             @include dFlex;  
             color: var(--btn-gray);
             margin: 0px 16px;
+            @include respond-to-maxWidth(smallMedium) {
+                margin: 0px 0px 0px 4px;
+                padding: 0px 4px 0px 0px;
+            }
         }
     }
 
@@ -45,6 +49,9 @@
         @include figtree($fw: 300, $fs: 18px);
         @include respond-to-maxWidth(large) {
             @include figtree($fw: 300, $fs: 18px);
+        }
+        @include respond-to-maxWidth(smallMedium) {
+            font-size: clamp(16px, 4vw, 18px);
         }
         @include input;
         background-color: transparent;
@@ -80,4 +87,8 @@
     width: 100%;
     top: -26px;
     left: 16px;
+
+    @include respond-to-maxWidth(smallMedium) {
+        font-size: clamp(16px, 4vw, 18px);
+    }
   }
