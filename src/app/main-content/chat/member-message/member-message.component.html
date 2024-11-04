@@ -1,13 +1,19 @@
 <div class="new-message-container">
     <div class="hover" (mousemove)="isMessageHover = true" (mouseleave)="isMessageHover = false">
-        <img src="{{message.profileImage}}" alt="">
+        <img class="profile-image" src="{{message.profileImage}}" alt="">
         <div class="message-container">
             <div class="name">
                 <h5>{{message.name}}</h5>
                 <p>{{message.time}} Uhr</p>
             </div>
-            <div class="message"><p>{{message.message}}</p>
+            <div class="message" *ngIf="message.message">
+                <p>{{message.message}}</p>
             </div>
+
+            <div class="postet-image-container">
+                <img *ngFor="let attachmen of message.attachmen" class="image" src="{{attachmen}}">
+            </div>
+
             <div class="answer-container">
                 <p class="answer" (click)="openThread()">{{message.answers.answer.length}} Anwtorten</p>
                 <p class="answer-time">Letze Antwort 14:56</p>

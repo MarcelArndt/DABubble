@@ -20,7 +20,8 @@ export class TestJasonsService {
       },
       answers: {
         answer: [],
-      }
+      },
+      attachmen: ['/img/profil-pic/004.svg',]
     },
     {
       user: 'uidTestId',
@@ -35,7 +36,10 @@ export class TestJasonsService {
       },
       answers: {
         answer: [],
-      }
+      },
+      attachmen: [
+        '/img/profil-pic/004.svg',
+      ]
     },
 
   ]

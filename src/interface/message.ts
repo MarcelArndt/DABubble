@@ -11,5 +11,6 @@ export interface Message {
     },
     answers: {
       answer: string[],
-    }
+    },
+    attachmen: string[]
 }

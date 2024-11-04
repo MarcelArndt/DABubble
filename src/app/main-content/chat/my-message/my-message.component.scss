@@ -65,7 +65,7 @@
                 cursor: pointer;
 
                 &:hover {
-                text-decoration: underline;
+                    text-decoration: underline;
                 }
             }
         }
@@ -184,4 +184,20 @@
             background-color: var(--border-light-purple);
         }
     }
+}
+
+.postet-image-container {
+    width: 100%;
+    @include dFlex($jc: end);
+    margin-bottom: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.image {
+    height: 200px;
+    width: 200px;
+    border-radius: 5px;
+    object-fit: cover;
+    object-position: center;
 }

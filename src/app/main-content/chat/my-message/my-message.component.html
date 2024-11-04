@@ -9,10 +9,14 @@
                 <p>{{message.time}}</p>
             </div>
 
-            <div class="message" (keydown)="handleKeydown($event)">
+            <div class="message" (keydown)="handleKeydown($event)" *ngIf="message.message">
                 <p class="message-text" *ngIf="isEdit == false">{{message.message}}</p>
                 <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()" value="{{message.message}}"></textarea>
                 <p *ngIf="isEdit" class="edit-info-text">Esc zum <span (click)="cancelEdit()">Abbrechen</span> • Enter zum <span (click)="saveText()">Speichern</span></p>
+            </div>
+
+            <div class="postet-image-container">
+                <img *ngFor="let attachmen of message.attachmen" class="image" src="{{attachmen}}">
             </div>
 
             <div class="reaction-container">

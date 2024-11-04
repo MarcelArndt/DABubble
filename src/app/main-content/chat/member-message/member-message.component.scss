@@ -7,7 +7,7 @@
     position: relative;
     border-top: 1px solid var(--border-light-purple);
 
-    img {
+    .profile-image {
         @include image($br: 50%);
         @include heightWidth($w: auto, $h: 60px);
         margin-right: 30px;
@@ -116,4 +116,20 @@
         }
     }
 
+}
+
+.postet-image-container {
+    width: 100%;
+    @include dFlex($jc: start);
+    margin-bottom: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.image {
+    height: 200px;
+    width: 200px;
+    border-radius: 5px;
+    object-fit: cover;
+    object-position: center;
 }
