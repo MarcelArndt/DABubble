@@ -6,7 +6,7 @@
             <app-my-message  *ngIf="msg.user === currentUserId" [message]="msg" (delete)="deleteMessage(i)"></app-my-message>
             <app-member-message *ngIf="msg.user !== currentUserId" [message]="msg"></app-member-message>
         </div> -->
-        <app-message *ngFor="let msg of message; index as i" [message]="msg"></app-message>
+        <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i" (deleteEvent)="handleDeleteMessage(i)"></app-message>>
     </div>
 
     <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"></app-chat-message-field>

@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, input, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { TestJasonsService } from '../../../../services/test-jsons.service';
 import { EventService } from '../../../../services/event.service';
+import { MessageOptionsComponent } from "./message-options/message-options.component";
+import { MessageReationComponent } from "./message-reation/message-reation.component";
 
 @Component({
   selector: 'app-message',
@@ -11,14 +13,17 @@ import { EventService } from '../../../../services/event.service';
   imports: [
     CommonModule,
     FormsModule,
-    MatIcon
-  ],
+    MatIcon,
+    MessageOptionsComponent,
+    MessageReationComponent
+],
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss'
 })
 export class MessageComponent {
   @Input() message: any;
-  @Output() delete = new EventEmitter<void>();
+  @Input() index: any
+  @Output() deleteEvent = new EventEmitter<number>();
   @ViewChild('textArea') textArea!: ElementRef<HTMLTextAreaElement>;
 
   isMessageHover: boolean = false;
@@ -48,7 +53,7 @@ export class MessageComponent {
   }
 
   deleteMessage() {
-    this.delete.emit();
+    this.deleteEvent.emit(this.index);
   }
 
   editMessage() {
@@ -106,5 +111,5 @@ export class MessageComponent {
 
   checkUser(): boolean {
     return this.message.user === this.object.userId;
-}
+  }
 }

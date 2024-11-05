@@ -116,63 +116,6 @@
     }
 }
 
-.options {
-    background-color: white;
-    box-sizing: border-box;
-    padding: 0px 10px;
-    position: absolute;
-    left: 50px;
-    top: 25px;
-    border-radius: 20px 20px 0px 20px;
-    border: 2px solid var(--border-light-purple);
-    @include dFlex();
-
-
-    .options-btn {
-        @include heightWidth($w: 40px, $h: 40px);
-        border: none;
-        margin: 0 5px;
-        text-align: center;
-        border-radius: 50%;
-        background-color: white;
-        cursor: pointer;
-
-        &:hover {
-            background-color: var(--border-light-purple);
-        }
-    }
-
-    .optionsMenu {
-        background-color: white;
-        margin-top: 20px;
-    }
-}
-
-.edit-message-menu {
-    @include dFlex($ai: start);
-    background-color: white;
-    position: absolute;
-    bottom: -79px;
-    right: -2px;
-    flex-direction: column;
-    border-radius: 0px 0px 0px 10px;
-    box-sizing: border-box;
-    padding: 5px;
-    border: 2px solid var(--border-light-purple);
-
-    button {
-        border: none;
-        background-color: white;
-        @include nunito($fw: 400, $fs: 16px, $c: black);
-        padding: 5px;
-        cursor: pointer;
-
-        &:hover {
-            background-color: var(--border-light-purple);
-        }
-    }
-}
-
 .postet-image-container {
     width: 100%;
     @include dFlex($jc: start);
@@ -270,12 +213,6 @@
 
 .ml {
     margin-left: 20px;
-}
-
-.option-menu {
-    right: 50px;
-    left: auto;
-    border-radius: 20px 20px 20px 0px;
 }
 
 .myMessage {
