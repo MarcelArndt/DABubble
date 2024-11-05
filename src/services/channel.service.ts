@@ -23,4 +23,8 @@ export class ChannelService {
   getChannels() {
     return this.channels;
   }
+
+  hasAccessToChannel(){// <-- userId, channelId as parameter
+    
+  } 
 }

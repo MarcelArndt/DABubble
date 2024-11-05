@@ -14,4 +14,8 @@ export class AuthenticationService {
     this.auth = getAuth(this.app);
   }
 
+  getCurrentUserId(){
+    // return UserId
+  }
+
 }

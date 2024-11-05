@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ChatHeaderComponent } from "./chat-header/chat-header.component";
 import { ChatMessageFieldComponent } from "./chat-message-field/chat-message-field.component";
 import { MemberMessageComponent } from "./member-message/member-message.component";

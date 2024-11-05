@@ -43,12 +43,12 @@
 
 
     svg {
-        transition: color 0.125s ease-in-out;
+        transition: color 0.125s ease-in-out, stroke  0.125s ease-in-out;
 
         path,
         rect {
             stroke: var(--text-black);
-            transition: color 0.125s ease-in-out;
+            transition: color 0.125s ease-in-out, stroke  0.125s ease-in-out;
         }
     }
 

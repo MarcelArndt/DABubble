@@ -55,7 +55,6 @@ export class ChatMessageFieldComponent {
       },
       attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
     };
-
     this.object.message.push(userMessage);
     this.messagesUpdated.emit();
     this.messageField = '';
