@@ -1,9 +1,21 @@
 @import '../../../../mixin.scss';
-nav{
+
+section{
     position: fixed;
     top: 0px;
     right: 0px;
     z-index: 99;
+    @include heightWidth($w: 100%, $h: auto);
+    @include dFlex;
+}
+
+.wrapper{
+    @include heightWidth($w: 100%, $h: auto);
+    max-width: 1920px;
+    @include dFlex;
+}
+
+nav{
     @include heightWidth($w: 100%, $h: auto);
     @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--secundary-bg));
     @include dFlex ($jc: space-between);
