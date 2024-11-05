@@ -5,6 +5,10 @@ import { MatIcon } from '@angular/material/icon';
 import { trigger, style, animate, transition, query } from '@angular/animations';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateChannelComponent } from '../../dialog/create-channel/create-channel.component';
+import { Member } from '../../../interface/member';
+import { MemberService } from '../../../services/member.service';
+import { ChannelService } from '../../../services/channel.service';
+import { Channel } from '../../../classes/channel.class';
 
 
 @Component({
@@ -72,6 +76,14 @@ export class DevspaceComponent {
   contactsAreVisible: boolean = true;
   channelsAreVisible: boolean = true;
   readonly dialog = inject(MatDialog);
+
+  members: Member[];
+  channels: Channel[];
+
+  constructor(private memberService: MemberService, private channelService: ChannelService){
+    this.members = memberService.getAllMembers();
+    this.channels = channelService.getChannels();
+  }
 
   toggleNavBar() { 
     this.navBarIsClosed = !this.navBarIsClosed;

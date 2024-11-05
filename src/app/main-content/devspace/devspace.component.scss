@@ -10,7 +10,7 @@
 
 .serverNavContent {
     background-color: var(--secundary-bg);
-    @include padding(32px, 30px 32px, 30px);
+    @include padding(32px, 30px, 32px, 30px);
     overflow: hidden;
     border-radius: 30px;
     color: var(--text-black);
@@ -155,14 +155,23 @@ h3 {
 
     &:hover {
         cursor: pointer;
-
+        
         .dFlex {
             color: var(--purple-1);
         }
+        .dropDownArrow, 
+        .userIcon,
+        .channelsIcon {
+            // filter: brightness(0) saturate(100%) invert(29%) sepia(70%) saturate(4142%) hue-rotate(258deg) brightness(93%) contrast(94%);
+            fill: var(--purple-1);
+            stroke: var(--purple-1);
+            color: var(--purple-1);
 
-        svg {
             path {
                 fill: var(--purple-1);
+                stroke: var(--purple-1);
+                color: var(--purple-1);
+
             }
         }
     }
@@ -248,9 +257,15 @@ h3 {
 .onlineStatus {
     position: absolute;
     right: 0px;
-    bottom: 6px;
+    bottom: 0px;
 }
 
 .mat-icon {
     @include materialSymbols($c: var(--text-black));
+}
+
+.userImage{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px; 
 }

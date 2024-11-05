@@ -6,7 +6,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ChooseMembersCreateChannelComponent } from './choose-members-create-channel/choose-members-create-channel.component';
 import { FormsModule } from '@angular/forms';
-import { Channel } from '../../classes/channel.class';
+import { Channel } from '../../../classes/channel.class';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 
@@ -36,11 +36,12 @@ export class CreateChannelComponent {
     this.dialogRef.close();
   }
 
-  openChooseMembers(){
-    console.log(this.channel);  
+  openChooseMembers() {
+    (document.activeElement as HTMLElement)?.blur();  // Fokus aufheben
     this.dialogRef.close();
+
     const dialogRef = this.dialog.open(ChooseMembersCreateChannelComponent, {
-      data: this.channel
+        data: this.channel
     });
     dialogRef.afterClosed().subscribe();
   }

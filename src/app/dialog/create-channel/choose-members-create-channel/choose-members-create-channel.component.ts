@@ -6,7 +6,7 @@ import { DevspaceComponent } from '../../../main-content/devspace/devspace.compo
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Channel } from '../../../classes/channel.class';
+import { Channel } from '../../../../classes/channel.class';
 import { MatFormField, MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
 import {MatChipEditedEvent, MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
@@ -15,16 +15,10 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { MatOptionModule } from '@angular/material/core';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
+import { Member } from '../../../../interface/member';
+import { MemberService } from '../../../../services/member.service';
+import { ChannelService } from '../../../../services/channel.service';
 
-
-
-
-interface Member {
-  name: string;
-  id: string;
-  img: string;
-  isOnline: boolean;
-}
 
 @Component({
   selector: 'app-choose-members-create-channel',
@@ -51,24 +45,25 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   readonly addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   readonly announcer = inject(LiveAnnouncer);
-  selectAllPeople = true; // Setzt den Standardwert auf den ersten Radio-Button
+  selectAllPeople = true; 
   myControl = new FormControl('');
   filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); // Leeres Observable initialisieren
 
   channel: Channel;
-  members: Member[] = [
-    { name: 'Alice', id: '1', img: '/img/profil-pic/001.svg', isOnline: false},
-    { name: 'Bob', id: '2', img: '/img/profil-pic/002.svg', isOnline: true},
-    { name: 'Charlie', id: '3', img: '/img/profil-pic/003.svg', isOnline: true},
-    { name: 'David', id: '4', img: '/img/profil-pic/004.svg', isOnline: false},
-  ];
+  members: Member[];
   selectedMembers: Member[] = [];
   filteredMembers: Member[] = [];
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Channel) {
+  constructor(@Inject(
+    MAT_DIALOG_DATA) public data: Channel, 
+    private memberService: MemberService,
+    private channelService: ChannelService,
+  ) {
     this.channel = data; 
+    this.members = memberService.getAllMembers();
   }
+
 
   ngOnInit() {
     // Beobachten Sie Änderungen im Eingabefeld und filtern Sie die Mitglieder entsprechend
@@ -77,6 +72,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       map(value => this._filter(value || ''))
     );
   }
+
 
   private _filter(value: string): Member[] {
     const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
@@ -89,35 +85,33 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     );
   }
 
+
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-
     // Überprüfen, ob der eingegebene Wert in der Mitgliederliste vorhanden und noch nicht ausgewählt ist
     const memberToAdd = this.members.find(
       member => 
         member.name.toLowerCase() === value.toLowerCase() &&
         !this.selectedMembers.some(selected => selected.id === member.id)
     );
-
     if (memberToAdd) {
       this.selectedMembers.push(memberToAdd);
     }
-
     // Leere das Eingabefeld
     event.chipInput!.clear();
   }
 
+
   selected(event: MatAutocompleteSelectedEvent): void {
     const selectedMember: Member = event.option.value;
-
     // Überprüfen, ob das Mitglied noch nicht ausgewählt wurde
     if (!this.selectedMembers.some(member => member.id === selectedMember.id)) {
       this.selectedMembers.push(selectedMember);
     }
-
     // Leere das Eingabefeld
     this.myControl.setValue('');
   }
+
 
   remove(member: Member): void {
     const index = this.selectedMembers.indexOf(member);
@@ -126,6 +120,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       this.announcer.announce(`Mitglied ${member.name} entfernt`);
     }
   }
+
 
   edit(member: Member, event: MatChipEditedEvent): void {
     const value = event.value.trim();
@@ -141,28 +136,32 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     }
   }
 
+
   generateId(): string {
     return (this.selectedMembers.length + 1).toString();
   }
 
+
   addSelectedMembers() {
     this.selectedMembers.forEach(member => {
       // Hier wird jedes ausgewählte Mitglied dem Channel hinzugefügt
-      if (!this.channel.members.some(existingMember => existingMember.id === member.id)) {
-        this.channel.members.push(member);
+      if (!this.channel.membersId.some(existingMember => existingMember === member.id)) {
+        this.channel.membersId.push(member.id);
       }
     });
     this.selectedMembers = []; // Reset selected members after adding
   }
 
+
   onNoClick(): void {
     this.dialogRef.close();
   };
 
+
   createChannel(){
     if (this.selectAllPeople) {
       this.members.forEach(member => {
-          this.channel.members.push(member);
+          this.channel.membersId.push(member.id);
         })
         if (this.selectedMembers.length > 0) {
           this.selectedMembers = [];
@@ -170,9 +169,11 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     } else if (!this.selectAllPeople) {
       this.addSelectedMembers();
     }
+    this.channelService.channels.push(this.channel);
     this.dialogRef.close();
     console.log(this.channel); // Überprüfe das aktualisierte Channel-Objekt
   }
+
 
   isFormValid(): boolean {
       if (this.selectAllPeople) {
