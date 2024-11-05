@@ -1,6 +1,7 @@
 @import '../../../../mixin.scss';
 
 .main-wrapper{
+    z-index: 98;
     position: absolute;
     @include heightWidth($w:100%, $h: 100%);
     @include dFlex;
@@ -8,6 +9,11 @@
     animation: heigh-scaling ease-in-out forwards 2.0;
     animation-delay: 3.0s;
     max-height: 100%;
+    padding: 36px;
+
+    @include respond-to-maxWidth(medium) {
+        padding: 36px 0px;
+    }
 }
 
 @keyframes heigh-scaling {
@@ -19,8 +25,10 @@
 .content-wrapper{
     @include heightWidth($w:100%, $h: 100%);
     position: relative;
-    @include respond-to-maxWidth(smallMedium) {
+    transition: width 1s ease-in-out;
+    @include respond-to-maxWidth(medium) {
         @include heightWidth($w:256px);
+        transition: width 1s ease-in-out;
     }
 
 }

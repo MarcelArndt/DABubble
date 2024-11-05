@@ -1,61 +1,21 @@
 @import '../../../mixin.scss';
 .MainWrapper{
-    @include heightWidth($w: 100%, $h: 85dvh);
+    @include heightWidth($w: 100%, $h: 95dvh);
     @include dFlex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content:flex-start;
     gap: 1%;
 }
 
 app-input-field{
     @include heightWidth($w: 75%, $h: auto);
+    margin-top: 16px;
 }
-
-aside{
-    @include heightWidth($w: 100%, $h: auto);
-    @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--secundary-bg));
-    @include dFlex ($jc: space-between);
-    text-align: right;
-
-    ul{
-        padding-top: 32px;
-        @include dFlex;
-        @include heightWidth($w: 100%, $h: auto);
-        flex-direction: column;
-        list-style: none;
-        margin-block-start: 0px;
-        margin-block-end: 0px;
-        padding-inline-start: 0px;
-        text-align: right;
-
-        li{
-            @include heightWidth($w: 100%, $h: auto);
-            text-align: right;
-            @include dFlex ($jc: flex-end);
-        }
-
-        a{          
-            @include heightWidth($w: 100%, $h: auto);
-            @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--text-black));
-            margin: 0px 16px;
-            padding: 8px 16px;
-            border-radius: 36px;
-            text-wrap: nowrap;
-            text-align: right;
-
-            &:hover{
-                cursor: pointer;
-                color: var(--text-blue);
-            }
-        }
-    }
-}
-
 
 button{
     @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--secundary-bg));
     min-width: clamp(125px, 4vw, 160px);
-    margin: 16px;
+    margin: 18px 8px 0px 8px;
     height: calc(60px - 16px);
     border-radius: 36px;
     padding: 8px 16px;
@@ -68,11 +28,10 @@ button{
     }
 
     @include respond-to-maxWidth(smallMedium) {
-        margin: 2%;
+        padding: 6px 12px;
         letter-spacing: 0px;
     }
 }
-
 
 .specialButton{
     background-color: transparent;
@@ -87,11 +46,11 @@ button{
 
 .button-collection{
     @include dFlex ($jc: center);
-    gap: 5%;
+    gap: 2%;
     @include heightWidth($w: 75%, $h: auto);
 
     @include respond-to-maxWidth(small) {
-        margin-top: 16px;
+        margin-top: 8px;
         gap: 0%;
     }
 }
@@ -111,19 +70,15 @@ button{
     @include dFlex($jc: space-between);
     max-width: 600px;
     background-color: var(--secundary-bg);
-    border-radius: 36px;
+    border-radius: 24px;
     flex-direction: column;
-    padding: 36px 0px;
+    padding: 28px 0px;
     max-height: 65dvh;
     box-shadow: 0px 2px 3px rgba(16, 0, 159, 0.1);
-    gap: 1.5%;
     overflow-y: scroll;
+    margin-top: calc(148px);
 
-    @include respond-to-maxWidth(smallMedium) {
-        gap: 0%;
-    }
-
-    @include respond-to-maxWidth(smallMedium) {
+    @include respond-to-maxWidth(medium) {
         @include heightWidth($w: 90%, $h: 100%);
     }
 
@@ -140,7 +95,7 @@ button{
 
     a{
         @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--purple-2));
-        margin: 0px 16px;
+        margin: 0px 8px;
         padding: 8px 16px;
         border: 1px solid  transparent;
         border-radius: 36px;
@@ -206,34 +161,6 @@ button{
         cursor: pointer;
         span{
             font-weight: 600;
-        }
-    }
-}
-
-
-.submenu{
-    @include heightWidth($w: 90%, $h: auto);
-    @include dFlex;
-    ul{
-        @include dFlex;
-        list-style: none;
-        margin-block-start: 0px;
-        margin-block-end: 0px;
-        padding-inline-start: 0px;
-
-        a{          
-            @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--purple-2));
-            margin: 0px 16px;
-            padding: 8px 16px;
-            border: 1px solid  transparent;
-            border-radius: 36px;
-            text-wrap: nowrap;
-
-            &:hover{
-                cursor: pointer;
-                border-color: var(--purple-3);
-                color: var(--text-blue);
-            }
         }
     }
 }

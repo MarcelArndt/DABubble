@@ -4,11 +4,13 @@ import { LoginAnimationInsideComponent } from './login-animation-inside/login-an
 import { RouterModule } from '@angular/router';
 import { MainContentComponent } from '../main-content.component';
 import { InputFieldComponent } from '../../shared/header/input-field/input-field.component';
+import { HeadmenuLoginComponent } from './headmenu-login/headmenu-login.component';
+import { SubmenuLoginComponent } from './submenu-login/submenu-login.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [LoginAnimationComponent, LoginAnimationInsideComponent, RouterModule, MainContentComponent, InputFieldComponent  ],
+  imports: [LoginAnimationComponent, LoginAnimationInsideComponent, RouterModule, MainContentComponent, InputFieldComponent, HeadmenuLoginComponent, SubmenuLoginComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss',]
 })
