@@ -48,10 +48,14 @@ export class ChatComponent {
     }
   }
 
-  deleteMessage(index: number) {
-    this.object.message.splice(index, 1);
+  handleDeleteMessage(index: number) {
+    this.object.deleteMessage(index);
     this.message = [...this.object.message];
     this.shouldScroll = false;
   }
+
+  // deleteMessage(index: number) {
+  //   this.shouldScroll = false;
+  // }
 
 }

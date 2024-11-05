@@ -1,12 +1,34 @@
 @import '../../../../mixin.scss';
 
+section{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 98;
+    @include heightWidth($w: 100%, $h: 100%);
+    @include dFlex;
+    animation: heigh-scaling ease-in-out forwards;
+    animation-delay: 3.0s;
+    padding: 36px 0px 0px 36px;
+
+    @include respond-to-maxWidth(medium) {
+        padding: 36px 0px 0px 0px;
+    }
+}
+
+.wrapper{
+    position: relative;
+    @include heightWidth($w: 100%, $h: 100%);
+    max-width: 1920px;
+    @include dFlex;
+}
+
 .main-wrapper{
+    z-index: 98;
     position: absolute;
     @include heightWidth($w:100%, $h: 100%);
     @include dFlex;
     align-items: self-start;
-    animation: heigh-scaling ease-in-out forwards 2.0;
-    animation-delay: 3.0s;
     max-height: 100%;
 }
 
@@ -19,8 +41,10 @@
 .content-wrapper{
     @include heightWidth($w:100%, $h: 100%);
     position: relative;
-    @include respond-to-maxWidth(smallMedium) {
+    transition: width 1s ease-in-out;
+    @include respond-to-maxWidth(medium) {
         @include heightWidth($w:256px);
+        transition: width 1s ease-in-out;
     }
 
 }
