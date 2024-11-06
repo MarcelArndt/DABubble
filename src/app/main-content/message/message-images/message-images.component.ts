@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { TestJasonsService } from '../../../../services/test-jsons.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
 
 @Component({
   selector: 'app-message-images',
@@ -17,7 +17,7 @@ export class MessageImagesComponent {
   @Input() message: any;
   @Input() isEdit: any
 
-  constructor(public object: TestJasonsService) { }
+  constructor(public object: MessagesService) { }
 
 
   deleteImage(i: any) {

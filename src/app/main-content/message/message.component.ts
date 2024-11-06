@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TestJasonsService } from '../../../services/test-jsons.service';
 import { MessageOptionsComponent } from './message-options/message-options.component';
 import { MessageReationComponent } from './message-reation/message-reation.component';
 import { MessageAnswerComponent } from './message-answer/message-answer.component';
 import { MessageImagesComponent } from './message-images/message-images.component';
 import { MessageTextComponent } from './message-text/message-text.component';
 import { MessageNameComponent } from './message-name/message-name.component';
+import { MessagesService } from '../../../services/messages/messages.service';
 
 @Component({
   selector: 'app-message',
@@ -33,7 +33,7 @@ export class MessageComponent {
   isEdit: boolean = false;
   editMessageText: string = '';
 
-  constructor(public object: TestJasonsService) { }
+  constructor(public object: MessagesService) { }
 
   resetHoverAndMenu() {
     this.isMessageHover = false;

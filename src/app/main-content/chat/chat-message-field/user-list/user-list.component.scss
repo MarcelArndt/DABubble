@@ -1,0 +1,36 @@
+@import '../../../../../mixin.scss';
+
+.user-list {
+    position: absolute;
+    background: var(--primary-bg);
+    border: 1px solid #ddd;
+    overflow-y: auto;
+    top: -102px;
+    left: 20px;
+    width: 40%;
+    height: 120px;
+    border-radius: 20px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+  }
+  
+  .user-list ul {
+    @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .user-list li {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .user-list li:hover {
+    background-color: var(--purple-2);
+  }
+
+  .user-list .active {
+    background-color: #f0f0f0;
+    color: #333;                
+  }

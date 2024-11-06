@@ -5,7 +5,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { SearchbarComponent } from "./searchbar/searchbar.component";
 import { ProfileNavigationComponent } from "./profile-navigation/profile-navigation.component";
-import { DarkModeService } from '../../../services/dark-mode.service';
+import { DarkModeService } from '../../../services/darkMode/dark-mode.service';
 
 @Component({
   selector: 'app-main-header',

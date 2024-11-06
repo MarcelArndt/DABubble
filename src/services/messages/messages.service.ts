@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Message } from '../interface/message';
+import { Message } from '../../interface/message';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TestJasonsService {
+export class MessagesService {
   userId: string = 'uidTestId';
   profileImage: string = '/img/profil-pic/003.svg';
 
@@ -58,5 +58,4 @@ export class TestJasonsService {
   checkUser(message: any): boolean {
     return message.user === this.userId;
   }
-
 }

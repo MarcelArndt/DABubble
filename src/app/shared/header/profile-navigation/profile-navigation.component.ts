@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { DarkModeService } from '../../../../services/dark-mode.service';
 import { HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { DarkModeService } from '../../../../services/darkMode/dark-mode.service';
 
 @Component({
   selector: 'app-profile-navigation',

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { TestJasonsService } from '../../../../services/test-jsons.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ import { TestJasonsService } from '../../../../services/test-jsons.service';
 export class MessageNameComponent {
   @Input() message: any;
 
-  constructor(public object: TestJasonsService) { }
+  constructor(public object: MessagesService) { }
 
 
 }

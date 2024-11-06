@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { TestJasonsService } from '../../../../services/test-jsons.service';
 import { EventService } from '../../../../services/event.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
+
 
 
 @Component({
@@ -16,7 +17,7 @@ import { EventService } from '../../../../services/event.service';
 export class MessageAnswerComponent {
   @Input() message: any;
 
-  constructor(public object: TestJasonsService, private eventService: EventService) { }
+  constructor(public object: MessagesService, private eventService: EventService) { }
 
   openThread() {
     this.eventService.emitEvent('openThread');

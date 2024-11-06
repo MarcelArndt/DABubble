@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { TestJasonsService } from '../../../../services/test-jsons.service';
 import { EventService } from '../../../../services/event.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class MessageOptionsComponent {
   @Output() deleteEvent = new EventEmitter<void>();
   @Output() toggleEdit = new EventEmitter<void>();
 
-  constructor(public object: TestJasonsService, private eventService: EventService) { }
+  constructor(public object: MessagesService, private eventService: EventService) { }
 
   toggleEditMode() {
     this.toggleEdit.emit();

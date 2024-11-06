@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TestJasonsService } from '../../../../services/test-jsons.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
 
 @Component({
   selector: 'app-message-reation',
@@ -17,7 +17,7 @@ import { TestJasonsService } from '../../../../services/test-jsons.service';
 export class MessageReationComponent {
   @Input() message: any;
 
-  constructor(public object: TestJasonsService) {}
+  constructor(public object: MessagesService) {}
 
   likeMessage() {
     const userIdIndex = this.message.reactions.like.indexOf(this.object.userId);

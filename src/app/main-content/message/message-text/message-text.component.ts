@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TestJasonsService } from '../../../../services/test-jsons.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
 
 @Component({
   selector: 'app-message-text',
@@ -23,7 +23,7 @@ export class MessageTextComponent {
 
   @ViewChild('textArea') textArea!: ElementRef<HTMLTextAreaElement>;
 
-  constructor(public object: TestJasonsService) { }
+  constructor(public object: MessagesService) { }
 
   autoGrow() {
     const textarea = this.textArea.nativeElement;

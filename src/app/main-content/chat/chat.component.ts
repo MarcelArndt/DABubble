@@ -2,9 +2,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ChatHeaderComponent } from "./chat-header/chat-header.component";
 import { ChatMessageFieldComponent } from "./chat-message-field/chat-message-field.component";
 import { CommonModule } from '@angular/common';
-import { TestJasonsService } from '../../../services/test-jsons.service';
 import { Message } from '../../../interface/message';
 import { MessageComponent } from "../message/message.component";
+import { MessagesService } from '../../../services/messages/messages.service';
 
 
 
@@ -26,7 +26,7 @@ export class ChatComponent {
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   private shouldScroll: boolean = true;
 
-  constructor(public object: TestJasonsService) { }
+  constructor(public object: MessagesService) { }
 
   ngOnInit(): void {
     this.message = this.object.message;
