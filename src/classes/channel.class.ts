@@ -3,13 +3,7 @@ export class Channel {
     title: string = '';
     messages: Array<{}>= []
     membersId: Array<string> = [];
-    // members: Array<{
-        // name: string; 
-        // id: string;
-        // img: string;
-        // isOnline: boolean;
-        // role: string;
-    // }> = [];
+    type: string = '';
     description: string = '';
     isPublic: boolean = true;
 

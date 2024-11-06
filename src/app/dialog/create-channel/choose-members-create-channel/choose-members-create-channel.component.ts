@@ -17,7 +17,7 @@ import {MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/mat
 import { map, Observable, startWith } from 'rxjs';
 import { Member } from '../../../../interface/member';
 import { MemberService } from '../../../../services/member.service';
-import { ChannelService } from '../../../../services/channel.service';
+import { ChannelService } from '../../../../services/channel/channel.service';
 
 
 @Component({
@@ -166,8 +166,10 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
         if (this.selectedMembers.length > 0) {
           this.selectedMembers = [];
         }
+        this.channel.type = 'everyone';
     } else if (!this.selectAllPeople) {
       this.addSelectedMembers();
+      this.channel.type = 'group';
     }
     this.channelService.channels.push(this.channel);
     this.dialogRef.close();

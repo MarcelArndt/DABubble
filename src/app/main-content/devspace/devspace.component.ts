@@ -7,7 +7,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateChannelComponent } from '../../dialog/create-channel/create-channel.component';
 import { Member } from '../../../interface/member';
 import { MemberService } from '../../../services/member.service';
-import { ChannelService } from '../../../services/channel.service';
+import { ChannelService } from '../../../services/channel/channel.service';
 import { Channel } from '../../../classes/channel.class';
 
 

@@ -9,19 +9,13 @@ export interface Message {
       like: string[],
       rocket: string[]
     },
-    answers: {
+    answers: {  //  <---- threadId: string,  ersetzt answers: {answer: string[]}
       answer: string[],
     },
+
     attachmen: string[]
 }
 
-export interface User {
-  name: string,
-  email: string,
-  profilePicture: string,
-  status: boolean,
-  server: string[]
-}
 
 export interface Server {
   name: string,
@@ -29,15 +23,8 @@ export interface Server {
   description: string,
   members: {}
   roles: {}
-}
+} 
 
-export interface Channel {
-  title: string,
-  membersId: string[],
-  messages: string[],
-  description: string,
-  isPublic: boolean,
-}
 
 export interface Attachmen {
   
