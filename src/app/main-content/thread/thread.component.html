@@ -2,10 +2,7 @@
     <app-thread-header class="thread-item" (closeThreadEvent)="toggleThread()"></app-thread-header>
     <div class="main-message-container thread-item">
 
-        <div *ngFor="let msg of messages" class="thread-item">
-            <app-thread-my-message *ngIf="msg.user === 'myself'" [message]="msg"></app-thread-my-message>
-            <app-thread-members-message *ngIf="msg.user === 'member'" [message]="msg"></app-thread-members-message>
-        </div>
+
         
     </div>
     <app-thread-message-field class="thread-item"></app-thread-message-field>

@@ -17,7 +17,7 @@ import { TestJasonsService } from '../../../../../services/test-jsons.service';
 export class MessageReationComponent {
   @Input() message: any;
 
-  constructor(private object: TestJasonsService) {}
+  constructor(public object: TestJasonsService) {}
 
   likeMessage() {
     const userIdIndex = this.message.reactions.like.indexOf(this.object.userId);
@@ -35,9 +35,5 @@ export class MessageReationComponent {
     } else {
       this.message.reactions.rocket.splice(userIdIndex, 1);
     }
-  }
-
-  checkUser(): boolean {
-    return this.message.user === this.object.userId;
   }
 }

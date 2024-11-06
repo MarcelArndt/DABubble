@@ -1,0 +1,28 @@
+@import '../../../../../mixin.scss';
+
+.reaction-container {
+
+    button {
+        @include dFlex();
+        border: none;
+        border: 1px solid var(--purple-2);
+        border-radius: 20px;
+        padding: 5px 10px;
+        background-color: var(--secundary-bg);
+        margin-right: 10px;
+        margin-top: 10px;
+
+        img {
+            height: 100%
+        }
+
+        p {
+            @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+            margin-left: 10px;
+        }
+    }
+
+    .add-reaction-btn {
+        margin-left: 10px;
+    }
+}

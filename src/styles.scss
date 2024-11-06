@@ -1,47 +1,65 @@
 @import '@ctrl/ngx-emoji-mart/picker';
+@import 'mixin.scss';
 
 
 :root {
     --primary-bg: #ECEEFE;
-        --secundary-bg: #FFFFFF;
-        --text-black: #000000;
-        --text-light-black: #0c0c0c;
-        --text-gray: #686868;
-        --text-blue: #1381FF;
-        --text-red: #ED1E79;
-        --purple-1: #444DF2;
-        --purple-2: #797EF3;
-        --purple-3: #535AF1;
-        --btn-gray: #686868;
-        --dg-btn-bg: #ECEEFE;
-        --green: #92C83E;
-        --border-light-purple: #ADB0D9;
+    --secundary-bg: #FFFFFF;
+    --text-black: #000000;
+    --text-light-black: #0c0c0c;
+    --text-gray: #686868;
+    --text-blue: #1381FF;
+    --text-red: #ED1E79;
+    --purple-1: #444DF2;
+    --purple-2: #797EF3;
+    --purple-3: #535AF1;
+    --btn-gray: #686868;
+    --dg-btn-bg: #ECEEFE;
+    --green: #92C83E;
+    --border-light-purple: #ADB0D9;
 }
 
 :root.dark-theme {
     --primary-bg: #1E1E2E;
-        --secundary-bg: #2A2A3B;
-        --text-black: #FFFFFF;
-        --text-light-black: #f1f1f1;
-        --text-gray: #A1A1A1;
-        --text-blue: #339BFF;
-        --text-red: #FF5C8D;
-        --purple-1: #7B83FF;
-        --purple-2: #A4A8FF;
-        --purple-3: #8E95FF;
-        --btn-gray: #A1A1A1;
-        --dg-btn-bg: #ECEEFE;
-        --green: #92C83E;
-        --border-light-purple: #e3e3ee;
-}
-  
-body {
-margin: 0;
-font-family: 'Nunito', Roboto, "Helvetica Neue", sans-serif;
-background-color: var(--primary-bg);
+    --secundary-bg: #2A2A3B;
+    --text-black: #FFFFFF;
+    --text-light-black: #f1f1f1;
+    --text-gray: #A1A1A1;
+    --text-blue: #339BFF;
+    --text-red: #FF5C8D;
+    --purple-1: #7B83FF;
+    --purple-2: #A4A8FF;
+    --purple-3: #8E95FF;
+    --btn-gray: #A1A1A1;
+    --dg-btn-bg: #ECEEFE;
+    --green: #92C83E;
+    --border-light-purple: #e3e3ee;
 }
 
-html, body { 
+body {
+    margin: 0;
+    font-family: 'Nunito', Roboto, "Helvetica Neue", sans-serif;
+    background-color: var(--primary-bg);
+}
+
+html,
+body {
     height: 100%;
     overflow: hidden;
- }
+}
+
+.flex-end {
+    @include dFlex($jc: end);
+}
+
+.flex-start {
+    @include dFlex($jc: start);
+}
+
+.row {
+    flex-direction: row;
+}
+
+.row-reverse {
+    flex-direction: row-reverse;
+}

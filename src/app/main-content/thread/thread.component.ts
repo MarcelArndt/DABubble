@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ThreadHeaderComponent } from "./thread-header/thread-header.component";
 import { ThreadMessageFieldComponent } from "./thread-message-field/thread-message-field.component";
-import { MemberMessageComponent } from "../chat/member-message/member-message.component";
-import { ThreadMembersMessageComponent } from "./thread-members-message/thread-members-message.component";
-import { ThreadMyMessageComponent } from "./thread-my-message/thread-my-message.component";
+
 import { CommonModule } from '@angular/common';
 import { animate, query, style, transition, trigger } from '@angular/animations';
 import { EventService } from '../../../services/event.service';
@@ -14,9 +12,6 @@ import { EventService } from '../../../services/event.service';
   imports: [
     ThreadHeaderComponent, 
     ThreadMessageFieldComponent, 
-    MemberMessageComponent, 
-    ThreadMembersMessageComponent, 
-    ThreadMyMessageComponent,
     CommonModule
   ],
   templateUrl: './thread.component.html',

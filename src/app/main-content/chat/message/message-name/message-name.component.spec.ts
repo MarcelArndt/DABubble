@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ThreadMyMessageComponent } from './thread-my-message.component';
+import { MessageNameComponent } from './message-name.component';
 
-describe('ThreadMyMessageComponent', () => {
-  let component: ThreadMyMessageComponent;
-  let fixture: ComponentFixture<ThreadMyMessageComponent>;
+describe('MessageNameComponent', () => {
+  let component: MessageNameComponent;
+  let fixture: ComponentFixture<MessageNameComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ThreadMyMessageComponent]
+      imports: [MessageNameComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ThreadMyMessageComponent);
+    fixture = TestBed.createComponent(MessageNameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

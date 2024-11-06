@@ -1,0 +1,9 @@
+<div class="message" (keydown)="handleKeydown($event)" *ngIf="message.message" [ngClass]="object.checkUser(message) ? 'myMessage' : 'memberMessage'">
+
+    <p class="message-text" *ngIf="isEdit == false" [ngClass]="object.checkUser(message) ? 'text.light' : 'text-dark'"> {{message.message}}</p>
+
+    <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()" value="{{message.message}}"></textarea>
+
+    <p *ngIf="isEdit" class="edit-info-text">Esc zum <span (click)="cancelEdit()">Abbrechen</span> • Enter zum <span (click)="saveText()">Speichern</span></p>
+    
+</div>

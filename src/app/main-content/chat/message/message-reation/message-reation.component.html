@@ -1,10 +1,10 @@
-<div class="reaction-container" [ngClass]="checkUser() ? 'flex-end' : 'flex-start'">
-    <button *ngIf="message.reactions.like.length" (click)="likeMessage()"><img src="/img/reactions/like.svg"
-            alt="">
+<div class="reaction-container" [ngClass]="object.checkUser(message) ? 'flex-end' : 'flex-start'">
+    <button *ngIf="message.reactions.like.length" (click)="likeMessage()">
+        <img src="/img/reactions/like.svg" alt="">
         <p>{{message.reactions.like.length}}</p>
     </button>
-    <button *ngIf="message.reactions.rocket.length" (click)="rocketMessage()"><img
-            src="/img/reactions/rocket.svg" alt="">
+    <button *ngIf="message.reactions.rocket.length" (click)="rocketMessage()">
+        <img src="/img/reactions/rocket.svg" alt="">
         <p>{{message.reactions.rocket.length}}</p>
     </button>
 </div>

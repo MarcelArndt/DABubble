@@ -22,11 +22,15 @@ export class MessageOptionsComponent {
   @Input() isMessageEditMenuOpen: any;
   @Input() editMessageText: any;
 
-  @Output() edit = new EventEmitter<void>();
   @Output() deleteEvent = new EventEmitter<void>();
-  isEdit: boolean = false;
+  @Output() toggleEdit = new EventEmitter<void>();
 
-  constructor(private object: TestJasonsService, private eventService: EventService) { }
+  constructor(public object: TestJasonsService, private eventService: EventService) { }
+
+  toggleEditMode() {
+    this.toggleEdit.emit();
+    this.isMessageEditMenuOpen = false;
+  }
 
   likeMessage() {
     const userIdIndex = this.message.reactions.like.indexOf(this.object.userId);
@@ -46,10 +50,6 @@ export class MessageOptionsComponent {
     }
   }
 
-  onEdit() {
-    this.edit.emit();
-  }
-
   onDelete() {
     this.deleteEvent.emit();
   }
@@ -64,9 +64,5 @@ export class MessageOptionsComponent {
     } else {
       this.isMessageEditMenuOpen = true
     }
-  }
-
-  checkUser(): boolean {
-    return this.message.user === this.object.userId;
   }
 }

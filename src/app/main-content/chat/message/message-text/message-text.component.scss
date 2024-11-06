@@ -1,0 +1,54 @@
+@import '../../../../../mixin.scss';
+
+.message {
+    background-color: var(--primary-bg);
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 0 20px 20px 20px;
+    margin: 10px 0;
+    width: 100%;
+
+    .message-text {
+        @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+    }
+
+    textarea {
+        @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+        width: 100%;
+        height: 100%;
+        resize: none;
+        outline: none;
+        border: none;
+        border-radius: 20px 0px 20px 20px;
+        box-sizing: border-box;
+        padding: 10px;
+        background-color: var(--purple-2);
+
+    }
+
+    .edit-info-text {
+        position: absolute;
+        bottom: 50px;
+        left: 30px;
+        @include nunito($fw: 400, $fs: 12px, $c: var(--text-black));
+
+        span {
+            color: var(--text-blue);
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.myMessage {
+    background-color: var(--purple-2);
+    border-radius: 20px 0px 20px 20px;
+}
+
+.memberMessage {
+    background-color: var(--primary-bg);
+    border-radius: 0 20px 20px 20px;
+}

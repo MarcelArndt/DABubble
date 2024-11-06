@@ -1,12 +1,12 @@
-<div class="options" *ngIf="isMessageHover" [ngClass]="checkUser() ? '' : 'option-menu'">
+<div class="options" *ngIf="isMessageHover" [ngClass]="object.checkUser(message) ? '' : 'option-menu'">
   <button class="options-btn" (click)="rocketMessage()"><img src="/img/reactions/rocket.svg" alt=""></button>
   <button class="options-btn" (click)="likeMessage()"><mat-icon><img src="/img/reactions/like.svg" alt=""></mat-icon></button>
   <button class="options-btn"><mat-icon>sentiment_satisfied</mat-icon></button>
   <button class="options-btn" (click)="openThread()"><mat-icon>comment</mat-icon></button>
-  <button *ngIf="checkUser()" class="options-btn" (click)="openEditMenu()"><mat-icon>more_vert</mat-icon></button>
+  <button *ngIf="object.checkUser(message)" class="options-btn" (click)="openEditMenu()"><mat-icon>more_vert</mat-icon></button>
 
   <div class="edit-message-menu" *ngIf="isMessageEditMenuOpen">
-    <button (click)="onEdit()">Bearbeiten</button>
+    <button (click)="toggleEditMode()">Bearbeiten</button>
     <button (click)="onDelete()">Löschen</button>
   </div>
 </div>

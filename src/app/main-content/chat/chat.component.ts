@@ -1,8 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ChatHeaderComponent } from "./chat-header/chat-header.component";
 import { ChatMessageFieldComponent } from "./chat-message-field/chat-message-field.component";
-import { MemberMessageComponent } from "./member-message/member-message.component";
-import { MyMessageComponent } from "./my-message/my-message.component";
 import { CommonModule } from '@angular/common';
 import { TestJasonsService } from '../../../services/test-jsons.service';
 import { Message } from '../../../interface/message';
@@ -12,7 +10,12 @@ import { MessageComponent } from "./message/message.component";
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [ChatHeaderComponent, ChatMessageFieldComponent, MemberMessageComponent, MyMessageComponent, CommonModule, MessageComponent],
+  imports: [
+    ChatHeaderComponent, 
+    ChatMessageFieldComponent, 
+    CommonModule, 
+    MessageComponent
+  ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
@@ -22,7 +25,7 @@ export class ChatComponent {
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   private shouldScroll: boolean = true;
 
-  constructor(public object: TestJasonsService, private eventService: EventService) { }
+  constructor(public object: TestJasonsService) { }
 
   ngOnInit(): void {
     this.message = this.object.message;

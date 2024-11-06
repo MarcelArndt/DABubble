@@ -49,12 +49,14 @@ export class TestJasonsService {
 
   ]
 
-  // public user:any []
-
-deleteMessage(index: number) {
+  deleteMessage(index: number) {
     this.message.splice(index, 1);
     this.message = [...this.message];
     console.log('Erfolgreich gelöscht', index)
-}
+  }
+
+  checkUser(message: any): boolean {
+    return message.user === this.userId;
+  }
 
 }

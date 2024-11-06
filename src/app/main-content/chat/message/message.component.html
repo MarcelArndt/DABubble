@@ -1,65 +1,23 @@
 <div class="new-message-container">
-    <div class="hover" (mousemove)="isMessageHover = true" (mouseleave)="resetHoverAndMenu()"
-        [ngClass]="checkUser() ? 'row-reverse' : ''">
+    <div class="hover" (mousemove)="isMessageHover = true" (mouseleave)="resetHoverAndMenu()" [ngClass]="object.checkUser(message) ? 'row-reverse' : ''">
 
-
-        <img class="profile-image" src="{{message.profileImage}}" alt=""
-            [ngStyle]="checkUser() ? { 'margin-left' : '30px' } : { 'margin-right' : '30px' }">
+        <img class="profile-image" src="{{message.profileImage}}" alt="" [ngStyle]="object.checkUser(message) ? { 'margin-left' : '30px' } : { 'margin-right' : '30px' }">
 
         <div class="message-container">
-
-
-            <div class="name" [ngClass]="checkUser() ? 'row-reverse flex-end' : 'flex-start'">
-                <h5 [ngClass]="checkUser() ? 'ml' : 'mr'">{{message.name}}</h5>
-                <p>{{message.time}}</p>
-            </div>
-
-            <div class="message" (keydown)="handleKeydown($event)" *ngIf="message.message"
-                [ngClass]="checkUser() ? 'myMessage' : 'memberMessage'">
-                <p class="message-text" *ngIf="isEdit == false" [ngClass]="checkUser() ? 'text.light' : 'text-dark'">
-                    {{message.message}}</p>
-                <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()"
-                    value="{{message.message}}"></textarea>
-                <p *ngIf="isEdit" class="edit-info-text">Esc zum <span (click)="cancelEdit()">Abbrechen</span> • Enter
-                    zum <span (click)="saveText()">Speichern</span></p>
-            </div>
-
-            <div class="postet-image-container" [ngClass]="checkUser() ? 'flex-end' : 'flex-start'">
-                <div class="image-container" *ngFor="let attachmen of message.attachmen; let i = index">
-                    <img class="image" [src]="attachmen">
-                    <button *ngIf="isEdit" (click)="deleteImage(i)"
-                        class="edit-images"><mat-icon>delete</mat-icon></button>
-                </div>
-            </div>
-
-            <div class="answer-container" [ngClass]="checkUser() ? 'flex-end' : 'flex-start'">
-                <p class="answer" (click)="openThread()">{{message.answers.answer.length}} Anwtorten</p>
-                <p class="answer-time">Letze Antwort 14:56</p>
-            </div>
-
+            <app-message-name [message]="message"></app-message-name>
+            <app-message-text [message]="message" [isEdit]="isEdit" [editMessageText]="editMessageText"></app-message-text>
+            <app-message-images [message]="message"></app-message-images>
+            <app-message-answer [message]="message"></app-message-answer>
             <app-message-reation [message]="message"></app-message-reation>
-            <div class="reaction-container" [ngClass]="checkUser() ? 'flex-end' : 'flex-start'">
-                <button *ngIf="message.reactions.like.length" (click)="likeMessage()"><img src="/img/reactions/like.svg"
-                        alt="">
-                    <p>{{message.reactions.like.length}}</p>
-                </button>
-                <button *ngIf="message.reactions.rocket.length" (click)="rocketMessage()"><img
-                        src="/img/reactions/rocket.svg" alt="">
-                    <p>{{message.reactions.rocket.length}}</p>
-                </button>
-            </div>
-
-
         </div>
 
-        <div class="answer-date-time-container">
-            <p>{{message.createdAt}}</p>
-        </div>
-
-        <app-message-options [message]="message" [isMessageHover]="isMessageHover"
-            [isMessageEditMenuOpen]="isMessageEditMenuOpen" [editMessageText]="editMessageText" (edit)="editMessage()"
-            (deleteEvent)="deleteMessage()">
+        <div class="answer-date-time-container"><p>{{message.createdAt}}</p></div>
+        <app-message-options  
+        [message]="message" 
+        [isMessageHover]="isMessageHover" 
+        [isMessageEditMenuOpen]="isMessageEditMenuOpen" 
+        (deleteEvent)="deleteMessage()"
+        (toggleEdit)="toggleEditMode()">
         </app-message-options>
-
     </div>
 </div>
