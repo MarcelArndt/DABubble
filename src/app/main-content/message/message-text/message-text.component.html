@@ -2,8 +2,8 @@
 
     <p class="message-text" *ngIf="isEdit == false" [ngClass]="object.checkUser(message) ? 'text.light' : 'text-dark'"> {{message.message}}</p>
 
-    <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()" value="{{message.message}}"></textarea>
+    <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()"></textarea>
 
-    <p *ngIf="isEdit" class="edit-info-text">Esc zum <span (click)="cancelEdit()">Abbrechen</span> • Enter zum <span (click)="saveText()">Speichern</span></p>
+    <p *ngIf="isEdit" class="edit-info-text">Esc zum <span (click)="cancel()">Abbrechen</span> • Enter zum <span (click)="save()">Speichern</span></p>
     
 </div>

@@ -1,7 +1,7 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { TestJasonsService } from '../../../../../services/test-jsons.service';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TestJasonsService } from '../../../../services/test-jsons.service';
 
 @Component({
   selector: 'app-message-text',
@@ -17,10 +17,13 @@ export class MessageTextComponent {
   @Input() message: any;
   @Input() isEdit: any;
   @Input() editMessageText: any;
-  // editMessageText: string = '';
+
+  @Output() saveText = new EventEmitter<void>();
+  @Output() cancelEdit = new EventEmitter<void>();
+
   @ViewChild('textArea') textArea!: ElementRef<HTMLTextAreaElement>;
 
-  constructor(public object: TestJasonsService) {}
+  constructor(public object: TestJasonsService) { }
 
   autoGrow() {
     const textarea = this.textArea.nativeElement;
@@ -30,18 +33,18 @@ export class MessageTextComponent {
 
   handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
-      this.saveText();
+      this.save();
     } else if (event.key === 'Escape') {
-      this.cancelEdit();
+      this.cancel();
     }
   }
 
-  saveText() {
+  save() {
     this.message.message = this.editMessageText;
-    this.isEdit = false
+    this.saveText.emit();
   }
 
-  cancelEdit() {
-    this.isEdit = false
+  cancel() {
+    this.cancelEdit.emit();
   }
 }

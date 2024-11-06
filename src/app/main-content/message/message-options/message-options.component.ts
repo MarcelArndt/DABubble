@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TestJasonsService } from '../../../../../services/test-jsons.service';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { EventService } from '../../../../../services/event.service';
+import { TestJasonsService } from '../../../../services/test-jsons.service';
+import { EventService } from '../../../../services/event.service';
+
 
 @Component({
   selector: 'app-message-options',

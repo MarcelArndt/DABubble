@@ -3,10 +3,10 @@
 
         <img class="profile-image" src="{{message.profileImage}}" alt="" [ngStyle]="object.checkUser(message) ? { 'margin-left' : '30px' } : { 'margin-right' : '30px' }">
 
-        <div class="message-container">
+        <div class="message-container" [ngStyle]="isEdit ? {'width': '100%'} : {'width': 'auto'}">
             <app-message-name [message]="message"></app-message-name>
-            <app-message-text [message]="message" [isEdit]="isEdit" [editMessageText]="editMessageText"></app-message-text>
-            <app-message-images [message]="message"></app-message-images>
+            <app-message-text [message]="message" [isEdit]="isEdit" [editMessageText]="editMessageText" (cancelEdit)="cancelEdit()" (saveText)="saveText()"></app-message-text>
+            <app-message-images [message]="message" [isEdit]="isEdit"></app-message-images>
             <app-message-answer [message]="message"></app-message-answer>
             <app-message-reation [message]="message"></app-message-reation>
         </div>

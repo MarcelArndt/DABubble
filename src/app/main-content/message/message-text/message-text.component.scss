@@ -1,4 +1,4 @@
-@import '../../../../../mixin.scss';
+@import '../../../../mixin.scss';
 
 .message {
     background-color: var(--primary-bg);
@@ -6,7 +6,7 @@
     padding: 10px;
     border-radius: 0 20px 20px 20px;
     margin: 10px 0;
-    width: 100%;
+    width: auto;
 
     .message-text {
         @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
@@ -15,7 +15,6 @@
     textarea {
         @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
         width: 100%;
-        height: 100%;
         resize: none;
         outline: none;
         border: none;
@@ -23,7 +22,7 @@
         box-sizing: border-box;
         padding: 10px;
         background-color: var(--purple-2);
-
+        word-break: unset;
     }
 
     .edit-info-text {

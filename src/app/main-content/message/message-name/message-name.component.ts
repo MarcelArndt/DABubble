@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { TestJasonsService } from '../../../../../services/test-jsons.service';
+import { TestJasonsService } from '../../../../services/test-jsons.service';
+
 
 @Component({
   selector: 'app-message-name',
@@ -15,5 +16,6 @@ export class MessageNameComponent {
   @Input() message: any;
 
   constructor(public object: TestJasonsService) { }
+
 
 }

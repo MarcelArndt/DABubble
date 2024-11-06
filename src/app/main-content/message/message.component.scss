@@ -1,4 +1,4 @@
-@import '../../../../mixin.scss';
+@import '../../../mixin.scss';
 
 .new-message-container {
     @include dFlex($ai: start, $jc: start);

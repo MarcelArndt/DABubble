@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TestJasonsService } from '../../../../services/test-jsons.service';
-import { MessageOptionsComponent } from "./message-options/message-options.component";
-import { MessageReationComponent } from "./message-reation/message-reation.component";
-import { MessageAnswerComponent } from "./message-answer/message-answer.component";
-import { MessageImagesComponent } from "./message-images/message-images.component";
-import { MessageTextComponent } from "./message-text/message-text.component";
-import { MessageNameComponent } from "./message-name/message-name.component";
+import { TestJasonsService } from '../../../services/test-jsons.service';
+import { MessageOptionsComponent } from './message-options/message-options.component';
+import { MessageReationComponent } from './message-reation/message-reation.component';
+import { MessageAnswerComponent } from './message-answer/message-answer.component';
+import { MessageImagesComponent } from './message-images/message-images.component';
+import { MessageTextComponent } from './message-text/message-text.component';
+import { MessageNameComponent } from './message-name/message-name.component';
 
 @Component({
   selector: 'app-message',
@@ -50,8 +50,15 @@ export class MessageComponent {
     } else {
       this.isEdit = true;
       this.editMessageText = this.message.message;
-      // console.log(this.isMessageEditMenuOpen)
     }
+  }
+
+  saveText() {
+    this.isEdit = false
+  }
+
+  cancelEdit() {
+    this.isEdit = false
   }
 
 }

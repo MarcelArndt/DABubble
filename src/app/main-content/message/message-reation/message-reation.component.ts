@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TestJasonsService } from '../../../../../services/test-jsons.service';
+import { TestJasonsService } from '../../../../services/test-jsons.service';
 
 @Component({
   selector: 'app-message-reation',

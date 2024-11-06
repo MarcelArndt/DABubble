@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { TestJasonsService } from '../../../../../services/test-jsons.service';
-import { EventService } from '../../../../../services/event.service';
+import { TestJasonsService } from '../../../../services/test-jsons.service';
+import { EventService } from '../../../../services/event.service';
+
 
 @Component({
   selector: 'app-message-answer',
