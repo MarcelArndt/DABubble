@@ -91,6 +91,7 @@ h1{
     border-top: none;
     border-bottom: none;
     line-height: normal;
+    margin: 4px;
 }
 
 .currentName{
@@ -111,6 +112,7 @@ p{
 
 
 .string{
+    padding: 8px 0px;
     @include heightWidth($w: 80%, $h: auto);
     @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--text-black));
     text-align: left;
@@ -162,15 +164,15 @@ a{
 .set-left{
     margin-top: 8px;
     position: relative;
-    @include heightWidth($w: 75%, $h: 100%);
+    @include heightWidth($w: 80%, $h: 100%);
     @include dFlex ($jc: flex-start);
     align-items: center;
     gap: 16px;
-    margin-bottom: 8px;
 
     @include respond-to-maxWidth(medium) {
         justify-content: center;
         flex-direction: column;
+        margin-bottom: 8px;
         p{
             @include figtree($fw: 400, $fs: 18px, $c: var(--text-black));
           background-color: var(--secundary-bg);  
