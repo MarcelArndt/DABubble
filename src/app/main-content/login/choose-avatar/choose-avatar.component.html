@@ -1,0 +1,24 @@
+<div class="content-inside-wrapper">
+
+    <div class="flow">
+        <div (click)="sendClickToParentPageCounter(1)" class="step-back-button"><mat-icon>arrow_back</mat-icon></div>
+        <h1>Choose Your Avatar</h1>
+    </div>
+
+    <div class="currentProfil"><img src="./img/profil-pic/001.svg"></div>
+    <div class="currentName">Frederik Beck</div>
+    <p class="string">Choose your avatar....</p>
+    <div class="default-presets">
+        <div><img src="./img/profil-pic/001.svg"> </div>
+        <div><img src="./img/profil-pic/002.svg"> </div>
+        <div><img src="./img/profil-pic/003.svg"> </div>
+        <div><img src="./img/profil-pic/004.svg"> </div>
+        <div><img src="./img/profil-pic/005.svg"> </div>
+        <div><img src="./img/profil-pic/006.svg"> </div>
+    </div>
+    <div class="set-left">
+        <p>Or you can</p><button class="specialButton">Upload foto</button> 
+    </div>
+        <div class="set-right"> <button (click)="sendClickToParentPageCounter(3)">Create Account</button> </div>
+
+</div>

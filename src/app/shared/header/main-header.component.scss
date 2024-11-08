@@ -7,10 +7,8 @@
     backdrop-filter: blur(2px);
 }
 
-
 ::ng-deep .mat-elevation-z2, .mat-mdc-elevation-specific.mat-elevation-z2 {
     box-shadow: none !important;
-
 }
 
 ::ng-deep .mat-mdc-menu-panel {
@@ -30,7 +28,6 @@
         max-width: 1440px !important; 
         transform: translateY(200px);
         animation: slied-in 0.525s ease-in-out forwards;
-
     }
 
     @keyframes slied-in {

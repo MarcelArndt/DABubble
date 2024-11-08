@@ -1,4 +1,4 @@
-<app-headmenu-login></app-headmenu-login>
+<app-headmenu-login (eventInHead)="changePageNumber($event)" ></app-headmenu-login>
 <app-login-animation></app-login-animation>
 <app-login-animation-inside></app-login-animation-inside>
 
@@ -6,27 +6,14 @@
  
     <div class='whiteBox'>
 
-        <h1>Login</h1>
-        <p>We recommend that you use the email address you use at work.</p>
-        <div class="input-area">   
-            <app-input-field icon="mail" placeholder="example@email.com"  [required]="true"  pattern="^[a-zA-Z ]+$">> ></app-input-field>
-            <app-input-field icon="lock" placeholder="Password" [required]="true"  pattern="^[a-zA-Z ]+$">>  ></app-input-field>
-        </div>
-
-        <a>Forgot Password?</a>
-
-        <div class="hrElement"><span>Or Else</span></div>
-
-        <button class="google-button" routerLink="/start"><img src="./img/main-assets/google.svg"><span>Sign in with Google</span></button>
-
-        <div class="button-collection">
-            <button routerLink="/start">Log In</button>
-            <button class="specialButton" routerLink="/start">Guest-Login</button>
-        </div>
-
+        <app-sign-in [ngClass]='getClass(0)'></app-sign-in>
+        <app-sign-up [ngClass]='getClass(1)'(eventInChild)="changePageNumber($event)"></app-sign-up>
+        <app-choose-avatar [ngClass]='getClass(2)' (eventInProfil)="changePageNumber($event)"></app-choose-avatar>
+        <app-success-creating-account [ngClass]='getClass(3)' (eventInSuccess)="changePageNumber($event)"></app-success-creating-account>
+        
     </div>
 
-    <app-submenu-login></app-submenu-login>
+    <app-submenu-login (eventInSubMenu)="changePageNumber($event)"></app-submenu-login>
 
 </section>
 

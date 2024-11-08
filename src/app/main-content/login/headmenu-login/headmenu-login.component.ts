@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+
 
 @Component({
   selector: 'app-headmenu-login',
@@ -8,5 +9,10 @@ import { Component } from '@angular/core';
   styleUrl: './headmenu-login.component.scss'
 })
 export class HeadmenuLoginComponent {
+
+  @Output() eventInHead = new EventEmitter();
+  sendClickToParentPageCounter(index:number = 0){
+    this.eventInHead.emit(index);
+  }
 
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-submenu-login',
@@ -8,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './submenu-login.component.scss'
 })
 export class SubmenuLoginComponent {
-
+  @Output() eventInSubMenu = new EventEmitter();
+  sendClickToParentPageCounter(index:number = 0){
+    this.eventInSubMenu.emit(index);
+  }
 }
