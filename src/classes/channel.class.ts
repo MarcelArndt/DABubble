@@ -1,8 +1,9 @@
 export class Channel {
     id: string = '';
     title: string = '';
-    messages: Array<{}>= []
+    messages: Array<string>= []; // nur die IDs der mesages
     membersId: Array<string> = [];
+    admin: Array <string> = [];
     type: string = '';
     description: string = '';
     isPublic: boolean = true;

@@ -4,5 +4,4 @@ export interface Member {
     id: string;
     img: string;
     isOnline: boolean;
-    role: string;
   }

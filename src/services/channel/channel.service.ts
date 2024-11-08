@@ -13,6 +13,7 @@ export class ChannelService {
       title: 'Developer Team',
       membersId: [ '1', '2', '3'],
       type: 'everyone',
+      admin: [],
       messages: [],
       description: 'Developer Team das developer Sachen macht.',
       isPublic: true,

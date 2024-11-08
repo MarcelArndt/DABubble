@@ -2,7 +2,7 @@ export interface Message {
     user: string,
     name: string,
     time: string,
-    message: string,
+    message: string, 
     profileImage: string,
     createdAt: string,
     reactions: {
@@ -17,13 +17,13 @@ export interface Message {
 }
 
 
-export interface Server {
-  name: string,
-  ownerId: string,
-  description: string,
-  members: {}
-  roles: {}
-} 
+// export interface Server {
+//   name: string,
+//   ownerId: string,
+//   description: string,
+//   members: {}
+//   roles: {}
+// } 
 
 
 export interface Attachmen {

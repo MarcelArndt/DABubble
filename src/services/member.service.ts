@@ -8,10 +8,10 @@ import { map, Observable } from 'rxjs';
 export class MemberService {
 
   members: Member[] = [
-    { name: 'Alice', id: '1', img: '/img/profil-pic/001.svg', isOnline: false, role: 'user'},
-    { name: 'Bob', id: '2', img: '/img/profil-pic/002.svg', isOnline: true, role: 'user'},
-    { name: 'Charlie', id: '3', img: '/img/profil-pic/003.svg', isOnline: true, role: 'user'},
-    { name: 'David', id: '4', img: '/img/profil-pic/004.svg', isOnline: false, role: 'user'},
+    { name: 'Alice', id: '1', img: '/img/profil-pic/001.svg', isOnline: false},
+    { name: 'Bob', id: '2', img: '/img/profil-pic/002.svg', isOnline: true},
+    { name: 'Charlie', id: '3', img: '/img/profil-pic/003.svg', isOnline: true},
+    { name: 'David', id: '4', img: '/img/profil-pic/004.svg', isOnline: false},
   ];
 
   // private members: Member[] = []; // local cache
@@ -38,4 +38,6 @@ export class MemberService {
   getAllMembers() {
     return this.members;
   }
+
+  
 }
