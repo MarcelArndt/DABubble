@@ -4,7 +4,7 @@ import { ThreadMessageFieldComponent } from "./thread-message-field/thread-messa
 
 import { CommonModule } from '@angular/common';
 import { animate, query, style, transition, trigger } from '@angular/animations';
-import { EventService } from '../../../services/event.service';
+import { EventService } from '../../../services/event/event.service';
 
 @Component({
   selector: 'app-thread',
@@ -67,7 +67,7 @@ export class ThreadComponent implements OnInit {
       name: 'Max Mustermann',
       time: '16:10',
       message: 'Angular ist ein Framework von Google',
-      profileImage: '/img/profil-pic/001.svg',
+      profileImage: '/img/profile-pic/001.svg',
       createdAt: 'Mittwoch, 15 Januar',
       reactions: {
         like: [],
@@ -83,7 +83,7 @@ export class ThreadComponent implements OnInit {
       name: 'Adrian Enßlin',
       time: '11:15',
       message: 'Welche Version ist aktuell von Angular',
-      profileImage: '/img/profil-pic/001.svg',
+      profileImage: '/img/profile-pic/001.svg',
       createdAt: 'Mittwoch, 15 Januar',
       reactions: {
         like: [],
@@ -99,7 +99,7 @@ export class ThreadComponent implements OnInit {
       name: 'Noah Braun',
       time: '14:25',
       message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos cumque sit fugiat labore quaerat a fuga consequuntur eligendi! Temporibus laudantium tempora sequi, non excepturi minus modi? Dolor voluptatum eaque doloribus!',
-      profileImage: '/img/profil-pic/002.svg',
+      profileImage: '/img/profile-pic/002.svg',
       createdAt: 'Dienstag, 14 Januar',
       reactions: {
         like: [''],

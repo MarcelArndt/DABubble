@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { EventService } from '../../../../services/event.service';
+import { EventService } from '../../../../services/event/event.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
 
 

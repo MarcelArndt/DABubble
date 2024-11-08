@@ -1,0 +1,164 @@
+@import '../../../mixin.scss';
+
+:ng-deep .mat-mdc-dialog-surface,
+:ng-deep mat-dialog-container,
+:ng-deep .mdc-dialog--open .mat-mdc-dialog-surface,
+:ng-deep .mdc-dialog--closing, :ng-deep .mat-mdc-dialog-surface
+{
+    width: auto !important;
+    height: auto !important;
+    position: absolute !important;
+    border-top-right-radius: 0px !important;
+}
+
+/* Nur für diesen spezifischen Dialog */
+.custom-dialog .mat-mdc-dialog-surface {
+    width: auto !important;
+    height: auto !important;
+    position: absolute !important;
+    border-top-right-radius: 0px !important;
+}
+
+.card{
+    border-top-right-radius: 0px;
+    @include padding(45px, 40px, 45px, 40px);
+    @include dFlex(start, center);
+   gap: 38px; 
+   flex-direction: column;
+   border-top-right-radius: 0px !important;
+}
+
+.closeButton {
+    border-radius: 50px;
+    padding: 4px;
+    &:hover{
+    cursor: pointer;
+    background-color: #DEE1F0;
+    }
+}
+
+.row{
+    width: 100%;
+    @include dFlex(space-between, center);
+}
+
+.startRow{
+    width: 100%;
+    @include dFlex(start, center);
+}
+
+h3{
+    margin: 0px !important;
+    @include nunito(700, 24px, black);
+}
+
+h4{
+    margin: 0px !important;
+    @include nunito(700, 20px, black);
+}
+
+h2{
+    margin: 0px !important;
+    @include nunito(700, 32px, black);
+    button{
+        @include nunito(600, 18px, var(--purple-3));
+    }
+}
+
+.m-t-16{
+    margin-top: 16px;
+}
+
+.icon{
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+}
+
+
+a{
+    margin-left: 38px;
+    text-decoration: none;
+    @include nunito(500, 18px, #1381FF);
+}
+
+.profileImage{
+    width: 200px;
+    height: 200px;
+    border-radius: 500px;
+}
+
+.textInput {
+    @include padding(15px, 20px, 15px, 20px);
+    @include nunito(500, 18px, black);
+    border: 1px solid #ADB0D9;
+    border-radius: 50px;
+    &:hover{
+        border: 1px solid var(--purple-1);
+    }
+    &:focus{
+        outline: 0px;
+    }
+}
+
+.editRow{
+    width: 100%;
+    @include dFlex(start, center);
+}
+
+.status,
+.emailTitle
+{ 
+    @include nunito(600, 20px, black);
+    margin-left: 8px;
+}
+
+.buttonRow{ 
+    @include dFlex(center, center);
+    gap: 24px;
+    width: 100%;
+    button{
+        font-size: 18px !important;
+        @include padding(12px, 25px, 12px, 25px);
+        transform: border 0.3s ease-in-out, background-color  0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+    .cancelButton{
+        background-color: white !important;
+        border: 1px solid #ADB0D9;
+        color: var(--purple-1) !important;
+        &:hover{
+            border: 1px solid var(--purple-1);
+            background-color: var(--purple-1) !important;
+            color: white !important; 
+        }
+    }
+    .saveButton{
+        background-color: var(--purple-1) !important;
+        &:hover{
+            background-color: var(--purple-2);
+        }
+    }
+}
+
+.fileInput {
+    position: absolute;    
+  }
+  
+  .fileInput input[type="file"] {
+    display: none;  /* Hides the file input */
+  }
+  
+  
+  .fileInput button {
+    padding: 0; /* Entfernt unnötige Innenabstände */
+  }
+  
+  .fileInput mat-icon {
+    font-size: 24px; /* Passen Sie die Icon-Größe nach Bedarf an */
+    color: #3f51b5; /* Wählen Sie eine Farbe für das Icon */
+    cursor: pointer; /* Zeigt an, dass es anklickbar ist */
+  }
+  
+  .fileInput button:hover mat-icon {
+    color: #1a73e8; /* Optionale Hover-Farbe für das Icon */
+  }

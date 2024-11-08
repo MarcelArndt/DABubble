@@ -6,7 +6,7 @@ import { Message } from '../../interface/message';
 })
 export class MessagesService {
   userId: string = 'uidTestId';
-  profileImage: string = '/img/profil-pic/003.svg';
+  profileImage: string = '/img/profile-pic/003.svg';
 
   public message: Message[] = [
     {
@@ -14,7 +14,7 @@ export class MessagesService {
       name: 'Ma Mustermann',
       time: '16:10',
       message: 'Angular ist ein Framework von Google',
-      profileImage: '/img/profil-pic/001.svg',
+      profileImage: '/img/profile-pic/001.svg',
       createdAt: 'Mittwoch, 15 Januar',
       reactions: {
         like: ['1', '2', '3'],
@@ -24,8 +24,8 @@ export class MessagesService {
         answer: [],
       },
       attachmen: [
-        '/img/profil-pic/004.svg',
-        '/img/profil-pic/004.svg',
+        '/img/profile-pic/004.svg',
+        '/img/profile-pic/004.svg',
       ]
     },
     {
@@ -33,7 +33,7 @@ export class MessagesService {
       name: 'Max Mustermann',
       time: '16:10',
       message: 'Angular ist ein Framework von Google kjsdhf ',
-      profileImage: '/img/profil-pic/001.svg',
+      profileImage: '/img/profile-pic/001.svg',
       createdAt: 'Mittwoch, 15 Januar',
       reactions: {
         like: [],
@@ -43,7 +43,7 @@ export class MessagesService {
         answer: [],
       },
       attachmen: [
-        '/img/profil-pic/004.svg',
+        '/img/profile-pic/004.svg',
       ]
     },
 

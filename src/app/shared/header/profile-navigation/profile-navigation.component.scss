@@ -63,3 +63,15 @@
         @include statusSymbol;
     }
 }
+
+
+.card{
+    border-top-right-radius: 0px;
+    @include padding(45px, 40px, 45px, 40px);
+    @include dFlex(start, center);
+   gap: 38px; 
+   flex-direction: column;
+
+
+   border-top-right-radius: 0px !important;
+}

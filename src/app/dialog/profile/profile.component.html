@@ -1,1 +1,66 @@
-<p>profile works!</p>
+<div class="card" appearance="outlined">
+        @if (!editDialog) {
+            <div class="row">
+                <h3>Profile</h3>
+                <mat-icon class="closeButton" (click)="this.dialogRef.close()">close</mat-icon>
+            </div>
+
+            <img class="profileImage" [src]="member.img">
+
+            <div class="row">
+                <h2>{{member.name}}</h2>
+                <button mat-button tabindex="-1" (click)="editDialog = true">Edit</button>
+            </div>
+
+            <div class="startRow">
+                <img src="/img/profile-pic/offline.svg" alt="Online status">
+                <span class="status">Offline</span>
+            </div>    
+
+            <div class="startRow">
+                <mat-icon class="mailIcon">mail</mat-icon>
+                <span class="emailTitle">E-Mail-Adress</span>
+            </div>
+            
+            <a href="mailto:email.adress@example.com"  tabindex="-1">email.adress&#64;example.com</a>
+        } @else {
+            <div class="row">
+                <h3>Edit your profile</h3>
+                <mat-icon class="closeButton" (click)="this.dialogRef.close()">close</mat-icon>
+            </div>
+
+            <div class="imgContainer">
+                <img class="profileImage" [src]="member.img">
+                <!-- Button to trigger file input -->
+                <button class="fileInput" mat-icon-button (click)="openFileDialog()">
+                    <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*"/>
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+            </div>
+
+
+
+            <div>
+                <div>
+                    <div class="editRow">
+                        <mat-icon class="icon">account_circle</mat-icon>
+                        <h4>Full name</h4>
+                    </div>
+                    <input class="textInput" [(ngModel)]="member.name" placeholder="{{member.name}}" >                 
+                </div>
+                <div>
+                    <div class="editRow m-t-16">
+                        <mat-icon class="icon">mail</mat-icon>
+                        <h4>Email</h4>
+                    </div>
+                    <input class="textInput" [(ngModel)]="member.email" placeholder="{{member.email}}">                
+                </div>                
+            </div>
+
+
+            <div class="buttonRow">
+                <button class="cancelButton" mat-button (click)="this.dialogRef.close()">Cancel</button>
+                <button class="saveButton" mat-flat-button (click)="save(member)">Save</button>
+            </div>
+        }
+</div>

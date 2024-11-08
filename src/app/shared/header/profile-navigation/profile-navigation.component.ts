@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DarkModeService } from '../../../../services/darkMode/dark-mode.service';
+import { ProfileComponent } from '../../../dialog/profile/profile.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-profile-navigation',
@@ -19,12 +21,26 @@ import { DarkModeService } from '../../../../services/darkMode/dark-mode.service
   styleUrl: './profile-navigation.component.scss'
 })
 export class ProfileNavigationComponent {
-  constructor(public darkMode: DarkModeService) { }
+  readonly dialog = inject(MatDialog);
 
   toInnerHTML = '';
   sizeThreshold = 1285;
-  currentImgPath = './img/profil-pic/006.svg'
+  currentImgPath = './img/profile-pic/006.svg'
   switchMobilOn = false
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ProfileComponent, {
+      width: '360px',
+      height: 'auto',
+      position: { top: '482px', right: '64px' },
+      autoFocus: false,
+      panelClass: 'custom-dialog'
+    });
+    dialogRef.afterClosed().subscribe();
+  }
+
+
+  constructor(public darkMode: DarkModeService) { }
 
   toggleTheme() {
     this.darkMode.toggleDarkMode();

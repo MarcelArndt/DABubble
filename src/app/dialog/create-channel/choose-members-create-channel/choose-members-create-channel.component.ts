@@ -16,7 +16,7 @@ import { MatOptionModule } from '@angular/material/core';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { Member } from '../../../../interface/member';
-import { MemberService } from '../../../../services/member.service';
+import { MemberService } from '../../../../services/member/member.service';
 import { ChannelService } from '../../../../services/channel/channel.service';
 
 

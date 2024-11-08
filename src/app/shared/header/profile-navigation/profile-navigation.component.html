@@ -1,18 +1,18 @@
 <nav class="profil"> 
     <div class="name">Frederik Beck</div>
 
-    <div class="profilPicture"><img src="./img/profil-pic/006.svg">   <div class="statusSymbol"></div> </div>
+    <div class="profilPicture"><img src="./img/profile-pic/006.svg">   <div class="statusSymbol"></div> </div>
      
     <div class="profilButton" mat-button [matMenuTriggerFor]="profilMenu">
         @if(switchMobilOn){
             <mat-icon>keyboard_arrow_down</mat-icon>
         } @else {
-            <img src="./img/profil-pic/006.svg">
+            <img src="./img/profile-pic/006.svg">
         }
     </div>
     <mat-menu #profilMenu="matMenu">
         <div class="mobilDekor"></div>
-        <div class="matMenu-item"><mat-icon class="outline">account_circle</mat-icon><button mat-menu-item>Profil</button></div>
+        <div class="matMenu-item"><mat-icon class="outline">account_circle</mat-icon><button (click)="openDialog()" mat-menu-item>Profil</button></div>
         <div class="matMenu-item" routerLink="/login" ><mat-icon class="outline">logout</mat-icon><button mat-menu-item>Log-Out</button></div>
         <div class="matMenu-item"><mat-icon class="outline">{{ isDarkMode() ? 'wb_sunny' : 'dark_mode' }}</mat-icon><button mat-menu-item (click)="toggleTheme()">{{ isDarkMode() ? 'Hell' : 'Dunkel' }}</button></div>
     </mat-menu>

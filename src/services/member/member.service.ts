@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Member } from '../interface/member';
+import { Member } from '../../interface/member';
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -8,10 +8,10 @@ import { map, Observable } from 'rxjs';
 export class MemberService {
 
   members: Member[] = [
-    { name: 'Alice', id: '1', img: '/img/profil-pic/001.svg', isOnline: false},
-    { name: 'Bob', id: '2', img: '/img/profil-pic/002.svg', isOnline: true},
-    { name: 'Charlie', id: '3', img: '/img/profil-pic/003.svg', isOnline: true},
-    { name: 'David', id: '4', img: '/img/profil-pic/004.svg', isOnline: false},
+    { name: 'Alice', email: 'emailOfAlice@gmail.com', id: '1', img: '/img/profile-pic/001.svg', isOnline: false},
+    { name: 'Bob', email: 'emailOfBob@gmail.com', id: '2', img: '/img/profile-pic/002.svg', isOnline: true},
+    { name: 'Charlie', email: 'emailOfCharlie@gmail.com', id: '3', img: '/img/profile-pic/003.svg', isOnline: true},
+    { name: 'David', email: 'emailOfDavid@gmail.com', id: '4', img: '/img/profile-pic/004.svg', isOnline: false},
   ];
 
   // private members: Member[] = []; // local cache

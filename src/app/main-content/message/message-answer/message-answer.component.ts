@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { EventService } from '../../../../services/event.service';
+import { EventService } from '../../../../services/event/event.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
 
 
