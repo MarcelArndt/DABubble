@@ -1,21 +1,18 @@
-import { Injectable } from '@angular/core';
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { inject, Injectable } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private app;
   private auth;
 
   constructor() {
-    this.app = initializeApp();
-    this.auth = getAuth(this.app);
+    this.auth = inject(Auth);
   }
 
   getCurrentUserId(){
-    // return UserId
+    return this.auth.currentUser;
   }
 
 }

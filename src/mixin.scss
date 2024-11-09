@@ -112,7 +112,8 @@ $breakpoints: (
     padding-left: $pl;
 }
 
-@mixin materialSymbols($c: var(--text-black)) {
+@mixin materialSymbols($c: var(--text-black), $fs: 16px) {
     font-family: 'Material Symbols Outlined';
     color: $c;
+    font-size: $fs;
 }

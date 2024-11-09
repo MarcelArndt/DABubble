@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule, MatDialogTitle} from '@angular/material/dialog';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import { EditChannelComponent } from '../../../dialog/edit-channel/edit-channel.component';
-import { MatIcon } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 
 @Component({
@@ -11,10 +11,6 @@ import { MatIcon } from '@angular/material/icon';
   imports: [
     MatDialogModule,
     MatButtonModule,
-    MatDialogActions,
-    MatDialogClose,
-    MatDialogContent,
-    MatDialogTitle,
     MatIcon,
   ],
   templateUrl: './chat-header.component.html',

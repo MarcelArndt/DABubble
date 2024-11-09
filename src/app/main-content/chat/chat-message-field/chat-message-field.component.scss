@@ -42,11 +42,11 @@ section {
 
         button {
             @include heightWidth($w: 35px, $h: 35px);
-            @include dFlex();
+
+            @include materialSymbols($c: var(--text-gray), $fs: 24px);
             border: none;
             background-color: var(--secundary-bg);
             border-radius: 50%;
-            color: var(--text-gray);
 
             &:hover {
                 background-color: var(--primary-bg);
@@ -57,10 +57,10 @@ section {
     .send-btn {
         @include heightWidth($w: 35px, $h: 35px);
         @include dFlex();
+        @include materialSymbols($c: var(--purple-1), $fs: 28px);
         border: none;
         background-color: var(--secundary-bg);
         border-radius: 50%;
-        color: var(--purple-1);
 
         &:hover {
             background-color: var(--primary-bg);
@@ -90,7 +90,8 @@ input[type="file"] {
 
 .open-file {
     cursor: pointer;
-    @include materialSymbols($c: var(--btn-gray));
+    @include dFlex();
+    @include materialSymbols($c: var(--text-gray), $fs: 24px);
 }
 
 .user-list {
@@ -105,25 +106,29 @@ input[type="file"] {
     border-radius: 20px;
     overflow-y: scroll;
     scrollbar-width: none;
-  }
-  
-  .user-list ul {
+}
+
+.user-list ul {
     @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  
-  .user-list li {
+}
+
+.user-list li {
     padding: 8px;
     cursor: pointer;
-  }
-  
-  .user-list li:hover {
-    background-color: var(--purple-2);
-  }
+}
 
-  .user-list .active {
+.user-list li:hover {
+    background-color: var(--purple-2);
+}
+
+.user-list .active {
     background-color: #f0f0f0;
-    color: #333;                
-  }
+    color: #333;
+}
+
+mat-icon {
+    @include dFlex();
+}

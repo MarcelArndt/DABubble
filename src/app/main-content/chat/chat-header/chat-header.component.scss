@@ -58,10 +58,9 @@ section {
     }
 }
 
-.add-members {
-    @include materialSymbols();
-}
 
-.hashtag {
-    @include materialSymbols();
+
+mat-icon {
+    @include dFlex();
+    @include materialSymbols($fs: 24px);
 }
