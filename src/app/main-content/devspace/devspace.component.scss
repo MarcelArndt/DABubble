@@ -177,6 +177,10 @@ h3 {
     }
 }
 
+::ng-deep .mat-icon {
+    font-size: 24px !important;
+}
+
 .folderTitle {
     margin-left: 10px;
     font-weight: 500;

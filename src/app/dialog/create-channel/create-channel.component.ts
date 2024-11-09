@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { DevspaceComponent } from '../../main-content/devspace/devspace.component';
 import {MatButtonModule} from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ChooseMembersCreateChannelComponent } from './choose-members-create-channel/choose-members-create-channel.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Channel } from '../../../classes/channel.class';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
@@ -29,6 +29,9 @@ import { CommonModule } from '@angular/common';
 export class CreateChannelComponent {
   readonly dialogRef = inject(MatDialogRef<DevspaceComponent>);
   readonly dialog = inject(MatDialog);
+  showError: boolean = false;
+  @ViewChild('channelForm') channelForm!: NgForm;  // ViewChild-Referenz für das Formular
+
 
   channel = new Channel();
   
@@ -44,5 +47,13 @@ export class CreateChannelComponent {
         data: this.channel
     });
     dialogRef.afterClosed().subscribe();
+  }
+
+  handleButtonClick() {
+    this.showError = true;
+    
+    if (this.channelForm.valid) {
+        this.openChooseMembers();
+    }
   }
 }

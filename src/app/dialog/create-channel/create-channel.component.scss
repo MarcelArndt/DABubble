@@ -33,6 +33,14 @@ input, textarea {
     }
 }
 
+.button-default {
+    background-color: #ECEEFE !important;
+  }
+  
+  .button-error {
+    background-color: #444DF2 !important;
+  }
+
 .input-container {
     position: relative;
     display: inline-flex;

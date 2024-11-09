@@ -16,7 +16,7 @@
                class="input-field">
     </div>
     <!-- Validation Message -->
-    <div *ngIf="channelTitle.invalid && (channelTitle.dirty || channelTitle.touched)" class="validation-error">
+    <div *ngIf="channelTitle.invalid && showError" class="validation-error">
         Channel Name is required.
     </div>
 
@@ -25,8 +25,9 @@
     
     <!-- Disable Button if Form is Invalid -->
     <div class="buttonContainer">
-        <button mat-flat-button (click)="openChooseMembers()" 
-                [disabled]="channelForm.invalid">Create</button>
+        <button mat-flat-button (click)="handleButtonClick()" 
+        [ngClass]="channelForm.invalid ? 'button-default' : 'button-error'">
+        Create</button>
     </div>
 </form>
 
