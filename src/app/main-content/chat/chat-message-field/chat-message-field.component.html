@@ -1,6 +1,16 @@
 <section>
+  <div *ngIf="showUserList" class="user-list" #userListContainer>
+    <ul>
+      <li *ngIf="filteredUsers.length === 0">Kein Nutzer gefunden</li>
+      <li
+        *ngFor="let user of filteredUsers; let i = index"
+        (click)="selectUser(user)"
+        [class.active]="i === selectedIndex">
+        {{ user }}
+      </li>
+    </ul>
+  </div>
 
-  <app-user-list [messageField]="messageField" [users]="users"></app-user-list>
   <app-images-preview [imagePreviews]="imagePreviews"></app-images-preview>
 
   <div class="message-field-container">
@@ -17,7 +27,7 @@
 
         <div class="between-line"></div>
         <button (click)="toggleEmojis($event)"><mat-icon>sentiment_satisfied</mat-icon></button>
-        <!-- <button (click)="addTag()"><mat-icon>alternate_email</mat-icon></button> -->
+        <button (click)="addTag()"><mat-icon>alternate_email</mat-icon></button>
       </div>
 
       <button [disabled]="!(imagePreviews.length > 0 || messageField.length > 0)" class="send-btn"

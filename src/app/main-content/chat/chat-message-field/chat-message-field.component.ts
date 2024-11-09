@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 import { ImagesPreviewComponent } from "./images-preview/images-preview.component";
-import { UserListComponent } from "./user-list/user-list.component";
 import { MessagesService } from '../../../../services/messages/messages.service';
 
 
@@ -19,7 +18,6 @@ import { MessagesService } from '../../../../services/messages/messages.service'
     MatMenuModule,
     FormsModule,
     ImagesPreviewComponent,
-    UserListComponent
 ],
   templateUrl: './chat-message-field.component.html',
   styleUrl: './chat-message-field.component.scss'
@@ -35,6 +33,7 @@ export class ChatMessageFieldComponent {
   showUserList: boolean = false;
   filteredUsers: string[] = [];
   selectedIndex = -1;
+  @ViewChild('userListContainer') userListContainer!: ElementRef;
 
   @Output() messagesUpdated = new EventEmitter<void>();
 
@@ -114,6 +113,47 @@ export class ChatMessageFieldComponent {
     }
   }
 
+  selectUser(user: any) {
+    const lastAtSignIndex = this.messageField.lastIndexOf('@');
+    this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
+    this.showUserList = false;
+    this.selectedIndex = -1;
+  }
 
+  addTag() {
+    this.messageField += '@';
+    this.showUserList = true;
+    this.filteredUsers = this.users; 
+  }
+
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (!this.showUserList) return;
+
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.filteredUsers.length;
+      this.scrollToSelected();
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.filteredUsers.length) % this.filteredUsers.length;
+      this.scrollToSelected();
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectUser(this.filteredUsers[this.selectedIndex]);
+      event.preventDefault();
+    } else if (event.key === ' ') {  // Leerzeichen schließt die Liste
+      this.showUserList = false;
+    }
+  }
+
+  private scrollToSelected() {
+    setTimeout(() => {
+      const items = this.userListContainer.nativeElement.querySelectorAll('li');
+      if (items[this.selectedIndex]) {
+        items[this.selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
 }
 
