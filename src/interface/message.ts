@@ -29,7 +29,7 @@ export interface Message {
       like: string[],
       rocket: string[]
     },
-    answers: { 
+    thread: { 
       answer: string[],
     },
 
@@ -51,5 +51,5 @@ export interface Thread {
 }
 
 export interface Attachmen {
-  
+
 }

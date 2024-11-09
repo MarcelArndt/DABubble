@@ -20,7 +20,7 @@ export class MessagesService {
         like: ['1', '2', '3'],
         rocket: []
       },
-      answers: {
+      thread: {
         answer: [],
       },
       attachmen: [
@@ -39,7 +39,7 @@ export class MessagesService {
         like: [],
         rocket: []
       },
-      answers: {
+      thread: {
         answer: [],
       },
       attachmen: [

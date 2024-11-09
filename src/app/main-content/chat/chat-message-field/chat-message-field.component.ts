@@ -52,7 +52,7 @@ export class ChatMessageFieldComponent {
         like: [],
         rocket: []
       },
-      answers: {
+      thread: {
         answer: [],
       },
       attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
