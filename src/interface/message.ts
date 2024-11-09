@@ -1,10 +1,10 @@
-export interface TestUser {
+export interface TestMember {
   name: string;
   email: string;
-  profilePictureUrl: string;
+  imageUrl: string;
   status: boolean;
-  channels: [];
-  directMessages: [];
+  channelIds: [];
+  directMessageIds: [];
 }
 
 export interface TestChannel {
@@ -19,28 +19,28 @@ export interface TestChannel {
 }
 
 export interface Message {
-    user: string,
-    name: string,
-    time: string,
-    message: string, 
-    profileImage: string,
-    createdAt: string,
-    reactions: {
-      like: string[],
-      rocket: string[]
-    },
-    thread: { 
-      answer: string[],
-    },
+  user: string,
+  name: string,
+  time: string,
+  message: string,
+  profileImage: string,
+  createdAt: string,
+  reactions: {
+    like: string[],
+    rocket: string[]
+  },
+  thread: {
+    answer: string[],
+  },
 
-    attachmen: string[]
+  attachmen: string[]
 }
 
 export interface Thread {
   user: string,
   name: string,
   time: string,
-  message: string, 
+  message: string,
   profileImage: string,
   createdAt: string,
   reactions: {

@@ -2,21 +2,37 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
 import { RouterModule } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [InputFieldComponent, RouterModule, MatIcon ],
+  imports: [
+    // InputFieldComponent,
+    RouterModule,
+    MatIcon,
+    FormsModule
+  ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss'
 })
 export class SignUpComponent {
+  fullName: string = '';
+  email: string = '';
+  password: string = '';
+
 
   @Output() eventInChild = new EventEmitter();
-  sendClickToParentPageCounter(index:number = 0){
+  sendClickToParentPageCounter(index: number = 0) {
     this.eventInChild.emit(index);
   }
 
-  
+  constructor(private auth: AuthenticationService) { }
+
+  registerUser() {
+    this.auth.registerUser(this.email, this.password, this.fullName);
+  }
+
 }

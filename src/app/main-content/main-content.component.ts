@@ -3,6 +3,7 @@ import { MainHeaderComponent } from '../shared/header/main-header.component';
 import { ChatComponent } from "./chat/chat.component";
 import { ThreadComponent } from "./thread/thread.component";
 import { DevspaceComponent } from "./devspace/devspace.component";
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 
 @Component({
@@ -18,4 +19,9 @@ import { DevspaceComponent } from "./devspace/devspace.component";
   styleUrl: './main-content.component.scss'
 })
 export class MainContentComponent {
+
+  constructor(private auth: AuthenticationService) {
+    auth.observerUser();
+  }
+
 }

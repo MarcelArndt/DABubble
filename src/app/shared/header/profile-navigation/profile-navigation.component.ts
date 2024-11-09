@@ -7,12 +7,13 @@ import { RouterModule } from '@angular/router';
 import { DarkModeService } from '../../../../services/darkMode/dark-mode.service';
 import { ProfileComponent } from '../../../dialog/profile/profile.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-profile-navigation',
   standalone: true,
   imports: [
-    MatButtonModule, 
+    MatButtonModule,
     MatMenuModule,
     MatIcon,
     RouterModule,
@@ -40,7 +41,7 @@ export class ProfileNavigationComponent {
   }
 
 
-  constructor(public darkMode: DarkModeService) { }
+  constructor(public darkMode: DarkModeService, private auth: AuthenticationService) { }
 
   toggleTheme() {
     this.darkMode.toggleDarkMode();
@@ -57,9 +58,14 @@ export class ProfileNavigationComponent {
     this.switchMobilOn = windowWidth < this.sizeThreshold ? false : true;
   }
 
-  ngOnInit(){
+  ngOnInit() {
     let windowWidth = window.innerWidth;
     this.switchMobilOn = windowWidth < this.sizeThreshold ? false : true;
   }
+
+  signOutUser() {
+    this.auth.signOutUser()
+  }
+
 
 }
