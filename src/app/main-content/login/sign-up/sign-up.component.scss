@@ -103,6 +103,8 @@ a{
 }
 
 .step-back-button{
+    @include materialSymbols;
+    font-size: 24px;
     color: var(--text-black);
     text-align: center;
     @include dFlex;

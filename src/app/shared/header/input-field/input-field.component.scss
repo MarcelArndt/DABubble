@@ -28,6 +28,7 @@
 
 
         mat-icon{
+            @include materialSymbols;
             @include heightWidth($w: 32px, $h: 70px);
             @include respond-to-maxWidth(large) {
                font-size: 21px;
