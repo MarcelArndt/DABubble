@@ -2,18 +2,20 @@
     <h1>Login</h1>
     <p>We recommend that you use the email address you use at work.</p>
     <div class="input-area">   
-        <app-input-field icon="mail" placeholder="example@email.com"  [required]="true"  pattern="^[a-zA-Z ]+$">> ></app-input-field>
-        <app-input-field icon="lock" placeholder="Password" [required]="true"  pattern="^[a-zA-Z ]+$">>  ></app-input-field>
+        <!-- <app-input-field icon="mail" placeholder="example@email.com"  [required]="true"  pattern="^[a-zA-Z ]+$">> ></app-input-field>
+        <app-input-field icon="lock" placeholder="Password" [required]="true"  pattern="^[a-zA-Z ]+$">>  ></app-input-field> -->
+        <input type="email" name="email" [(ngModel)]="email" [required]="true" pattern="^[a-zA-Z ]+$" placeholder="example@email.com">
+        <input type="password" name="password" [(ngModel)]="password" [required]="true" pattern="^[a-zA-Z ]+$" placeholder="Password">
     </div>
 
     <a>Forgot Password?</a>
 
     <div class="hrElement"><span>Or Else</span></div>
 
-    <button class="google-button" routerLink="/start"><img src="./img/main-assets/google.svg"><span>Sign in with Google</span></button>
+    <button class="google-button" (click)="signInWithGoogle()"><img src="./img/main-assets/google.svg"><span>Sign in with Google</span></button>
 
     <div class="button-collection">
-        <button routerLink="/start">Log In</button>
+        <button (click)="signInUser()" >Log In</button>
         <button class="specialButton" routerLink="/start">Guest-Login</button>
     </div>
 </div>

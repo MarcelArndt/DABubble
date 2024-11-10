@@ -18,6 +18,7 @@ import { map, Observable, startWith } from 'rxjs';
 import { Member } from '../../../../interface/member';
 import { MemberService } from '../../../../services/member/member.service';
 import { ChannelService } from '../../../../services/channel/channel.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 @Component({
@@ -59,11 +60,17 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     MAT_DIALOG_DATA) public data: Channel, 
     private memberService: MemberService,
     private channelService: ChannelService,
+    private auth: AuthenticationService
   ) {
     this.channel = data; 
     this.members = memberService.getAllMembers();
   }
 
+  test() {
+    this.channel.title;
+    this.channel.description;
+    this.channel.membersId
+  }
 
   ngOnInit() {
     // Beobachten Sie Änderungen im Eingabefeld und filtern Sie die Mitglieder entsprechend
@@ -172,6 +179,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       this.channel.type = 'group';
     }
     this.channelService.channels.push(this.channel);
+    this.auth.createChannel(this.channel);
     this.dialogRef.close();
     console.log(this.channel); // Überprüfe das aktualisierte Channel-Objekt
   }
