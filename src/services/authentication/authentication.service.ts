@@ -14,5 +14,5 @@ export class AuthenticationService {
   getCurrentUserId(){
     return this.auth.currentUser;
   }
-
+  
 }

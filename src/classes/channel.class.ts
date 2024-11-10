@@ -1,7 +1,7 @@
 export class Channel {
     id: string = '';
     title: string = '';
-    messages: Array<string>= []; // nur die IDs der mesages
+    messages: Array<string>= []; 
     membersId: Array<string> = [];
     admin: Array <string> = [];
     type: string = '';
