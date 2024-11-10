@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { MessagesService } from '../../../../services/messages/messages.service';
+import { ThreadImagesPreviewComponent } from "./thread-images-preview/thread-images-preview.component";
 
 @Component({
   selector: 'app-thread-message-field',
@@ -11,16 +14,57 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
     MatIcon,
     PickerComponent,
     CommonModule,
-    MatMenuModule
-  ],
+    MatMenuModule,
+    FormsModule,
+    ThreadImagesPreviewComponent
+],
   templateUrl: './thread-message-field.component.html',
   styleUrl: './thread-message-field.component.scss'
 })
 export class ThreadMessageFieldComponent {
   openEmojis: boolean = false;
+  messageField: string = ''
+  openData: boolean = false;
+  imageUploads: string[] = [];
+  imagePreviews: (string | ArrayBuffer | null)[] = [];
+
+  users = ['JohnDoe', 'JaneSmith', 'AlexMiller', 'ChrisJohnson'];
+  showUserList: boolean = false;
+  filteredUsers: string[] = [];
+  selectedIndex = -1;
+  @ViewChild('userListContainer') userListContainer!: ElementRef;
+
+  @Output() messagesUpdated = new EventEmitter<void>();
+
+  constructor(public object: MessagesService) { }
+
+  sendMessage() {
+    const now = new Date();
+    const userMessage = {
+      user: 'uidTestId',
+      name: 'Max Mustermann',
+      time: `${now.getHours()}:${now.getMinutes()}`,
+      message: this.messageField,
+      profileImage: this.object.profileImage,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      reactions: {
+        like: [],
+        rocket: []
+      },
+      thread: {
+        answer: [],
+      },
+      attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
+    };
+    this.object.message.push(userMessage);
+    this.messagesUpdated.emit();
+    this.messageField = '';
+    this.imageUploads = [];
+    this.imagePreviews = [];
+  }
 
   toggleEmojis(event: Event): void {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.openEmojis = !this.openEmojis;
   }
 
@@ -30,4 +74,85 @@ export class ThreadMessageFieldComponent {
       this.openEmojis = false;
     }
   }
+
+  onFileSelected(event: Event): void {
+    const files = (event.target as HTMLInputElement).files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagePreviews = [...this.imagePreviews, reader.result];
+          console.log(this.imageUploads);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+
+  addEmoji(event: any) {
+    this.messageField += event.emoji.native;
+    this.openEmojis = false;
+  }
+
+  onInput(event: any) {
+    const lastAtSignIndex = this.messageField.lastIndexOf('@');
+    if (lastAtSignIndex > -1) {
+      const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
+      if (searchQuery && !searchQuery.includes(' ')) {
+        this.filteredUsers = this.users.filter(user =>
+          user.toLowerCase().startsWith(searchQuery.toLowerCase())
+        );
+        this.showUserList = this.filteredUsers.length > 0;
+        this.selectedIndex = 0;
+      } else {
+        this.showUserList = false;
+      }
+    } else {
+      this.showUserList = false; 
+    }
+  }
+
+  selectUser(user: any) {
+    const lastAtSignIndex = this.messageField.lastIndexOf('@');
+    this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
+    this.showUserList = false;
+    this.selectedIndex = -1;
+  }
+
+  addTag() {
+    this.messageField += '@';
+    this.showUserList = true;
+    this.filteredUsers = this.users; 
+  }
+
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (!this.showUserList) return;
+
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.filteredUsers.length;
+      this.scrollToSelected();
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.filteredUsers.length) % this.filteredUsers.length;
+      this.scrollToSelected();
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectUser(this.filteredUsers[this.selectedIndex]);
+      event.preventDefault();
+    } else if (event.key === ' ') {  // Leerzeichen schließt die Liste
+      this.showUserList = false;
+    }
+  }
+
+  private scrollToSelected() {
+    setTimeout(() => {
+      const items = this.userListContainer.nativeElement.querySelectorAll('li');
+      if (items[this.selectedIndex]) {
+        items[this.selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
 }
+
