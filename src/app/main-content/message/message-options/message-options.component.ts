@@ -4,6 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '../../../../services/event/event.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
+import { MainContentService } from '../../../../services/main-content/main-content.service';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class MessageOptionsComponent {
   @Output() deleteEvent = new EventEmitter<void>();
   @Output() toggleEdit = new EventEmitter<void>();
 
-  constructor(public object: MessagesService, private eventService: EventService) { }
+  constructor(public object: MessagesService, private eventService: EventService, private mainContentService: MainContentService) { }
 
   toggleEditMode() {
     this.toggleEdit.emit();
@@ -57,6 +58,11 @@ export class MessageOptionsComponent {
 
   openThread() {
     this.eventService.emitEvent('openThread');
+    this.checkWindowAndOpenThread();
+  }
+
+  checkWindowAndOpenThread(){
+    window.innerWidth <= 1285 ? this.mainContentService.openThreadForMobile() : this.mainContentService.openThread();    
   }
 
   openEditMenu() {

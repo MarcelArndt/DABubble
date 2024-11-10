@@ -1,4 +1,4 @@
-<div  *ngIf="navBarIsClosed" @toggleNavBar class="serverNav">
+<div  *ngIf="navBarIsClosed" @toggleNavBar class="serverNav nav-Bar">
     <div class="serverNavContent nav-item" mode="side">
         <div class="titleRow">
             <div class="titleAndServerSvg">
@@ -27,7 +27,7 @@
         @if (channelsAreVisible) {
         <div class="dropDownChannelSection" @slideDown>
             <div class="dropDownChannels" *ngFor="let channel of channels; let i = index;">
-                <p class="channel"># {{channel.title}}</p>
+                <p class="channel" (click)="checkWindowAndOpenChannel()"># {{channel.title}}</p>
             </div>
             <div class="addChannelButton" (click)="openCreateChannelDialog()">
                 <mat-icon class="material-icons">add_circle_outline</mat-icon>

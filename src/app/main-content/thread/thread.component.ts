@@ -20,7 +20,7 @@ import { EventService } from '../../../services/event/event.service';
       trigger('toggleThread', [
         transition(':enter', [
           style({
-            width: '0px',
+            // width: '0px',
             opacity: 0,
             overflow: 'hidden',
             transform: 'translateX(-100%)' 
@@ -28,7 +28,7 @@ import { EventService } from '../../../services/event/event.service';
           animate(
             '125ms ease-out',
             style({
-              width: '485px', 
+              // width: '440px', 
               opacity: 1,
               transform: 'translateX(0)'
             })
@@ -46,7 +46,7 @@ import { EventService } from '../../../services/event/event.service';
           animate(
             '125ms ease-in',
             style({
-              width: '0px', 
+              // width: '0px', 
               opacity: 0,
               overflow: 'hidden',
               transform: 'translateX(100%)'

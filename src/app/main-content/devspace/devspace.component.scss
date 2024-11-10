@@ -5,7 +5,15 @@
     background-color: var(--secundary-bg);
     border-radius: 30px;
     font-family: 'Nunito';
-    max-width: 318.33px;
+    width: 302px;
+    @include respond-to-maxWidth('smallMedium') {
+        width: 100%;
+        max-width: 100%;
+    }
+    @include respond-to-maxWidth(large){
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
 }
 
 .serverNavContent {

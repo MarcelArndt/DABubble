@@ -6,6 +6,25 @@ section {
     flex-direction: column;
     background-color: var(--secundary-bg);
     border-radius: 20px;
+    width: 450px;
+    @include respond-to-maxWidth(medium) {
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 20px;
+        z-index: 2;
+    }
+    @include respond-to-maxWidth('smallMedium') {
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 20px;
+        z-index: 2;
+    }
 }
 
 .main-message-container {
@@ -25,3 +44,5 @@ app-thread-message-field {
     @include heightWidth($h: 20%);
     border-radius: 0 0 20px 20px;
 }
+
+

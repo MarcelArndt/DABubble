@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Channel } from '../../classes/channel.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChannelService {
-
 
   channels: Channel[] = [
     {

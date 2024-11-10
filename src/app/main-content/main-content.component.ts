@@ -4,6 +4,9 @@ import { ChatComponent } from "./chat/chat.component";
 import { ThreadComponent } from "./thread/thread.component";
 import { DevspaceComponent } from "./devspace/devspace.component";
 import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { ChannelService } from '../../services/channel/channel.service';
+import { CommonModule } from '@angular/common';
+import { MainContentService } from '../../services/main-content/main-content.service';
 
 
 @Component({
@@ -13,15 +16,33 @@ import { AuthenticationService } from '../../services/authentication/authenticat
     MainHeaderComponent,
     ChatComponent,
     ThreadComponent,
-    DevspaceComponent
+    DevspaceComponent,
+    CommonModule
 ],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss'
 })
 export class MainContentComponent {
 
-  constructor(private auth: AuthenticationService) {
+  devSpaceAsTopLayer: boolean = false;
+  chatAsTopLayer: boolean = false;
+  threadAsTopLayer: boolean = false;
+
+  constructor(private auth: AuthenticationService, private mainContentService: MainContentService) {
     auth.observerUser();
   }
+
+  ngOnInit() {
+    this.mainContentService.devSpaceAsTopLayerObs.subscribe(value => {
+      this.devSpaceAsTopLayer = value;
+    });
+    this.mainContentService.chatAsTopLayerObs.subscribe(value => {
+      this.chatAsTopLayer = value;
+    });
+    this.mainContentService.threadAsTopLayerObs.subscribe(value => {
+      this.threadAsTopLayer = value;
+    });
+  }
+
 
 }

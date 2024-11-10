@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { trigger, style, animate, transition, query } from '@angular/animations';
@@ -9,6 +9,7 @@ import { Member } from '../../../interface/member';
 import { MemberService } from '../../../services/member/member.service';
 import { ChannelService } from '../../../services/channel/channel.service';
 import { Channel } from '../../../classes/channel.class';
+import { MainContentService } from '../../../services/main-content/main-content.service';
 
 
 @Component({
@@ -35,7 +36,7 @@ import { Channel } from '../../../classes/channel.class';
     trigger('toggleNavBar', [
       transition(':enter', [
         style({
-          width: '0px',
+          // width: '0px',
           opacity: 0,
           overflow: 'hidden',
           transform: 'translateX(-100%)' 
@@ -43,7 +44,7 @@ import { Channel } from '../../../classes/channel.class';
         animate(
           '125ms ease-out',
           style({
-            width: '318.33px', 
+            // width: '302.33px', 
             opacity: 1,
             transform: 'translateX(0)'
           })
@@ -61,7 +62,7 @@ import { Channel } from '../../../classes/channel.class';
         animate(
           '125ms ease-in',
           style({
-            width: '0px', 
+            // width: '0px', 
             opacity: 0,
             overflow: 'hidden',
             transform: 'translateX(-100%)'
@@ -80,7 +81,7 @@ export class DevspaceComponent {
   members: Member[];
   channels: Channel[];
 
-  constructor(private memberService: MemberService, private channelService: ChannelService){
+  constructor(private memberService: MemberService, private channelService: ChannelService, private mainContentService: MainContentService){
     this.members = memberService.getAllMembers();
     this.channels = channelService.getChannels();
   }
@@ -101,5 +102,9 @@ export class DevspaceComponent {
   openCreateChannelDialog(){
     const dialogRef = this.dialog.open(CreateChannelComponent);
     dialogRef.afterClosed().subscribe();
+  }
+  
+  checkWindowAndOpenChannel(){
+    window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
   }
 }

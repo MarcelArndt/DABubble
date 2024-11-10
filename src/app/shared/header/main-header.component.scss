@@ -130,8 +130,10 @@
 }
 
 .headerComponent{
-    @include dFlex;
-    height: 15vh;
+    // @include dFlex(space-between, center);
+    // height: 250px;
+    width: 100%;
+    // @include padding( 24px, 24px, 24px, 24px);
 
     @include respond-to-maxWidth(large) {
         z-index: 99;
@@ -144,7 +146,6 @@
 .headerMainWrapper{
     @include heightWidth;
     @include dFlex;  
-    padding:  24px 24px; 
 }
 
 .headerContentWrapper{

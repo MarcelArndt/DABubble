@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { EventService } from '../../../../services/event/event.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
+import { MainContentService } from '../../../../services/main-content/main-content.service';
 
 
 
@@ -17,9 +18,14 @@ import { MessagesService } from '../../../../services/messages/messages.service'
 export class MessageAnswerComponent {
   @Input() message: any;
 
-  constructor(public object: MessagesService, private eventService: EventService) { }
+  constructor(public object: MessagesService, private eventService: EventService, private mainContentService: MainContentService) { }
 
   openThread() {
     this.eventService.emitEvent('openThread');
+    this.checkWindowAndOpenThread();
+  }
+
+  checkWindowAndOpenThread(){
+    window.innerWidth <= 1285 ? this.mainContentService.openThreadForMobile() : this.mainContentService.openThread();    
   }
 }

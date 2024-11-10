@@ -6,6 +6,14 @@ section {
     flex-direction: column;
     background-color: var(--secundary-bg);
     border-radius: 20px;
+    @include respond-to-maxWidth(medium) {
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
 }
 
 .main-message-container {

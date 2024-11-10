@@ -1,7 +1,20 @@
 
 <app-main-header></app-main-header>
 <div class="main-content">
-    <app-devspace></app-devspace>
-    <app-chat></app-chat>
-    <app-thread></app-thread>
+    <app-devspace [ngClass]="{
+        'focus-app': devSpaceAsTopLayer
+        }">
+    </app-devspace>
+    <div class="main-content-wrapper">
+        <app-chat [ngClass]="{
+            'focus-app': chatAsTopLayer, 
+            'hidden': threadAsTopLayer
+            }">
+        </app-chat>
+        <app-thread  [ngClass]="{
+            'focus-app-thread': threadAsTopLayer, 
+            'hiddenForMobile': chatAsTopLayer, 
+            }">
+        </app-thread>
+    </div>
 </div>
