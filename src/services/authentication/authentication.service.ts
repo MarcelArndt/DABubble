@@ -23,7 +23,7 @@ export class AuthenticationService {
     createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        this.createUserCollection(user.uid, fullName, email)
+        this.createUserCollection(fullName, email)
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -58,10 +58,6 @@ export class AuthenticationService {
     });
   }
 
-  getCurrentUserId() {
-    return this.auth.currentUser;
-  }
-
   signUpWithGoogle() {
     signInWithPopup(this.auth, this.provider)
       .then((result) => {
@@ -85,10 +81,23 @@ export class AuthenticationService {
     });
   }
 
+  getCurrentUserId(): string | null {
+    const currentUser = this.auth.currentUser;
+    return currentUser ? currentUser.uid : null;
+  }
+
+  getUserUid(): string {
+    const uid = this.getCurrentUserId();
+    if (!uid) {
+      throw new Error("Kein Benutzer angemeldet.");
+    }
+    return uid;
+  }
+
   // Cloude Firestore 
 
-  async createUserCollection(uid: string, fullName: string, email: string) {
-    await setDoc(doc(this.getReference(), "member", uid), {
+  async createUserCollection(fullName: string, email: string) {
+    await setDoc(doc(this.getReference(), "member", this.getUserUid()), {
       name: fullName,
       email: email,
       imageUrl: '',
@@ -99,34 +108,25 @@ export class AuthenticationService {
   }
 
   async createChannel(channel: Channel) {
+    const userUid = this.getUserUid();
     const docRef = await addDoc(collection(this.getReference(), "channels"), {
       title: channel.title,
       messages: [],
       membersId: [],
-      admin: 'XSkNEhJFJVh9To5N4QAfiRJEfnX2',
+      admin: userUid,
       description: channel.description,
     });
     this.addChannelMember(docRef.id);
   }
 
-
   async addChannelMember(docRefid: string) {
-    const userDocRef = doc(this.getReference(), "member", "XSkNEhJFJVh9To5N4QAfiRJEfnX2");
+    const userDocRef = doc(this.getReference(), "member", this.getUserUid());
   
     await updateDoc(userDocRef, {
       channelIds: arrayUnion(docRefid)
     });
   
     console.log("Channel ID erfolgreich zum Array hinzugefügt:", docRefid);
-  }
-
-
-
-  async updateProfile(uid: string) {
-    const washingtonRef = doc(this.getReference(), "members", uid);
-    await updateDoc(washingtonRef, {
-      
-    });
   }
 
   getReference() {
