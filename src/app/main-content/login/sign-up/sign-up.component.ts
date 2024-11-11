@@ -43,4 +43,5 @@ export class SignUpComponent {
     this.auth.registerUser(this.email, this.password, this.fullName);
   }
 
+  
 }
