@@ -1,7 +1,7 @@
-import { Component, ElementRef, HostListener, Renderer2, Input, Output, EventEmitter} from '@angular/core';
+import { Component, ElementRef, HostListener, Renderer2, Input, Output, EventEmitter, } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import {  FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-input-field',
@@ -9,11 +9,12 @@ import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
   imports: [
     MatIconModule,
     CommonModule,
-    ReactiveFormsModule
+    FormsModule,
   ],
   templateUrl: './input-field.component.html',
   styleUrl: './input-field.component.scss'
 })
+
 export class InputFieldComponent {
   constructor(private renderer: Renderer2, private elRef: ElementRef,) {}
 
@@ -23,14 +24,11 @@ export class InputFieldComponent {
   @Input() placeholder: string = 'Your placeholder is still empty, please check your html: <app-input-field placerholder=`your placerholde`>'; 
   @Input() align_reverse: boolean = false;
   @Input() required: boolean = false;
-  @Input() pattern: string | null = null;
-
+  @Input() pattern:string = "";
+  @Input() type: string = 'text';
+  @Input() minlength:string = "0";
+ 
   public value:string = '';
-  inputControl: FormControl = new FormControl('');
-
-  sendOutputValueToParent() {
-    this.eventInChild.emit(this.value);
-  }
 
   @HostListener('focusin', ['$event'])
   onFocusIn(event: Event): void {
@@ -48,10 +46,4 @@ export class InputFieldComponent {
     return this.value;
   }
 
-  ngOnInit() {
-    let validators = [];
-    if (this.required) validators.push(Validators.required);
-    if (this.pattern) validators.push(Validators.pattern(this.pattern));
-    this.inputControl = new FormControl('', validators);
-  }
 }

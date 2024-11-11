@@ -1,12 +1,24 @@
 <div class="custom-input" [ngClass]="addClass">
 
-    <div *ngIf="inputControl.invalid && inputControl.touched" class="error-messages">
-        <span *ngIf="inputControl.hasError('required')">This field is required.</span>
-        <span *ngIf="inputControl.hasError('pattern')">Invalid format.</span>
-      </div>
+    @if (!inputField.valid && inputField.touched){
+        <div class="error-messages">
+        @if(inputField.errors?.['required']){
+            <span>Field is required!</span>
+        }
+        @else if(inputField.errors?.['minlength']){
+            <span>Must be at least {{minlength}} characters long!</span>
+        }
+        @else if(inputField.errors?.['pattern'] && type != 'email'){
+            <span>This character is not allowed!</span>
+        }
+        @else if(type === 'email'){
+            <span>E-Mail should look like this: email&#64;mail.de</span>
+        }
+        </div>
+    }
 
     <div class="inputFrame"  [ngClass]="{'align-reverse' : !align_reverse}">
-        <input name="value" [(ngModel)]="value" [formControl]="inputControl" type="text" [placeholder]="placeholder"/>
+        <input name="inputName" [(ngModel)]="value" #inputField="ngModel" [required]="required ? true: false" [minlength]="minlength" [type]="type" [placeholder]="placeholder" [pattern]="pattern"/>
         <mat-icon>{{icon}}</mat-icon>
     </div>
 </div>

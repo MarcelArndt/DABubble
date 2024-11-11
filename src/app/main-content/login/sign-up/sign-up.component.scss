@@ -33,6 +33,11 @@ button{
     }
 }
 
+.button:disabled{
+    background-color: grey;
+    cursor: not-allowed !important;
+}
+
 .specialButton{
     background-color: transparent;
     border-color: var(--purple-2);
@@ -100,6 +105,12 @@ a{
     @include heightWidth($w: 90%, $h: 100%);
     @include dFlex;
     align-items: center;
+}
+
+form{
+    @include heightWidth($w: 100%, $h: 100%);
+    @include dFlex;
+    flex-direction: column;
 }
 
 .step-back-button{

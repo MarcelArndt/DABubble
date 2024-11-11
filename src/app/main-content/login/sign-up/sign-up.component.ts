@@ -3,7 +3,8 @@ import { InputFieldComponent } from '../../../shared/header/input-field/input-fi
 import { RouterModule } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm} from '@angular/forms';
+
 
 @Component({
   selector: 'app-sign-up',
@@ -36,11 +37,19 @@ export class SignUpComponent {
     this.fullName = fullName;
     this.email = email;
     this.password = password;
-    this.registerUser();
   }
 
   registerUser() {
     this.auth.registerUser(this.email, this.password, this.fullName);
+  }
+
+  onSubmit(ngForm: NgForm, fullName:string = '', email:string='', password:string = '', pageNumber:number = 2){
+    if (ngForm.submitted && ngForm.form.valid){
+      this.fillValues(fullName,email,password);
+      this.registerUser();
+      this.sendClickToParentPageCounter(pageNumber);
+      console.log('Success')
+    }
   }
 
   
