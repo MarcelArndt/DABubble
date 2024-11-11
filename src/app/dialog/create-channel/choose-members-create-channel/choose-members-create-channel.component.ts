@@ -15,7 +15,7 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { MatOptionModule } from '@angular/material/core';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
-import { Member } from '../../../../interface/member';
+import { Member } from '../../../../interface/message';
 import { MemberService } from '../../../../services/member/member.service';
 import { ChannelService } from '../../../../services/channel/channel.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
@@ -51,7 +51,8 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); // Leeres Observable initialisieren
 
   channel: Channel;
-  members: Member[];
+  members!: Member[];
+
   selectedMembers: Member[] = [];
   filteredMembers: Member[] = [];
 
@@ -63,7 +64,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     private auth: AuthenticationService
   ) {
     this.channel = data; 
-    this.members = memberService.getAllMembers();
   }
 
   test() {
@@ -72,8 +72,13 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     this.channel.membersId
   }
 
-  ngOnInit() {
-    // Beobachten Sie Änderungen im Eingabefeld und filtern Sie die Mitglieder entsprechend
+  async ngOnInit() {
+    // Lädt alle Mitglieder von Firebase und weist sie dem lokalen Array `members` zu
+    this.members = await this.auth.getAllMembers();
+    console.log(this.members);
+
+    
+    // Beobachten von Änderungen im Eingabefeld und Filtern der Mitglieder
     this.filteredMembers$ = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || ''))
@@ -83,7 +88,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
   private _filter(value: string): Member[] {
     const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
-
     // Filtere die Mitgliederliste, um nur Mitglieder einzuschließen, die noch nicht ausgewählt sind
     return this.members.filter(
       member => 
@@ -141,11 +145,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     if (index >= 0) {
       this.selectedMembers[index].name = value;
     }
-  }
-
-
-  generateId(): string {
-    return (this.selectedMembers.length + 1).toString();
   }
 
 

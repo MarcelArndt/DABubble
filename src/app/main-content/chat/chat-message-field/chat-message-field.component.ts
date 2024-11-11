@@ -86,7 +86,7 @@ export class ChatMessageFieldComponent {
           this.imagePreviews = [...this.imagePreviews, reader.result];
           console.log(this.imageUploads);
           console.log(file);
-          this.test.uploadImage(files);
+          this.test.uploadMultipleImages(files);
         };
         reader.readAsDataURL(file);
       });
