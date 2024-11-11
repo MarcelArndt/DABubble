@@ -29,9 +29,8 @@ export class LoginComponent {
       this.pageNumber = index;
       this.checkforStepDirection();
     }  
-
-  }
-
+  } 
+  
   checkforStepDirection(){
     this.isStepForwards =  this.pageNumberTrashHolder < this.pageNumber ? true : false;
   }
@@ -52,5 +51,4 @@ export class LoginComponent {
       }
     return newClass;
 }
-
 }

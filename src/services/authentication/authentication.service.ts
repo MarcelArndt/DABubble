@@ -4,7 +4,7 @@ import { addDoc, arrayUnion, collection, doc, getFirestore, setDoc, updateDoc } 
 import { Router } from '@angular/router';
 import { TestMember } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
-import { getStorage } from '@angular/fire/storage';
+import { getStorage, ref, uploadBytes } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -137,5 +137,7 @@ export class AuthenticationService {
   }
 
   // cloud storage 
+
+
 
 }
