@@ -4,6 +4,7 @@ import { addDoc, arrayUnion, collection, doc, getFirestore, setDoc, updateDoc } 
 import { Router } from '@angular/router';
 import { TestMember } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
+import { getStorage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,12 @@ import { Channel } from '../../classes/channel.class';
 export class AuthenticationService {
   private auth;
   private provider;
+  private storage;
 
   constructor(private router: Router) {
     this.auth = inject(Auth);
-    this.provider = new GoogleAuthProvider()
+    this.provider = new GoogleAuthProvider();
+    this.storage = getStorage();
   }
 
   // Authentication 
@@ -132,5 +135,10 @@ export class AuthenticationService {
   getReference() {
     return getFirestore();
   }
+
+
+  // cloud storage 
+
+
 
 }

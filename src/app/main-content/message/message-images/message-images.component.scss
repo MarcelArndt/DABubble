@@ -39,3 +39,7 @@
 .flex-start {
     @include dFlex($jc: start);
 }
+
+mat-icon {
+    @include materialSymbols($c: red, $fs: 24px);
+    }

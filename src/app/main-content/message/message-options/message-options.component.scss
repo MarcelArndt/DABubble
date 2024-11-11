@@ -14,8 +14,9 @@
 
     .options-btn {
         @include heightWidth($w: 40px, $h: 40px);
+        @include dFlex();
         border: none;
-        margin: 0 5px;
+        margin: 0 3px;
         text-align: center;
         border-radius: 50%;
         background-color: white;
@@ -61,4 +62,13 @@
     right: 50px;
     left: auto;
     border-radius: 20px 20px 20px 0px;
+}
+
+.icon {
+@include materialSymbols($c: black, $fs: 24px);
+@include dFlex();
+}
+
+.like-icon {
+width: 100%;
 }
