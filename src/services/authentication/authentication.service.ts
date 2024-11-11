@@ -206,7 +206,7 @@ export class AuthenticationService {
 
     Array.from(files).forEach((file, index) => { 
       const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
-      console.log('hello')
+      console.log('herllo')
       uploadBytes(fileRef, file).then((snapshot) => {
         console.log(`Datei ${index + 1} hochgeladen: ${file.name}`);
       }).catch(error => {
