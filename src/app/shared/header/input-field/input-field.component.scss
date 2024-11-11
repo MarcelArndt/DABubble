@@ -21,11 +21,9 @@
         padding: 0px 24px;
         width: 100%; 
 
-
         @include respond-to-maxWidth(large) {
             padding: 0px 0px 0px 12px;
          }
-
 
         mat-icon{
             @include materialSymbols;

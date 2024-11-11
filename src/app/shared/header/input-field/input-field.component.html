@@ -5,8 +5,8 @@
         <span *ngIf="inputControl.hasError('pattern')">Invalid format.</span>
       </div>
 
-    <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
-        <input [formControl]="inputControl" type="text" [placeholder]="placeholder"/>
+    <div class="inputFrame"  [ngClass]="{'align-reverse' : !align_reverse}">
+        <input name="value" [(ngModel)]="value" [formControl]="inputControl" type="text" [placeholder]="placeholder"/>
         <mat-icon>{{icon}}</mat-icon>
     </div>
 </div>

@@ -4,7 +4,7 @@ import { addDoc, arrayUnion, collection, doc, getFirestore, setDoc, updateDoc } 
 import { Router } from '@angular/router';
 import { TestMember } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
-import { getStorage } from '@angular/fire/storage';
+import { getStorage, ref, uploadBytes } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -141,4 +141,17 @@ export class AuthenticationService {
 
 
 
+  uploadImage(files:FileList, folderName:string = 'User'){
+
+    Array.from(files).forEach((file, index) => { 
+      const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
+    
+      uploadBytes(fileRef, file).then((snapshot) => {
+        console.log(`Datei ${index + 1} hochgeladen: ${file.name}`);
+      }).catch(error => {
+        console.error(`Fehler beim Hochladen der Datei ${file.name}:`, error);
+      });
+    });
+
+  }
 }

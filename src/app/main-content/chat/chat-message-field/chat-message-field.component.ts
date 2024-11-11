@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 import { ImagesPreviewComponent } from "./images-preview/images-preview.component";
 import { MessagesService } from '../../../../services/messages/messages.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class ChatMessageFieldComponent {
 
   @Output() messagesUpdated = new EventEmitter<void>();
 
-  constructor(public object: MessagesService) { }
+  constructor(public object: MessagesService, public test: AuthenticationService) { }
 
   sendMessage() {
     const now = new Date();
@@ -84,6 +85,8 @@ export class ChatMessageFieldComponent {
         reader.onload = () => {
           this.imagePreviews = [...this.imagePreviews, reader.result];
           console.log(this.imageUploads);
+          console.log(file);
+          this.test.uploadImage(files);
         };
         reader.readAsDataURL(file);
       });

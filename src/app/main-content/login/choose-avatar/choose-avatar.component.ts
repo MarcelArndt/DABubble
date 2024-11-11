@@ -13,4 +13,9 @@ export class ChooseAvatarComponent {
   sendClickToParentPageCounter(index:number = 0){
     this.eventInProfil.emit(index);
   }
+
+  uploadImage(){
+    
+  }
+
 }

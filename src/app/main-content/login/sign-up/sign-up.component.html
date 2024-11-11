@@ -7,13 +7,16 @@
 
     <p>With your name and email address you have your new DABubble account.</p>
     <div class="input-area">   
-        <!-- <app-input-field icon="person" placeholder="Firstname & Lastname" [required]="true" pattern="^[a-zA-Z ]+$">> ></app-input-field>
-        <app-input-field name="email" [(ngModel)]="email" icon="mail" placeholder="example@email.com" [required]="true" pattern="^[a-zA-Z ]+$">>  ></app-input-field>
-        <app-input-field name="password" [(ngModel)]="password" icon="lock" placeholder="Password" [required]="true" pattern="^[a-zA-Z ]+$">>  ></app-input-field> -->
+        <!--
+        <app-input-field #fullname icon="person" placeholder="Firstname & Lastname" [required]="true" pattern="^[a-zA-Z ]+$">> ></app-input-field>
+        <app-input-field #email icon="mail" placeholder="example@email.com" [required]="true" pattern="^[a-zA-Z ]+$">>  ></app-input-field>
+        <app-input-field #password icon="lock" placeholder="Password" [required]="true" pattern="^[a-zA-Z ]+$">>  ></app-input-field>
+            --->
+
         <input type="text" name="fullName" [(ngModel)]="fullName" placeholder="Firstname & Lastname">
         <input type="email" name="email" [(ngModel)]="email" [required]="true" pattern="^[a-zA-Z ]+$" placeholder="example@email.com">
         <input type="password" name="password" [(ngModel)]="password" [required]="true" pattern="^[a-zA-Z ]+$" placeholder="Password">
-        <div class="set-right"> <button (click)="sendClickToParentPageCounter(2); registerUser()">Go On</button> </div>
+        <div class="set-right"> <button (click)="sendClickToParentPageCounter(2); registerUser();">Go On</button> </div>
     </div>
 
 </div>
