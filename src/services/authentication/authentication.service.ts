@@ -136,8 +136,22 @@ export class AuthenticationService {
     return getFirestore();
   }
 
+
   // cloud storage 
 
 
+
+  uploadImage(files:FileList, folderName:string = 'User'){
+
+    Array.from(files).forEach((file, index) => { 
+      const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
+      console.log('hello')
+      uploadBytes(fileRef, file).then((snapshot) => {
+        console.log(`Datei ${index + 1} hochgeladen: ${file.name}`);
+      }).catch(error => {
+        console.error(`Fehler beim Hochladen der Datei ${file.name}:`, error);
+      });
+    });
+  }
 
 }
