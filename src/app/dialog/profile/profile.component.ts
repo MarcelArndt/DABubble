@@ -27,7 +27,6 @@ export class ProfileComponent {
   // readonly data = inject<DialogData>(MAT_DIALOG_DATA);
   // readonly member = model(this.data.member);
   editDialog: boolean = false;
-
   member: Member =  { name: 'Alice', email: 'emailOfAlice@gmail.com', id: '1', img: '/img/profile-pic/001.svg', isOnline: false};
 
 
