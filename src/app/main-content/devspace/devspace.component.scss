@@ -5,14 +5,15 @@
     background-color: var(--secundary-bg);
     border-radius: 30px;
     font-family: 'Nunito';
-    width: 302px;
-    @include respond-to-maxWidth('smallMedium') {
-        width: 100%;
-        max-width: 100%;
-    }
+    flex: auto;
     @include respond-to-maxWidth(large){
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
+    }
+    @include respond-to-maxWidth(small) {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0px;
     }
 }
 
@@ -29,7 +30,7 @@
     transform: translateY(-30%);
     left: 0px;
     bottom: 5vh;
-    z-index: 10;
+    z-index: 1;
     transform: rotate(90deg) scaleX(-1) scaleY(-1);
     transform-origin: left top;
     padding: 18px 26px 18px 26px;

@@ -105,6 +105,7 @@ export class DevspaceComponent {
   }
   
   checkWindowAndOpenChannel(){
+    this.mainContentService.hideThread();
     window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
   }
 }

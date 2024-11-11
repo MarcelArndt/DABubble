@@ -43,20 +43,23 @@ app-devspace {
         height: auto;
         max-width: 302px;
         position: absolute;
-        top: 80px;
+        top: 0;
         left: 0;
         bottom: 20px;
-        z-index: 1;
+        z-index: 2;
         box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;        border-radius: 30px;
     }
-    @include respond-to-maxWidth('smallMedium') {
+    @include respond-to-minWidth(small) {
+        z-index: 5;
+    }
+    @include respond-to-maxWidth(small) {
         width: 100%;
         max-width: 100%;
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 1;
+        z-index: 3;
     }
 }
 
@@ -68,7 +71,8 @@ app-chat {
 app-thread {
     max-width: 35%;
     height: 100%;
-
+    flex: auto;
+    display: none;
 }
 
 .focus-app{
@@ -84,7 +88,7 @@ app-thread {
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 2;
+        z-index: 4;
     }
 }
 
@@ -98,27 +102,15 @@ app-thread {
         position: absolute;
         left: 0;
         right: 0;
-        z-index: 2;
-    }
-    @include respond-to-maxWidth('smallMedium') {
-        width: 100%;
-        max-width: 100%;
-        position: absolute;
-        left: 0;
-        right: 0;
         bottom: 0;
-        z-index: 2;
+        z-index: 4;
     }
 }
 
-.hiddenForMobile {
-    @include respond-to-maxWidth('smallMedium') {
-        display: none;
-    }
-}
+// .hiddenForMobile {
+//         display: none;
+// }
 
 .visible{
-    @include respond-to-maxWidth('smallMedium') {
         display: flex;
-    }
 }

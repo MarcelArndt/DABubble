@@ -58,6 +58,7 @@ export class MessageOptionsComponent {
 
   openThread() {
     this.eventService.emitEvent('openThread');
+    this.mainContentService.displayThread();
     this.checkWindowAndOpenThread();
   }
 

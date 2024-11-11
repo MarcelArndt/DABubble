@@ -14,10 +14,11 @@ import { MainContentService } from '../../../../services/main-content/main-conte
 export class ThreadHeaderComponent {
   @Output() closeThreadEvent = new EventEmitter();
 
-  constructor(private mainContentService:  MainContentService){}
+  constructor(private mainContentService: MainContentService) {}
 
   closeThread() {
     this.closeThreadEvent.emit();
+    this.mainContentService.hideThread();
     this.mainContentService.makeChatAsTopLayer();
   }
 }

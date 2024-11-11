@@ -27,6 +27,7 @@ export class MainContentComponent {
   devSpaceAsTopLayer: boolean = false;
   chatAsTopLayer: boolean = false;
   threadAsTopLayer: boolean = false;
+  threadIsOpen: boolean = false;
 
   constructor(private auth: AuthenticationService, private mainContentService: MainContentService) {
     auth.observerUser();
@@ -41,6 +42,9 @@ export class MainContentComponent {
     });
     this.mainContentService.threadAsTopLayerObs.subscribe(value => {
       this.threadAsTopLayer = value;
+    });
+    this.mainContentService.threadIsOpen.subscribe(value => {
+      this.threadIsOpen = value;
     });
   }
 

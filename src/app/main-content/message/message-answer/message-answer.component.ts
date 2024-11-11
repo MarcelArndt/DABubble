@@ -26,6 +26,7 @@ export class MessageAnswerComponent {
   }
 
   checkWindowAndOpenThread(){
+    this.mainContentService.displayThread();
     window.innerWidth <= 1285 ? this.mainContentService.openThreadForMobile() : this.mainContentService.openThread();    
   }
 }

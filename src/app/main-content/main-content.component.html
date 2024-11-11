@@ -13,8 +13,11 @@
         </app-chat>
         <app-thread  [ngClass]="{
             'focus-app-thread': threadAsTopLayer, 
-            'hiddenForMobile': chatAsTopLayer, 
+            'visible': threadIsOpen,
             }">
         </app-thread>
     </div>
 </div>
+
+
+<!-- 'hiddenForMobile': chatAsTopLayer,  -->

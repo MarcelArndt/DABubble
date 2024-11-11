@@ -10,11 +10,13 @@ export class MainContentService {
     private devSpaceAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private chatAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private threadAsTopLayer$ = new BehaviorSubject<boolean>(false);
+    private threadIsOpen$ = new BehaviorSubject<boolean>(false);
   
     // Expose Observables for components to subscribe
     devSpaceAsTopLayerObs = this.devSpaceAsTopLayer$.asObservable();
     chatAsTopLayerObs = this.chatAsTopLayer$.asObservable();
     threadAsTopLayerObs = this.threadAsTopLayer$.asObservable();
+    threadIsOpen = this.threadIsOpen$.asObservable();
 
   constructor() {
   }
@@ -46,6 +48,14 @@ export class MainContentService {
     this.devSpaceAsTopLayer$.next(false);
     this.chatAsTopLayer$.next(false);
     this.threadAsTopLayer$.next(true);
+  }
+
+  displayThread(){
+    this.threadIsOpen$.next(true);
+  }
+
+  hideThread(){
+    this.threadIsOpen$.next(false);
   }
 
   openChannel(){
