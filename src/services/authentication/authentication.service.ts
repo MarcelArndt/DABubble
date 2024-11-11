@@ -136,9 +136,6 @@ export class AuthenticationService {
     return getFirestore();
   }
 
-
   // cloud storage 
-
-
 
 }
