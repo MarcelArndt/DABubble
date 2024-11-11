@@ -282,3 +282,8 @@ h3 {
     height: 50px;
     border-radius: 50px; 
 }
+
+.dropdown-content{
+    max-height: 280px;
+    overflow: auto;
+}

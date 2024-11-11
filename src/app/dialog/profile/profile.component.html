@@ -5,10 +5,10 @@
                 <mat-icon class="closeButton" (click)="this.dialogRef.close()">close</mat-icon>
             </div>
 
-            <img class="profileImage" [src]="member.img">
+            <img class="profileImage" [src]="currentMember.imageUrl">
 
             <div class="row">
-                <h2>{{member.name}}</h2>
+                <h2>{{currentMember.name}}</h2>
                 <button mat-button tabindex="-1" (click)="editDialog = true">Edit</button>
             </div>
 
@@ -30,7 +30,7 @@
             </div>
 
             <div class="imgContainer">
-                <img class="profileImage" [src]="member.img">
+                <img class="profileImage" [src]="currentMember.imageUrl">
                 <!-- Button to trigger file input -->
                 <button class="fileInput" mat-icon-button (click)="openFileDialog()">
                     <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*"/>
@@ -46,21 +46,21 @@
                         <mat-icon class="icon">account_circle</mat-icon>
                         <h4>Full name</h4>
                     </div>
-                    <input class="textInput" [(ngModel)]="member.name" placeholder="{{member.name}}" >                 
+                    <input class="textInput" [(ngModel)]="currentMember.name" placeholder="{{currentMember.name}}" >                 
                 </div>
                 <div>
                     <div class="editRow m-t-16">
                         <mat-icon class="icon">mail</mat-icon>
                         <h4>Email</h4>
                     </div>
-                    <input class="textInput" [(ngModel)]="member.email" placeholder="{{member.email}}">                
+                    <input class="textInput" [(ngModel)]="currentMember.email" placeholder="{{currentMember.email}}">                
                 </div>                
             </div>
 
 
             <div class="buttonRow">
                 <button class="cancelButton" mat-button (click)="this.dialogRef.close()">Cancel</button>
-                <button class="saveButton" mat-flat-button (click)="save(member)">Save</button>
+                <button class="saveButton" mat-flat-button (click)="save(currentMember)">Save</button>
             </div>
         }
 </div>

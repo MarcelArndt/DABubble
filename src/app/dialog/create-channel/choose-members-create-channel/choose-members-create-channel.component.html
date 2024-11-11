@@ -17,7 +17,7 @@
                 [editable]="true"
                 (edited)="edit(member, $event)">
                 <div class="contactAsChip">
-                    <img class="contactPictureInChip" src="{{ member.img }}" alt="User picture">
+                    <img class="contactPictureInChip" src="{{ member.imageUrl }}" alt="User picture">
                     <span>{{ member.name }}</span>
                     <button class="matChipRemove" matChipRemove>
                         <mat-icon>close</mat-icon>
@@ -39,8 +39,8 @@
             <mat-option *ngFor="let member of filteredMembers$ | async" [value]="member">
                 <div class="contact">
                     <div class="contactPictureContainer">
-                        <img class="contactPicture" src="{{ member.img }}" alt="User picture">
-                        <img class="onlineStatus" [src]="member.isOnline ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="User picture">
+                        <img class="contactPicture" src="{{ member.imageUrl }}" alt="User picture">
+                        <img class="onlineStatus" [src]="member.status ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="User picture">
                     </div>
                     <span>{{ member.name }}</span>
                 </div>

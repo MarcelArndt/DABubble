@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from '@angular/fire/auth';
-import { addDoc, arrayUnion, collection, doc, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { TestMember } from '../../interface/message';
+import { Member } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
-import { getStorage, ref, uploadBytes } from '@angular/fire/storage';
+import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,17 @@ export class AuthenticationService {
   private provider;
   private storage;
 
+  // export interface TestMember {
+  //   name: string;
+  //   email: string;
+  //   imageUrl: string;
+  //   status: boolean;
+  //   channelIds: [];
+  //   directMessageIds: [];
+  // }
+
+  currentMember!: Member;
+
   constructor(private router: Router) {
     this.auth = inject(Auth);
     this.provider = new GoogleAuthProvider();
@@ -21,12 +32,11 @@ export class AuthenticationService {
   }
 
   // Authentication 
-
   registerUser(email: string, password: string, fullName: string) {
     createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        this.createUserCollection(fullName, email)
+        this.createUserCollection(fullName, email);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -97,10 +107,40 @@ export class AuthenticationService {
     return uid;
   }
 
-  // Cloude Firestore 
+
+
+  // Cloud Firestore 
+
+  async getAllMembers(): Promise<Member[]> {
+    const querySnapshot = await getDocs(collection(this.getReference(), "member"));
+    const members: Member[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const member: Member = {
+        id: doc.id, 
+        name: data['name'],
+        email: data['email'],
+        imageUrl: data['imageUrl'],
+        status: data['status'],
+        channelIds: data['channelIds'] || [],
+        directMessageIds: data['directMessageIds'] || []
+      };
+      members.push(member);
+    });
+    return members;
+  }
+
+  async updateProfileImageOfUser(downloadURL: string){
+    const userId = this.getUserUid();
+    await updateDoc(doc(this.getReference(), "member", userId), {
+      imageUrl: downloadURL
+    });
+  }
 
   async createUserCollection(fullName: string, email: string) {
-    await setDoc(doc(this.getReference(), "member", this.getUserUid()), {
+    const userId = this.getUserUid();
+    await setDoc(doc(this.getReference(), "member", userId), {
+      id: userId,
       name: fullName,
       email: email,
       imageUrl: '',
@@ -119,10 +159,10 @@ export class AuthenticationService {
       admin: userUid,
       description: channel.description,
     });
-    this.addChannelMember(docRef.id);
+    this.addChannelIdToMember(docRef.id);
   }
 
-  async addChannelMember(docRefid: string) {
+  async addChannelIdToMember(docRefid: string) {
     const userDocRef = doc(this.getReference(), "member", this.getUserUid());
   
     await updateDoc(userDocRef, {
@@ -136,12 +176,33 @@ export class AuthenticationService {
     return getFirestore();
   }
 
+  async getCurrentMemberData(){
+    const docRef = doc(this.getReference(), 'member', this.getUserUid());
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      // console.log("Document data:", docSnap.data());
+
+      this.currentMember = {
+        id: data['id'],
+        name: data['name'],
+        email: data['email'],
+        imageUrl: data['imageUrl'],
+        status: data['status'],
+        channelIds: data['channelIds'],
+        directMessageIds: data['directMessageIds'],
+      }
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
+
 
   // cloud storage 
 
-
-
-  uploadImage(files:FileList, folderName:string = 'User'){
+  uploadMultipleImages(files:FileList, folderName:string = 'User'){
 
     Array.from(files).forEach((file, index) => { 
       const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
@@ -153,5 +214,22 @@ export class AuthenticationService {
       });
     });
   }
+
+  async uploadImage(file: File, folderName: string = 'User'): Promise<string> {
+    const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
+    
+    return uploadBytes(fileRef, file)
+      .then(() => {
+        console.log('File uploaded:', file);
+        // Abrufen der Download-URL nach erfolgreichem Upload
+        return getDownloadURL(fileRef);
+      })
+      .catch(error => {
+        console.error('Error uploading file:', error);
+        throw error; // Weitergeben des Fehlers zur Fehlerbehandlung
+      });
+  }
+
+
 
 }

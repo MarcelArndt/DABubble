@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { trigger, style, animate, transition, query } from '@angular/animations';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateChannelComponent } from '../../dialog/create-channel/create-channel.component';
-import { Member } from '../../../interface/member';
+import { Member } from '../../../interface/message';
 import { MemberService } from '../../../services/member/member.service';
 import { ChannelService } from '../../../services/channel/channel.service';
 import { Channel } from '../../../classes/channel.class';
 import { MainContentService } from '../../../services/main-content/main-content.service';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 
 @Component({
@@ -72,18 +73,27 @@ import { MainContentService } from '../../../services/main-content/main-content.
     ])
   ]
 })
-export class DevspaceComponent {
+export class DevspaceComponent implements OnInit{
   navBarIsClosed: boolean = true;
   contactsAreVisible: boolean = true;
   channelsAreVisible: boolean = true;
   readonly dialog = inject(MatDialog);
 
-  members: Member[];
+  members?: Member[];
   channels: Channel[];
 
-  constructor(private memberService: MemberService, private channelService: ChannelService, private mainContentService: MainContentService){
-    this.members = memberService.getAllMembers();
+  constructor(
+    private memberService: MemberService, 
+    private channelService: ChannelService, 
+    private mainContentService: MainContentService,
+    private authenticationService: AuthenticationService)
+    {
     this.channels = channelService.getChannels();
+  }
+
+  async ngOnInit(){
+    this.members = await this.authenticationService.getAllMembers();
+
   }
 
   toggleNavBar() { 

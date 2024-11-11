@@ -1,10 +1,11 @@
-export interface TestMember {
+export interface Member {
+  id: string;
   name: string;
   email: string;
   imageUrl: string;
   status: boolean;
-  channelIds: [];
-  directMessageIds: [];
+  channelIds: string[];
+  directMessageIds: string[];
 }
 
 export interface TestChannel {
