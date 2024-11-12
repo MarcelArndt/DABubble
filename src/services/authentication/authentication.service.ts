@@ -191,25 +191,46 @@ export class AuthenticationService {
 
 
   // Messages
-  async createMessage(message: Message) {
+  async createMessage(message: string, imagePreviews: any) {
+    const now = new Date();
     const cityDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
     const messageCollectionRef = collection(cityDocRef, "messages");
     const messageDocRef = await addDoc(messageCollectionRef, {
-      message
+      user: this.getUserUid(),
+      name: 'Max Mustermann',
+      time: `${now.getHours()}:${now.getMinutes()}`,
+      message: message,
+      profileImage: '',
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      reactions: {
+        like: [],
+        rocket: []
+      },
+      answers: [],
+      attachmen:  imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
     this.updateChannelMessages(messageDocRef.id)
-    console.log("Document written in 'landmarks' with ID: ", messageDocRef.id);
   }
 
-  async createThread(thread: Thread) {
+  async createThread(message: string, imagePreviews: any) {
+    const now = new Date();
     const channelDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
-    const messageDocRef = doc(channelDocRef, "messages", 'ndKr3DhX1JyWbUMy4XR2');
+    const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
     const threadCollectionRef = collection(messageDocRef, "threads");
     const threadDocRef = await addDoc(threadCollectionRef, {
-    thread
+      user: this.getUserUid(),
+      name: 'Max Mustermann',
+      time: `${now.getHours()}:${now.getMinutes()}`,
+      message: message,
+      profileImage: '',
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      reactions: {
+        like: [],
+        rocket: []
+      },
+      attachmen:  imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
      this.updateChannelMessagesThread(threadDocRef.id);
-    console.log("Thread document written with ID: ", threadDocRef.id);
   }
 
   async updateChannelMessages(messageId: string) {
@@ -221,7 +242,7 @@ export class AuthenticationService {
 
   async updateChannelMessagesThread(threadId: string) {
     const channelDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
-    const messageDocRef = doc(channelDocRef, "messages", 'ndKr3DhX1JyWbUMy4XR2');
+    const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
     await updateDoc(messageDocRef, {
       answers: arrayUnion(threadId)
     });

@@ -44,23 +44,8 @@ export class ChatMessageFieldComponent {
   }
 
   sendMessage() {
-    const now = new Date();
-    const userMessage: Message = {
-      user: this.auth.getUserUid(),
-      name: 'Max Mustermann',
-      time: `${now.getHours()}:${now.getMinutes()}`,
-      message: this.messageField,
-      profileImage: this.object.profileImage,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      answers: [],
-      attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
-    };
-    this.auth.createMessage(userMessage)
-    this.object.message.push(userMessage);
+    this.auth.createMessage(this.messageField, this.imagePreviews)
+    // this.object.message.push(userMessage);
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];

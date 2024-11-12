@@ -42,21 +42,7 @@ export class ThreadMessageFieldComponent {
 
   sendMessage() {
     const now = new Date();
-    const userMessage: Thread = {
-      user: this.auth.getUserUid(),
-      name: 'Max Mustermann',
-      time: `${now.getHours()}:${now.getMinutes()}`,
-      message: this.messageField,
-      profileImage: this.object.profileImage,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
-    };
-    // this.object.message.push(userMessage);
-    this.auth.createThread(userMessage);
+    this.auth.createThread(this.messageField, this.imagePreviews);
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];
