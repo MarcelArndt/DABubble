@@ -6,6 +6,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { ThreadImagesPreviewComponent } from "./thread-images-preview/thread-images-preview.component";
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { Thread } from '../../../../interface/message';
 
 @Component({
   selector: 'app-thread-message-field',
@@ -36,12 +38,12 @@ export class ThreadMessageFieldComponent {
 
   @Output() messagesUpdated = new EventEmitter<void>();
 
-  constructor(public object: MessagesService) { }
+  constructor(public object: MessagesService, public auth: AuthenticationService) { }
 
   sendMessage() {
     const now = new Date();
-    const userMessage = {
-      user: 'uidTestId',
+    const userMessage: Thread = {
+      user: this.auth.getUserUid(),
       name: 'Max Mustermann',
       time: `${now.getHours()}:${now.getMinutes()}`,
       message: this.messageField,
@@ -51,12 +53,10 @@ export class ThreadMessageFieldComponent {
         like: [],
         rocket: []
       },
-      thread: {
-        answer: [],
-      },
       attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
     };
-    this.object.message.push(userMessage);
+    // this.object.message.push(userMessage);
+    this.auth.createThread(userMessage);
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];

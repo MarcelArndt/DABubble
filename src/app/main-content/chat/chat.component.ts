@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Message } from '../../../interface/message';
 import { MessageComponent } from "../message/message.component";
 import { MessagesService } from '../../../services/messages/messages.service';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 
 
@@ -26,9 +27,10 @@ export class ChatComponent {
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   private shouldScroll: boolean = true;
 
-  constructor(public object: MessagesService) { }
+  constructor(public object: MessagesService, public auth: AuthenticationService) {}
 
   ngOnInit(): void {
+    this.auth.readChannel(); 
     this.message = this.object.message;
   }
 

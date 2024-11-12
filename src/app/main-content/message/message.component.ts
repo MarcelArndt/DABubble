@@ -7,6 +7,7 @@ import { MessageImagesComponent } from './message-images/message-images.componen
 import { MessageTextComponent } from './message-text/message-text.component';
 import { MessageNameComponent } from './message-name/message-name.component';
 import { MessagesService } from '../../../services/messages/messages.service';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-message',
@@ -33,7 +34,7 @@ export class MessageComponent {
   isEdit: boolean = false;
   editMessageText: string = '';
 
-  constructor(public object: MessagesService) { }
+  constructor(public object: MessagesService, public auth: AuthenticationService) { }
 
   resetHoverAndMenu() {
     this.isMessageHover = false;
