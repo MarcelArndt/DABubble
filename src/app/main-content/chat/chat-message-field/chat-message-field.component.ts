@@ -39,13 +39,11 @@ export class ChatMessageFieldComponent {
 
   @Output() messagesUpdated = new EventEmitter<void>();
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) {
-    
-  }
+  constructor(public object: MessagesService, public auth: AuthenticationService) {}
 
-  sendMessage() {
+ async sendMessage() {
+    await this.auth.getCurrentMemberData();
     this.auth.createMessage(this.messageField, this.imagePreviews)
-    // this.object.message.push(userMessage);
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];

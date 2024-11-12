@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -23,7 +23,7 @@ import { Thread } from '../../../../interface/message';
   templateUrl: './thread-message-field.component.html',
   styleUrl: './thread-message-field.component.scss'
 })
-export class ThreadMessageFieldComponent {
+export class ThreadMessageFieldComponent  implements OnInit{
   openEmojis: boolean = false;
   messageField: string = ''
   openData: boolean = false;
@@ -38,10 +38,13 @@ export class ThreadMessageFieldComponent {
 
   @Output() messagesUpdated = new EventEmitter<void>();
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) { }
+  constructor(public object: MessagesService, public auth: AuthenticationService) {}
+ 
+  ngOnInit(): void {
+    this.auth.getCurrentMemberData();
+  }
 
   sendMessage() {
-    const now = new Date();
     this.auth.createThread(this.messageField, this.imagePreviews);
     this.messagesUpdated.emit();
     this.messageField = '';

@@ -13,12 +13,14 @@ export class AuthenticationService {
   private auth;
   private provider;
   private storage;
+  memberId: string = '';
   currentMember!: Member;
 
   constructor(private router: Router) {
     this.auth = inject(Auth);
     this.provider = new GoogleAuthProvider();
     this.storage = getStorage();
+    this.observerUser();
   }
 
   // Authentication 
@@ -51,12 +53,9 @@ export class AuthenticationService {
   observerUser() {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        console.log(uid);
+        this.memberId = user.uid;
       } else {
-        // User is signed out
-        // ...
+
       }
     });
   }
@@ -100,7 +99,6 @@ export class AuthenticationService {
 
 
   // Cloud Firestore 
-
   async getAllMembers(): Promise<Member[]> {
     const querySnapshot = await getDocs(collection(this.getReference(), "member"));
     const members: Member[] = [];
@@ -191,46 +189,37 @@ export class AuthenticationService {
 
 
   // Messages
+  async readChannel() {
+    const docRef = doc(this.getReference(), "channels", "wMwhBmnxQKbVZ3cifLBG");
+    const channel = await getDoc(docRef);
+
+    if (channel.exists()) {
+      console.log("Document data:", channel.data());
+      this.readMessages(channel.id)
+    } else {
+      console.log("No such document!");
+    }
+  }
+
   async createMessage(message: string, imagePreviews: any) {
     const now = new Date();
     const cityDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
     const messageCollectionRef = collection(cityDocRef, "messages");
     const messageDocRef = await addDoc(messageCollectionRef, {
       user: this.getUserUid(),
-      name: 'Max Mustermann',
+      name: this.currentMember.name,
       time: `${now.getHours()}:${now.getMinutes()}`,
       message: message,
-      profileImage: '',
+      profileImage: this.currentMember.imageUrl,
       createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
       reactions: {
         like: [],
         rocket: []
       },
       answers: [],
-      attachmen:  imagePreviews.filter((item: any): item is string => typeof item === 'string')
+      attachmen: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
     this.updateChannelMessages(messageDocRef.id)
-  }
-
-  async createThread(message: string, imagePreviews: any) {
-    const now = new Date();
-    const channelDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
-    const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
-    const threadCollectionRef = collection(messageDocRef, "threads");
-    const threadDocRef = await addDoc(threadCollectionRef, {
-      user: this.getUserUid(),
-      name: 'Max Mustermann',
-      time: `${now.getHours()}:${now.getMinutes()}`,
-      message: message,
-      profileImage: '',
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      attachmen:  imagePreviews.filter((item: any): item is string => typeof item === 'string')
-    });
-     this.updateChannelMessagesThread(threadDocRef.id);
   }
 
   async updateChannelMessages(messageId: string) {
@@ -238,6 +227,35 @@ export class AuthenticationService {
     await updateDoc(washingtonRef, {
       messages: arrayUnion(messageId)
     });
+  }
+
+  async readMessages(channel: string) {
+    const querySnapshot = await getDocs(collection(this.getReference(), "channels", channel, "messages"));
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+    });
+  }
+
+  //Thread
+  async createThread(message: string, imagePreviews: any) {
+    const now = new Date();
+    const channelDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
+    const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
+    const threadCollectionRef = collection(messageDocRef, "threads");
+    const threadDocRef = await addDoc(threadCollectionRef, {
+      user: this.getUserUid(),
+      name: this.currentMember.name,
+      time: `${now.getHours()}:${now.getMinutes()}`,
+      message: message,
+      profileImage: this.currentMember.imageUrl,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      reactions: {
+        like: [],
+        rocket: []
+      },
+      attachmen: imagePreviews.filter((item: any): item is string => typeof item === 'string')
+    });
+    this.updateChannelMessagesThread(threadDocRef.id);
   }
 
   async updateChannelMessagesThread(threadId: string) {
@@ -248,28 +266,7 @@ export class AuthenticationService {
     });
   }
 
-  async readChannel() {
-    const docRef = doc(this.getReference(), "channels", "wMwhBmnxQKbVZ3cifLBG");
-    const channel = await getDoc(docRef);
-
-    if (channel.exists()) {
-      console.log("Document data:", channel.data());
-       this.readMessages(channel.id)
-    } else {
-      console.log("No such document!");
-    }
-  }
-
- async readMessages(channel: string) {
-    const querySnapshot = await getDocs(collection(this.getReference(), "channels", channel, "messages"));
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
-  }
-
-
   // cloud storage 
-
   uploadMultipleImages(files: FileList, folderName: string = 'User') {
     Array.from(files).forEach((file, index) => {
       const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
