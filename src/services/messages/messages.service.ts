@@ -23,7 +23,7 @@ export class MessagesService {
         rocket: []
       },
       answers: [],
-      attachmen: [
+      attachment: [
         '/img/profile-pic/004.svg',
         '/img/profile-pic/004.svg',
       ]
@@ -40,7 +40,7 @@ export class MessagesService {
         rocket: []
       },
       answers: [],
-      attachmen: [
+      attachment: [
         '/img/profile-pic/004.svg',
       ]
     },

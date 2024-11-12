@@ -21,6 +21,6 @@ export class MessageImagesComponent {
 
 
   deleteImage(i: any) {
-    this.message.attachmen.splice(i, 1);
+    this.message.attachment.splice(i, 1);
   }
 }

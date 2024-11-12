@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
 import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
+import { writeBatch } from '@firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -88,7 +89,7 @@ export class AuthenticationService {
     return currentUser ? currentUser.uid : null;
   }
 
-  getUserUid(): string {
+  getCurrentUserUid(): string {
     const uid = this.getCurrentUserId();
     if (!uid) {
       throw new Error("Kein Benutzer angemeldet.");
@@ -118,15 +119,34 @@ export class AuthenticationService {
     return members;
   }
 
+  async getAllChannelsFromFirestore():Promise <Channel[]>{
+    const querySnapshot = await getDocs(collection(this.getReference(), "channels"));
+    const channels: Channel[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const channel: Channel = {
+        id: data['id'],
+        title: data['title'],
+        messages: data['messages'],
+        membersId: data['membersId'],
+        admin: data['admin'],
+        description: data['description'],
+        isPublic: data['isPublic'],
+      }
+      channels.push(channel);
+    });
+    return channels;
+  }
+
   async updateProfileImageOfUser(downloadURL: string) {
-    const userId = this.getUserUid();
+    const userId = this.getCurrentUserUid();
     await updateDoc(doc(this.getReference(), "member", userId), {
       imageUrl: downloadURL
     });
   }
 
   async createUserCollection(fullName: string, email: string) {
-    const userId = this.getUserUid();
+    const userId = this.getCurrentUserUid();
     await setDoc(doc(this.getReference(), "member", userId), {
       id: userId,
       name: fullName,
@@ -138,25 +158,45 @@ export class AuthenticationService {
     });
   }
 
-  async createChannel(channel: Channel) {
-    const userUid = this.getUserUid();
-    const docRef = await addDoc(collection(this.getReference(), "channels"), {
+  async addChannelToFirebase(channel: Channel) {
+    const userUid = this.getCurrentUserUid();
+    // Step 1: Generate a new document reference with a unique ID
+    const docRef = doc(collection(this.getReference(), "channels"));
+    // Step 2: Assign the Firestore-generated ID to the `channel` object
+    channel.id = docRef.id;
+    // Step 3: Use `setDoc()` to create the document with the assigned ID
+    await setDoc(docRef, {
+      id: channel.id,
       title: channel.title,
-      messages: [],
-      membersId: [],
+      messages: [],  
+      membersId: channel.membersId,
       admin: userUid,
       description: channel.description,
+      isPublic: channel.isPublic,
     });
-    this.addChannelIdToMember(docRef.id);
+  
+    this.addChannelIdToCurrentUser(channel.id);
+    await this.addChannelIdToMembers(channel.membersId, channel.id);  
   }
+  
+  
+  async addChannelIdToMembers(memberIds: string[], channelId: string) {
+    const batch = writeBatch(this.getReference());
+    memberIds.forEach((memberId) => {
+      const memberRef = doc(this.getReference(), `member/${memberId}`);
+      batch.update(memberRef, {
+        channels: arrayUnion(channelId),
+      });
+    });
+    await batch.commit();
+  }
+  
 
-  async addChannelIdToMember(docRefid: string) {
-    const userDocRef = doc(this.getReference(), "member", this.getUserUid());
-
+  async addChannelIdToCurrentUser(docRefid: string) {
+    const userDocRef = doc(this.getReference(), "member", this.getCurrentUserUid());
     await updateDoc(userDocRef, {
       channelIds: arrayUnion(docRefid)
     });
-
     console.log("Channel ID erfolgreich zum Array hinzugefügt:", docRefid);
   }
 
@@ -165,7 +205,7 @@ export class AuthenticationService {
   }
 
   async getCurrentMemberData() {
-    const docRef = doc(this.getReference(), 'member', this.getUserUid());
+    const docRef = doc(this.getReference(), 'member', this.getCurrentUserUid());
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -206,7 +246,7 @@ export class AuthenticationService {
     const cityDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
     const messageCollectionRef = collection(cityDocRef, "messages");
     const messageDocRef = await addDoc(messageCollectionRef, {
-      user: this.getUserUid(),
+      user: this.getCurrentUserUid(),
       name: this.currentMember.name,
       time: `${now.getHours()}:${now.getMinutes()}`,
       message: message,
@@ -217,7 +257,7 @@ export class AuthenticationService {
         rocket: []
       },
       answers: [],
-      attachmen: imagePreviews.filter((item: any): item is string => typeof item === 'string')
+      attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
     this.updateChannelMessages(messageDocRef.id)
   }
@@ -243,7 +283,7 @@ export class AuthenticationService {
     const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
     const threadCollectionRef = collection(messageDocRef, "threads");
     const threadDocRef = await addDoc(threadCollectionRef, {
-      user: this.getUserUid(),
+      user: this.getCurrentUserUid(),
       name: this.currentMember.name,
       time: `${now.getHours()}:${now.getMinutes()}`,
       message: message,
@@ -253,7 +293,7 @@ export class AuthenticationService {
         like: [],
         rocket: []
       },
-      attachmen: imagePreviews.filter((item: any): item is string => typeof item === 'string')
+      attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
     this.updateChannelMessagesThread(threadDocRef.id);
   }
@@ -269,7 +309,7 @@ export class AuthenticationService {
   // cloud storage 
   uploadMultipleImages(files: FileList, folderName: string = 'User') {
     Array.from(files).forEach((file, index) => {
-      const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
+      const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
       console.log('herllo')
       uploadBytes(fileRef, file).then((snapshot) => {
         console.log(`Datei ${index + 1} hochgeladen: ${file.name}`);
@@ -280,7 +320,7 @@ export class AuthenticationService {
   }
 
   async uploadImage(file: File, folderName: string = 'User'): Promise<string> {
-    const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
+    const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
 
     return uploadBytes(fileRef, file)
       .then(() => {

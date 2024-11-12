@@ -11,11 +11,10 @@ export class ChannelService {
       id: '1',
       title: 'Developer Team',
       membersId: [ '1', '2', '3'],
-      type: 'everyone',
-      admin: [],
+      isPublic: true,
+      admin: 'Hermann Mannherr',
       messages: [],
       description: 'Developer Team das developer Sachen macht.',
-      isPublic: true,
     }
   ]
 

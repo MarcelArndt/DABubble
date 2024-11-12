@@ -1,10 +1,9 @@
 export class Channel {
     id: string = '';
     title: string = '';
-    messages: Array<string>= []; 
+    messages: Array<string> = [];
     membersId: Array<string> = [];
-    admin: Array <string> = [];
-    type: string = '';
+    admin: string = '';
     description: string = '';
     isPublic: boolean = true;
 
@@ -12,4 +11,3 @@ export class Channel {
         Object.assign(this, init);
     }
 }
-

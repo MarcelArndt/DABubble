@@ -8,7 +8,7 @@ export interface Member {
   directMessageIds: string[];
 }
 
-export interface TestChannel {
+export interface Channel {
   id: string | '';
   title: string | '';
   messages: [];
@@ -30,7 +30,7 @@ export interface Message {
     rocket: string[]
   },
   answers: string[],
-  attachmen: string[]
+  attachment: string[]
 }
 
 export interface Thread {
@@ -44,9 +44,9 @@ export interface Thread {
     like: string[],
     rocket: string[]
   },
-  attachmen: string[]
+  attachment: string[]
 }
 
-export interface Attachmen {
+export interface Attachment {
 
 }

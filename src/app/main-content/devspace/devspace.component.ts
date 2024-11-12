@@ -82,7 +82,7 @@ export class DevspaceComponent implements OnInit{
   readonly dialog = inject(MatDialog);
 
   members?: Member[];
-  channels: Channel[];
+  channels?: Channel[];
 
   //Searchbar
   @Input() icon: string = 'search'; 
@@ -120,12 +120,11 @@ export class DevspaceComponent implements OnInit{
     private renderer: Renderer2, 
     private elRef: ElementRef )
     {
-    this.channels = channelService.getChannels();
   }
 
   async ngOnInit(){
+    this.channels = await this.authenticationService.getAllChannelsFromFirestore();
     this.members = await this.authenticationService.getAllMembers();
-
   }
 
   toggleNavBar() { 

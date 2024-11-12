@@ -172,13 +172,13 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
         if (this.selectedMembers.length > 0) {
           this.selectedMembers = [];
         }
-        this.channel.type = 'everyone';
+        this.channel.isPublic = true;
     } else if (!this.selectAllPeople) {
       this.addSelectedMembers();
-      this.channel.type = 'group';
+      this.channel.isPublic = false;
     }
-    this.channelService.channels.push(this.channel);
-    this.auth.createChannel(this.channel);
+    // this.channelService.channels.push(this.channel);
+    this.auth.addChannelToFirebase(this.channel);
     this.dialogRef.close();
     console.log(this.channel); // Überprüfe das aktualisierte Channel-Objekt
   }

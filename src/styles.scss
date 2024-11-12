@@ -4,6 +4,7 @@
 
 :root {
     --primary-bg: #ECEEFE;
+    --primary-bg-dark: #dadcea;
     --secundary-bg: #FFFFFF;
     --text-black: #000000;
     --text-light-black: #0c0c0c;
@@ -21,6 +22,7 @@
 
 :root.dark-theme {
     --primary-bg: #1E1E2E;
+    --primary-bg-dark: #1a1a27fc;
     --secundary-bg: #2A2A3B;
     --text-black: #FFFFFF;
     --text-light-black: #f1f1f1;
@@ -45,8 +47,9 @@ body {
 html,
 body {
     height: 100%;
-    overflow: hidden;
+    overflow: hidden;               
 }
+
 
 .flex-end {
     @include dFlex($jc: end);

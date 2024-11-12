@@ -30,8 +30,7 @@ export class CreateChannelComponent {
   readonly dialogRef = inject(MatDialogRef<DevspaceComponent>);
   readonly dialog = inject(MatDialog);
   showError: boolean = false;
-  @ViewChild('channelForm') channelForm!: NgForm;  // ViewChild-Referenz für das Formular
-
+  @ViewChild('channelForm') channelForm!: NgForm; 
 
   channel = new Channel();
   
