@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output, Renderer2, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { trigger, style, animate, transition, query } from '@angular/animations';
@@ -11,6 +11,7 @@ import { ChannelService } from '../../../services/channel/channel.service';
 import { Channel } from '../../../classes/channel.class';
 import { MainContentService } from '../../../services/main-content/main-content.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { SearchbarComponent } from '../../shared/header/searchbar/searchbar.component';
 
 
 @Component({
@@ -20,7 +21,8 @@ import { AuthenticationService } from '../../../services/authentication/authenti
     CommonModule,
     MatButtonModule,
     MatIcon,
-    MatDialogModule
+    MatDialogModule,
+    SearchbarComponent,
   ],
   templateUrl: './devspace.component.html',
   styleUrl: './devspace.component.scss',
@@ -82,11 +84,41 @@ export class DevspaceComponent implements OnInit{
   members?: Member[];
   channels: Channel[];
 
-  constructor(
+  //Searchbar
+  @Input() icon: string = 'search'; 
+  @Input() addClass: string[] = [];
+  @Input() placeholder: string = 'Search in Devspace'; 
+  @Input() align_reverse: boolean = false;
+
+  @HostListener('focusin', ['$event'])
+  onFocusIn(event: Event): void {
+    const parent = this.elRef.nativeElement.querySelector('.searchbar');
+    if (parent) {
+      this.renderer.addClass(parent, 'active');
+    } else {
+      console.warn('Element .searchbar nicht gefunden');
+    }
+  }
+
+  @HostListener('focusout', ['$event'])
+  onFocusOut(event: Event): void {
+    const parent = this.elRef.nativeElement.querySelector('.searchbar');
+    if (parent) {
+      this.renderer.removeClass(parent, 'active');
+    } else {
+      console.warn('Element .searchbar nicht gefunden');
+    }
+  }
+  ///////
+
+  
+  constructor (
     private memberService: MemberService, 
     private channelService: ChannelService, 
     private mainContentService: MainContentService,
-    private authenticationService: AuthenticationService)
+    private authenticationService: AuthenticationService,
+    private renderer: Renderer2, 
+    private elRef: ElementRef )
     {
     this.channels = channelService.getChannels();
   }
@@ -100,6 +132,11 @@ export class DevspaceComponent implements OnInit{
     this.navBarIsClosed = !this.navBarIsClosed;
   }
 
+  closeNavBar() { 
+    if (window.innerWidth < 1250) {
+      this.navBarIsClosed = false;
+    }
+  }
 
   dropChannels(){
     this.channelsAreVisible = !this.channelsAreVisible;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MainHeaderComponent } from '../shared/header/main-header.component';
 import { ChatComponent } from "./chat/chat.component";
 import { ThreadComponent } from "./thread/thread.component";
@@ -29,7 +29,10 @@ export class MainContentComponent {
   threadAsTopLayer: boolean = false;
   threadIsOpen: boolean = false;
 
-  constructor(private auth: AuthenticationService, private mainContentService: MainContentService) {
+  @ViewChild('devSpace') devSpace!: DevspaceComponent; // Zugriff auf die DevSpaceComponent
+
+
+  constructor(private auth: AuthenticationService, public mainContentService: MainContentService) {
     auth.observerUser();
   }
 

@@ -1,7 +1,9 @@
 
 <app-main-header></app-main-header>
 <div class="main-content">
-    <app-devspace [ngClass]="{
+    <app-devspace 
+        #devSpace
+        [ngClass]="{
         'focus-app': devSpaceAsTopLayer
         }">
     </app-devspace>
@@ -9,15 +11,14 @@
         <app-chat [ngClass]="{
             'focus-app': chatAsTopLayer, 
             'hidden': threadAsTopLayer
-            }">
+            }"
+            (click)="this.devSpace.closeNavBar()">
         </app-chat>
         <app-thread  [ngClass]="{
             'focus-app-thread': threadAsTopLayer, 
             'visible': threadIsOpen,
-            }">
+            }"
+            (click)="this.devSpace.closeNavBar()">
         </app-thread>
     </div>
 </div>
-
-
-<!-- 'hiddenForMobile': chatAsTopLayer,  -->

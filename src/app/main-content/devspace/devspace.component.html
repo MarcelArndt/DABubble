@@ -1,5 +1,11 @@
 <div  *ngIf="navBarIsClosed" @toggleNavBar class="serverNav nav-Bar">
     <div class="serverNavContent nav-item" mode="side">
+        <div class="searchbar" [ngClass]="addClass">
+            <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
+                <input [placeholder]="placeholder">
+                <mat-icon>{{icon}}</mat-icon>
+            </div>
+        </div>
         <div class="titleRow">
             <div class="titleAndServerSvg">
                 <img src="/img/devspace/titleAndServerSvg.svg">

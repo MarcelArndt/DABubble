@@ -6,6 +6,8 @@
     border-radius: 30px;
     font-family: 'Nunito';
     flex: auto;
+    display: flex;
+    flex-direction: column;
     @include respond-to-maxWidth(large){
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
@@ -23,6 +25,34 @@
     overflow: hidden;
     border-radius: 30px;
     color: var(--text-black);
+    display: flex;
+    flex-direction: column;
+    @include respond-to-maxWidth(large) {
+        max-height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 20px;
+        z-index: 2;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;        border-radius: 30px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    @include respond-to-minWidth(small) {
+        z-index: 5;
+    }
+    @include respond-to-maxWidth(small) {
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        border-radius: 0px;
+
+    }
 }
 
 .toggleNavBarButton {
@@ -30,7 +60,7 @@
     transform: translateY(-30%);
     left: 0px;
     bottom: 5vh;
-    z-index: 1;
+    z-index: 5;
     transform: rotate(90deg) scaleX(-1) scaleY(-1);
     transform-origin: left top;
     padding: 18px 26px 18px 26px;
@@ -49,8 +79,6 @@
     transition: color 0.125s ease-in-out;
     align-items: center;
     box-sizing: border-box;
-
-
     svg {
         transition: color 0.125s ease-in-out, stroke  0.125s ease-in-out;
 
@@ -60,7 +88,6 @@
             transition: color 0.125s ease-in-out, stroke  0.125s ease-in-out;
         }
     }
-
     &:hover {
         cursor: pointer;
         color: var(--purple-2);
@@ -73,11 +100,17 @@
             }
         }
     }
+    @include respond-to-maxWidth(small){
+        display: none;
+    }
 }
 
 .titleRow {
-    @include dFlex($jc: space-between);
-    margin-bottom: 25px;
+    display: none;
+    @include respond-to-minWidth(small){
+        @include dFlex($jc: space-between);
+        margin-bottom: 25px;
+    }
 }
 
 .titleAndServerSvg {
@@ -284,6 +317,71 @@ h3 {
 }
 
 .dropdown-content{
-    max-height: 280px;
+    flex: 1;
     overflow: auto;
+}
+
+.searchbar{
+    @include dFlex;  
+    margin-bottom: 25px;
+    background-color: transparent;
+    width: 100%;
+    max-width: 989px;
+    height: 70px;
+    border-radius: 46px;
+    border: 1px solid var(--border-light-purple);
+
+    @include respond-to-minWidth(small) {
+        display: none;
+    }
+
+    &:hover{
+        border-color: var(--purple-2);
+    }
+
+    .inputFrame{
+        @include dFlex; 
+        padding: 0px 24px;
+        width: 100%; 
+
+
+        @include respond-to-maxWidth(large) {
+            padding: 0px 0px 0px 12px;
+         }
+
+
+        mat-icon{
+            @include heightWidth($w: 32px, $h: 70px);
+            @include respond-to-maxWidth(large) {
+               font-size: 24px;
+               padding: 0px 12px 0px 0px;
+            }
+            @include dFlex;  
+            @include matIcon($scale: 110%);    
+        }
+    }
+
+    input{
+        background-color: transparent !important;
+        @include heightWidth($h: 26px);
+        @include respond-to-maxWidth(large) {
+        @include figtree($fw: 300, $fs: 18px);
+        }
+        @include input;
+    }
+}
+
+.align-reverse{
+    flex-direction: row-reverse;
+}
+
+.active{
+    border-color: var(--purple-2);
+
+    .inputFrame{
+        mat-icon{  
+            color: var(--text-black);
+        }
+    }
+    
 }

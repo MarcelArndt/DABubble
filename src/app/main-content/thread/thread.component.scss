@@ -6,7 +6,9 @@ section {
     flex-direction: column;
     background-color: var(--secundary-bg);
     border-radius: 20px;
-    // width: 450px;
+    @include respond-to-maxWidth(medium) {
+        border-radius: 0px;
+    }
 }
 
 .main-message-container {
@@ -26,5 +28,3 @@ app-thread-message-field {
     @include heightWidth($h: 20%);
     border-radius: 0 0 20px 20px;
 }
-
-

@@ -15,7 +15,7 @@
         height: 45px;
     }
 
-    @include respond-to-maxWidth(smallMedium) {
+    @include respond-to-maxWidth(small) {
         display: none;
     }
 

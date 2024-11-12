@@ -25,6 +25,10 @@ app-main-header {
     gap: 20px;
     @include padding(0px, 20px, 20px, 20px);
     position: relative;
+    @include respond-to-maxWidth(medium){
+        @include padding(0px, 0px, 0px, 0px);
+        border-radius: 0px;
+    }
 } 
 
 .main-content-wrapper {
@@ -39,8 +43,13 @@ app-main-header {
 app-devspace {
     max-width: 20%;
     height: 100%;
+    position: relative;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+
     @include respond-to-maxWidth(large) {
-        height: auto;
         max-width: 302px;
         position: absolute;
         top: 0;
@@ -56,6 +65,7 @@ app-devspace {
         width: 100%;
         max-width: 100%;
         position: absolute;
+        top: 0;
         left: 0;
         right: 0;
         bottom: 0;
@@ -93,10 +103,10 @@ app-thread {
 }
 
 .focus-app-thread{
-    @include respond-to-maxWidth(large) {
+    @include respond-to-maxWidth('XL') {
         position: relative;
     }
-    @include respond-to-maxWidth(medium) {
+    @include respond-to-maxWidth(large) {
         width: 100%;
         max-width: 100%;
         position: absolute;
@@ -106,10 +116,6 @@ app-thread {
         z-index: 4;
     }
 }
-
-// .hiddenForMobile {
-//         display: none;
-// }
 
 .visible{
         display: flex;
