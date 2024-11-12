@@ -86,7 +86,12 @@ a{
         color: var(--text-blue);
         font-weight: 600;
     }
+}
 
+form{
+    @include heightWidth($w: 100%, $h: auto);
+    @include dFlex;
+    flex-direction: column;
 }
 
 

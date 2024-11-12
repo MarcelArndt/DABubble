@@ -7,13 +7,11 @@
 
     <p>With your name and email address you have your new DABubble account.</p>
     <div class="input-area">   
-        <form (ngSubmit)="onSubmit(signUpForm, fullname.getValue(), email.getValue(), password.getValue(), 2)" #signUpForm="ngForm">
-        <app-input-field #fullname type="text" icon="person" placeholder="Firstname & Lastname" [required]="true" minlength="3" pattern="[A-Za-z._\-\s]+" ></app-input-field>
-        <app-input-field #email type="email" icon="mail" placeholder="example@email.com" [required]="true" minlength="6" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"  ></app-input-field>
-        <app-input-field #password type="password" icon="lock" placeholder="Password" [required]="true" minlength="8" ></app-input-field>
-        <div class="set-right"> <button [disabled]="signUpForm.invalid">Go On</button> </div>
-        </form>
-       
+        <div class="form" [formGroup]="myForm">
+        <app-input-field formControlName="fullName" #fullname type="text" icon="person" placeholder="Firstname & Lastname" [required]="true" minlength="3" pattern="[A-Za-z._\-\s]+" ></app-input-field>
+        <app-input-field formControlName="email" #email type="email" icon="mail" placeholder="example@email.com" [required]="true" minlength="6" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"  ></app-input-field>
+        <app-input-field formControlName="password" #password type="password" icon="lock" placeholder="Password" [required]="true" minlength="8" ></app-input-field>
+        <div class="set-right"> <button [disabled]="!myForm.valid" (click)="onSubmit(2)" >Go On</button> </div>
+        </div>
     </div>
-
 </div>

@@ -9,7 +9,7 @@ import { AuthenticationService } from '../../../../services/authentication/authe
   selector: 'app-sign-in',
   standalone: true,
   imports: [
-    // InputFieldComponent, 
+    InputFieldComponent, 
     RouterModule,
     FormsModule
   ],
@@ -22,8 +22,8 @@ export class SignInComponent {
 
   constructor(private auth: AuthenticationService, private router: Router) {}
 
-  signInUser() {
-    this.auth.signInUser(this.email, this.password);
+  signInUser(email:string = '', password:string = '') {
+    this.auth.signInUser(email, password);
     this.router.navigate(['start']);
   }
 

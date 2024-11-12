@@ -27,16 +27,18 @@ button{
         cursor: pointer;
     }
 
+    &:disabled{
+        background-color: var(--text-gray);
+        cursor: not-allowed;
+    }
+
     @include respond-to-maxWidth(smallMedium) {
         padding: 6px 12px;
         letter-spacing: 0px;
     }
 }
 
-.button:disabled{
-    background-color: grey;
-    cursor: not-allowed !important;
-}
+
 
 .specialButton{
     background-color: transparent;
@@ -107,7 +109,7 @@ a{
     align-items: center;
 }
 
-form{
+.form{
     @include heightWidth($w: 100%, $h: 100%);
     @include dFlex;
     flex-direction: column;
