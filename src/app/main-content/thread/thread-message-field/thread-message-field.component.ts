@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { ThreadImagesPreviewComponent } from "./thread-images-preview/thread-images-preview.component";
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { Thread } from '../../../../interface/message';
 
 @Component({
   selector: 'app-thread-message-field',
@@ -21,7 +23,7 @@ import { ThreadImagesPreviewComponent } from "./thread-images-preview/thread-ima
   templateUrl: './thread-message-field.component.html',
   styleUrl: './thread-message-field.component.scss'
 })
-export class ThreadMessageFieldComponent {
+export class ThreadMessageFieldComponent  implements OnInit{
   openEmojis: boolean = false;
   messageField: string = ''
   openData: boolean = false;
@@ -36,27 +38,14 @@ export class ThreadMessageFieldComponent {
 
   @Output() messagesUpdated = new EventEmitter<void>();
 
-  constructor(public object: MessagesService) { }
+  constructor(public object: MessagesService, public auth: AuthenticationService) {}
+ 
+  ngOnInit(): void {
+    this.auth.getCurrentMemberData();
+  }
 
   sendMessage() {
-    const now = new Date();
-    const userMessage = {
-      user: 'uidTestId',
-      name: 'Max Mustermann',
-      time: `${now.getHours()}:${now.getMinutes()}`,
-      message: this.messageField,
-      profileImage: this.object.profileImage,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      thread: {
-        answer: [],
-      },
-      attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
-    };
-    this.object.message.push(userMessage);
+    this.auth.createThread(this.messageField, this.imagePreviews);
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];

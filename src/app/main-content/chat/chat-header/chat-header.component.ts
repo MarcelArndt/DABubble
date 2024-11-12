@@ -3,6 +3,7 @@ import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import { EditChannelComponent } from '../../../dialog/edit-channel/edit-channel.component';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 @Component({
@@ -18,6 +19,9 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 })
 export class ChatHeaderComponent {
   readonly dialog = inject(MatDialog);
+
+  constructor(public auth: AuthenticationService) {
+  }
 
   openEditeChannel(): void {
     const dialogRef = this.dialog.open(EditChannelComponent);

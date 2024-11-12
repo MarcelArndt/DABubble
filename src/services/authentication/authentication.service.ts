@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from '@angular/fire/auth';
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { Member } from '../../interface/message';
+import { Member, Message, Thread } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
 import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
 
@@ -13,22 +13,14 @@ export class AuthenticationService {
   private auth;
   private provider;
   private storage;
-
-  // export interface TestMember {
-  //   name: string;
-  //   email: string;
-  //   imageUrl: string;
-  //   status: boolean;
-  //   channelIds: [];
-  //   directMessageIds: [];
-  // }
-
+  memberId: string = '';
   currentMember!: Member;
 
   constructor(private router: Router) {
     this.auth = inject(Auth);
     this.provider = new GoogleAuthProvider();
     this.storage = getStorage();
+    this.observerUser();
   }
 
   // Authentication 
@@ -61,12 +53,9 @@ export class AuthenticationService {
   observerUser() {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        console.log(uid);
+        this.memberId = user.uid;
       } else {
-        // User is signed out
-        // ...
+
       }
     });
   }
@@ -90,7 +79,7 @@ export class AuthenticationService {
       this.router.navigate(['login']);
       console.log('Sie wurden erfolgreich amgemeldet')
     }).catch((error) => {
-      
+
     });
   }
 
@@ -110,14 +99,13 @@ export class AuthenticationService {
 
 
   // Cloud Firestore 
-
   async getAllMembers(): Promise<Member[]> {
     const querySnapshot = await getDocs(collection(this.getReference(), "member"));
     const members: Member[] = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       const member: Member = {
-        id: doc.id, 
+        id: doc.id,
         name: data['name'],
         email: data['email'],
         imageUrl: data['imageUrl'],
@@ -130,7 +118,7 @@ export class AuthenticationService {
     return members;
   }
 
-  async updateProfileImageOfUser(downloadURL: string){
+  async updateProfileImageOfUser(downloadURL: string) {
     const userId = this.getUserUid();
     await updateDoc(doc(this.getReference(), "member", userId), {
       imageUrl: downloadURL
@@ -164,11 +152,11 @@ export class AuthenticationService {
 
   async addChannelIdToMember(docRefid: string) {
     const userDocRef = doc(this.getReference(), "member", this.getUserUid());
-  
+
     await updateDoc(userDocRef, {
       channelIds: arrayUnion(docRefid)
     });
-  
+
     console.log("Channel ID erfolgreich zum Array hinzugefügt:", docRefid);
   }
 
@@ -176,10 +164,10 @@ export class AuthenticationService {
     return getFirestore();
   }
 
-  async getCurrentMemberData(){
+  async getCurrentMemberData() {
     const docRef = doc(this.getReference(), 'member', this.getUserUid());
     const docSnap = await getDoc(docRef);
-  
+
     if (docSnap.exists()) {
       const data = docSnap.data();
       // console.log("Document data:", docSnap.data());
@@ -200,11 +188,87 @@ export class AuthenticationService {
   }
 
 
+  // Messages
+  async readChannel() {
+    const docRef = doc(this.getReference(), "channels", "wMwhBmnxQKbVZ3cifLBG");
+    const channel = await getDoc(docRef);
+
+    if (channel.exists()) {
+      console.log("Document data:", channel.data());
+      this.readMessages(channel.id)
+    } else {
+      console.log("No such document!");
+    }
+  }
+
+  async createMessage(message: string, imagePreviews: any) {
+    const now = new Date();
+    const cityDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
+    const messageCollectionRef = collection(cityDocRef, "messages");
+    const messageDocRef = await addDoc(messageCollectionRef, {
+      user: this.getUserUid(),
+      name: this.currentMember.name,
+      time: `${now.getHours()}:${now.getMinutes()}`,
+      message: message,
+      profileImage: this.currentMember.imageUrl,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      reactions: {
+        like: [],
+        rocket: []
+      },
+      answers: [],
+      attachmen: imagePreviews.filter((item: any): item is string => typeof item === 'string')
+    });
+    this.updateChannelMessages(messageDocRef.id)
+  }
+
+  async updateChannelMessages(messageId: string) {
+    const washingtonRef = doc(this.getReference(), "channels", "wMwhBmnxQKbVZ3cifLBG");
+    await updateDoc(washingtonRef, {
+      messages: arrayUnion(messageId)
+    });
+  }
+
+  async readMessages(channel: string) {
+    const querySnapshot = await getDocs(collection(this.getReference(), "channels", channel, "messages"));
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+    });
+  }
+
+  //Thread
+  async createThread(message: string, imagePreviews: any) {
+    const now = new Date();
+    const channelDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
+    const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
+    const threadCollectionRef = collection(messageDocRef, "threads");
+    const threadDocRef = await addDoc(threadCollectionRef, {
+      user: this.getUserUid(),
+      name: this.currentMember.name,
+      time: `${now.getHours()}:${now.getMinutes()}`,
+      message: message,
+      profileImage: this.currentMember.imageUrl,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      reactions: {
+        like: [],
+        rocket: []
+      },
+      attachmen: imagePreviews.filter((item: any): item is string => typeof item === 'string')
+    });
+    this.updateChannelMessagesThread(threadDocRef.id);
+  }
+
+  async updateChannelMessagesThread(threadId: string) {
+    const channelDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
+    const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
+    await updateDoc(messageDocRef, {
+      answers: arrayUnion(threadId)
+    });
+  }
+
   // cloud storage 
-
-  uploadMultipleImages(files:FileList, folderName:string = 'User'){
-
-    Array.from(files).forEach((file, index) => { 
+  uploadMultipleImages(files: FileList, folderName: string = 'User') {
+    Array.from(files).forEach((file, index) => {
       const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
       console.log('herllo')
       uploadBytes(fileRef, file).then((snapshot) => {
@@ -217,7 +281,7 @@ export class AuthenticationService {
 
   async uploadImage(file: File, folderName: string = 'User'): Promise<string> {
     const fileRef = ref(this.storage, `${folderName}/${this.getUserUid()}/${file.name}`);
-    
+
     return uploadBytes(fileRef, file)
       .then(() => {
         console.log('File uploaded:', file);

@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ImagesPreviewComponent } from "./images-preview/images-preview.component";
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { Message, Thread } from '../../../../interface/message';
 
 
 @Component({
@@ -38,27 +39,11 @@ export class ChatMessageFieldComponent {
 
   @Output() messagesUpdated = new EventEmitter<void>();
 
-  constructor(public object: MessagesService, public test: AuthenticationService) { }
+  constructor(public object: MessagesService, public auth: AuthenticationService) {}
 
-  sendMessage() {
-    const now = new Date();
-    const userMessage = {
-      user: 'uidTestId',
-      name: 'Max Mustermann',
-      time: `${now.getHours()}:${now.getMinutes()}`,
-      message: this.messageField,
-      profileImage: this.object.profileImage,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      thread: {
-        answer: [],
-      },
-      attachmen:  this.imagePreviews.filter((item): item is string => typeof item === 'string')
-    };
-    this.object.message.push(userMessage);
+ async sendMessage() {
+    await this.auth.getCurrentMemberData();
+    this.auth.createMessage(this.messageField, this.imagePreviews)
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];
@@ -86,7 +71,7 @@ export class ChatMessageFieldComponent {
           this.imagePreviews = [...this.imagePreviews, reader.result];
           console.log(this.imageUploads);
           console.log(file);
-          this.test.uploadMultipleImages(files);
+          this.auth.uploadMultipleImages(files);
         };
         reader.readAsDataURL(file);
       });

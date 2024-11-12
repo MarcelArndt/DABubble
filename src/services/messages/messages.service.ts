@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Message } from '../../interface/message';
+import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,7 @@ import { Message } from '../../interface/message';
 export class MessagesService {
   userId: string = 'uidTestId';
   profileImage: string = '/img/profile-pic/003.svg';
+
 
   public message: Message[] = [
     {
@@ -20,9 +22,7 @@ export class MessagesService {
         like: ['1', '2', '3'],
         rocket: []
       },
-      thread: {
-        answer: [],
-      },
+      answers: [],
       attachmen: [
         '/img/profile-pic/004.svg',
         '/img/profile-pic/004.svg',
@@ -39,9 +39,7 @@ export class MessagesService {
         like: [],
         rocket: []
       },
-      thread: {
-        answer: [],
-      },
+      answers: [],
       attachmen: [
         '/img/profile-pic/004.svg',
       ]

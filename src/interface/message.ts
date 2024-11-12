@@ -16,7 +16,6 @@ export interface TestChannel {
   admin: string;
   description: string | '';
   isPublic: boolean;
-
 }
 
 export interface Message {
@@ -30,10 +29,7 @@ export interface Message {
     like: string[],
     rocket: string[]
   },
-  thread: {
-    answer: string[],
-  },
-
+  answers: string[],
   attachmen: string[]
 }
 
