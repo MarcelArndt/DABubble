@@ -1,4 +1,4 @@
-import { Component, HostListener, Renderer2, ElementRef } from '@angular/core';
+import { Component, HostListener, Renderer2, ElementRef, Output, EventEmitter } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
@@ -15,5 +15,30 @@ import { DarkModeService } from '../../../services/darkMode/dark-mode.service';
   styleUrl: './main-header.component.scss'
 })
 export class MainHeaderComponent {
-  constructor(private renderer: Renderer2, private elRef: ElementRef, public darkmode : DarkModeService){}
+  windowWidth: number = window.innerWidth; 
+  placeholder: string = 'Search in Devspace';
+
+  @Output() backToDevSpaceEvent = new EventEmitter();
+
+  constructor(private renderer: Renderer2, private elRef: ElementRef, public darkmode : DarkModeService){
+    this.updatePlaceholder();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.windowWidth = window.innerWidth;
+    this.updatePlaceholder();
+  }
+
+  updatePlaceholder() {
+    if (this.windowWidth <= 600 && this.windowWidth >= 450) {
+      this.placeholder = 'Search'; 
+    } else {
+      this.placeholder = 'Search in Devspace'; 
+    }
+  }
+
+  backToDevSpace(){
+    this.backToDevSpaceEvent.emit();
+  }
 }

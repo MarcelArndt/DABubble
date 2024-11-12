@@ -133,8 +133,14 @@ export class DevspaceComponent implements OnInit{
   }
 
   closeNavBar() { 
-    if (window.innerWidth < 1250) {
+    if (window.innerWidth <= 1250) {
       this.navBarIsClosed = false;
+    }
+  }
+
+  openNavBar(){
+    if (window.innerWidth <= 450) {
+      this.navBarIsClosed = true;
     }
   }
 

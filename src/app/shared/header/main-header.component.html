@@ -1,8 +1,17 @@
 <div class="headerComponent" >
     <div class="headerMainWrapper">
         <div class="headerContentWrapper">
-            <div class="logo"><img [src]="darkmode.isDarkMode() ? './img/main-assets/main-logo-dark.svg' : './img/main-assets/main-logo.svg'"></div>
-            <app-searchbar class="nonMobilSearchbar" icon="search" placeholder="Search in Devspace" [align_reverse]='true'></app-searchbar>
+            <div class="logo">
+                <img [src]="darkmode.isDarkMode() ? './img/main-assets/main-logo-dark.svg' : './img/main-assets/main-logo.svg'">
+            </div>
+            <div class="serverAndBackToNavContainer" (click)="backToDevSpace()">
+                <button class="backToSideNavButton">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <img src="/img/devspace/titleAndServerSvg.svg">
+                <span>Devspace</span>
+            </div>
+            <app-searchbar class="nonMobilSearchbar" icon="search" [placeholder]="this.placeholder" [align_reverse]='true'></app-searchbar>
             <app-profile-navigation></app-profile-navigation>
         </div>
     </div>
