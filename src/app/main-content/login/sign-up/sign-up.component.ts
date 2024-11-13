@@ -3,8 +3,7 @@ import { InputFieldComponent } from '../../../shared/header/input-field/input-fi
 import { RouterModule } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
-import { FormsModule, NgForm} from '@angular/forms';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-up',

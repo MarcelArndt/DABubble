@@ -6,7 +6,7 @@
                 <div class="animationContainer">
                     <div class="devider"></div>
                     <div class="Logo-Wrapper">
-                        <div class="logo"><img src="./img/main-assets/main-logo.svg"></div>
+                        <div class="logo"><img [src]="darkmode.isDarkMode() ? './img/main-assets/main-logo-dark.svg' : './img/main-assets/main-logo.svg'"></div>
                     </div>
                     <div class="devider"></div>
                 </div>
