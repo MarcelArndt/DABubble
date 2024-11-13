@@ -23,7 +23,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, Validators, React
   ]
 })
 
-
 export class InputFieldComponent implements ControlValueAccessor {
   constructor(private renderer: Renderer2, private elRef: ElementRef,) {}
 

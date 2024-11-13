@@ -21,6 +21,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 
 export class SignUpComponent {
+
+  constructor(private auth: AuthenticationService) {
+  }
+
   @ViewChild(InputFieldComponent) childComponent!: InputFieldComponent;
   fullName: string = '';
   email: string = '';
@@ -38,9 +42,6 @@ export class SignUpComponent {
     this.eventInChild.emit(index);
   }
 
-  constructor(private auth: AuthenticationService) {
-  }
-
   fillValues(){
     this.fullName = this.myForm.value.fullName || '';
     this.email = this.myForm.value.email || '';
@@ -56,14 +57,7 @@ export class SignUpComponent {
       this.fillValues();
       this.registerUser();
       this.sendClickToParentPageCounter(2);
-      console.log('Success')
     }
-  }
-
-  printFormValues() {
-    console.log('Form Values:', this.myForm.value.fullName);
-    console.log('Form Values:', this.myForm.value.email);
-    console.log('Form Values:', this.myForm.value.password);
   }
 
 }

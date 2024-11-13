@@ -18,7 +18,7 @@
     }
 
     <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
-        <input name="inputName" [formControl]="inputControl" #inputField [required]="required ? true: false" [type]="type" [minlength]="minlength" [placeholder]="placeholder" [pattern]="pattern"/>
+        <input name="inputName" [formControl]="inputControl" [required]="required ? true: false" [type]="type" [minlength]="minlength" [placeholder]="placeholder" [pattern]="pattern"/>
         <mat-icon>{{icon}}</mat-icon>
     </div>
 
