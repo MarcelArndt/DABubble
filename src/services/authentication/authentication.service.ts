@@ -17,6 +17,7 @@ export class AuthenticationService {
   private storage;
   memberId: string = '';
   currentMember!: Member;
+  currentChannelId: string = '7oe1XRFotJY5IhNzFEbL';
 
   constructor(private router: Router) {
     this.auth = inject(Auth);
@@ -233,23 +234,37 @@ export class AuthenticationService {
   messagesUpdated = new Subject<void>();
 
   async readChannel() {
-    const docRef = doc(this.getReference(), "channels", "wMwhBmnxQKbVZ3cifLBG");
+    const docRef = doc(this.getReference(), "channels", this.currentChannelId);
     const channel = await getDoc(docRef);
+  
     if (channel.exists()) {
-      this.listenToMessages(channel.id);
+      await this.loadInitialMessages(this.currentChannelId); // Erstes Laden synchronisiert die Nachrichten
+      this.listenToMessages(this.currentChannelId); // Startet Echtzeit-Updates
     } else {
       console.log("No such document!");
     }
   }
+  
+  // Erstmaliges Laden aller Nachrichten
+  async loadInitialMessages(channelId: string) {
+    const messagesCollectionRef = collection(this.getReference(), "channels", channelId, "messages");
+    const querySnapshot = await getDocs(messagesCollectionRef);
+    this.messages = querySnapshot.docs
+      .map(doc => doc.data())
+      .sort((a, b) => a['timestamp'] - b['timestamp']);
+    this.messagesUpdated.next(); // Aktualisiert die Nachrichtenanzeige einmalig
+  }
 
-  listenToMessages(channel: string) {
-    const messagesCollectionRef = collection(this.getReference(), "channels", channel, "messages");
+  listenToMessages(channelId: string) {
+    const messagesCollectionRef = collection(this.getReference(), "channels", channelId, "messages");
+  
     onSnapshot(messagesCollectionRef, (querySnapshot) => {
       const loadedMessages = querySnapshot.docs
         .map(doc => doc.data())
         .sort((a, b) => a['timestamp'] - b['timestamp']);
   
-      if (loadedMessages.length > 0) {  // Nur Nachrichten-Update, wenn Daten vorhanden sind
+      // Vermeidet Aktualisierung bei leerem Zustand und initialisiert nur bei vorhandenem Inhalt
+      if (loadedMessages.length > 0) {
         this.messages = loadedMessages;
         this.messagesUpdated.next();
       }
@@ -258,7 +273,7 @@ export class AuthenticationService {
 
   async createMessage(message: string, imagePreviews: any) {
     const now = new Date();
-    const cityDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
+    const cityDocRef = doc(this.getReference(), "channels", this.currentChannelId);
     const messageCollectionRef = collection(cityDocRef, "messages");
   
     const messageDocRef = await addDoc(messageCollectionRef, {
@@ -273,20 +288,11 @@ export class AuthenticationService {
         like: [],
         rocket: []
       },
-      answers: [],
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
-  
-    this.updateChannelMessages(messageDocRef.id);
     this.messagesUpdated.next();
   }
 
-  async updateChannelMessages(messageId: string) {
-    const washingtonRef = doc(this.getReference(), "channels", "wMwhBmnxQKbVZ3cifLBG");
-    await updateDoc(washingtonRef, {
-      messages: arrayUnion(messageId)
-    });
-  }
 
   checkUser(message: any): boolean {
     return message.user === this.memberId;

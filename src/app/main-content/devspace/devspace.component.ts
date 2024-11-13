@@ -41,7 +41,7 @@ import { SearchbarComponent } from '../../shared/header/searchbar/searchbar.comp
           // width: '0px',
           opacity: 0,
           overflow: 'hidden',
-          transform: 'translateX(-100%)' 
+          transform: 'translateX(-100%)'
         }),
         animate(
           '125ms ease-out',
@@ -53,13 +53,13 @@ import { SearchbarComponent } from '../../shared/header/searchbar/searchbar.comp
         ),
         query('.nav-item', [
           style({ opacity: 0, display: 'none' }),
-          animate('125ms ease-out', style({ opacity: 1, display: 'block' })) 
+          animate('125ms ease-out', style({ opacity: 1, display: 'block' }))
         ])
       ]),
       transition(':leave', [
         query('.nav-item', [
           style({ opacity: 1, display: 'block' }),
-          animate('125ms ease-out', style({ opacity: 0, display: 'none' })) 
+          animate('125ms ease-out', style({ opacity: 0, display: 'none' }))
         ]),
         animate(
           '125ms ease-in',
@@ -74,7 +74,7 @@ import { SearchbarComponent } from '../../shared/header/searchbar/searchbar.comp
     ])
   ]
 })
-export class DevspaceComponent implements OnInit{
+export class DevspaceComponent implements OnInit {
   navBarIsClosed: boolean = true;
   contactsAreVisible: boolean = true;
   channelsAreVisible: boolean = true;
@@ -84,9 +84,9 @@ export class DevspaceComponent implements OnInit{
   channels?: Channel[];
 
   //Searchbar
-  @Input() icon: string = 'search'; 
+  @Input() icon: string = 'search';
   @Input() addClass: string[] = [];
-  @Input() placeholder: string = 'Search in Devspace'; 
+  @Input() placeholder: string = 'Search in Devspace';
   @Input() align_reverse: boolean = false;
 
   @HostListener('focusin', ['$event'])
@@ -110,53 +110,54 @@ export class DevspaceComponent implements OnInit{
   }
   ///////
 
-  
-  constructor (
-    private memberService: MemberService, 
-    private channelService: ChannelService, 
+
+  constructor(
+    private memberService: MemberService,
+    private channelService: ChannelService,
     private mainContentService: MainContentService,
     private authenticationService: AuthenticationService,
-    private renderer: Renderer2, 
-    private elRef: ElementRef )
-    {
+    private renderer: Renderer2,
+    private elRef: ElementRef) {
   }
 
-  async ngOnInit(){
+  async ngOnInit() {
     this.channels = await this.authenticationService.getAllChannelsFromFirestore();
     this.members = await this.authenticationService.getAllMembers();
   }
 
-  toggleNavBar() { 
+  toggleNavBar() {
     this.navBarIsClosed = !this.navBarIsClosed;
   }
 
-  closeNavBar() { 
+  closeNavBar() {
     if (window.innerWidth <= 1250) {
       this.navBarIsClosed = false;
     }
   }
 
-  openNavBar(){
+  openNavBar() {
     if (window.innerWidth <= 450) {
       this.navBarIsClosed = true;
     }
   }
 
-  dropChannels(){
+  dropChannels() {
     this.channelsAreVisible = !this.channelsAreVisible;
   }
 
-  dropContacts(){
+  dropContacts() {
     this.contactsAreVisible = !this.contactsAreVisible;
   }
 
-  openCreateChannelDialog(){
+  openCreateChannelDialog() {
     const dialogRef = this.dialog.open(CreateChannelComponent);
     dialogRef.afterClosed().subscribe();
   }
-  
-  checkWindowAndOpenChannel(){
+
+  async checkWindowAndOpenChannel(channel: any) {
     this.mainContentService.hideThread();
     window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
+    this.authenticationService.currentChannelId = channel.id;
+    await this.authenticationService.readChannel();
   }
 }

@@ -32,10 +32,9 @@ export class ChatComponent {
   }
 
   ngOnInit() {
-    this.auth.readChannel()
     this.auth.messagesUpdated.subscribe(() => {
       this.message = [...this.auth.messages];
-      this.isLoading = false; // Nach dem ersten Laden wird isLoading auf false gesetzt
+      this.isLoading = false;
       this.shouldScroll = true;
     });
   }
@@ -61,9 +60,9 @@ export class ChatComponent {
   }
 
   handleDeleteMessage(index: number) {
-    this.object.deleteMessage(index);
-    this.message = [...this.object.message];
-    this.shouldScroll = false;
+    // this.object.deleteMessage(index);
+    // this.message = [...this.object.message];
+    // this.shouldScroll = false;
   }
 
   // deleteMessage(index: number) {

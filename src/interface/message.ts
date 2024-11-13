@@ -29,7 +29,6 @@ export interface Message {
     like: string[],
     rocket: string[]
   },
-  answers: string[],
   attachment: string[]
 }
 
