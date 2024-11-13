@@ -37,14 +37,14 @@ export class ChatMessageFieldComponent {
   selectedIndex = -1;
   @ViewChild('userListContainer') userListContainer!: ElementRef;
 
-  @Output() messagesUpdated = new EventEmitter<void>();
+  // @Output() messagesUpdated = new EventEmitter<void>();
 
   constructor(public object: MessagesService, public auth: AuthenticationService) {}
 
  async sendMessage() {
     await this.auth.getCurrentMemberData();
     this.auth.createMessage(this.messageField, this.imagePreviews)
-    this.messagesUpdated.emit();
+    // this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];

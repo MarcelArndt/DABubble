@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MessagesService } from '../../../../services/messages/messages.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ import { MessagesService } from '../../../../services/messages/messages.service'
 export class MessageNameComponent {
   @Input() message: any;
 
-  constructor(public object: MessagesService) { }
+  constructor(public object: MessagesService,  public auth: AuthenticationService) { }
+
 
 
 }

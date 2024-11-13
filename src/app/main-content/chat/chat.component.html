@@ -1,12 +1,20 @@
 <section>
     <app-chat-header></app-chat-header>
 
-    <div class="main-message-container"  #messageContainer>
-        <!-- <div *ngFor="let msg of message; index as i">
-            <app-my-message  *ngIf="msg.user === currentUserId" [message]="msg" (delete)="deleteMessage(i)"></app-my-message>
-            <app-member-message *ngIf="msg.user !== currentUserId" [message]="msg"></app-member-message>
-        </div> -->
-        <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i" (deleteEvent)="handleDeleteMessage(i)"></app-message>
+    <div class="main-message-container" #messageContainer>
+        <ng-container *ngIf="isLoading; else messageList">
+            <!-- Loader-Komponente oder einfacher Ladeindikator -->
+            <div class="loader">Laden...</div>
+        </ng-container>
+
+        <ng-template #messageList>
+            <app-message 
+                *ngFor="let msg of message; index as i" 
+                [message]="msg" 
+                [index]="i" 
+                (deleteEvent)="handleDeleteMessage(i)">
+            </app-message>
+        </ng-template>
     </div>
 
     <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"></app-chat-message-field>

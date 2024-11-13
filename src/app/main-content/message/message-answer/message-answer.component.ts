@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { EventService } from '../../../../services/event/event.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { MainContentService } from '../../../../services/main-content/main-content.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 
@@ -18,7 +19,12 @@ import { MainContentService } from '../../../../services/main-content/main-conte
 export class MessageAnswerComponent {
   @Input() message: any;
 
-  constructor(public object: MessagesService, private eventService: EventService, private mainContentService: MainContentService) { }
+  constructor(
+    public object: MessagesService,
+    private eventService: EventService, 
+    private mainContentService: MainContentService,
+    public auth: AuthenticationService
+  ) { }
 
   openThread() {
     this.eventService.emitEvent('openThread');

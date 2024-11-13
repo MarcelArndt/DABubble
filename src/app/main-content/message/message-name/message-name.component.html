@@ -1,4 +1,4 @@
-<div class="name" [ngClass]="object.checkUser(message) ? 'row-reverse flex-end' : 'flex-start'">
-    <h5 [ngClass]="object.checkUser(message) ? 'ml' : 'mr'">{{message.name}}</h5>
+<div class="name" [ngClass]="auth.checkUser(message) ? 'row-reverse flex-end' : 'flex-start'">
+    <h5 [ngClass]="auth.checkUser(message) ? 'ml' : 'mr'">{{message.name}}</h5>
     <p>{{message.time}}</p>
 </div>

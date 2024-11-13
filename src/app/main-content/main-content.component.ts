@@ -4,7 +4,6 @@ import { ChatComponent } from "./chat/chat.component";
 import { ThreadComponent } from "./thread/thread.component";
 import { DevspaceComponent } from "./devspace/devspace.component";
 import { AuthenticationService } from '../../services/authentication/authentication.service';
-import { ChannelService } from '../../services/channel/channel.service';
 import { CommonModule } from '@angular/common';
 import { MainContentService } from '../../services/main-content/main-content.service';
 
@@ -49,6 +48,7 @@ export class MainContentComponent {
     this.mainContentService.threadIsOpen.subscribe(value => {
       this.threadIsOpen = value;
     });
+    this.auth.readChannel();
   }
 
 

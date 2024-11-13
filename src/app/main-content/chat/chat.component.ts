@@ -26,16 +26,22 @@ export class ChatComponent {
   public currentUserId: string = 'uidTestId';
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   private shouldScroll: boolean = true;
+  public isLoading: boolean = true;
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) {}
+  constructor(public object: MessagesService, public auth: AuthenticationService) {
+  }
 
-  ngOnInit(): void {
-    this.auth.readChannel(); 
-    this.message = this.object.message;
+  ngOnInit() {
+    this.auth.readChannel()
+    this.auth.messagesUpdated.subscribe(() => {
+      this.message = [...this.auth.messages];
+      this.isLoading = false; // Nach dem ersten Laden wird isLoading auf false gesetzt
+      this.shouldScroll = true;
+    });
   }
 
   onMessagesUpdated() {
-    this.message = [...this.object.message];
+    this.message = [...this.auth.messages];
     this.shouldScroll = true;
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output, Renderer2, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, Input, OnInit, Renderer2 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { trigger, style, animate, transition, query } from '@angular/animations';
@@ -22,7 +22,6 @@ import { SearchbarComponent } from '../../shared/header/searchbar/searchbar.comp
     MatButtonModule,
     MatIcon,
     MatDialogModule,
-    SearchbarComponent,
   ],
   templateUrl: './devspace.component.html',
   styleUrl: './devspace.component.scss',

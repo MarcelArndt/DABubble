@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessagesService } from '../../../../services/messages/messages.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-message-reation',
@@ -17,7 +18,7 @@ import { MessagesService } from '../../../../services/messages/messages.service'
 export class MessageReationComponent {
   @Input() message: any;
 
-  constructor(public object: MessagesService) {}
+  constructor(public object: MessagesService,  public auth: AuthenticationService) {}
 
   likeMessage() {
     const userIdIndex = this.message.reactions.like.indexOf(this.object.userId);

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { EventService } from '../../../../services/event/event.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { MainContentService } from '../../../../services/main-content/main-content.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 @Component({
@@ -27,7 +28,11 @@ export class MessageOptionsComponent {
   @Output() deleteEvent = new EventEmitter<void>();
   @Output() toggleEdit = new EventEmitter<void>();
 
-  constructor(public object: MessagesService, private eventService: EventService, private mainContentService: MainContentService) { }
+  constructor(
+    public object: MessagesService, 
+    private eventService: EventService, 
+    private mainContentService: MainContentService,  
+    public auth: AuthenticationService) { }
 
   toggleEditMode() {
     this.toggleEdit.emit();

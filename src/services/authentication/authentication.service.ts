@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
 import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
-import { writeBatch } from '@firebase/firestore';
+import { onSnapshot, writeBatch } from '@firebase/firestore';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -179,7 +180,6 @@ export class AuthenticationService {
     await this.addChannelIdToMembers(channel.membersId, channel.id);  
   }
   
-  
   async addChannelIdToMembers(memberIds: string[], channelId: string) {
     const batch = writeBatch(this.getReference());
     memberIds.forEach((memberId) => {
@@ -191,7 +191,6 @@ export class AuthenticationService {
     await batch.commit();
   }
   
-
   async addChannelIdToCurrentUser(docRefid: string) {
     const userDocRef = doc(this.getReference(), "member", this.getCurrentUserUid());
     await updateDoc(userDocRef, {
@@ -228,23 +227,40 @@ export class AuthenticationService {
   }
 
 
+
   // Messages
+  messages: any = [];
+  messagesUpdated = new Subject<void>();
+
   async readChannel() {
     const docRef = doc(this.getReference(), "channels", "wMwhBmnxQKbVZ3cifLBG");
     const channel = await getDoc(docRef);
-
     if (channel.exists()) {
-      console.log("Document data:", channel.data());
-      this.readMessages(channel.id)
+      this.listenToMessages(channel.id);
     } else {
       console.log("No such document!");
     }
+  }
+
+  listenToMessages(channel: string) {
+    const messagesCollectionRef = collection(this.getReference(), "channels", channel, "messages");
+    onSnapshot(messagesCollectionRef, (querySnapshot) => {
+      const loadedMessages = querySnapshot.docs
+        .map(doc => doc.data())
+        .sort((a, b) => a['timestamp'] - b['timestamp']);
+  
+      if (loadedMessages.length > 0) {  // Nur Nachrichten-Update, wenn Daten vorhanden sind
+        this.messages = loadedMessages;
+        this.messagesUpdated.next();
+      }
+    });
   }
 
   async createMessage(message: string, imagePreviews: any) {
     const now = new Date();
     const cityDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
     const messageCollectionRef = collection(cityDocRef, "messages");
+  
     const messageDocRef = await addDoc(messageCollectionRef, {
       user: this.getCurrentUserUid(),
       name: this.currentMember.name,
@@ -252,6 +268,7 @@ export class AuthenticationService {
       message: message,
       profileImage: this.currentMember.imageUrl,
       createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      timestamp: now.getTime(),  // Hinzufügen des Zeitstempels
       reactions: {
         like: [],
         rocket: []
@@ -259,7 +276,9 @@ export class AuthenticationService {
       answers: [],
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
-    this.updateChannelMessages(messageDocRef.id)
+  
+    this.updateChannelMessages(messageDocRef.id);
+    this.messagesUpdated.next();
   }
 
   async updateChannelMessages(messageId: string) {
@@ -269,11 +288,8 @@ export class AuthenticationService {
     });
   }
 
-  async readMessages(channel: string) {
-    const querySnapshot = await getDocs(collection(this.getReference(), "channels", channel, "messages"));
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
+  checkUser(message: any): boolean {
+    return message.user === this.memberId;
   }
 
   //Thread
@@ -305,6 +321,8 @@ export class AuthenticationService {
       answers: arrayUnion(threadId)
     });
   }
+
+
 
   // cloud storage 
   uploadMultipleImages(files: FileList, folderName: string = 'User') {

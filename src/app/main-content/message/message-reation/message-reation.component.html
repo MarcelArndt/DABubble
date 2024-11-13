@@ -1,4 +1,4 @@
-<div class="reaction-container" [ngClass]="object.checkUser(message) ? 'flex-end' : 'flex-start'">
+<div class="reaction-container" [ngClass]="auth.checkUser(message) ? 'flex-end' : 'flex-start'">
     <button *ngIf="message.reactions.like.length" (click)="likeMessage()">
         <img src="/img/reactions/like.svg" alt="">
         <p>{{message.reactions.like.length}}</p>
