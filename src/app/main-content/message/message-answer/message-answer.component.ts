@@ -29,6 +29,7 @@ export class MessageAnswerComponent {
   openThread() {
     this.eventService.emitEvent('openThread');
     this.checkWindowAndOpenThread();
+    this.auth.readThread(this.message.messageId);
   }
 
   checkWindowAndOpenThread(){

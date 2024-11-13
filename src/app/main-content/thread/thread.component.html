@@ -1,6 +1,14 @@
 <section *ngIf="threadIsOpen" @toggleThread>
     <app-thread-header class="thread-item" (closeThreadEvent)="toggleThread()"></app-thread-header>
     <div class="main-message-container thread-item">
+        <ng-template #messageList>
+            <app-message 
+                *ngFor="let msg of messages; index as i" 
+                [message]="msg" 
+                [index]="i" 
+                (deleteEvent)="handleDeleteMessage(i)">
+            </app-message>
+        </ng-template>
     </div>
     <app-thread-message-field class="thread-item"></app-thread-message-field>
 </section>

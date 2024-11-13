@@ -236,34 +236,29 @@ export class AuthenticationService {
   async readChannel() {
     const docRef = doc(this.getReference(), "channels", this.currentChannelId);
     const channel = await getDoc(docRef);
-  
     if (channel.exists()) {
-      await this.loadInitialMessages(this.currentChannelId); // Erstes Laden synchronisiert die Nachrichten
-      this.listenToMessages(this.currentChannelId); // Startet Echtzeit-Updates
+      await this.loadInitialMessages(this.currentChannelId); 
+      this.listenToMessages(this.currentChannelId); 
     } else {
       console.log("No such document!");
     }
   }
   
-  // Erstmaliges Laden aller Nachrichten
   async loadInitialMessages(channelId: string) {
     const messagesCollectionRef = collection(this.getReference(), "channels", channelId, "messages");
     const querySnapshot = await getDocs(messagesCollectionRef);
     this.messages = querySnapshot.docs
       .map(doc => doc.data())
       .sort((a, b) => a['timestamp'] - b['timestamp']);
-    this.messagesUpdated.next(); // Aktualisiert die Nachrichtenanzeige einmalig
+    this.messagesUpdated.next();
   }
 
   listenToMessages(channelId: string) {
     const messagesCollectionRef = collection(this.getReference(), "channels", channelId, "messages");
-  
     onSnapshot(messagesCollectionRef, (querySnapshot) => {
       const loadedMessages = querySnapshot.docs
         .map(doc => doc.data())
         .sort((a, b) => a['timestamp'] - b['timestamp']);
-  
-      // Vermeidet Aktualisierung bei leerem Zustand und initialisiert nur bei vorhandenem Inhalt
       if (loadedMessages.length > 0) {
         this.messages = loadedMessages;
         this.messagesUpdated.next();
@@ -275,7 +270,6 @@ export class AuthenticationService {
     const now = new Date();
     const cityDocRef = doc(this.getReference(), "channels", this.currentChannelId);
     const messageCollectionRef = collection(cityDocRef, "messages");
-  
     const messageDocRef = await addDoc(messageCollectionRef, {
       user: this.getCurrentUserUid(),
       name: this.currentMember.name,
@@ -283,26 +277,30 @@ export class AuthenticationService {
       message: message,
       profileImage: this.currentMember.imageUrl,
       createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      timestamp: now.getTime(),  // Hinzufügen des Zeitstempels
+      timestamp: now.getTime(),
       reactions: {
         like: [],
         rocket: []
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
+    await updateDoc(messageDocRef, {
+      messageId: messageDocRef.id
+    });
     this.messagesUpdated.next();
   }
-
 
   checkUser(message: any): boolean {
     return message.user === this.memberId;
   }
 
   //Thread
+  threadMessages: any = [];
+
   async createThread(message: string, imagePreviews: any) {
     const now = new Date();
-    const channelDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
-    const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
+    const channelDocRef = doc(this.getReference(), "channels", this.currentChannelId);
+    const messageDocRef = doc(channelDocRef, "messages", 'D7glbpvdv5sdwZy6cq0V');
     const threadCollectionRef = collection(messageDocRef, "threads");
     const threadDocRef = await addDoc(threadCollectionRef, {
       user: this.getCurrentUserUid(),
@@ -317,16 +315,20 @@ export class AuthenticationService {
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
-    this.updateChannelMessagesThread(threadDocRef.id);
   }
 
-  async updateChannelMessagesThread(threadId: string) {
-    const channelDocRef = doc(this.getReference(), "channels", 'wMwhBmnxQKbVZ3cifLBG');
-    const messageDocRef = doc(channelDocRef, "messages", 'k0O3xIu5C9slvUOBM0Ed');
-    await updateDoc(messageDocRef, {
-      answers: arrayUnion(threadId)
+  async readThread(messageId: string) {
+    const messageDocRef = doc(this.getReference(), "channels", this.currentChannelId, "messages", messageId);
+    const threadCollectionRef = collection(messageDocRef, "threads");
+    const querySnapshot = await getDocs(threadCollectionRef);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+      this.threadMessages.push(doc.data());
+      console.log(this.threadMessages)
     });
   }
+
+
 
 
 
