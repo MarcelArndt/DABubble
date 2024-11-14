@@ -73,12 +73,9 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // Lädt alle Mitglieder von Firebase und weist sie dem lokalen Array `members` zu
-    this.members = await this.auth.getAllMembers();
-    console.log(this.members);
-
-    
-    // Beobachten von Änderungen im Eingabefeld und Filtern der Mitglieder
+    this.auth.getAllMembersFromFirestore((updatedMembers: Member[]) => {
+      this.members = updatedMembers;
+    });
     this.filteredMembers$ = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || ''))

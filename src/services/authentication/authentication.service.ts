@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile } from '@angular/fire/auth';
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
 import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
-import { CollectionReference, DocumentData, onSnapshot, where, writeBatch } from '@firebase/firestore';
+import { CollectionReference, DocumentData, onSnapshot, QuerySnapshot, where, writeBatch } from '@firebase/firestore';
 import { Subject } from 'rxjs';
 import { query } from '@angular/animations';
 
@@ -105,44 +105,47 @@ export class AuthenticationService {
   }
 
 
-
-  // Cloud Firestore 
-  async getAllMembers(): Promise<Member[]> {
-    const querySnapshot = await getDocs(collection(this.getReference(), "member"));
-    const members: Member[] = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      const member: Member = {
-        id: doc.id,
-        name: data['name'],
-        email: data['email'],
-        imageUrl: data['imageUrl'],
-        status: data['status'],
-        channelIds: data['channelIds'] || [],
-        directMessageIds: data['directMessageIds'] || []
-      };
-      members.push(member);
+  getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
+    const membersCollection = collection(this.getReference(), 'member');
+    onSnapshot(membersCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+      const members: Member[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data['name'],
+          email: data['email'],
+          imageUrl: data['imageUrl'],
+          status: data['status'],
+          channelIds: data['channelIds'] || [],
+          directMessageIds: data['directMessageIds'] || []
+        };
+      });
+      onMembersUpdated(members);
+    }, (error) => {
+      console.error("Fehler beim Abrufen der Mitglieder: ", error);
     });
-    return members;
   }
 
-  async getAllChannelsFromFirestore(): Promise<Channel[]> {
-    const querySnapshot = await getDocs(collection(this.getReference(), "channels"));
-    const channels: Channel[] = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      const channel: Channel = {
-        id: data['id'],
-        title: data['title'],
-        messages: data['messages'],
-        membersId: data['membersId'],
-        admin: data['admin'],
-        description: data['description'],
-        isPublic: data['isPublic'],
-      }
-      channels.push(channel);
+
+  async getAllChannelsFromFirestore(onChannelsUpdated: (channels: Channel[]) => void): Promise<void> {
+    const channelsCollection = collection(this.getReference(), 'channels');
+    onSnapshot(channelsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+      const channels: Channel[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: data['id'],
+          title: data['title'],
+          messages: data['messages'],
+          membersId: data['membersId'],
+          admin: data['admin'],
+          description: data['description'],
+          isPublic: data['isPublic'],
+        };
+      });
+      onChannelsUpdated(channels); 
+    }, (error) => {
+      console.error("Fehler beim Abrufen der Channels: ", error);
     });
-    return channels;
   }
 
   async updateProfileImageOfUser(downloadURL: string) {
@@ -167,11 +170,8 @@ export class AuthenticationService {
 
   async addChannelToFirebase(channel: Channel) {
     const userUid = this.getCurrentUserUid();
-    // Step 1: Generate a new document reference with a unique ID
     const docRef = doc(collection(this.getReference(), "channels"));
-    // Step 2: Assign the Firestore-generated ID to the `channel` object
     channel.id = docRef.id;
-    // Step 3: Use `setDoc()` to create the document with the assigned ID
     await setDoc(docRef, {
       id: channel.id,
       title: channel.title,
@@ -212,11 +212,8 @@ export class AuthenticationService {
   async getCurrentMemberData() {
     const docRef = doc(this.getReference(), 'member', this.getCurrentUserUid());
     const docSnap = await getDoc(docRef);
-
     if (docSnap.exists()) {
       const data = docSnap.data();
-      // console.log("Document data:", docSnap.data());
-
       this.currentMember = {
         id: data['id'],
         name: data['name'],
@@ -227,10 +224,37 @@ export class AuthenticationService {
         directMessageIds: data['directMessageIds'],
       }
     } else {
-      // docSnap.data() will be undefined in this case
       console.log("No such document!");
     }
   }
+
+  async updateCurrentMemberData(currentMember: Member): Promise<void> {
+    try {
+        const docRef = doc(this.getReference(), 'member', this.getCurrentUserUid());
+        await updateDoc(docRef, {
+            name: currentMember.name,
+            email: currentMember.email,
+        });
+    } catch (error) {
+        console.error("Error while updating current user data:", error);
+    }
+  }
+
+  async updateAuthProfileData(currentMember: Member): Promise<void> {
+    try {
+        const user = this.auth.currentUser;
+        if (user) {
+            await updateEmail(user, currentMember.email);
+            await updateProfile(user, {
+                displayName: currentMember.name,
+            });
+        } else {
+            console.error("No authentified user found.");
+        }
+    } catch (error) {
+        console.error("Error while updating the data in firebase-authentication:", error);
+    }
+}
 
 
   // Members
@@ -384,6 +408,11 @@ export class AuthenticationService {
         console.error(`Fehler beim Hochladen der Datei ${file.name}:`, error);
       });
     });
+  }
+
+  async getDownloadURLFromFirebase(file: File, folderName: string = 'User'){
+    const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
+    return getDownloadURL(fileRef);
   }
 
   async uploadImage(file: File, folderName: string = 'User'): Promise<string> {

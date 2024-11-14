@@ -28,9 +28,13 @@ export class ProfileComponent {
   // readonly member = model(this.data.member);
   editDialog: boolean = false;
   // member: TestMember;
+  previousMember!: Member;
   currentMember!: Member;
+  downloadURL?: File;
 
   constructor(private authenticationService: AuthenticationService){
+    this.previousMember = this.currentMember;
+
   }
 
   async ngOnInit() {
@@ -42,12 +46,30 @@ export class ProfileComponent {
     this.dialogRef.close();
   }
 
-  save(currentMember: Member){
+  async save(currentMember: Member) {
+    if (this.currentMember === this.previousMember) {
+        this.editDialog = false;
+        return;
+    }
     this.currentMember = currentMember;
+    await Promise.all([
+        this.authenticationService.updateCurrentMemberData(this.currentMember),
+        this.authenticationService.updateAuthProfileData(this.currentMember)
+    ]);
+    if (this.downloadURL) {
+        try {
+            const uploadedUrl = await this.authenticationService.uploadImage(this.downloadURL);
+            await this.authenticationService.updateProfileImageOfUser(uploadedUrl);
+            this.currentMember.imageUrl = uploadedUrl;
+        } catch (error) {
+            console.error('Error while uploading new profile image:', error);
+        }
+    }
     this.editDialog = false;
-  }
+}
 
-  // Methode zum Öffnen des Datei-Dialogs beim Klicken auf das Symbol
+
+
   openFileDialog() {
     this.fileInput.nativeElement.click(); 
   }
@@ -56,19 +78,8 @@ export class ProfileComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      
-      try {
-        // Bild hochladen und die URL zurückgeben
-        const downloadURL = await this.authenticationService.uploadImage(file);
-        this.currentMember.imageUrl = downloadURL; // Setzen der URL im aktuellen Mitgliedsobjekt
-        this.authenticationService.currentMember.imageUrl = downloadURL; // Optional: Update im Service
-        
-        // Update des Profilbilds im Firestore-Dokument des Benutzers
-        await this.authenticationService.updateProfileImageOfUser(downloadURL);
-      } catch (error) {
-        console.error('Fehler beim Hochladen des Bildes:', error);
-      }
+      this.downloadURL = file;
+      const previewUrl = URL.createObjectURL(file);
+      this.currentMember.imageUrl = previewUrl;
     }
-  }
-  
-}
+  }}

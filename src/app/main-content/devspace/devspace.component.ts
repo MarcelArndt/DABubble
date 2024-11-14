@@ -121,8 +121,12 @@ export class DevspaceComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.channels = await this.authenticationService.getAllChannelsFromFirestore();
-    this.members = await this.authenticationService.getAllMembers();
+    this.authenticationService.getAllChannelsFromFirestore((updatedChannels: Channel[]) => {
+      this.channels = updatedChannels;  
+    });  
+    this.authenticationService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
+      this.members = updatedMembers;
+    });
   }
 
   toggleNavBar() {
