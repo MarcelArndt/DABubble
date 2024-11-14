@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-success-creating-account',
   standalone: true,
-  imports: [MatIcon],
+  imports: [],
   templateUrl: './success-creating-account.component.html',
   styleUrl: './success-creating-account.component.scss'
 })
