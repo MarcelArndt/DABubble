@@ -29,8 +29,6 @@ interface Page {
 })
 
 export class LoginComponent {
-
-
   pageNumber:number = 0;
   pageNumberTrashHolder:number = 0;
   isStepForwards = false;
@@ -52,8 +50,6 @@ export class LoginComponent {
 
   checkforStepDirection(){
     this.isStepForwards =  this.pageNumberTrashHolder < this.pageNumber ? true : false;
-
-
   }
 
 
@@ -66,7 +62,6 @@ export class LoginComponent {
 // Is going though PageMap -> For Each Element in PageMap it checks the Type of it and it is looking for a Match. If the type the same, it will return the correct object. otherwise it returns undefined
   findPageByType(type: string, pages: Page[]): Page | undefined {
     for (let eachPage of this.pageMap){
-
       if(eachPage.type == type) return eachPage;
 
       if(eachPage.subPages){
