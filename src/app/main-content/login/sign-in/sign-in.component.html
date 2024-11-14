@@ -3,12 +3,11 @@
     <p>We recommend that you use the email address you use at work.</p>
     <div class="form" [formGroup]="myFormLogin">
         <div class="input-area">   
-
-            <app-input-field  formControlName="email" type="text" minlenght="3"  icon="mail" placeholder="example@email.com" minlength="3" [required]="true"></app-input-field>
+            <app-input-field formControlName="email" type="email" icon="mail" placeholder="example@email.com" [required]="true" minlength="6" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"  ></app-input-field>
             <app-input-field  formControlName="password" type="password" icon="lock" placeholder="Password" minlength="8"  [required]="true"></app-input-field>
         </div>
 
-        <a>Forgot Password?</a>
+        <a (click)="sendClickToParentPageCounter(7)">Forgot Password?</a>
 
         <div class="hrElement"><span>Or Else</span></div>
 

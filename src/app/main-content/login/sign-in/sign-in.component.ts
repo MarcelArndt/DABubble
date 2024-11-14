@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
@@ -23,11 +23,16 @@ export class SignInComponent {
 
   constructor(private auth: AuthenticationService, private router: Router) {}
 
-
   myFormLogin = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)])
   });
+
+  @Output() eventInSignIn = new EventEmitter();
+
+  sendClickToParentPageCounter(index: number = 0) {
+    this.eventInSignIn.emit(index);
+  }
 
   signInUser() {
     this.fillValues();

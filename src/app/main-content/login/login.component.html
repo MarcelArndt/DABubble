@@ -6,11 +6,13 @@
  
     <div class='whiteBox'>
 
-        <app-sign-in [ngClass]='getClass(0)'></app-sign-in>
+        <app-sign-in [ngClass]='getClass(0)'(eventInSignIn)="changePageNumber($event)"></app-sign-in>
         <app-sign-up [ngClass]='getClass(1)'(eventInChild)="changePageNumber($event)"></app-sign-up>
         <app-choose-avatar [ngClass]='getClass(2)' (eventInProfil)="changePageNumber($event)"></app-choose-avatar>
         <app-success-creating-account [ngClass]='getClass(3)' (eventInSuccess)="changePageNumber($event)"></app-success-creating-account>
-        
+        <app-lost-password [ngClass]='getClass(7)'(eventInLostPassword)="changePageNumber($event)"></app-lost-password>
+        <app-reset-password [ngClass]='getClass(8)' (eventInResetPassword)="changePageNumber($event)"></app-reset-password>
+
     </div>
 
     <app-submenu-login (eventInSubMenu)="changePageNumber($event)"></app-submenu-login>
