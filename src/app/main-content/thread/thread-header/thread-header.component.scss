@@ -27,7 +27,7 @@ section {
 
 button {
     @include dFlex();
-    @include heightWidth($w: 35px, $h: 35px); 
+    @include heightWidth($w: 35px, $h: 35px);
     border: none;
     border-radius: 50%;
     background-color: var(--secundary-bg);
@@ -36,4 +36,8 @@ button {
     &:hover {
         background-color: var(--primary-bg);
     }
+}
+
+mat-icon {
+    @include materialSymbols($c: var(--text-black), $fs: 16px);
 }

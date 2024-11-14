@@ -5,8 +5,9 @@ import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
 import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
-import { onSnapshot, writeBatch } from '@firebase/firestore';
+import { CollectionReference, DocumentData, onSnapshot, where, writeBatch } from '@firebase/firestore';
 import { Subject } from 'rxjs';
+import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,10 @@ export class AuthenticationService {
   memberId: string = '';
   currentMember!: Member;
   currentChannelId: string = '7oe1XRFotJY5IhNzFEbL';
-  currentMessageId: string = ''
+  currentMessageId: string = '';
+
+  currentChannelData: any = {};
+
 
   constructor(private router: Router) {
     this.auth = inject(Auth);
@@ -229,6 +233,26 @@ export class AuthenticationService {
   }
 
 
+  // Members
+
+//   async allMembersInChannel() {
+//     let membersId = this.currentChannelData.membersId;
+//     console.log("membersId:", membersId); // Ausgabe der IDs prüfen
+//     for (const id of membersId) {
+//         await this.search(id);
+//     }
+// }
+
+// async search(ids: any) {
+//   const docRef = doc(this.getReference(), "members", ids);
+//   const docSnap = await getDoc(docRef);
+//   if (docSnap.exists()) {
+//       console.log("Document data:", docSnap.data()['imageUrl']);
+//   } else {
+//       console.log(`No document found for ID: ${ids}`);
+//   }
+// }
+
 
   // Messages
   messages: any = [];
@@ -240,8 +264,9 @@ export class AuthenticationService {
     if (channel.exists()) {
       await this.loadInitialMessages(this.currentChannelId);
       this.listenToMessages(this.currentChannelId);
-    } else {
-      console.log("No such document!");
+      this.currentChannelData = channel.data();
+      // this.allMembersInChannel();
+      console.log(this.currentChannelData)
     }
   }
 
@@ -318,7 +343,7 @@ export class AuthenticationService {
         rocket: []
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string'),
-      timestamp: now.getTime() 
+      timestamp: now.getTime()
     });
   }
 
@@ -329,7 +354,7 @@ export class AuthenticationService {
     onSnapshot(threadCollectionRef, (querySnapshot) => {
       const threadsData = querySnapshot.docs
         .map(doc => doc.data())
-        .sort((a, b) => a['timestamp'] - b['timestamp']);     
+        .sort((a, b) => a['timestamp'] - b['timestamp']);
       this.threadMessages = threadsData;
       this.threadUpdated.next();
     });

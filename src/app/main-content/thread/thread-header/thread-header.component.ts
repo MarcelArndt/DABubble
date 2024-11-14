@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MainContentService } from '../../../../services/main-content/main-content.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-thread-header',
@@ -14,7 +15,7 @@ import { MainContentService } from '../../../../services/main-content/main-conte
 export class ThreadHeaderComponent {
   @Output() closeThreadEvent = new EventEmitter();
 
-  constructor(private mainContentService: MainContentService) {}
+  constructor(private mainContentService: MainContentService, public auth: AuthenticationService) {}
 
   closeThread() {
     this.closeThreadEvent.emit();

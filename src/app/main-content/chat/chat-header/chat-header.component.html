@@ -1,14 +1,10 @@
 <section>
     <button class="creator-team-btn" (click)="openEditeChannel()">
         <mat-icon class="hashtag">tag</mat-icon>
-        <p>Entwicklerteam</p>
+        <p>{{auth.currentChannelData.title}}</p>
         <mat-icon>keyboard_arrow_down</mat-icon>
     </button>
-
-    <div class="testChannel">
-        
-    </div>
-
+    
     <div class="add-members-container">
         <div class="active-members-image-container">
             <img src="/img/profile-pic/001.svg" alt="">
@@ -16,7 +12,7 @@
             <img style="margin-left: -10px;" src="/img/profile-pic/001.svg" alt="">
         </div>
 
-        <p>3</p>
+        <p>{{auth.currentChannelData?.membersId?.length}}</p>
         <button>
             <mat-icon (click)="addMembersToChannel()" class="add-members">person_add</mat-icon>
         </button>

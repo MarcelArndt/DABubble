@@ -23,6 +23,7 @@ export class ChatHeaderComponent {
   constructor(public auth: AuthenticationService) {
   }
 
+
   openEditeChannel(): void {
     const dialogRef = this.dialog.open(EditChannelComponent);
     dialogRef.afterClosed().subscribe(result => {
