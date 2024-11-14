@@ -7,6 +7,7 @@ import { animate, query, style, transition, trigger } from '@angular/animations'
 import { EventService } from '../../../services/event/event.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { MessageComponent } from "../message/message.component";
+import { Message, Thread } from '../../../interface/message';
 
 @Component({
   selector: 'app-thread',
@@ -16,7 +17,7 @@ import { MessageComponent } from "../message/message.component";
     ThreadMessageFieldComponent,
     CommonModule,
     MessageComponent
-],
+  ],
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss',
   animations: [
@@ -61,12 +62,18 @@ import { MessageComponent } from "../message/message.component";
 })
 export class ThreadComponent implements OnInit {
   threadIsOpen: boolean = false;
-  messages = [];
+  messages: Thread[] = [];
+  threadFirstMessage: any= {};
+  isThread: boolean = true;
+  isThreadFirstMessage: boolean = true;
 
   constructor(private eventService: EventService, public auth: AuthenticationService) { }
 
-  ngOnInit() {
-    this.messages = this.auth.threadMessages
+ngOnInit() {
+    this.auth.threadUpdated.subscribe(() => {
+      this.messages = [...this.auth.threadMessages];
+    });
+    
     this.eventService.event$.subscribe(event => {
       if (event.eventType === 'openThread') {
         this.threadIsOpen = true;
@@ -83,4 +90,5 @@ export class ThreadComponent implements OnInit {
   handleDeleteMessage(i: any) {
     console.log(i)
   }
+
 }

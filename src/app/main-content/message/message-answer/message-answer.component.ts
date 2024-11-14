@@ -29,6 +29,8 @@ export class MessageAnswerComponent {
   openThread() {
     this.eventService.emitEvent('openThread');
     this.checkWindowAndOpenThread();
+    this.auth.currentMessageId = this.message.messageId;
+    this.auth.readMessageThread(this.message.messageId)
     this.auth.readThread(this.message.messageId);
   }
 

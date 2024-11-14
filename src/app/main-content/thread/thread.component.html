@@ -1,14 +1,19 @@
 <section *ngIf="threadIsOpen" @toggleThread>
     <app-thread-header class="thread-item" (closeThreadEvent)="toggleThread()"></app-thread-header>
     <div class="main-message-container thread-item">
-        <ng-template #messageList>
-            <app-message 
-                *ngFor="let msg of messages; index as i" 
-                [message]="msg" 
-                [index]="i" 
-                (deleteEvent)="handleDeleteMessage(i)">
-            </app-message>
-        </ng-template>
+
+        <app-message *ngIf="auth.threadFirstMessage" [message]="auth.threadFirstMessage" [thread]="isThread"
+            [threadFirstMessage]="isThreadFirstMessage"></app-message>
+
+            <div class="between-line-container">
+                <p>{{auth.threadMessages.length}} Antworten</p>
+            <div class="between-line"></div>
+            </div>
+
+        <app-message *ngFor="let msg of messages; index as i" [message]="msg" [index]="i" [thread]="isThread"
+            (deleteEvent)="handleDeleteMessage(i)">
+        </app-message>
+
     </div>
     <app-thread-message-field class="thread-item"></app-thread-message-field>
 </section>

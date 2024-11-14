@@ -18,6 +18,7 @@ export class AuthenticationService {
   memberId: string = '';
   currentMember!: Member;
   currentChannelId: string = '7oe1XRFotJY5IhNzFEbL';
+  currentMessageId: string = ''
 
   constructor(private router: Router) {
     this.auth = inject(Auth);
@@ -121,7 +122,7 @@ export class AuthenticationService {
     return members;
   }
 
-  async getAllChannelsFromFirestore():Promise <Channel[]>{
+  async getAllChannelsFromFirestore(): Promise<Channel[]> {
     const querySnapshot = await getDocs(collection(this.getReference(), "channels"));
     const channels: Channel[] = [];
     querySnapshot.forEach((doc) => {
@@ -170,17 +171,17 @@ export class AuthenticationService {
     await setDoc(docRef, {
       id: channel.id,
       title: channel.title,
-      messages: [],  
+      messages: [],
       membersId: channel.membersId,
       admin: userUid,
       description: channel.description,
       isPublic: channel.isPublic,
     });
-  
+
     this.addChannelIdToCurrentUser(channel.id);
-    await this.addChannelIdToMembers(channel.membersId, channel.id);  
+    await this.addChannelIdToMembers(channel.membersId, channel.id);
   }
-  
+
   async addChannelIdToMembers(memberIds: string[], channelId: string) {
     const batch = writeBatch(this.getReference());
     memberIds.forEach((memberId) => {
@@ -191,7 +192,7 @@ export class AuthenticationService {
     });
     await batch.commit();
   }
-  
+
   async addChannelIdToCurrentUser(docRefid: string) {
     const userDocRef = doc(this.getReference(), "member", this.getCurrentUserUid());
     await updateDoc(userDocRef, {
@@ -237,13 +238,13 @@ export class AuthenticationService {
     const docRef = doc(this.getReference(), "channels", this.currentChannelId);
     const channel = await getDoc(docRef);
     if (channel.exists()) {
-      await this.loadInitialMessages(this.currentChannelId); 
-      this.listenToMessages(this.currentChannelId); 
+      await this.loadInitialMessages(this.currentChannelId);
+      this.listenToMessages(this.currentChannelId);
     } else {
       console.log("No such document!");
     }
   }
-  
+
   async loadInitialMessages(channelId: string) {
     const messagesCollectionRef = collection(this.getReference(), "channels", channelId, "messages");
     const querySnapshot = await getDocs(messagesCollectionRef);
@@ -296,11 +297,14 @@ export class AuthenticationService {
 
   //Thread
   threadMessages: any = [];
+  threadFirstMessage: any = {};
+  threadUpdated = new Subject<void>();
+  threadFirstMessageUpdated = new Subject<void>();
 
   async createThread(message: string, imagePreviews: any) {
     const now = new Date();
     const channelDocRef = doc(this.getReference(), "channels", this.currentChannelId);
-    const messageDocRef = doc(channelDocRef, "messages", 'D7glbpvdv5sdwZy6cq0V');
+    const messageDocRef = doc(channelDocRef, "messages", this.currentMessageId);
     const threadCollectionRef = collection(messageDocRef, "threads");
     const threadDocRef = await addDoc(threadCollectionRef, {
       user: this.getCurrentUserUid(),
@@ -313,21 +317,33 @@ export class AuthenticationService {
         like: [],
         rocket: []
       },
-      attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
+      attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string'),
+      timestamp: now.getTime() 
     });
   }
 
   async readThread(messageId: string) {
+    this.threadMessages = [];
     const messageDocRef = doc(this.getReference(), "channels", this.currentChannelId, "messages", messageId);
     const threadCollectionRef = collection(messageDocRef, "threads");
-    const querySnapshot = await getDocs(threadCollectionRef);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-      this.threadMessages.push(doc.data());
-      console.log(this.threadMessages)
+    onSnapshot(threadCollectionRef, (querySnapshot) => {
+      const threadsData = querySnapshot.docs
+        .map(doc => doc.data())
+        .sort((a, b) => a['timestamp'] - b['timestamp']);     
+      this.threadMessages = threadsData;
+      this.threadUpdated.next();
     });
   }
 
+  async readMessageThread(messageId: string) {
+    this.threadFirstMessage = {};
+    const docRef = doc(this.getReference(), "channels", this.currentChannelId, "messages", messageId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      this.threadFirstMessage = docSnap.data();
+      this.threadFirstMessageUpdated.next();
+    }
+  }
 
 
 

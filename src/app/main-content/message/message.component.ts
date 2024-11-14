@@ -28,13 +28,24 @@ export class MessageComponent {
   @Input() message: any;
   @Input() index: any
   @Output() deleteEvent = new EventEmitter<number>();
+  @Input() thread: boolean = false;
+  @Input() threadFirstMessage: boolean = false;
+
 
   isMessageHover: boolean = false;
   isMessageEditMenuOpen = false;
   isEdit: boolean = false;
   editMessageText: string = '';
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) { }
+  constructor(public object: MessagesService, public auth: AuthenticationService) {}
+
+  ngOnInit() {
+    if (this.thread) {
+      console.log("This is a thread message");
+    } else {
+      console.log("This is a regular message");
+    }
+  }
 
   resetHoverAndMenu() {
     this.isMessageHover = false;
