@@ -4,6 +4,8 @@ import {MatButtonModule} from '@angular/material/button';
 import { EditChannelComponent } from '../../../dialog/edit-channel/edit-channel.component';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -13,6 +15,7 @@ import { AuthenticationService } from '../../../../services/authentication/authe
     MatDialogModule,
     MatButtonModule,
     MatIcon,
+    CommonModule,
   ],
   templateUrl: './chat-header.component.html',
   styleUrl: './chat-header.component.scss'

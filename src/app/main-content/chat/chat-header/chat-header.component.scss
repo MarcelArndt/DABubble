@@ -33,9 +33,10 @@ section {
     .active-members-image-container {
 
         img {
-            @include heightWidth($w: 35px, $h: 50%);
+            @include heightWidth($w: 35px, $h: 35px);
             @include image($br: 50%);
             border: 3px solid white;
+            object-fit: cover;
         }
     }
 

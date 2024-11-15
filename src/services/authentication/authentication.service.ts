@@ -142,7 +142,7 @@ export class AuthenticationService {
           isPublic: data['isPublic'],
         };
       });
-      onChannelsUpdated(channels); 
+      onChannelsUpdated(channels);
     }, (error) => {
       console.error("Fehler beim Abrufen der Channels: ", error);
     });
@@ -230,52 +230,50 @@ export class AuthenticationService {
 
   async updateCurrentMemberData(currentMember: Member): Promise<void> {
     try {
-        const docRef = doc(this.getReference(), 'member', this.getCurrentUserUid());
-        await updateDoc(docRef, {
-            name: currentMember.name,
-            email: currentMember.email,
-        });
+      const docRef = doc(this.getReference(), 'member', this.getCurrentUserUid());
+      await updateDoc(docRef, {
+        name: currentMember.name,
+        email: currentMember.email,
+      });
     } catch (error) {
-        console.error("Error while updating current user data:", error);
+      console.error("Error while updating current user data:", error);
     }
   }
 
   async updateAuthProfileData(currentMember: Member): Promise<void> {
     try {
-        const user = this.auth.currentUser;
-        if (user) {
-            await updateEmail(user, currentMember.email);
-            await updateProfile(user, {
-                displayName: currentMember.name,
-            });
-        } else {
-            console.error("No authentified user found.");
-        }
+      const user = this.auth.currentUser;
+      if (user) {
+        await updateEmail(user, currentMember.email);
+        await updateProfile(user, {
+          displayName: currentMember.name,
+        });
+      } else {
+        console.error("No authentified user found.");
+      }
     } catch (error) {
-        console.error("Error while updating the data in firebase-authentication:", error);
+      console.error("Error while updating the data in firebase-authentication:", error);
     }
-}
+  }
 
 
   // Members
+  allChannelMembers: any = [];
 
-//   async allMembersInChannel() {
-//     let membersId = this.currentChannelData.membersId;
-//     console.log("membersId:", membersId); // Ausgabe der IDs prüfen
-//     for (const id of membersId) {
-//         await this.search(id);
-//     }
-// }
+  async allMembersInChannel() {
+    let membersId = this.currentChannelData.membersId;
+    for (const id of membersId) {
+      await this.search(id);
+    }
+  }
 
-// async search(ids: any) {
-//   const docRef = doc(this.getReference(), "members", ids);
-//   const docSnap = await getDoc(docRef);
-//   if (docSnap.exists()) {
-//       console.log("Document data:", docSnap.data()['imageUrl']);
-//   } else {
-//       console.log(`No document found for ID: ${ids}`);
-//   }
-// }
+  async search(ids: any) {
+    const docRef = doc(this.getReference(), "member", ids);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      this.allChannelMembers.push(docSnap.data())
+    }
+  }
 
 
   // Messages
@@ -289,8 +287,8 @@ export class AuthenticationService {
       await this.loadInitialMessages(this.currentChannelId);
       this.listenToMessages(this.currentChannelId);
       this.currentChannelData = channel.data();
-      // this.allMembersInChannel();
-      console.log(this.currentChannelData)
+      this.allChannelMembers = [];
+      this.allMembersInChannel();
     }
   }
 
@@ -410,7 +408,7 @@ export class AuthenticationService {
     });
   }
 
-  async getDownloadURLFromFirebase(file: File, folderName: string = 'User'){
+  async getDownloadURLFromFirebase(file: File, folderName: string = 'User') {
     const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
     return getDownloadURL(fileRef);
   }

@@ -6,10 +6,10 @@
     </button>
     
     <div class="add-members-container">
-        <div class="active-members-image-container">
-            <img src="/img/profile-pic/001.svg" alt="">
-            <img style="margin-left: -10px;" src="/img/profile-pic/001.svg" alt="">
-            <img style="margin-left: -10px;" src="/img/profile-pic/001.svg" alt="">
+        <div class="active-members-image-container" *ngFor="let img of auth.allChannelMembers">
+            <!-- <img src="/img/profile-pic/001.svg" alt=""> -->
+            <img style="margin-left: -10px;" src="{{img.imageUrl}}" alt="">
+            <!-- <img style="margin-left: -10px;" src="/img/profile-pic/001.svg" alt=""> -->
         </div>
 
         <p>{{auth.currentChannelData?.membersId?.length}}</p>
