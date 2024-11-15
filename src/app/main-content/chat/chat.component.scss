@@ -82,3 +82,35 @@ app-chat-message-field {
         }
     }
 }
+
+.mesage-container {
+    @include heightWidth($w: 100%, $h: 100%);
+}
+
+.welcome-message {
+    box-sizing: border-box;
+    padding: 0 30px;
+    @include dFlex($jc: end, $ai: start);
+    flex-direction: column;
+    @include heightWidth($w: 100%, $h: 100%);
+
+    div {
+        @include dFlex($jc: start, $ai: center);
+
+        mat-icon {
+        @include materialSymbols($c: var(--text-black), $fs: 24px);
+        }
+
+        h2 {
+            @include nunito($fw: 400, $fs: 24px, $c: var(--text-black));
+        }
+    }
+
+    p {
+        @include nunito($fw: 400, $fs: 20px, $c: var(--text-black));
+    }
+
+    span {
+        @include nunito($fw: 400, $fs: 20px, $c: var(--purple-3));
+    }
+}

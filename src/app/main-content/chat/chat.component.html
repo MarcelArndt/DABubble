@@ -3,7 +3,7 @@
 
     <div class="main-message-container" #messageContainer>
 
-        <div *ngIf="auth.isDirectMessage == false">
+        <div *ngIf="auth.isDirectMessage == false" class="mesage-container">
             <ng-container *ngIf="isLoading; else messageList">
                 <div class="loader">Laden...</div>
             </ng-container>
@@ -13,6 +13,15 @@
                     (deleteEvent)="handleDeleteMessage(i)">
                 </app-message>
             </ng-template>
+
+            <div class="welcome-message" *ngIf="!isLoading && auth.messages.length == 0">
+                <div>
+                    <mat-icon class="hashtag">tag</mat-icon>
+                    <h2>{{auth.currentChannelData.title}}</h2>
+                </div>
+                <p>Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels <span># {{auth.currentChannelData.title}}</span></p>
+            </div>
+
         </div>
 
         <div *ngIf="auth.isDirectMessage" class="direct-message-container">
