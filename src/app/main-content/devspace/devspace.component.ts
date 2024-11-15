@@ -168,6 +168,6 @@ export class DevspaceComponent implements OnInit {
 
   openDirectMessage(memberId: any) {
     this.authenticationService.isDirectMessage = true;
-    this.authenticationService.directMessageMemberId = memberId;
+    this.authenticationService.readDirectUserData(memberId)
   }
 }

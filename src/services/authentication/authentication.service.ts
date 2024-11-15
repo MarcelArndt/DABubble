@@ -395,7 +395,7 @@ export class AuthenticationService {
 
   // Direct Message
   public isDirectMessage: boolean = false;
-  directMessageMemberId: string = '';
+  public directMessageUserData: any = {};
 
   async createDirectMessage() {
     const docRef = await addDoc(collection(this.getReference(), "directMessages"), {
@@ -403,6 +403,14 @@ export class AuthenticationService {
       memberTwo: '',
     });
     console.log("Document written with ID: ", docRef.id);
+  }
+
+  async readDirectUserData(memberId: string) {
+    const docRef = doc(this.getReference(), "member", memberId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      this.directMessageUserData = docSnap.data();
+    } 
   }
 
 

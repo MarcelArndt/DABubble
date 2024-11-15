@@ -27,10 +27,10 @@
         <div *ngIf="auth.isDirectMessage" class="direct-message-container">
             <div class="welcome-direct-message">
                 <div>
-                    <img src="/img/profile-pic/001.svg">
-                    <h2>Max Mustermann</h2>
+                    <img src="{{auth.directMessageUserData.imageUrl}}">
+                    <h2>{{auth.directMessageUserData.name}}</h2>
                 </div>
-                <p>Diese Unterhaltung findet nur zwischen <span>&#64;Max Mustermann</span> und dir statt</p>
+                <p>Diese Unterhaltung findet nur zwischen <span>&#64;{{auth.directMessageUserData.name}}</span> und dir statt</p>
             </div>
 
         </div>

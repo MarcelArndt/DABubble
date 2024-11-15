@@ -19,9 +19,9 @@
     </div>
     <div class="direct-message-header" *ngIf="auth.isDirectMessage">
         <div>
-            <img src="/img/profile-pic/001.svg">
+            <img src="{{auth.directMessageUserData.imageUrl}}">
             <div class="online-status"></div>
         </div>
-        <h2>Max Mustermann</h2>
+        <h2>{{auth.directMessageUserData.name}}</h2>
     </div>
 </section>

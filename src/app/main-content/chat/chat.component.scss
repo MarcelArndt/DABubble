@@ -66,6 +66,7 @@ app-chat-message-field {
             @include heightWidth($w: 90px, $h: 90px);
             @include image($br: 50%);
             object-fit: cover;
+            object-position: center;
         }
 
         h2 {
