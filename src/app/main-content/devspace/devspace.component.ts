@@ -164,4 +164,8 @@ export class DevspaceComponent implements OnInit {
     this.authenticationService.currentChannelId = channel.id;
     await this.authenticationService.readChannel();
   }
+
+  openDirectMessage(memberId: any) {
+    this.authenticationService.directMessageMemberId = memberId;
+  }
 }

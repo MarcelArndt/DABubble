@@ -271,6 +271,7 @@ export class AuthenticationService {
     const docRef = doc(this.getReference(), "member", ids);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
+
       this.allChannelMembers.push(docSnap.data())
     }
   }
@@ -392,6 +393,11 @@ export class AuthenticationService {
     }
   }
 
+  // Direct Message
+
+  directMessageMemberId: string = '';
+
+  
 
 
 
