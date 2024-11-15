@@ -15,6 +15,8 @@ import { AuthenticationService } from '../../../../services/authentication/authe
   styleUrl: './reset-password.component.scss'
 })
 export class ResetPasswordComponent {
+  constructor(public auth:AuthenticationService){
+  }
 
     myFormResetPassword = new FormGroup({
       setNewPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
@@ -25,6 +27,16 @@ export class ResetPasswordComponent {
 
     sendClickToParentPageCounter(index: number = 0) {
       this.eventInResetPassword.emit(index);
+    }
+    
+    setNewPassword(){
+      if(this.myFormResetPassword.value){
+        console.log('new Password is on saveing');
+        this.auth.saveNewPassword(this.myFormResetPassword.value.confirmPassword as string).then(() => {
+          console.log( console.log('Password is saved'));
+          console.log('Prozess comes to end');
+        });
+      }
     }
 
 }

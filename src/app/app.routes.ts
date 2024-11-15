@@ -15,7 +15,7 @@ import { LoginComponent } from './main-content/login/login.component';
 import { ThreadComponent } from './main-content/thread/thread.component';
 import { ChatComponent } from './main-content/chat/chat.component';
 import { AuthGuard } from '../guard/auth.guard';
-import { LostPasswordComponent } from './main-content/login/lost-password/lost-password.component';
+import { ResetPasswordComponent } from './main-content/login/reset-password/reset-password.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -36,7 +36,7 @@ export const routes: Routes = [
           },
           
       { path: '', redirectTo: 'channels/welcome', pathMatch: 'full' }, // Standard auf Welcome-Channel
-      { path:'/lost-password', component: LostPasswordComponent} 
     ]
-  }
+  },
+  { path:'lost-password/auth/action', component: ResetPasswordComponent}, 
 ];

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User } from '@angular/fire/auth';
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
@@ -450,17 +450,21 @@ export class AuthenticationService {
 
 
   // Lost Password
-  resetPassword(email:string){
+  async resetPassword(email:string){
     sendPasswordResetEmail(this.auth, email)
     .then(() => {
-      console.log('E-Mail for your new Password is on the way!')
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
     });
   }
 
-
+  async saveNewPassword(newPassword:string = '85736251'){
+    updatePassword(this.auth.currentUser as User, newPassword).then(() => {
+      console.log(this.auth.currentUser);
+      console.log('Password is' + newPassword);
+    }).catch((error) => {
+      console.log('ops, somethign went wrong');
+    });
+  }
 
 }
