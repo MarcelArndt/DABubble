@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail } from '@angular/fire/auth';
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
@@ -446,6 +446,19 @@ export class AuthenticationService {
         console.error('Error uploading file:', error);
         throw error; // Weitergeben des Fehlers zur Fehlerbehandlung
       });
+  }
+
+
+  // Lost Password
+  resetPassword(email:string){
+    sendPasswordResetEmail(this.auth, email)
+    .then(() => {
+      console.log('E-Mail for your new Password is on the way!')
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
   }
 
 
