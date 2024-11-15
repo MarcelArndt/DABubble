@@ -161,11 +161,13 @@ export class DevspaceComponent implements OnInit {
   async checkWindowAndOpenChannel(channel: any) {
     this.mainContentService.hideThread();
     window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
+    this.authenticationService.isDirectMessage = false;
     this.authenticationService.currentChannelId = channel.id;
     await this.authenticationService.readChannel();
   }
 
   openDirectMessage(memberId: any) {
+    this.authenticationService.isDirectMessage = true;
     this.authenticationService.directMessageMemberId = memberId;
   }
 }

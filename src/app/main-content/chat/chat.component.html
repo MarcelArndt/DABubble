@@ -3,18 +3,29 @@
 
     <div class="main-message-container" #messageContainer>
 
-        <ng-container *ngIf="isLoading; else messageList">
-            <div class="loader">Laden...</div>
-        </ng-container>
+        <div *ngIf="auth.isDirectMessage == false">
+            <ng-container *ngIf="isLoading; else messageList">
+                <div class="loader">Laden...</div>
+            </ng-container>
 
-        <ng-template #messageList>
-            <app-message 
-                *ngFor="let msg of message; index as i" 
-                [message]="msg" 
-                [index]="i" 
-                (deleteEvent)="handleDeleteMessage(i)">
-            </app-message>
-        </ng-template>
+            <ng-template #messageList>
+                <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i"
+                    (deleteEvent)="handleDeleteMessage(i)">
+                </app-message>
+            </ng-template>
+        </div>
+
+        <div *ngIf="auth.isDirectMessage" class="direct-message-container">
+            <div class="welcome-direct-message">
+                <div>
+                    <img src="/img/profile-pic/001.svg">
+                    <h2>Max Mustermann</h2>
+                </div>
+                <p>Diese Unterhaltung findet nur zwischen <span>&#64;Max Mustermann</span> und dir statt</p>
+            </div>
+
+        </div>
+
     </div>
 
     <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"></app-chat-message-field>

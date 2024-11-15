@@ -394,10 +394,16 @@ export class AuthenticationService {
   }
 
   // Direct Message
-
+  public isDirectMessage: boolean = false;
   directMessageMemberId: string = '';
 
-  
+  async createDirectMessage() {
+    const docRef = await addDoc(collection(this.getReference(), "directMessages"), {
+      memberOne: '',
+      memberTwo: '',
+    });
+    console.log("Document written with ID: ", docRef.id);
+  }
 
 
 

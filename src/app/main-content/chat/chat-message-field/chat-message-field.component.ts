@@ -30,6 +30,7 @@ export class ChatMessageFieldComponent {
   openData: boolean = false;
   imageUploads: string[] = [];
   imagePreviews: (string | ArrayBuffer | null)[] = [];
+  public isDirectMessage: boolean = true;
 
   users = ['JohnDoe', 'JaneSmith', 'AlexMiller', 'ChrisJohnson'];
   showUserList: boolean = false;

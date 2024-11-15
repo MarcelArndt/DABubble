@@ -1,20 +1,27 @@
 <section>
-    <button class="creator-team-btn" (click)="openEditeChannel()">
-        <mat-icon class="hashtag">tag</mat-icon>
-        <p>{{auth.currentChannelData.title}}</p>
-        <mat-icon>keyboard_arrow_down</mat-icon>
-    </button>
-    
-    <div class="add-members-container">
-        <div class="active-members-image-container" *ngFor="let img of auth.allChannelMembers">
-            <!-- <img src="/img/profile-pic/001.svg" alt=""> -->
-            <img style="margin-left: -10px;" src="{{img.imageUrl}}" alt="">
-            <!-- <img style="margin-left: -10px;" src="/img/profile-pic/001.svg" alt=""> -->
-        </div>
-
-        <p>{{auth.currentChannelData?.membersId?.length}}</p>
-        <button>
-            <mat-icon (click)="addMembersToChannel()" class="add-members">person_add</mat-icon>
+    <div class="channel-header" *ngIf="auth.isDirectMessage == false">
+        <button class="creator-team-btn" (click)="openEditeChannel()">
+            <mat-icon class="hashtag">tag</mat-icon>
+            <p>{{auth.currentChannelData.title}}</p>
+            <mat-icon>keyboard_arrow_down</mat-icon>
         </button>
+
+        <div class="add-members-container">
+            <div class="active-members-image-container" *ngFor="let img of auth.allChannelMembers">
+                <img style="margin-left: -10px;" src="{{img.imageUrl}}" alt="">
+            </div>
+
+            <p>{{auth.currentChannelData?.membersId?.length}}</p>
+            <button>
+                <mat-icon (click)="addMembersToChannel()" class="add-members">person_add</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="direct-message-header" *ngIf="auth.isDirectMessage">
+        <div>
+            <img src="/img/profile-pic/001.svg">
+            <div class="online-status"></div>
+        </div>
+        <h2>Max Mustermann</h2>
     </div>
 </section>
