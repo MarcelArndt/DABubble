@@ -42,7 +42,7 @@
     }
 
     mat-icon{
-        @include matIcon(); 
+        @include materialSymbols($c: var(--text-black), $fs: 24px);
     }
 }
 

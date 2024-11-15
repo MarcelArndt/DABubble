@@ -41,7 +41,8 @@
                padding: 0px 12px 0px 0px;
             }
             @include dFlex;  
-            @include matIcon($scale: 110%);    
+            @include matIcon($scale: 110%);  
+            @include materialSymbols($c: var(--text-black), $fs: 24px);  
         }
     }
 
