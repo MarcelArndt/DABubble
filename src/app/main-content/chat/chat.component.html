@@ -2,8 +2,8 @@
     <app-chat-header></app-chat-header>
 
     <div class="main-message-container" #messageContainer>
+        
         <ng-container *ngIf="isLoading; else messageList">
-            <!-- Loader-Komponente oder einfacher Ladeindikator -->
             <div class="loader">Laden...</div>
         </ng-container>
 

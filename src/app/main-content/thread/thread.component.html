@@ -1,6 +1,6 @@
 <section *ngIf="threadIsOpen" @toggleThread>
     <app-thread-header class="thread-item" (closeThreadEvent)="toggleThread()"></app-thread-header>
-    <div class="main-message-container thread-item">
+    <div class="main-message-container thread-item" #threadContainer>
 
         <app-message *ngIf="auth.threadFirstMessage" [message]="auth.threadFirstMessage" [thread]="isThread"
             [threadFirstMessage]="isThreadFirstMessage"></app-message>

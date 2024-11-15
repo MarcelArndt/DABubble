@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ThreadHeaderComponent } from "./thread-header/thread-header.component";
 import { ThreadMessageFieldComponent } from "./thread-message-field/thread-message-field.component";
 
@@ -67,24 +67,50 @@ export class ThreadComponent implements OnInit {
   isThread: boolean = true;
   isThreadFirstMessage: boolean = true;
 
+  @ViewChild('threadContainer') private threadContainer!: ElementRef;
+  private shouldScroll: boolean = true;
+
   constructor(private eventService: EventService, public auth: AuthenticationService) { }
 
-ngOnInit() {
+  ngOnInit() {
     this.auth.threadUpdated.subscribe(() => {
       this.messages = [...this.auth.threadMessages];
+      this.shouldScroll = true;
     });
-    
+
     this.eventService.event$.subscribe(event => {
       if (event.eventType === 'openThread') {
         this.threadIsOpen = true;
+        setTimeout(() => this.scrollToBottom(), 0);
       } else if (event.eventType === 'closeThread') {
         this.threadIsOpen = false;
       }
     });
   }
 
+  ngAfterViewChecked() {
+    if (this.shouldScroll && this.threadContainer) { 
+      this.scrollToBottom();
+      this.shouldScroll = false;
+    }
+  }
+
+  scrollToBottom(): void {
+    try {
+      if (this.threadContainer) {
+        const element = this.threadContainer.nativeElement;
+        element.scrollTop = element.scrollHeight + 50;
+      }
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
+  }
+
   toggleThread() {
     this.threadIsOpen = !this.threadIsOpen;
+    if (this.threadIsOpen) {
+      setTimeout(() => this.scrollToBottom(), 0);
+    }
   }
 
   handleDeleteMessage(i: any) {
