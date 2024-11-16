@@ -57,11 +57,23 @@ export class SignUpComponent {
     console.log('open a Lightbox here')
   }
 
-  onSubmit(pageNumber:number = 0){
+  async onSubmit(pageNumber:number = 0){
+    /*
     if (this.myForm.valid){
-      this.fillValues();
+    this.fillValues();
       this.registerUser();
       this.sendClickToParentPageCounter(2);
+    }
+  */
+    this.fillValues();
+    if (await this.auth.checkIsEmailAlreadyExists(this.email)) {
+      this.registerUser();
+      this.sendClickToParentPageCounter(2);
+      // Code, wenn die E-Mail bereits existiert
+      console.log('E-Mail ist bereits registriert');
+    } else {
+      // Code, wenn die E-Mail nicht existiert
+      console.log('E-Mail ist verfügbar');
     }
   }
 

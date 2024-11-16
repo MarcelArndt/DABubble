@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User,  fetchSignInMethodsForEmail} from '@angular/fire/auth';
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
@@ -58,6 +58,7 @@ export class AuthenticationService {
       });
   }
 
+
   observerUser() {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
@@ -67,6 +68,31 @@ export class AuthenticationService {
       }
     });
   }
+
+  async pullAllEmails(){
+    const membersCollection = collection(this.getReference(), 'member');
+    let AllEmails:string[] = [];
+    await getDocs(membersCollection)
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        const userData = doc.data();
+        if (userData && userData['email']) {
+          AllEmails.push(userData['email']);
+        }
+      });
+    })
+    .catch((error) => {
+      console.error('Error fetching documents:', error);
+    });
+    return(AllEmails)
+  }
+
+  async checkIsEmailAlreadyExists(email:string = ''){
+    let collection:string [] = await this.pullAllEmails();
+    if(collection.indexOf(email) > 0) return true
+    return false
+  }
+
 
   signUpWithGoogle() {
     signInWithPopup(this.auth, this.provider)
