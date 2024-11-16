@@ -51,7 +51,12 @@ button{
 .button-collection{
     @include dFlex ($jc: center);
     gap: 2%;
+    margin-top: 16px;
     @include heightWidth($w: 75%, $h: auto);
+
+    @include respond-to-maxWidth(smallMedium) {
+        padding-bottom: 32px;
+    }
 
     @include respond-to-maxWidth(small) {
         margin-top: 8px;
@@ -75,6 +80,10 @@ p{
     @include heightWidth($w: 75%, $h: auto);
     @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--text-black));
     text-align: center;
+    padding-bottom: 8px;
+    @include respond-to-maxWidth(smallMedium) {
+        padding-bottom: 16px;
+    }
 }
 
 a{

@@ -1,7 +1,9 @@
 import { Component, Output, EventEmitter} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,6 +12,8 @@ import { AuthenticationService } from '../../../../services/authentication/authe
     InputFieldComponent,
     FormsModule,
     ReactiveFormsModule,
+    MatIcon,
+    RouterModule,
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'
@@ -31,10 +35,7 @@ export class ResetPasswordComponent {
     
     setNewPassword(){
       if(this.myFormResetPassword.value){
-        console.log('new Password is on saveing');
         this.auth.saveNewPassword(this.myFormResetPassword.value.confirmPassword as string).then(() => {
-          console.log( console.log('Password is saved'));
-          console.log('Prozess comes to end');
         });
       }
     }

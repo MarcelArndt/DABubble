@@ -54,7 +54,14 @@
         }
         @include input;
         background-color: transparent;
+        border-radius: 16px;
     }
+
+    input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 0 rgba(0,0,0,0) inset !important;
+        box-shadow:  0 0 0 0 rgba(0,0,0,0) white inset !important;
+        background-color: rgba(0,0,0,0) !important;
+      }
 }
 
 .align-reverse{
@@ -83,11 +90,14 @@
     position: absolute;
     @include figtree($fw: 400, $fs: 18px);
     color: red;
+    vertical-align: middle;
+    @include dFlex ($jc: start);  
     width: 100%;
-    top: -26px;
+    top: -44px;
     left: 16px;
-
+    height: 39px;
     @include respond-to-maxWidth(smallMedium) {
         font-size: clamp(16px, 4vw, 18px);
     }
   }
+

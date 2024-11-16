@@ -34,7 +34,8 @@ export class SignUpComponent {
   myForm = new FormGroup({
     fullName: new FormControl('', [Validators.required, Validators.minLength(3)]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)])
+    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    dataProtection: new FormControl('', [Validators.requiredTrue]),
   });
 
   sendClickToParentPageCounter(index: number = 0) {
@@ -45,10 +46,15 @@ export class SignUpComponent {
     this.fullName = this.myForm.value.fullName || '';
     this.email = this.myForm.value.email || '';
     this.password = this.myForm.value.password || '';
+
   }
 
   registerUser() {
     this.auth.registerUser(this.email, this.password, this.fullName);
+  }
+
+  openDataProtect(){
+    console.log('open a Lightbox here')
   }
 
   onSubmit(pageNumber:number = 0){
