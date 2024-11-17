@@ -2,11 +2,11 @@
     <app-thread-header class="thread-item" (closeThreadEvent)="toggleThread()"></app-thread-header>
     <div class="main-message-container thread-item" #threadContainer>
 
-        <app-message *ngIf="auth.threadFirstMessage" [message]="auth.threadFirstMessage" [thread]="isThread"
+        <app-message *ngIf="threadService.threadFirstMessage" [message]="threadService.threadFirstMessage" [thread]="isThread"
             [threadFirstMessage]="isThreadFirstMessage"></app-message>
 
             <div class="between-line-container">
-                <p>{{auth.threadMessages.length}} Antworten</p>
+                <p>{{threadService.threadMessages.length}} Antworten</p>
             <div class="between-line"></div>
             </div>
 

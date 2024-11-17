@@ -1,25 +1,36 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { addDoc, collection, doc, getDoc, onSnapshot } from '@angular/fire/firestore';
+import { ChannelService } from '../channel/channel.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThreadService {
+  threadMessages: any = [];
+  threadFirstMessage: any = {};
+  threadUpdated = new Subject<void>();
+  threadFirstMessageUpdated = new Subject<void>();
+  currentMessageId: string = '';
 
-  constructor(private auth: AuthenticationService) {}
+
+  constructor(
+    private authenticationService: AuthenticationService,
+    private channelService: ChannelService
+  ) {}
 
   async createThread(message: string, imagePreviews: any) {
     const now = new Date();
-    const channelDocRef = doc(this.auth.getReference(), "channels", this.auth.currentChannelId);
-    const messageDocRef = doc(channelDocRef, "messages", this.auth.currentMessageId);
+    const channelDocRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId);
+    const messageDocRef = doc(channelDocRef, "messages", this.currentMessageId);
     const threadCollectionRef = collection(messageDocRef, "threads");
     const threadDocRef = await addDoc(threadCollectionRef, {
-      user: this.auth.getCurrentUserUid(),
-      name: this.auth.currentMember.name,
+      user: this.authenticationService.getCurrentUserUid(),
+      name: this.authenticationService.currentMember.name,
       time: `${now.getHours()}:${now.getMinutes()}`,
       message: message,
-      profileImage: this.auth.currentMember.imageUrl,
+      profileImage: this.authenticationService.currentMember.imageUrl,
       createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
       reactions: {
         like: [],
@@ -31,25 +42,25 @@ export class ThreadService {
   }
 
   async readThread(messageId: string) {
-    this.auth.threadMessages = [];
-    const messageDocRef = doc(this.auth.getReference(), "channels", this.auth.currentChannelId, "messages", messageId);
+    this.threadMessages = [];
+    const messageDocRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId, "messages", messageId);
     const threadCollectionRef = collection(messageDocRef, "threads");
     onSnapshot(threadCollectionRef, (querySnapshot) => {
       const threadsData = querySnapshot.docs
         .map(doc => doc.data())
         .sort((a, b) => a['timestamp'] - b['timestamp']);
-      this.auth.threadMessages = threadsData;
-      this.auth.threadUpdated.next();
+      this.threadMessages = threadsData;
+      this.threadUpdated.next();
     });
   }
 
   async readMessageThread(messageId: string) {
-    this.auth.threadFirstMessage = {};
-    const docRef = doc(this.auth.getReference(), "channels", this.auth.currentChannelId, "messages", messageId);
+    this.threadFirstMessage = {};
+    const docRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId, "messages", messageId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      this.auth.threadFirstMessage = docSnap.data();
-      this.auth.threadFirstMessageUpdated.next();
+      this.threadFirstMessage = docSnap.data();
+      this.threadFirstMessageUpdated.next();
     }
   }
 }

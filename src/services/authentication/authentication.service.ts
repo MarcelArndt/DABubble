@@ -12,51 +12,30 @@ import { HttpClient } from '@angular/common/http';
 import { debounceTime, map, catchError, switchMap } from 'rxjs/operators';
 import { AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { Observable, of } from 'rxjs';
+import { MemberService } from '../member/member.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private auth;
   private provider;
   public storage;
   memberId: string = '';
   currentMember!: Member;
-  currentChannelId: string = '7oe1XRFotJY5IhNzFEbL';
-  currentMessageId: string = '';
 
   currentChannelData: any = {};
+  auth = inject(Auth);
 
-   // Messages
-   messages: any = [];
-   messagesUpdated = new Subject<void>();
- 
-   //Thread
-   threadMessages: any = [];
-   threadFirstMessage: any = {};
-   threadUpdated = new Subject<void>();
-   threadFirstMessageUpdated = new Subject<void>();
-
-
-  constructor(private router: Router) {
-    this.auth = inject(Auth);
+  constructor(
+    private router: Router,
+  ) {
     this.provider = new GoogleAuthProvider();
     this.storage = getStorage();
     this.observerUser();
   }
 
   // Authentication 
-  registerUser(email: string, password: string, fullName: string) {
-    createUserWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        this.createUserCollection(fullName, email);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
-  }
+
 
   signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
@@ -81,6 +60,22 @@ export class AuthenticationService {
 
       }
     });
+  }
+
+  async updateAuthProfileData(currentMember: Member): Promise<void> {
+    try {
+      const user = this.auth.currentUser;
+      if (user) {
+        await updateEmail(user, currentMember.email);
+        await updateProfile(user, {
+          displayName: currentMember.name,
+        });
+      } else {
+        console.error("No authentified user found.");
+      }
+    } catch (error) {
+      console.error("Error while updating the data in firebase-authentication:", error);
+    }
   }
 
 
@@ -139,6 +134,7 @@ export class AuthenticationService {
       });
   }
 
+
   signOutUser() {
     signOut(this.auth).then(() => {
       this.router.navigate(['login']);
@@ -148,10 +144,12 @@ export class AuthenticationService {
     });
   }
 
+
   getCurrentUserId(): string | null {
     const currentUser = this.auth.currentUser;
     return currentUser ? currentUser.uid : null;
   }
+
 
   getCurrentUserUid(): string {
     const uid = this.getCurrentUserId();
@@ -161,58 +159,21 @@ export class AuthenticationService {
     return uid;
   }
 
+
   getReference() {
     return getFirestore();
-  }
-
-
-  getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
-    const membersCollection = collection(this.getReference(), 'member');
-    onSnapshot(membersCollection, (snapshot: QuerySnapshot<DocumentData>) => {
-      const members: Member[] = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          name: data['name'],
-          email: data['email'],
-          imageUrl: data['imageUrl'],
-          status: data['status'],
-          channelIds: data['channelIds'] || [],
-          directMessageIds: data['directMessageIds'] || []
-        };
+  }  
+  
+  registerUser(email: string, password: string, fullName: string) {
+    createUserWithEmailAndPassword(this.auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        this.createUserCollection(fullName, email);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
       });
-      onMembersUpdated(members);
-    }, (error) => {
-      console.error("Fehler beim Abrufen der Mitglieder: ", error);
-    });
-  }
-
-  async getAllChannelsFromFirestore(onChannelsUpdated: (channels: Channel[]) => void): Promise<void> {
-    const channelsCollection = collection(this.getReference(), 'channels');
-    onSnapshot(channelsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
-      const channels: Channel[] = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: data['id'],
-          title: data['title'],
-          messages: data['messages'],
-          membersId: data['membersId'],
-          admin: data['admin'],
-          description: data['description'],
-          isPublic: data['isPublic'],
-        };
-      });
-      onChannelsUpdated(channels);
-    }, (error) => {
-      console.error("Fehler beim Abrufen der Channels: ", error);
-    });
-  }
-
-  async updateProfileImageOfUser(downloadURL: string) {
-    const userId = this.getCurrentUserUid();
-    await updateDoc(doc(this.getReference(), "member", userId), {
-      imageUrl: downloadURL
-    });
   }
 
   async createUserCollection(fullName: string, email: string) {
@@ -228,129 +189,6 @@ export class AuthenticationService {
     });
   }
 
-  async addChannelToFirebase(channel: Channel) {
-    const userUid = this.getCurrentUserUid();
-    const docRef = doc(collection(this.getReference(), "channels"));
-    channel.id = docRef.id;
-    await setDoc(docRef, {
-      id: channel.id,
-      title: channel.title,
-      messages: [],
-      membersId: channel.membersId,
-      admin: userUid,
-      description: channel.description,
-      isPublic: channel.isPublic,
-    });
-
-    this.addChannelIdToCurrentUser(channel.id);
-    await this.addChannelIdToMembers(channel.membersId, channel.id);
-  }
-
-  async addChannelIdToMembers(memberIds: string[], channelId: string) {
-    const batch = writeBatch(this.getReference());
-    memberIds.forEach((memberId) => {
-      const memberRef = doc(this.getReference(), `member/${memberId}`);
-      batch.update(memberRef, {
-        channels: arrayUnion(channelId),
-      });
-    });
-    await batch.commit();
-  }
-
-  async addChannelIdToCurrentUser(docRefid: string) {
-    const userDocRef = doc(this.getReference(), "member", this.getCurrentUserUid());
-    await updateDoc(userDocRef, {
-      channelIds: arrayUnion(docRefid)
-    });
-    console.log("Channel ID erfolgreich zum Array hinzugefügt:", docRefid);
-  }
-
-  async getCurrentMemberData() {
-    const docRef = doc(this.getReference(), 'member', this.getCurrentUserUid());
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      this.currentMember = {
-        id: data['id'],
-        name: data['name'],
-        email: data['email'],
-        imageUrl: data['imageUrl'],
-        status: data['status'],
-        channelIds: data['channelIds'],
-        directMessageIds: data['directMessageIds'],
-      }
-    } else {
-      console.log("No such document!");
-    }
-  }
-
-  async updateCurrentMemberData(currentMember: Member): Promise<void> {
-    try {
-      const docRef = doc(this.getReference(), 'member', this.getCurrentUserUid());
-      await updateDoc(docRef, {
-        name: currentMember.name,
-        email: currentMember.email,
-      });
-    } catch (error) {
-      console.error("Error while updating current user data:", error);
-    }
-  }
-
-  async updateAuthProfileData(currentMember: Member): Promise<void> {
-    try {
-      const user = this.auth.currentUser;
-      if (user) {
-        await updateEmail(user, currentMember.email);
-        await updateProfile(user, {
-          displayName: currentMember.name,
-        });
-      } else {
-        console.error("No authentified user found.");
-      }
-    } catch (error) {
-      console.error("Error while updating the data in firebase-authentication:", error);
-    }
-  }
-
-
-  // Members
-  allChannelMembers: any = [];
-
-  async allMembersInChannel() {
-    let membersId = this.currentChannelData.membersId;
-    for (const id of membersId) {
-      await this.search(id);
-    }
-  }
-
-  async search(ids: any) {
-    const docRef = doc(this.getReference(), "member", ids);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-
-      this.allChannelMembers.push(docSnap.data())
-    }
-  }
-
-  // Direct Message
-  public isDirectMessage: boolean = false;
-  public directMessageUserData: any = {};
-
-  async createDirectMessage() {
-    const docRef = await addDoc(collection(this.getReference(), "directMessages"), {
-      memberOne: '',
-      memberTwo: '',
-    });
-    console.log("Document written with ID: ", docRef.id);
-  }
-
-  async readDirectUserData(memberId: string) {
-    const docRef = doc(this.getReference(), "member", memberId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      this.directMessageUserData = docSnap.data();
-    } 
-  }
 
   // Lost Password
   async resetPassword(email:string){

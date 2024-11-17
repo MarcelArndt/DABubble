@@ -5,10 +5,10 @@
                 <mat-icon class="closeButton" (click)="this.dialogRef.close()">close</mat-icon>
             </div>
 
-            <img class="profileImage" [src]="currentMember?.imageUrl || '/img/profile-pic/001.svg'">
+            <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/001.svg'">
 
             <div class="row">
-                <h2>{{currentMember?.name}}</h2>
+                <h2>{{currentMember.name}}</h2>
                 <button mat-button tabindex="-1" (click)="editDialog = true">Edit</button>
             </div>
 
@@ -22,7 +22,7 @@
                 <span class="emailTitle">E-Mail-Adress</span>
             </div>
             
-            <a href="mailto:email.adress@example.com"  tabindex="-1">{{currentMember?.email}}</a>
+            <a href="mailto:email.adress@example.com"  tabindex="-1">{{currentMember.email}}</a>
         } @else {
             <div class="row">
                 <h3>Edit your profile</h3>
@@ -30,7 +30,7 @@
             </div>
 
             <div class="imgContainer">
-                <img class="profileImage" [src]="currentMember?.imageUrl || '/img/profile-pic/001.svg'">
+                <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/001.svg'">
                 <!-- Button to trigger file input -->
                 <button class="fileInput" mat-icon-button (click)="openFileDialog()">
                     <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*"/>

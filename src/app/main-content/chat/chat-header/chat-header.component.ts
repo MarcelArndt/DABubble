@@ -6,6 +6,8 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DirectMessageService } from '../../../../services/directMessage/direct-message.service';
+import { MemberService } from '../../../../services/member/member.service';
 
 
 @Component({
@@ -23,7 +25,11 @@ import { FormsModule } from '@angular/forms';
 export class ChatHeaderComponent {
   readonly dialog = inject(MatDialog);
 
-  constructor(public auth: AuthenticationService) {
+  constructor( 
+    public auth: AuthenticationService,
+    public directMessageService: DirectMessageService,
+    public memberService: MemberService
+  ) {
   }
 
 

@@ -238,6 +238,7 @@ h3 {
     align-items: center;
     justify-content: center;
     margin-bottom: 25px;
+    margin-top: 16px;
 }
 
 .channel,
@@ -321,7 +322,11 @@ h3 {
 .dropdown-content {
     flex: 1;
     overflow: auto;
+}
 
+.dropdown-content,
+.dropDownChannelSection{
+    
     /* Custom scrollbar styling */
     &::-webkit-scrollbar {
         width: 6px; /* Breite der Scrollbar */
@@ -407,4 +412,9 @@ h3 {
         }
     }
     
+}
+
+.dropDownChannelSection{
+    overflow: auto;
+    max-height: 50%;
 }

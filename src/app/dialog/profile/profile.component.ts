@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { Member } from '../../../interface/message';
 import { StorageService } from '../../../services/storage/storage.service';
+import { MemberService } from '../../../services/member/member.service';
 
 
 @Component({
@@ -29,21 +30,21 @@ export class ProfileComponent {
   // readonly member = model(this.data.member);
   editDialog: boolean = false;
   // member: TestMember;
-  previousMember!: Member;
-  currentMember!: Member;
+  previousMember: Member = {} as Member;
+  currentMember: Member = {} as Member; 
   downloadURL?: File;
 
   constructor(
     private authenticationService: AuthenticationService,
+    private memberService: MemberService,
     private storageService: StorageService
   ){
     this.previousMember = this.currentMember;
-
   }
 
   async ngOnInit() {
-    await this.authenticationService.getCurrentMemberData();
-    this.currentMember = this.authenticationService.currentMember;
+    await this.memberService.getCurrentMemberData();
+    this.currentMember = this.authenticationService.currentMember || {} as Member;
   }
 
   onNoClick(): void {
@@ -57,13 +58,13 @@ export class ProfileComponent {
     }
     this.currentMember = currentMember;
     await Promise.all([
-        this.authenticationService.updateCurrentMemberData(this.currentMember),
+        this.memberService.updateCurrentMemberData(this.currentMember),
         this.authenticationService.updateAuthProfileData(this.currentMember)
     ]);
     if (this.downloadURL) {
         try {
             const uploadedUrl = await this.storageService.uploadImage(this.downloadURL);
-            await this.authenticationService.updateProfileImageOfUser(uploadedUrl);
+            await this.memberService.updateProfileImageOfUser(uploadedUrl);
             this.currentMember.imageUrl = uploadedUrl;
         } catch (error) {
             console.error('Error while uploading new profile image:', error);

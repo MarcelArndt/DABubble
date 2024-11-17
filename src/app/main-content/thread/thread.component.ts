@@ -8,6 +8,8 @@ import { EventService } from '../../../services/event/event.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { MessageComponent } from "../message/message.component";
 import { Message, Thread } from '../../../interface/message';
+import { MessagesService } from '../../../services/messages/messages.service';
+import { ThreadService } from '../../../services/thread/thread.service';
 
 @Component({
   selector: 'app-thread',
@@ -70,14 +72,18 @@ export class ThreadComponent implements OnInit {
   @ViewChild('threadContainer') private threadContainer!: ElementRef;
   private shouldScroll: boolean = true;
 
-  constructor(private eventService: EventService, public auth: AuthenticationService) { }
+  constructor(
+    private eventService: EventService, 
+    public auth: AuthenticationService,
+    public threadService: ThreadService,
+  ) { }
 
   ngOnInit() {
-    this.auth.threadUpdated.subscribe(() => {
-      this.messages = [...this.auth.threadMessages];
+    console.log(this.threadFirstMessage);
+    this.threadService.threadUpdated.subscribe(() => {
+      this.messages = [...this.threadService.threadMessages];
       this.shouldScroll = true;
     });
-
     this.eventService.event$.subscribe(event => {
       if (event.eventType === 'openThread') {
         this.threadIsOpen = true;

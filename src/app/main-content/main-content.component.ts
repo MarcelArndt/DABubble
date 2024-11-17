@@ -7,6 +7,7 @@ import { AuthenticationService } from '../../services/authentication/authenticat
 import { CommonModule } from '@angular/common';
 import { MainContentService } from '../../services/main-content/main-content.service';
 import { MessagesService } from '../../services/messages/messages.service';
+import { ChannelService } from '../../services/channel/channel.service';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class MainContentComponent {
   constructor(
     private auth: AuthenticationService, 
     public messageService: MessagesService,
-    public mainContentService: MainContentService) {
+    public mainContentService: MainContentService,
+  ) {
     auth.observerUser();
   }
 

@@ -13,6 +13,7 @@ import { MainContentService } from '../../../services/main-content/main-content.
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { SearchbarComponent } from '../../shared/header/searchbar/searchbar.component';
 import { MessagesService } from '../../../services/messages/messages.service';
+import { DirectMessageService } from '../../../services/directMessage/direct-message.service';
 
 
 @Component({
@@ -117,16 +118,17 @@ export class DevspaceComponent implements OnInit {
     private memberService: MemberService,
     private channelService: ChannelService,
     private mainContentService: MainContentService,
+    private directMessageService: DirectMessageService,
     private authenticationService: AuthenticationService,
     private renderer: Renderer2,
     private elRef: ElementRef) {
   }
 
   async ngOnInit() {
-    this.authenticationService.getAllChannelsFromFirestore((updatedChannels: Channel[]) => {
+    this.channelService.getAllChannelsFromFirestore((updatedChannels: Channel[]) => {
       this.channels = updatedChannels;  
     });  
-    this.authenticationService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
+    this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
       this.members = updatedMembers;
     });
   }
@@ -163,13 +165,13 @@ export class DevspaceComponent implements OnInit {
   async checkWindowAndOpenChannel(channel: any) {
     this.mainContentService.hideThread();
     window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
-    this.authenticationService.isDirectMessage = false;
-    this.authenticationService.currentChannelId = channel.id;
+    this.directMessageService.isDirectMessage = false;
+    this.channelService.currentChannelId = channel.id;
     await this.messageService.readChannel();
   }
 
   openDirectMessage(memberId: any) {
-    this.authenticationService.isDirectMessage = true;
-    this.authenticationService.readDirectUserData(memberId)
+    this.directMessageService.isDirectMessage = true;
+    this.directMessageService.readDirectUserData(memberId)
   }
 }

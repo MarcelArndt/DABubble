@@ -7,6 +7,7 @@ import { MessageComponent } from "../message/message.component";
 import { MessagesService } from '../../../services/messages/messages.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { MatIcon } from '@angular/material/icon';
+import { DirectMessageService } from '../../../services/directMessage/direct-message.service';
 
 
 
@@ -30,19 +31,24 @@ export class ChatComponent {
   private shouldScroll: boolean = true;
   public isLoading: boolean = true;
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) {
+  constructor(
+    public object: MessagesService, 
+    public auth: AuthenticationService,
+    public directMessageService: DirectMessageService,
+    public messageService: MessagesService
+  ) {
   }
 
   ngOnInit() {
-    this.auth.messagesUpdated.subscribe(() => {
-      this.message = [...this.auth.messages];
+    this.messageService.messagesUpdated.subscribe(() => {
+      this.message = [...this.messageService.messages];
       this.isLoading = false;
       this.shouldScroll = true;
     });
   }
 
   onMessagesUpdated() {
-    this.message = [...this.auth.messages];
+    this.message = [...this.messageService.messages];
     this.shouldScroll = true;
   }
 

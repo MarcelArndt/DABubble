@@ -18,7 +18,6 @@ import { map, Observable, startWith } from 'rxjs';
 import { Member } from '../../../../interface/message';
 import { MemberService } from '../../../../services/member/member.service';
 import { ChannelService } from '../../../../services/channel/channel.service';
-import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 @Component({
@@ -61,7 +60,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     MAT_DIALOG_DATA) public data: Channel, 
     private memberService: MemberService,
     private channelService: ChannelService,
-    private auth: AuthenticationService
   ) {
     this.channel = data; 
   }
@@ -73,7 +71,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.auth.getAllMembersFromFirestore((updatedMembers: Member[]) => {
+    this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
       this.members = updatedMembers;
     });
     this.filteredMembers$ = this.myControl.valueChanges.pipe(
@@ -175,7 +173,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       this.channel.isPublic = false;
     }
     // this.channelService.channels.push(this.channel);
-    this.auth.addChannelToFirebase(this.channel);
+    this.channelService.addChannelToFirebase(this.channel);
     this.dialogRef.close();
     console.log(this.channel); // Überprüfe das aktualisierte Channel-Objekt
   }

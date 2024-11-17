@@ -1,5 +1,5 @@
 <section>
-    <div class="channel-header" *ngIf="auth.isDirectMessage == false">
+    <div class="channel-header" *ngIf="directMessageService.isDirectMessage == false">
         <button class="creator-team-btn" (click)="openEditeChannel()">
             <mat-icon class="hashtag">tag</mat-icon>
             <p>{{auth.currentChannelData.title}}</p>
@@ -7,7 +7,7 @@
         </button>
 
         <div class="add-members-container">
-            <div class="active-members-image-container" *ngFor="let img of auth.allChannelMembers">
+            <div class="active-members-image-container" *ngFor="let img of memberService.allChannelMembers">
                 <img style="margin-left: -10px;" src="{{img.imageUrl}}" alt="">
             </div>
 
@@ -17,11 +17,11 @@
             </button>
         </div>
     </div>
-    <div class="direct-message-header" *ngIf="auth.isDirectMessage">
+    <div class="direct-message-header" *ngIf="directMessageService.isDirectMessage">
         <div>
-            <img src="{{auth.directMessageUserData.imageUrl}}">
+            <img src="{{directMessageService.directMessageUserData.imageUrl}}">
             <div class="online-status"></div>
         </div>
-        <h2>{{auth.directMessageUserData.name}}</h2>
+        <h2>{{directMessageService.directMessageUserData.name}}</h2>
     </div>
 </section>

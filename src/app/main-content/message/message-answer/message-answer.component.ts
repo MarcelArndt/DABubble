@@ -18,6 +18,7 @@ import { ThreadService } from '../../../../services/thread/thread.service';
   styleUrl: './message-answer.component.scss'
 })
 export class MessageAnswerComponent {
+
   @Input() message: any;
 
   constructor(
@@ -31,7 +32,7 @@ export class MessageAnswerComponent {
   openThread() {
     this.eventService.emitEvent('openThread');
     this.checkWindowAndOpenThread();
-    this.auth.currentMessageId = this.message.messageId;
+    this.threadService.currentMessageId = this.message.messageId;
     this.threadService.readMessageThread(this.message.messageId)
     this.threadService.readThread(this.message.messageId);
   }

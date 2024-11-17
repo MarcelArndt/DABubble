@@ -3,7 +3,7 @@
 
     <div class="main-message-container" #messageContainer>
 
-        <div *ngIf="auth.isDirectMessage == false" class="mesage-container">
+        <div *ngIf="directMessageService.isDirectMessage == false" class="mesage-container">
             <ng-container *ngIf="isLoading; else messageList">
                 <div class="loader">Laden...</div>
             </ng-container>
@@ -14,7 +14,7 @@
                 </app-message>
             </ng-template>
 
-            <div class="welcome-message" *ngIf="!isLoading && auth.messages.length == 0">
+            <div class="welcome-message" *ngIf="!isLoading && messageService.messages.length == 0">
                 <div>
                     <mat-icon class="hashtag">tag</mat-icon>
                     <h2>{{auth.currentChannelData.title}}</h2>
@@ -24,13 +24,13 @@
 
         </div>
 
-        <div *ngIf="auth.isDirectMessage" class="direct-message-container">
+        <div *ngIf="directMessageService.isDirectMessage" class="direct-message-container">
             <div class="welcome-direct-message">
                 <div>
-                    <img src="{{auth.directMessageUserData.imageUrl}}">
-                    <h2>{{auth.directMessageUserData.name}}</h2>
+                    <img src="{{directMessageService.directMessageUserData.imageUrl}}">
+                    <h2>{{directMessageService.directMessageUserData.name}}</h2>
                 </div>
-                <p>Diese Unterhaltung findet nur zwischen <span>&#64;{{auth.directMessageUserData.name}}</span> und dir statt</p>
+                <p>Diese Unterhaltung findet nur zwischen <span>&#64;{{directMessageService.directMessageUserData.name}}</span> und dir statt</p>
             </div>
 
         </div>

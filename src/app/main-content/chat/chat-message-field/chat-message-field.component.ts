@@ -9,6 +9,7 @@ import { MessagesService } from '../../../../services/messages/messages.service'
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { Message, Thread } from '../../../../interface/message';
 import { StorageService } from '../../../../services/storage/storage.service';
+import { MemberService } from '../../../../services/member/member.service';
 
 
 @Component({
@@ -43,13 +44,13 @@ export class ChatMessageFieldComponent {
 
   constructor(
     public object: MessagesService, 
-    public auth: AuthenticationService,
+    public memberService: MemberService,
     public messageService: MessagesService,
     public storageService: StorageService
   ) {}
 
  async sendMessage() {
-    await this.auth.getCurrentMemberData();
+    await this.memberService.getCurrentMemberData();
     this.messageService.createMessage(this.messageField, this.imagePreviews)
     // this.messagesUpdated.emit();
     this.messageField = '';

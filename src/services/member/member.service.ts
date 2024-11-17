@@ -1,41 +1,96 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Member } from '../../interface/message';
 import { map, Observable } from 'rxjs';
+import { AuthenticationService } from '../authentication/authentication.service';
+import { collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, setDoc, updateDoc } from '@firebase/firestore';
+import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
+  allChannelMembers: any = [];
 
-  // members: Member[] = [
-  //   { name: 'Alice', email: 'emailOfAlice@gmail.com', id: '1', img: '/img/profile-pic/001.svg', isOnline: false},
-  //   { name: 'Bob', email: 'emailOfBob@gmail.com', id: '2', img: '/img/profile-pic/002.svg', isOnline: true},
-  //   { name: 'Charlie', email: 'emailOfCharlie@gmail.com', id: '3', img: '/img/profile-pic/003.svg', isOnline: true},
-  //   { name: 'David', email: 'emailOfDavid@gmail.com', id: '4', img: '/img/profile-pic/004.svg', isOnline: false},
-  // ];
+  constructor(private authenticationService: AuthenticationService){
 
-  // // private members: Member[] = []; // local cache
-  // // members$: Observable<Member[]>;
+  }
 
-  // // constructor(private firestore: AngularFirestore) {
-  // //   // Initialize the members observable with Firebase data
-  // //   this.members$ = this.firestore.collection<Member>('members').valueChanges().pipe(
-  // //     map((data) => {
-  // //       this.members = data;
-  // //       return this.members;
-  // //     })
-  // //   );
-  // // }
+  getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
+    const membersCollection = collection(this.authenticationService.getReference(), 'member');
+    onSnapshot(membersCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+      const members: Member[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data['name'],
+          email: data['email'],
+          imageUrl: data['imageUrl'],
+          status: data['status'],
+          channelIds: data['channelIds'] || [],
+          directMessageIds: data['directMessageIds'] || []
+        };
+      });
+      onMembersUpdated(members);
+    }, (error) => {
+      console.error("Fehler beim Abrufen der Mitglieder: ", error);
+    });
+  }
 
-  // // // Method to fetch the latest members list
-  // // getAllMembers(): Observable<Member[]> {
-  // //   return this.members$;
-  // // }
+
+  async allMembersInChannel() {
+    let membersId = this.authenticationService.currentChannelData.membersId;
+    for (const id of membersId) {
+      await this.search(id);
+    }
+  }
 
 
-  // getAllMembers() {
-  //   return this.members;
-  // }
-
+  async search(ids: any) {
+    const docRef = doc(this.authenticationService.getReference(), "member", ids);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      this.allChannelMembers.push(docSnap.data())
+    }
+  }
   
+
+  async getCurrentMemberData() {
+    const docRef = doc(this.authenticationService.getReference(), 'member', this.authenticationService.getCurrentUserUid());
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      this.authenticationService.currentMember = {
+        id: data['id'],
+        name: data['name'],
+        email: data['email'],
+        imageUrl: data['imageUrl'],
+        status: data['status'],
+        channelIds: data['channelIds'],
+        directMessageIds: data['directMessageIds'],
+      }
+    } else {
+      console.log("No such document!");
+    }
+  }
+
+
+  async updateCurrentMemberData(currentMember: Member): Promise<void> {
+    try {
+      const docRef = doc(this.authenticationService.getReference(), 'member', this.authenticationService.getCurrentUserUid());
+      await updateDoc(docRef, {
+        name: currentMember.name,
+        email: currentMember.email,
+      });
+    } catch (error) {
+      console.error("Error while updating current user data:", error);
+    }
+  }
+
+
+  async updateProfileImageOfUser(downloadURL: string) {
+    const userId = this.authenticationService.getCurrentUserUid();
+    await updateDoc(doc(this.authenticationService.getReference(), "member", userId), {
+      imageUrl: downloadURL
+    });
+  }
 }

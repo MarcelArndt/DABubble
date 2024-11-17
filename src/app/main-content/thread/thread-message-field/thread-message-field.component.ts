@@ -9,6 +9,7 @@ import { ThreadImagesPreviewComponent } from "./thread-images-preview/thread-ima
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { Thread } from '../../../../interface/message';
 import { ThreadService } from '../../../../services/thread/thread.service';
+import { MemberService } from '../../../../services/member/member.service';
 
 @Component({
   selector: 'app-thread-message-field',
@@ -42,11 +43,12 @@ export class ThreadMessageFieldComponent  implements OnInit{
   constructor(
     public object: MessagesService, 
     public auth: AuthenticationService,
+    private memberService: MemberService,
     public threadService: ThreadService,
   ) {}
  
   ngOnInit(): void {
-    this.auth.getCurrentMemberData();
+    this.memberService.getCurrentMemberData();
   }
 
   sendMessage() {
