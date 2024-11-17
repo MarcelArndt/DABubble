@@ -4,6 +4,7 @@ import { EventService } from '../../../../services/event/event.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { MainContentService } from '../../../../services/main-content/main-content.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { ThreadService } from '../../../../services/thread/thread.service';
 
 
 
@@ -20,7 +21,8 @@ export class MessageAnswerComponent {
   @Input() message: any;
 
   constructor(
-    public object: MessagesService,
+    public threadService: ThreadService,
+    public messageService: MessagesService,
     private eventService: EventService, 
     private mainContentService: MainContentService,
     public auth: AuthenticationService
@@ -30,8 +32,8 @@ export class MessageAnswerComponent {
     this.eventService.emitEvent('openThread');
     this.checkWindowAndOpenThread();
     this.auth.currentMessageId = this.message.messageId;
-    this.auth.readMessageThread(this.message.messageId)
-    this.auth.readThread(this.message.messageId);
+    this.threadService.readMessageThread(this.message.messageId)
+    this.threadService.readThread(this.message.messageId);
   }
 
   checkWindowAndOpenThread(){

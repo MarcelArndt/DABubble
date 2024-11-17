@@ -12,6 +12,7 @@ import { Channel } from '../../../classes/channel.class';
 import { MainContentService } from '../../../services/main-content/main-content.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { SearchbarComponent } from '../../shared/header/searchbar/searchbar.component';
+import { MessagesService } from '../../../services/messages/messages.service';
 
 
 @Component({
@@ -112,6 +113,7 @@ export class DevspaceComponent implements OnInit {
 
 
   constructor(
+    public messageService: MessagesService,
     private memberService: MemberService,
     private channelService: ChannelService,
     private mainContentService: MainContentService,
@@ -163,7 +165,7 @@ export class DevspaceComponent implements OnInit {
     window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
     this.authenticationService.isDirectMessage = false;
     this.authenticationService.currentChannelId = channel.id;
-    await this.authenticationService.readChannel();
+    await this.messageService.readChannel();
   }
 
   openDirectMessage(memberId: any) {

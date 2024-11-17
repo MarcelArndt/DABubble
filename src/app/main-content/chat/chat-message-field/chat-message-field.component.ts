@@ -8,6 +8,7 @@ import { ImagesPreviewComponent } from "./images-preview/images-preview.componen
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { Message, Thread } from '../../../../interface/message';
+import { StorageService } from '../../../../services/storage/storage.service';
 
 
 @Component({
@@ -40,11 +41,16 @@ export class ChatMessageFieldComponent {
 
   // @Output() messagesUpdated = new EventEmitter<void>();
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) {}
+  constructor(
+    public object: MessagesService, 
+    public auth: AuthenticationService,
+    public messageService: MessagesService,
+    public storageService: StorageService
+  ) {}
 
  async sendMessage() {
     await this.auth.getCurrentMemberData();
-    this.auth.createMessage(this.messageField, this.imagePreviews)
+    this.messageService.createMessage(this.messageField, this.imagePreviews)
     // this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];
@@ -72,7 +78,7 @@ export class ChatMessageFieldComponent {
           this.imagePreviews = [...this.imagePreviews, reader.result];
           console.log(this.imageUploads);
           console.log(file);
-          this.auth.uploadMultipleImages(files);
+          this.storageService.uploadMultipleImages(files);
         };
         reader.readAsDataURL(file);
       });

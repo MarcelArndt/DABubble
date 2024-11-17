@@ -1,4 +1,4 @@
-<div class="answer-container" [ngClass]="auth.checkUser(message) ? 'flex-end' : 'flex-start'">
+<div class="answer-container" [ngClass]="messageService.checkUser(message) ? 'flex-end' : 'flex-start'">
     <p class="answer" (click)="openThread()">
         <!-- {{message.answers.length}}  -->
        0 Anwtorten</p>

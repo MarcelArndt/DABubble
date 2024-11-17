@@ -8,6 +8,7 @@ import { MessagesService } from '../../../../services/messages/messages.service'
 import { ThreadImagesPreviewComponent } from "./thread-images-preview/thread-images-preview.component";
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { Thread } from '../../../../interface/message';
+import { ThreadService } from '../../../../services/thread/thread.service';
 
 @Component({
   selector: 'app-thread-message-field',
@@ -38,14 +39,18 @@ export class ThreadMessageFieldComponent  implements OnInit{
 
   @Output() messagesUpdated = new EventEmitter<void>();
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) {}
+  constructor(
+    public object: MessagesService, 
+    public auth: AuthenticationService,
+    public threadService: ThreadService,
+  ) {}
  
   ngOnInit(): void {
     this.auth.getCurrentMemberData();
   }
 
   sendMessage() {
-    this.auth.createThread(this.messageField, this.imagePreviews);
+    this.threadService.createThread(this.messageField, this.imagePreviews);
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploads = [];

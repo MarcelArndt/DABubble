@@ -15,13 +15,23 @@ import { query } from '@angular/animations';
 export class AuthenticationService {
   private auth;
   private provider;
-  private storage;
+  public storage;
   memberId: string = '';
   currentMember!: Member;
   currentChannelId: string = '7oe1XRFotJY5IhNzFEbL';
   currentMessageId: string = '';
 
   currentChannelData: any = {};
+
+   // Messages
+   messages: any = [];
+   messagesUpdated = new Subject<void>();
+ 
+   //Thread
+   threadMessages: any = [];
+   threadFirstMessage: any = {};
+   threadUpdated = new Subject<void>();
+   threadFirstMessageUpdated = new Subject<void>();
 
 
   constructor(private router: Router) {
@@ -104,6 +114,10 @@ export class AuthenticationService {
     return uid;
   }
 
+  getReference() {
+    return getFirestore();
+  }
+
 
   getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
     const membersCollection = collection(this.getReference(), 'member');
@@ -125,7 +139,6 @@ export class AuthenticationService {
       console.error("Fehler beim Abrufen der Mitglieder: ", error);
     });
   }
-
 
   async getAllChannelsFromFirestore(onChannelsUpdated: (channels: Channel[]) => void): Promise<void> {
     const channelsCollection = collection(this.getReference(), 'channels');
@@ -205,10 +218,6 @@ export class AuthenticationService {
     console.log("Channel ID erfolgreich zum Array hinzugefügt:", docRefid);
   }
 
-  getReference() {
-    return getFirestore();
-  }
-
   async getCurrentMemberData() {
     const docRef = doc(this.getReference(), 'member', this.getCurrentUserUid());
     const docSnap = await getDoc(docRef);
@@ -276,123 +285,6 @@ export class AuthenticationService {
     }
   }
 
-
-  // Messages
-  messages: any = [];
-  messagesUpdated = new Subject<void>();
-
-  async readChannel() {
-    const docRef = doc(this.getReference(), "channels", this.currentChannelId);
-    const channel = await getDoc(docRef);
-    if (channel.exists()) {
-      await this.loadInitialMessages(this.currentChannelId);
-      this.listenToMessages(this.currentChannelId);
-      this.currentChannelData = channel.data();
-      this.allChannelMembers = [];
-      this.allMembersInChannel();
-    }
-  }
-
-  async loadInitialMessages(channelId: string) {
-    const messagesCollectionRef = collection(this.getReference(), "channels", channelId, "messages");
-    const querySnapshot = await getDocs(messagesCollectionRef);
-    this.messages = querySnapshot.docs
-      .map(doc => doc.data())
-      .sort((a, b) => a['timestamp'] - b['timestamp']);
-    this.messagesUpdated.next();
-  }
-
-  listenToMessages(channelId: string) {
-    const messagesCollectionRef = collection(this.getReference(), "channels", channelId, "messages");
-    onSnapshot(messagesCollectionRef, (querySnapshot) => {
-      const loadedMessages = querySnapshot.docs
-        .map(doc => doc.data())
-        .sort((a, b) => a['timestamp'] - b['timestamp']);
-      if (loadedMessages.length > 0) {
-        this.messages = loadedMessages;
-        this.messagesUpdated.next();
-      }
-    });
-  }
-
-  async createMessage(message: string, imagePreviews: any) {
-    const now = new Date();
-    const cityDocRef = doc(this.getReference(), "channels", this.currentChannelId);
-    const messageCollectionRef = collection(cityDocRef, "messages");
-    const messageDocRef = await addDoc(messageCollectionRef, {
-      user: this.getCurrentUserUid(),
-      name: this.currentMember.name,
-      time: `${now.getHours()}:${now.getMinutes()}`,
-      message: message,
-      profileImage: this.currentMember.imageUrl,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      timestamp: now.getTime(),
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
-    });
-    await updateDoc(messageDocRef, {
-      messageId: messageDocRef.id
-    });
-    this.messagesUpdated.next();
-  }
-
-  checkUser(message: any): boolean {
-    return message.user === this.memberId;
-  }
-
-  //Thread
-  threadMessages: any = [];
-  threadFirstMessage: any = {};
-  threadUpdated = new Subject<void>();
-  threadFirstMessageUpdated = new Subject<void>();
-
-  async createThread(message: string, imagePreviews: any) {
-    const now = new Date();
-    const channelDocRef = doc(this.getReference(), "channels", this.currentChannelId);
-    const messageDocRef = doc(channelDocRef, "messages", this.currentMessageId);
-    const threadCollectionRef = collection(messageDocRef, "threads");
-    const threadDocRef = await addDoc(threadCollectionRef, {
-      user: this.getCurrentUserUid(),
-      name: this.currentMember.name,
-      time: `${now.getHours()}:${now.getMinutes()}`,
-      message: message,
-      profileImage: this.currentMember.imageUrl,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string'),
-      timestamp: now.getTime()
-    });
-  }
-
-  async readThread(messageId: string) {
-    this.threadMessages = [];
-    const messageDocRef = doc(this.getReference(), "channels", this.currentChannelId, "messages", messageId);
-    const threadCollectionRef = collection(messageDocRef, "threads");
-    onSnapshot(threadCollectionRef, (querySnapshot) => {
-      const threadsData = querySnapshot.docs
-        .map(doc => doc.data())
-        .sort((a, b) => a['timestamp'] - b['timestamp']);
-      this.threadMessages = threadsData;
-      this.threadUpdated.next();
-    });
-  }
-
-  async readMessageThread(messageId: string) {
-    this.threadFirstMessage = {};
-    const docRef = doc(this.getReference(), "channels", this.currentChannelId, "messages", messageId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      this.threadFirstMessage = docSnap.data();
-      this.threadFirstMessageUpdated.next();
-    }
-  }
-
   // Direct Message
   public isDirectMessage: boolean = false;
   public directMessageUserData: any = {};
@@ -413,40 +305,6 @@ export class AuthenticationService {
     } 
   }
 
-
-
-  // cloud storage 
-  uploadMultipleImages(files: FileList, folderName: string = 'User') {
-    Array.from(files).forEach((file, index) => {
-      const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
-      console.log('herllo')
-      uploadBytes(fileRef, file).then((snapshot) => {
-        console.log(`Datei ${index + 1} hochgeladen: ${file.name}`);
-      }).catch(error => {
-        console.error(`Fehler beim Hochladen der Datei ${file.name}:`, error);
-      });
-    });
-  }
-
-  async getDownloadURLFromFirebase(file: File, folderName: string = 'User') {
-    const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
-    return getDownloadURL(fileRef);
-  }
-
-  async uploadImage(file: File, folderName: string = 'User'): Promise<string> {
-    const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
-
-    return uploadBytes(fileRef, file)
-      .then(() => {
-        console.log('File uploaded:', file);
-        // Abrufen der Download-URL nach erfolgreichem Upload
-        return getDownloadURL(fileRef);
-      })
-      .catch(error => {
-        console.error('Error uploading file:', error);
-        throw error; // Weitergeben des Fehlers zur Fehlerbehandlung
-      });
-  }
 
 
 

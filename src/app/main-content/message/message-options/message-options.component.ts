@@ -29,7 +29,7 @@ export class MessageOptionsComponent {
   @Output() toggleEdit = new EventEmitter<void>();
 
   constructor(
-    public object: MessagesService, 
+    public messageService: MessagesService, 
     private eventService: EventService, 
     private mainContentService: MainContentService,  
     public auth: AuthenticationService) { }
@@ -40,18 +40,18 @@ export class MessageOptionsComponent {
   }
 
   likeMessage() {
-    const userIdIndex = this.message.reactions.like.indexOf(this.object.userId);
+    const userIdIndex = this.message.reactions.like.indexOf(this.auth.getCurrentUserUid());
     if (userIdIndex === -1) {
-      this.message.reactions.like.push(this.object.userId);
+      this.message.reactions.like.push(this.auth.getCurrentUserUid());
     } else {
       this.message.reactions.like.splice(userIdIndex, 1);
     }
   }
 
   rocketMessage() {
-    const userIdIndex = this.message.reactions.rocket.indexOf(this.object.userId);
+    const userIdIndex = this.message.reactions.rocket.indexOf(this.auth.getCurrentUserUid());
     if (userIdIndex === -1) {
-      this.message.reactions.rocket.push(this.object.userId);
+      this.message.reactions.rocket.push(this.auth.getCurrentUserUid());
     } else {
       this.message.reactions.rocket.splice(userIdIndex, 1);
     }

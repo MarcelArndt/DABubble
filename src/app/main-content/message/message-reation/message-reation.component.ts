@@ -18,21 +18,21 @@ import { AuthenticationService } from '../../../../services/authentication/authe
 export class MessageReationComponent {
   @Input() message: any;
 
-  constructor(public object: MessagesService,  public auth: AuthenticationService) {}
+  constructor(public messageService: MessagesService,  public auth: AuthenticationService) {}
 
   likeMessage() {
-    const userIdIndex = this.message.reactions.like.indexOf(this.object.userId);
+    const userIdIndex = this.message.reactions.like.indexOf(this.auth.getCurrentUserUid());
     if (userIdIndex === -1) {
-      this.message.reactions.like.push(this.object.userId);
+      this.message.reactions.like.push(this.auth.getCurrentUserUid());
     } else {
       this.message.reactions.like.splice(userIdIndex, 1);
     }
   }
 
   rocketMessage() {
-    const userIdIndex = this.message.reactions.rocket.indexOf(this.object.userId);
+    const userIdIndex = this.message.reactions.rocket.indexOf(this.auth.getCurrentUserUid());
     if (userIdIndex === -1) {
-      this.message.reactions.rocket.push(this.object.userId);
+      this.message.reactions.rocket.push(this.auth.getCurrentUserUid());
     } else {
       this.message.reactions.rocket.splice(userIdIndex, 1);
     }

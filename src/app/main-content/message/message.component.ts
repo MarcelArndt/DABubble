@@ -37,7 +37,9 @@ export class MessageComponent {
   isEdit: boolean = false;
   editMessageText: string = '';
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) {}
+  constructor(
+    public messageService: MessagesService,
+    public auth: AuthenticationService) {}
 
   resetHoverAndMenu() {
     this.isMessageHover = false;

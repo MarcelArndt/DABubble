@@ -6,6 +6,7 @@ import { DevspaceComponent } from "./devspace/devspace.component";
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { CommonModule } from '@angular/common';
 import { MainContentService } from '../../services/main-content/main-content.service';
+import { MessagesService } from '../../services/messages/messages.service';
 
 
 @Component({
@@ -31,7 +32,10 @@ export class MainContentComponent {
   @ViewChild('devSpace') devSpace!: DevspaceComponent; // Zugriff auf die DevSpaceComponent
 
 
-  constructor(private auth: AuthenticationService, public mainContentService: MainContentService) {
+  constructor(
+    private auth: AuthenticationService, 
+    public messageService: MessagesService,
+    public mainContentService: MainContentService) {
     auth.observerUser();
   }
 
@@ -48,7 +52,7 @@ export class MainContentComponent {
     this.mainContentService.threadIsOpen.subscribe(value => {
       this.threadIsOpen = value;
     });
-    this.auth.readChannel();
+    this.messageService.readChannel();
   }
 
 

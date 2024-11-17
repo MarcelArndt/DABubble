@@ -24,7 +24,10 @@ export class MessageTextComponent {
 
   @ViewChild('textArea') textArea!: ElementRef<HTMLTextAreaElement>;
 
-  constructor(public object: MessagesService, public auth: AuthenticationService) { }
+  constructor(
+    public messageService: MessagesService, 
+    public auth: AuthenticationService
+  ) { }
 
   autoGrow() {
     const textarea = this.textArea.nativeElement;

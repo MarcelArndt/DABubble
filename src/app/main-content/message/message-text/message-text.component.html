@@ -1,6 +1,6 @@
-<div class="message" (keydown)="handleKeydown($event)" *ngIf="message.message" [ngClass]="auth.checkUser(message) ? 'myMessage' : 'memberMessage'">
+<div class="message" (keydown)="handleKeydown($event)" *ngIf="message.message" [ngClass]="messageService.checkUser(message) ? 'myMessage' : 'memberMessage'">
 
-    <p class="message-text" *ngIf="isEdit == false" [ngClass]="auth.checkUser(message) ? 'text.light' : 'text-dark'"> {{message.message}}</p>
+    <p class="message-text" *ngIf="isEdit == false" [ngClass]="messageService.checkUser(message) ? 'text.light' : 'text-dark'"> {{message.message}}</p>
 
     <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()"></textarea>
 

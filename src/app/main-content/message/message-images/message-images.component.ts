@@ -18,7 +18,10 @@ export class MessageImagesComponent {
   @Input() message: any;
   @Input() isEdit: any
 
-  constructor(public object: MessagesService,  public auth: AuthenticationService) { }
+  constructor(
+    public messageService: MessagesService,
+    public auth: AuthenticationService
+  ) { }
 
 
   deleteImage(i: any) {

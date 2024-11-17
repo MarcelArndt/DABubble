@@ -6,6 +6,7 @@ import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { Member } from '../../../interface/message';
+import { StorageService } from '../../../services/storage/storage.service';
 
 
 @Component({
@@ -32,7 +33,10 @@ export class ProfileComponent {
   currentMember!: Member;
   downloadURL?: File;
 
-  constructor(private authenticationService: AuthenticationService){
+  constructor(
+    private authenticationService: AuthenticationService,
+    private storageService: StorageService
+  ){
     this.previousMember = this.currentMember;
 
   }
@@ -58,7 +62,7 @@ export class ProfileComponent {
     ]);
     if (this.downloadURL) {
         try {
-            const uploadedUrl = await this.authenticationService.uploadImage(this.downloadURL);
+            const uploadedUrl = await this.storageService.uploadImage(this.downloadURL);
             await this.authenticationService.updateProfileImageOfUser(uploadedUrl);
             this.currentMember.imageUrl = uploadedUrl;
         } catch (error) {

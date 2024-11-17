@@ -16,7 +16,10 @@ import { AuthenticationService } from '../../../../services/authentication/authe
 export class MessageNameComponent {
   @Input() message: any;
 
-  constructor(public object: MessagesService,  public auth: AuthenticationService) { }
+  constructor(
+    public messageService: MessagesService,  
+    public auth: AuthenticationService
+  ) { }
 
 
 
