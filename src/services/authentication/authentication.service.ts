@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User,  fetchSignInMethodsForEmail} from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User, fetchSignInMethodsForEmail} from '@angular/fire/auth';
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
@@ -8,6 +8,10 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/stor
 import { CollectionReference, DocumentData, onSnapshot, QuerySnapshot, where, writeBatch } from '@firebase/firestore';
 import { Subject } from 'rxjs';
 import { query } from '@angular/animations';
+import { HttpClient } from '@angular/common/http';
+import { debounceTime, map, catchError, switchMap } from 'rxjs/operators';
+import { AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +83,8 @@ export class AuthenticationService {
     });
   }
 
+
+  /// Email Validation
   async pullAllEmails(){
     const membersCollection = collection(this.getReference(), 'member');
     let AllEmails:string[] = [];
@@ -102,6 +108,21 @@ export class AuthenticationService {
     if(collection.indexOf(email) > 0) return true
     return false
   }
+
+  async checkIsEmailAlreadyExistsV2(email: string): Promise<boolean> {
+    try {
+      const signInMethods = await fetchSignInMethodsForEmail(this.auth, email);
+      console.log('Sign-in methods:', signInMethods);
+      console.log('Sign-in methods length:', signInMethods.length);
+      return signInMethods.length > 0;
+    } catch (error) {
+      console.error('Error checking email:', error);
+      return false;
+    }
+  }
+
+
+  /////////////////////////////////////////////////////
 
 
   signUpWithGoogle() {
@@ -333,5 +354,56 @@ export class AuthenticationService {
 
 
 
+  // cloud storage 
+  uploadMultipleImages(files: FileList, folderName: string = 'User') {
+    Array.from(files).forEach((file, index) => {
+      const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
+      console.log('herllo')
+      uploadBytes(fileRef, file).then((snapshot) => {
+        console.log(`Datei ${index + 1} hochgeladen: ${file.name}`);
+      }).catch(error => {
+        console.error(`Fehler beim Hochladen der Datei ${file.name}:`, error);
+      });
+    });
+  }
+
+  async getDownloadURLFromFirebase(file: File, folderName: string = 'User') {
+    const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
+    return getDownloadURL(fileRef);
+  }
+
+  async uploadImage(file: File, folderName: string = 'User'): Promise<string> {
+    const fileRef = ref(this.storage, `${folderName}/${this.getCurrentUserUid()}/${file.name}`);
+
+    return uploadBytes(fileRef, file)
+      .then(() => {
+        console.log('File uploaded:', file);
+        // Abrufen der Download-URL nach erfolgreichem Upload
+        return getDownloadURL(fileRef);
+      })
+      .catch(error => {
+        console.error('Error uploading file:', error);
+        throw error; // Weitergeben des Fehlers zur Fehlerbehandlung
+      });
+  }
+
+
+  // Lost Password
+  async resetPassword(email:string){
+    sendPasswordResetEmail(this.auth, email)
+    .then(() => {
+    })
+    .catch((error) => {
+    });
+  }
+
+  async saveNewPassword(newPassword:string = '85736251'){
+    updatePassword(this.auth.currentUser as User, newPassword).then(() => {
+      console.log(this.auth.currentUser);
+      console.log('Password is' + newPassword);
+    }).catch((error) => {
+      console.log('ops, somethign went wrong');
+    });
+  }
 
 }
