@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User,  fetchSignInMethodsForEmail} from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User, fetchSignInMethodsForEmail} from '@angular/fire/auth';
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Member, Message, Thread } from '../../interface/message';
@@ -8,6 +8,10 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/stor
 import { CollectionReference, DocumentData, onSnapshot, QuerySnapshot, where, writeBatch } from '@firebase/firestore';
 import { Subject } from 'rxjs';
 import { query } from '@angular/animations';
+import { HttpClient } from '@angular/common/http';
+import { debounceTime, map, catchError, switchMap } from 'rxjs/operators';
+import { AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +73,8 @@ export class AuthenticationService {
     });
   }
 
+
+  /// Email Validation
   async pullAllEmails(){
     const membersCollection = collection(this.getReference(), 'member');
     let AllEmails:string[] = [];
@@ -92,6 +98,21 @@ export class AuthenticationService {
     if(collection.indexOf(email) > 0) return true
     return false
   }
+
+  async checkIsEmailAlreadyExistsV2(email: string): Promise<boolean> {
+    try {
+      const signInMethods = await fetchSignInMethodsForEmail(this.auth, email);
+      console.log('Sign-in methods:', signInMethods);
+      console.log('Sign-in methods length:', signInMethods.length);
+      return signInMethods.length > 0;
+    } catch (error) {
+      console.error('Error checking email:', error);
+      return false;
+    }
+  }
+
+
+  /////////////////////////////////////////////////////
 
 
   signUpWithGoogle() {
@@ -486,10 +507,7 @@ export class AuthenticationService {
 
   async saveNewPassword(newPassword:string = '85736251'){
     updatePassword(this.auth.currentUser as User, newPassword).then(() => {
-      console.log(this.auth.currentUser);
-      console.log('Password is' + newPassword);
     }).catch((error) => {
-      console.log('ops, somethign went wrong');
     });
   }
 
