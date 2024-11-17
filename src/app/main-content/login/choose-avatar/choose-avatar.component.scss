@@ -31,7 +31,7 @@
         img{
             width: 100%;
             border-radius: 50%;
-            border: 1px solid transparent;
+            border: 3px solid transparent;
             &:hover{
                 cursor: pointer;
                 border-color: var(--purple-3);
@@ -63,6 +63,7 @@ button{
 }
 
 .specialButton{
+    position: relative;
     background-color: transparent;
     border-color: var(--purple-2);
     color: var(--text-blue);
@@ -72,12 +73,46 @@ button{
         background-color: var(--purple-2);
         cursor: pointer;
     }
+
+    .hideInput{
+        opacity: 0;
+        content: '';
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.previewImage{
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    overflow: hidden;
+    img{
+        width: 100%;
+        object-fit: contain;
+    }
 }
 
 .input-area{
     @include heightWidth($w: 100%, $h: auto);
     @include dFlex ();
     flex-direction: column;
+}
+
+.errorPicture{
+    width: 100%;
+    height: 38px;
+    vertical-align: middle;
+    p{
+        @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: red);  
+    }
 }
 
 
@@ -210,5 +245,12 @@ a{
         color: var(--text-blue);
         border-color: var( --purple-3);
         cursor: pointer;
+    }
+}
+
+.active{
+    img{
+        border-radius: 50%;
+        border: 3px solid var(--green) !important;
     }
 }
