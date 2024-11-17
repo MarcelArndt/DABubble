@@ -74,6 +74,19 @@ export class SignUpComponent {
   }
 */
 
+async checkForEmail(){
+  this.fillValues();
+  let isDopple = await this.auth.checkIsEmailAlreadyExists(this.email);
+  if(isDopple){
+    this.registerUser();
+    console.log('E-Mail ist bereits vorhanden.')
+  } else {
+    this.registerUser();
+    console.log('E-Mail ist noch frei.')
+  }
+  this.sendClickToParentPageCounter(2);
+}
+
 async onSubmit(pageNumber:number = 0){
   if (this.myForm.valid){
   this.fillValues();

@@ -5,19 +5,37 @@
         <h1>Choose Your Avatar</h1>
     </div>
 
-    <div class="currentProfil"><img src="./img/profile-pic/001.svg"></div>
+    <div class="currentProfil"><img [src]="defaultImage ? defaultImage : './img/profile-pic/001.svg'"></div>
     <div class="currentName">Frederik Beck</div>
     <p class="string">Choose your avatar....</p>
     <div class="default-presets">
-        <div><img src="./img/profile-pic/001.svg"></div>
-        <div><img src="./img/profile-pic/002.svg"></div>
-        <div><img src="./img/profile-pic/003.svg"></div>
-        <div><img src="./img/profile-pic/004.svg"></div>
-        <div><img src="./img/profile-pic/005.svg"></div>
-        <div><img src="./img/profile-pic/006.svg"></div>
+        <div [ngClass]="{'active': indexNumber === 1}" (click)="selectPicture('./img/profile-pic/001.svg' , 1)"><img src="./img/profile-pic/001.svg"></div>
+        <div [ngClass]="{'active': indexNumber === 2}" (click)="selectPicture('./img/profile-pic/002.svg', 2)"><img src="./img/profile-pic/002.svg"></div>
+        <div [ngClass]="{'active': indexNumber === 3}" (click)="selectPicture('./img/profile-pic/003.svg', 3)"><img src="./img/profile-pic/003.svg"></div>
+        <div [ngClass]="{'active': indexNumber === 4}" (click)="selectPicture('./img/profile-pic/004.svg', 4)"><img src="./img/profile-pic/004.svg"></div>
+        <div [ngClass]="{'active': indexNumber === 5}" (click)="selectPicture('./img/profile-pic/005.svg', 5)"><img src="./img/profile-pic/005.svg"></div>
+        <div [ngClass]="{'active': indexNumber === 6}" (click)="selectPicture('./img/profile-pic/006.svg', 6)"><img src="./img/profile-pic/006.svg"></div>
     </div>
+
+    <div class="errorPicture">
+        @if(fileError){
+           <p>{{ fileError}}</p>
+            }
+    </div>
+
     <div class="set-left">
-        <p>Or you can</p><input class="specialButton" accept=" image/*, .pdf, .docx" type="file" id="myfile" name="myfile">
+        <p>Or you can</p>
+
+        <button class="specialButton">Upload Pic
+            <input class="hideInput" (change)="onFileSelected($event)" accept="image/*" type="file" id="myfile" name="myfile">
+        </button>
+
+        <div class="previewImage">        
+            @if(previewUrl){
+            <img [src]="previewUrl" alt="Vorschau">
+            }
+         </div>
+      
     </div>
         <div class="set-right"> <button (click)="sendClickToParentPageCounter(3)">Create Account</button> </div>
 

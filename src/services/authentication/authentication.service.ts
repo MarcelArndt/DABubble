@@ -82,20 +82,20 @@ export class AuthenticationService {
   /// Email Validation
   async pullAllEmails(){
     const membersCollection = collection(this.getReference(), 'member');
-    let AllEmails:string[] = [];
+    let allEmails:string[] = [];
     await getDocs(membersCollection)
     .then((snapshot) => {
       snapshot.forEach((doc) => {
         const userData = doc.data();
-        if (userData && userData['email']) {
-          AllEmails.push(userData['email']);
+        if (userData['email']) {
+          allEmails.push(userData['email']);
         }
       });
     })
     .catch((error) => {
       console.error('Error fetching documents:', error);
     });
-    return(AllEmails)
+    return(allEmails)
   }
 
   async checkIsEmailAlreadyExists(email:string = ''){
@@ -115,9 +115,6 @@ export class AuthenticationService {
       return false;
     }
   }
-
-
-  /////////////////////////////////////////////////////
 
 
   signUpWithGoogle() {
