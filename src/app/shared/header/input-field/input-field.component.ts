@@ -34,6 +34,12 @@ export class InputFieldComponent implements ControlValueAccessor {
   @Input() pattern:string = "";
   @Input() type: string = 'text';
   @Input() minlength:string = "0";
+
+  // [0] = true or false for is required to has a same Value
+  // [1] = true or false is for this inputField is showing ErrorMessages
+  // [2] [...] = all inputsValues from Component-/Template-SisterElement.
+  @Input() checkForSameValue = [false, false, []];
+
   minlenghtNumber:number = parseFloat(this.minlength);
 
   inputControl = new FormControl('', [Validators.required, Validators.minLength(this.minlenghtNumber)]);
