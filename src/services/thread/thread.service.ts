@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { ChannelService } from '../channel/channel.service';
 import { Subject } from 'rxjs';
 
@@ -37,10 +37,14 @@ export class ThreadService {
         rocket: []
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string'),
-      timestamp: now.getTime()
+      timestamp: now.getTime(),
     });
     await updateDoc(threadDocRef, {
       threadId: threadDocRef.id
+    });
+    await updateDoc(messageDocRef, {
+      answers: increment(1),
+      lastAnswer: `${now.getHours()}:${now.getMinutes()}`
     });
   }
 
@@ -70,6 +74,7 @@ export class ThreadService {
   async deleteMessageThread(messageId: string) {
     const baseRef = this.authenticationService.getReference();
     const channelId = this.channelService.currentChannelId;
+    const message = doc(baseRef, "channels", channelId, "messages", this.currentMessageId);
     const messageRef = doc(baseRef, "channels", channelId, "messages", this.currentMessageId, 'threads', messageId);
     await deleteDoc(messageRef);
 
@@ -79,5 +84,9 @@ export class ThreadService {
       this.threadMessages = [];
       this.threadUpdated.next();
     }
+
+    await updateDoc(message, {
+      answers: increment(-1)
+    });
   }
 }

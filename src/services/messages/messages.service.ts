@@ -75,10 +75,12 @@ export class MessagesService {
         like: [],
         rocket: []
       },
+      answers: 0,
+      lastAnswer: '',
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
     await updateDoc(messageDocRef, {
-      messageId: messageDocRef.id
+      messageId: messageDocRef.id,
     });
     this.messagesUpdated.next();
   }
