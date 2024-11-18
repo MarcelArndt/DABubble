@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, collection, doc, getDoc, onSnapshot } from '@angular/fire/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { ChannelService } from '../channel/channel.service';
 import { Subject } from 'rxjs';
 
@@ -39,6 +39,9 @@ export class ThreadService {
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string'),
       timestamp: now.getTime()
     });
+    await updateDoc(threadDocRef, {
+      threadId: threadDocRef.id
+    });
   }
 
   async readThread(messageId: string) {
@@ -61,6 +64,20 @@ export class ThreadService {
     if (docSnap.exists()) {
       this.threadFirstMessage = docSnap.data();
       this.threadFirstMessageUpdated.next();
+    }
+  }
+
+  async deleteMessageThread(messageId: string) {
+    const baseRef = this.authenticationService.getReference();
+    const channelId = this.channelService.currentChannelId;
+    const messageRef = doc(baseRef, "channels", channelId, "messages", this.currentMessageId, 'threads', messageId);
+    await deleteDoc(messageRef);
+
+    const messagesCollectionRef = collection(baseRef, "channels", channelId, "messages", this.currentMessageId, 'threads');
+    const querySnapshot = await getDocs(messagesCollectionRef);
+    if (querySnapshot.empty) {
+      this.threadMessages = [];
+      this.threadUpdated.next();
     }
   }
 }

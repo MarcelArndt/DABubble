@@ -8,6 +8,7 @@ import { MessageTextComponent } from './message-text/message-text.component';
 import { MessageNameComponent } from './message-name/message-name.component';
 import { MessagesService } from '../../../services/messages/messages.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { DirectMessageService } from '../../../services/directMessage/direct-message.service';
 
 @Component({
   selector: 'app-message',
@@ -30,8 +31,6 @@ export class MessageComponent {
   @Input() thread: boolean = false;
   @Input() threadFirstMessage: boolean = false;
 
-  @Output() deleteEvent = new EventEmitter<number>();
-
   isMessageHover: boolean = false;
   isMessageEditMenuOpen = false;
   isEdit: boolean = false;
@@ -39,6 +38,7 @@ export class MessageComponent {
 
   constructor(
     public messageService: MessagesService,
+    public directMessageService: DirectMessageService,
     public auth: AuthenticationService) {}
 
   resetHoverAndMenu() {
@@ -46,9 +46,6 @@ export class MessageComponent {
     this.isMessageEditMenuOpen = false;
   }
 
-  deleteMessage() {
-    this.deleteEvent.emit(this.index);
-  }
 
   toggleEditMode() {
     if (this.isEdit) {

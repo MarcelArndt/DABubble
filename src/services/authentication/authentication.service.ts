@@ -49,7 +49,6 @@ export class AuthenticationService {
       });
   }
 
-
   observerUser() {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
@@ -75,7 +74,6 @@ export class AuthenticationService {
       console.error("Error while updating the data in firebase-authentication:", error);
     }
   }
-
 
   /// Email Validation
   async pullAllEmails(){
@@ -114,7 +112,6 @@ export class AuthenticationService {
     }
   }
 
-
   signUpWithGoogle() {
     signInWithPopup(this.auth, this.provider)
       .then((result) => {
@@ -129,7 +126,6 @@ export class AuthenticationService {
       });
   }
 
-
   signOutUser() {
     signOut(this.auth).then(() => {
       this.router.navigate(['login']);
@@ -139,12 +135,10 @@ export class AuthenticationService {
     });
   }
 
-
   getCurrentUserId(): string | null {
     const currentUser = this.auth.currentUser;
     return currentUser ? currentUser.uid : null;
   }
-
 
   getCurrentUserUid(): string {
     const uid = this.getCurrentUserId();
@@ -153,7 +147,6 @@ export class AuthenticationService {
     }
     return uid;
   }
-
 
   getReference() {
     return getFirestore();

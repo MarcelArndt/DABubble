@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Message } from '../../interface/message';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
 import { MemberService } from '../member/member.service';
 import { ChannelService } from '../channel/channel.service';
 import { Subject } from 'rxjs';
@@ -11,10 +11,10 @@ import { Subject } from 'rxjs';
 })
 export class MessagesService {
 
-  
-   // Messages
-   messages: any = [];
-   messagesUpdated = new Subject<void>();
+
+  // Messages
+  messages: any = [];
+  messagesUpdated = new Subject<void>();
 
   constructor(
     public authenticationService: AuthenticationService,
@@ -26,7 +26,6 @@ export class MessagesService {
     const docRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId);
     const channel = await getDoc(docRef);
     if (channel.exists()) {
-      console.log(this.channelService.currentChannelId)
       await this.loadInitialMessages(this.channelService.currentChannelId);
       this.listenToMessages(this.channelService.currentChannelId);
       this.authenticationService.currentChannelData = channel.data();
@@ -46,7 +45,7 @@ export class MessagesService {
 
   listenToMessages(channelId: string) {
     const messagesCollectionRef = collection(this.authenticationService.getReference(), "channels", channelId, "messages");
-    onSnapshot(messagesCollectionRef, (querySnapshot) => {
+    const unsub = onSnapshot(messagesCollectionRef, (querySnapshot) => {
       const loadedMessages = querySnapshot.docs
         .map(doc => doc.data())
         .sort((a, b) => a['timestamp'] - b['timestamp']);
@@ -55,6 +54,9 @@ export class MessagesService {
         this.messagesUpdated.next();
       }
     });
+
+    // Gib die Unsubscribe-Funktion zurück
+    return unsub;
   }
 
   async createMessage(message: string, imagePreviews: any) {
@@ -85,9 +87,17 @@ export class MessagesService {
     return message.user === this.authenticationService.memberId;
   }
 
-  deleteMessage(index: number) { 
-    
+  async deleteMessage(messageId: string) {
+    const baseRef = this.authenticationService.getReference();
+    const channelId = this.channelService.currentChannelId;
+    const messageRef = doc(baseRef, "channels", channelId, "messages", messageId);
+    await deleteDoc(messageRef);
+    const messagesCollectionRef = collection(baseRef, "channels", channelId, "messages");
+    const querySnapshot = await getDocs(messagesCollectionRef);
+    if (querySnapshot.empty) {
+      this.messages = [];
+      this.messagesUpdated.next();
+    }
   }
-
 
 }

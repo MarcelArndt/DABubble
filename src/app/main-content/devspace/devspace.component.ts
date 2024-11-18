@@ -172,6 +172,7 @@ export class DevspaceComponent implements OnInit {
 
   openDirectMessage(memberId: any) {
     this.directMessageService.isDirectMessage = true;
+    this.memberService.getCurrentMemberData();
     this.directMessageService.readDirectUserData(memberId)
   }
 }

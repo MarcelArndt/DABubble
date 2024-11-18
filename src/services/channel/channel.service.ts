@@ -8,7 +8,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 })
 export class ChannelService {
 
-  currentChannelId: string = '7oe1XRFotJY5IhNzFEbL';
+  currentChannelId: string = 'AsIy6nGF9elR2fSCclv3';
 
 
   constructor(

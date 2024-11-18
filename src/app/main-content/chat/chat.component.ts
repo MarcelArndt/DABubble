@@ -45,6 +45,10 @@ export class ChatComponent {
       this.isLoading = false;
       this.shouldScroll = true;
     });
+    this.directMessageService.messagesUpdated.subscribe(() => {
+      this.isLoading = false;
+      this.shouldScroll = true;
+    });
   }
 
   onMessagesUpdated() {
@@ -66,15 +70,5 @@ export class ChatComponent {
       console.error('Error scrolling to bottom:', err);
     }
   }
-
-  handleDeleteMessage(index: number) {
-    // this.object.deleteMessage(index);
-    // this.message = [...this.object.message];
-    // this.shouldScroll = false;
-  }
-
-  // deleteMessage(index: number) {
-  //   this.shouldScroll = false;
-  // }
 
 }

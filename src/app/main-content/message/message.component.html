@@ -9,16 +9,19 @@
             <app-message-name [message]="message"></app-message-name>
             <app-message-text [message]="message" [isEdit]="isEdit" [editMessageText]="editMessageText" (cancelEdit)="cancelEdit()" (saveText)="saveText()"></app-message-text>
             <app-message-images [message]="message" [isEdit]="isEdit"></app-message-images>
-            <app-message-answer *ngIf="thread == false" [message]="message"></app-message-answer>
+            <app-message-answer *ngIf="thread == false && directMessageService.isDirectMessage == false" [message]="message"></app-message-answer>
             <app-message-reation *ngIf="threadFirstMessage == false" [message]="message"></app-message-reation>
         </div>
 
         <div *ngIf="thread == false" class="answer-date-time-container">
             <p>{{message.createdAt}}</p>
         </div>
-        <app-message-options [message]="message" [isMessageHover]="isMessageHover"
-            [isMessageEditMenuOpen]="isMessageEditMenuOpen" (deleteEvent)="deleteMessage()"
-            (toggleEdit)="toggleEditMode()">
+        <app-message-options
+        [isThread]="thread"
+        [message]="message" 
+        [isMessageHover]="isMessageHover" 
+        [isMessageEditMenuOpen]="isMessageEditMenuOpen"
+        (toggleEdit)="toggleEditMode()">
         </app-message-options>
     </div>
 </div>

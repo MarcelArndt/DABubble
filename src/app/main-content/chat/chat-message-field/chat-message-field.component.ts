@@ -10,6 +10,7 @@ import { AuthenticationService } from '../../../../services/authentication/authe
 import { Message, Thread } from '../../../../interface/message';
 import { StorageService } from '../../../../services/storage/storage.service';
 import { MemberService } from '../../../../services/member/member.service';
+import { DirectMessageService } from '../../../../services/directMessage/direct-message.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { MemberService } from '../../../../services/member/member.service';
     MatMenuModule,
     FormsModule,
     ImagesPreviewComponent,
-],
+  ],
   templateUrl: './chat-message-field.component.html',
   styleUrl: './chat-message-field.component.scss'
 })
@@ -43,19 +44,34 @@ export class ChatMessageFieldComponent {
   // @Output() messagesUpdated = new EventEmitter<void>();
 
   constructor(
-    public object: MessagesService, 
+    public object: MessagesService,
     public memberService: MemberService,
     public messageService: MessagesService,
-    public storageService: StorageService
-  ) {}
+    public storageService: StorageService,
+    public directMessageService: DirectMessageService
+  ) { }
 
- async sendMessage() {
+  async sendMessage() {
     await this.memberService.getCurrentMemberData();
-    this.messageService.createMessage(this.messageField, this.imagePreviews)
-    // this.messagesUpdated.emit();
+    this.messageService.createMessage(this.messageField, this.imagePreviews);
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
+  }
+
+  async sendDirectMessage() {
+    await this.directMessageService.createDirectMessage(this.messageField, this.imagePreviews);
+    this.messageField = '';
+    this.imageUploads = [];
+    this.imagePreviews = [];
+  }
+
+  handleSendMessage() {
+    if (this.directMessageService.isDirectMessage) {
+      this.sendDirectMessage();
+    } else {
+      this.sendMessage();
+    }
   }
 
   toggleEmojis(event: Event): void {
@@ -76,10 +92,7 @@ export class ChatMessageFieldComponent {
       Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onload = () => {
-          this.imagePreviews = [...this.imagePreviews, reader.result];
-          console.log(this.imageUploads);
-          console.log(file);
-          this.storageService.uploadMultipleImages(files);
+          this.imagePreviews.push(reader.result); // Lokale Verwaltung von Previews
         };
         reader.readAsDataURL(file);
       });
@@ -105,7 +118,7 @@ export class ChatMessageFieldComponent {
         this.showUserList = false;
       }
     } else {
-      this.showUserList = false; 
+      this.showUserList = false;
     }
   }
 
@@ -119,7 +132,7 @@ export class ChatMessageFieldComponent {
   addTag() {
     this.messageField += '@';
     this.showUserList = true;
-    this.filteredUsers = this.users; 
+    this.filteredUsers = this.users;
   }
 
 
