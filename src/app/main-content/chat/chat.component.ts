@@ -45,6 +45,10 @@ export class ChatComponent {
       this.isLoading = false;
       this.shouldScroll = true;
     });
+    this.directMessageService.messagesUpdated.subscribe(() => {
+      this.isLoading = false;
+      this.shouldScroll = true;
+    });
   }
 
   onMessagesUpdated() {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { addDoc, collection } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { doc, getDoc, onSnapshot, setDoc } from '@firebase/firestore';
+import { doc, getDoc, getDocs, onSnapshot, setDoc } from '@firebase/firestore';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -40,6 +40,7 @@ export class DirectMessageService {
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
+    this.readDirectMessages()
     this.messagesUpdated.next();
   }
 
@@ -52,16 +53,15 @@ export class DirectMessageService {
     });
   }
 
-  readDirectMessages() {
+ async readDirectMessages() {
     const messagesRef = collection(this.authenticationService.getReference(), "directMessagesChannels", this.directMessageChannelId, "messages");
-    const unsub = onSnapshot(messagesRef, (snapshot) => {
-      const messages = snapshot.docs.map((doc) => ({
-        id: doc.id, 
-        ...doc.data(),
-      }));
-      this.allDirectMessages = messages;
-    });
-  }
+    const querySnapshot = await getDocs(messagesRef);
+    this.allDirectMessages = querySnapshot.docs
+      .map(doc => doc.data())
+      .sort((a, b) => a['timestamp'] - b['timestamp']);
+    this.messagesUpdated.next();
+    }
+
 
   async readDirectUserData(memberId: string) {
     const docRef = doc(this.authenticationService.getReference(), "member", memberId);

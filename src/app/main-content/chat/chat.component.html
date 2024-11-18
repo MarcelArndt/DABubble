@@ -25,11 +25,11 @@
         </div>
 
         <div *ngIf="directMessageService.isDirectMessage" class="direct-message-container">
-            <ng-container *ngIf="isLoading; else directMessageList">
+            <ng-container *ngIf="isLoading; else messageList">
                 <div class="loader">Laden...</div>
             </ng-container>
 
-            <ng-template #directMessageList>
+            <ng-template #messageList>
                 <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i"
                     (deleteEvent)="handleDeleteMessage(i)">
                 </app-message>
