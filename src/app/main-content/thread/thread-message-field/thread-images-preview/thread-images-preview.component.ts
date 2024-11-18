@@ -13,7 +13,7 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './thread-images-preview.component.scss'
 })
 export class ThreadImagesPreviewComponent {
-  @Input() imagePreviews: any
+  @Input() imagePreviews: (string | ArrayBuffer | null)[] = [];
   
   deleteImage(i: any) {
     this.imagePreviews.splice(i, 1);

@@ -29,7 +29,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   openEmojis: boolean = false;
   messageField: string = ''
   openData: boolean = false;
-  imageUploads: string[] = [];
+  imageUploadsThread: string[] = [];
   imagePreviews: (string | ArrayBuffer | null)[] = [];
 
   users = ['JohnDoe', 'JaneSmith', 'AlexMiller', 'ChrisJohnson'];
@@ -55,7 +55,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
     this.threadService.createThread(this.messageField, this.imagePreviews);
     this.messagesUpdated.emit();
     this.messageField = '';
-    this.imageUploads = [];
+    this.imageUploadsThread = [];
     this.imagePreviews = [];
   }
 
@@ -77,8 +77,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
       Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onload = () => {
-          this.imagePreviews = [...this.imagePreviews, reader.result];
-          console.log(this.imageUploads);
+          this.imagePreviews.push(reader.result); // Lokale Verwaltung von Previews
         };
         reader.readAsDataURL(file);
       });

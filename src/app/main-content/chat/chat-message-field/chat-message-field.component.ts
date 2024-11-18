@@ -92,10 +92,7 @@ export class ChatMessageFieldComponent {
       Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onload = () => {
-          this.imagePreviews = [...this.imagePreviews, reader.result];
-          console.log(this.imageUploads);
-          console.log(file);
-          this.storageService.uploadMultipleImages(files);
+          this.imagePreviews.push(reader.result); // Lokale Verwaltung von Previews
         };
         reader.readAsDataURL(file);
       });

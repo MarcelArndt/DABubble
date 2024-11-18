@@ -2,9 +2,7 @@
   <div *ngIf="showUserList" class="user-list" #userListContainer>
     <ul>
       <li *ngIf="filteredUsers.length === 0">Kein Nutzer gefunden</li>
-      <li
-        *ngFor="let user of filteredUsers; let i = index"
-        (click)="selectUser(user)"
+      <li *ngFor="let user of filteredUsers; let i = index" (click)="selectUser(user)"
         [class.active]="i === selectedIndex">
         {{ user }}
       </li>
@@ -31,7 +29,7 @@
       </div>
 
       <button [disabled]="!(imagePreviews.length > 0 || messageField.length > 0)" class="send-btn"
-    (click)="handleSendMessage()"><mat-icon>send</mat-icon></button>
+        (click)="handleSendMessage()"><mat-icon>send</mat-icon></button>
     </div>
 
     <div class="emojis-container" *ngIf="openEmojis">
