@@ -7,7 +7,9 @@
 
     .profile-image {
         @include image($br: 50%);
-        @include heightWidth($w: auto, $h: 60px);
+        @include heightWidth($w: 60px, $h: 60px);
+        object-fit: cover;
+        object-position: center;
     }
 
     .answer-date-time-container {
@@ -54,8 +56,4 @@
 
 .text.light {
     @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
-}
-
-.thread-answers-current {
-
 }

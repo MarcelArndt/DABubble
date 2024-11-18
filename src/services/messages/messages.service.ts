@@ -26,7 +26,6 @@ export class MessagesService {
     const docRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId);
     const channel = await getDoc(docRef);
     if (channel.exists()) {
-      console.log(this.channelService.currentChannelId)
       await this.loadInitialMessages(this.channelService.currentChannelId);
       this.listenToMessages(this.channelService.currentChannelId);
       this.authenticationService.currentChannelData = channel.data();

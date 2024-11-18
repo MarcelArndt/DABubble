@@ -25,7 +25,17 @@
         </div>
 
         <div *ngIf="directMessageService.isDirectMessage" class="direct-message-container">
-            <div class="welcome-direct-message">
+            <ng-container *ngIf="isLoading; else directMessageList">
+                <div class="loader">Laden...</div>
+            </ng-container>
+
+            <ng-template #directMessageList>
+                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i"
+                    (deleteEvent)="handleDeleteMessage(i)">
+                </app-message>
+            </ng-template>
+
+            <div class="welcome-direct-message" *ngIf="!isLoading && directMessageService.allDirectMessages.length == 0">
                 <div>
                     <img src="{{directMessageService.directMessageUserData.imageUrl}}">
                     <h2>{{directMessageService.directMessageUserData.name}}</h2>
@@ -37,5 +47,8 @@
 
     </div>
 
-    <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"></app-chat-message-field>
+    <app-chat-message-field
+     (messagesUpdated)="onMessagesUpdated()"
+     
+     ></app-chat-message-field>
 </section>

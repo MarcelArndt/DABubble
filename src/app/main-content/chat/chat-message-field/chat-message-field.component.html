@@ -31,7 +31,7 @@
       </div>
 
       <button [disabled]="!(imagePreviews.length > 0 || messageField.length > 0)" class="send-btn"
-        (click)="sendMessage()"><mat-icon>send</mat-icon></button>
+    (click)="handleSendMessage()"><mat-icon>send</mat-icon></button>
     </div>
 
     <div class="emojis-container" *ngIf="openEmojis">
