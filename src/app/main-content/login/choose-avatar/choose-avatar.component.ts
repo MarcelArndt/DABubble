@@ -57,20 +57,14 @@ export class ChooseAvatarComponent {
     let reader = new FileReader();
     let file:File;
     let fileInput = event.target as HTMLInputElement;
-
     if (fileInput.files && fileInput.files[0]) {
       file = fileInput.files[0];
-
     if(!this.checkForFile(file)) return;
-
     if(!this.checkForSize(file)) return;
-
     this.fileError = null;
-
       reader.onload = () => {
         this.previewUrl = reader.result;
       };
-
       reader.readAsDataURL(file);
       this.selectedImage = file;
       this.defaultImage = URL.createObjectURL(file);
