@@ -7,7 +7,8 @@
 
     .profile-image {
         @include image($br: 50%);
-        @include heightWidth($w: auto, $h: 60px);
+        @include heightWidth($w: 60px, $h: 60px);
+        object-fit: cover;
     }
 
     .answer-date-time-container {

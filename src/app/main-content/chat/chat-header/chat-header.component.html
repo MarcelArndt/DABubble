@@ -1,17 +1,19 @@
 <section>
     <div class="channel-header" *ngIf="directMessageService.isDirectMessage == false">
-        <button class="creator-team-btn" (click)="openEditeChannel()">
+        <button class="creator-team-btn" (click)="openEditChannel()">
             <mat-icon class="hashtag">tag</mat-icon>
             <p>{{auth.currentChannelData.title}}</p>
             <mat-icon>keyboard_arrow_down</mat-icon>
         </button>
 
         <div class="add-members-container">
-            <div class="active-members-image-container" *ngFor="let img of memberService.allChannelMembers">
-                <img style="margin-left: -10px;" src="{{img.imageUrl}}" alt="">
+            <div class="showMemberListButtonContainer">
+                <div class="active-members-image-container" *ngFor="let img of memberService.allChannelMembers">
+                    <img style="margin-left: -10px;" src="{{img.imageUrl}}" alt="">
+                </div>
+                <p>{{auth.currentChannelData?.membersId?.length}}</p>
             </div>
 
-            <p>{{auth.currentChannelData?.membersId?.length}}</p>
             <button>
                 <mat-icon (click)="addMembersToChannel()" class="add-members">person_add</mat-icon>
             </button>

@@ -47,7 +47,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   readonly announcer = inject(LiveAnnouncer);
   selectAllPeople = true; 
   myControl = new FormControl('');
-  filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); // Leeres Observable initialisieren
+  filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); 
 
   channel: Channel;
   members!: Member[];
@@ -64,12 +64,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     this.channel = data; 
   }
 
-  test() {
-    this.channel.title;
-    this.channel.description;
-    this.channel.membersId
-  }
-
   async ngOnInit() {
     this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
       this.members = updatedMembers;
@@ -80,16 +74,16 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     );
   }
 
-
   private _filter(value: string): Member[] {
     const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
-    // Filtere die Mitgliederliste, um nur Mitglieder einzuschließen, die noch nicht ausgewählt sind
-    return this.members.filter(
-      member => 
-        member.name.toLowerCase().includes(filterValue) &&
-        !this.selectedMembers.some(selected => selected.id === member.id)
-    );
+    
+    return this.members.filter(member => {
+      const memberName = member.name ? member.name.toLowerCase() : ''; 
+      return memberName.includes(filterValue) &&
+             !this.selectedMembers.some(selected => selected.id === member.id);
+    });
   }
+  
 
 
   add(event: MatChipInputEvent): void {
@@ -143,14 +137,14 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   }
 
 
-  addSelectedMembers() {
+  async addSelectedMembers() {
     this.selectedMembers.forEach(member => {
-      // Hier wird jedes ausgewählte Mitglied dem Channel hinzugefügt
       if (!this.channel.membersId.some(existingMember => existingMember === member.id)) {
         this.channel.membersId.push(member.id);
       }
     });
-    this.selectedMembers = []; // Reset selected members after adding
+    this.selectedMembers = [];
+    await this.channelService.updateMemberIdsToChannel(this.channel.id, this.channel.membersId);
   }
 
 
@@ -159,10 +153,10 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   };
 
 
-  createChannel(){
+  async createChannel(){
     if (this.selectAllPeople) {
       this.members.forEach(member => {
-          this.channel.membersId.push(member.id);
+        this.channel.membersId.push(member.id);
         })
         if (this.selectedMembers.length > 0) {
           this.selectedMembers = [];
@@ -172,10 +166,8 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       this.addSelectedMembers();
       this.channel.isPublic = false;
     }
-    // this.channelService.channels.push(this.channel);
     this.channelService.addChannelToFirebase(this.channel);
     this.dialogRef.close();
-    console.log(this.channel); // Überprüfe das aktualisierte Channel-Objekt
   }
 
 

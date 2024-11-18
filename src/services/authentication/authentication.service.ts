@@ -22,7 +22,6 @@ export class AuthenticationService {
   public storage;
   memberId: string = '';
   currentMember!: Member;
-
   currentChannelData: any = {};
   auth = inject(Auth);
 
@@ -35,7 +34,6 @@ export class AuthenticationService {
   }
 
   // Authentication 
-
 
   signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)

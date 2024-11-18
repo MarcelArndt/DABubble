@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Channel } from '../../classes/channel.class';
-import { arrayUnion, collection, doc, DocumentData, onSnapshot, QuerySnapshot, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
+import { arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
@@ -15,6 +15,32 @@ export class ChannelService {
     private authenticationService: AuthenticationService
   ){
   }
+
+  async getChannelById(channelId: string): Promise<Channel | null> {
+    try {
+      const channelDocRef = doc(this.authenticationService.getReference(), 'channels', channelId);
+      const channelSnapshot = await getDoc(channelDocRef);
+      if (channelSnapshot.exists()) {
+        const data = channelSnapshot.data();
+        return {
+          id: data['id'],
+          title: data['title'],
+          messages: data['messages'] || [],
+          membersId: data['membersId'] || [],
+          admin: data['admin'],
+          description: data['description'] || '',
+          isPublic: data['isPublic'] || false,
+        };
+      } else {
+        console.warn(`Channel with ID ${channelId} does not exist.`);
+        return null;
+      }
+    } catch (error) {
+      console.error(`Error while trying to get the document of channels with the ID: ${channelId}:`, error);
+      return null;
+    }
+  }
+  
 
   async getAllChannelsFromFirestore(onChannelsUpdated: (channels: Channel[]) => void): Promise<void> {
     const channelsCollection = collection(this.authenticationService.getReference(), 'channels');
@@ -51,7 +77,7 @@ export class ChannelService {
       description: channel.description,
       isPublic: channel.isPublic,
     });
-    this.addChannelIdToCurrentUser(channel.id);
+    await this.addChannelIdToCurrentUser(channel.id);
     await this.addChannelIdToMembers(channel.membersId, channel.id);
   }
 
@@ -73,6 +99,16 @@ export class ChannelService {
     await updateDoc(userDocRef, {
       channelIds: arrayUnion(docRefid)
     });
-    console.log("Channel ID erfolgreich zum Array hinzugefügt:", docRefid);
   }
+
+  async updateMemberIdsToChannel(channelId: string, memberIds: string[]) {
+    console.log(channelId, memberIds);
+    const batch = writeBatch(this.authenticationService.getReference());
+    const channelDocRef = doc(this.authenticationService.getReference(), 'channels', channelId);
+    batch.update(channelDocRef, {
+      membersId: arrayUnion(...memberIds) 
+    });
+    await batch.commit();
+  }
+  
 }

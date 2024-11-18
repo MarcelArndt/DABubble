@@ -173,6 +173,12 @@ form {
 ::ng-deep .cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above) div.mat-mdc-autocomplete-panel {
     border-radius: 30px !important;
     border-top-left-radius: 0px !important;
+    &::-webkit-scrollbar {
+        width: 0px; 
+    }
+    &::-webkit-scrollbar-track {
+        background-color: transparent; 
+    }
 }
 
 ::ng-deep  .mat-mdc-standard-chip .mdc-evolution-chip__action--primary::before {
@@ -229,75 +235,4 @@ form {
 ::ng-deep .mdc-evolution-chip-set__chips{
     row-gap: 12px;
 }
-// ::ng-deep .mat-mdc-option .mat-mdc-option-active .mdc-list-item{
-//     background-color: white !important;
-//     &:hover{
-//         .mdc-list-item__primary-text{
-//             cursor: pointer !important;
-//             .contact {
-//                 background-color: #ECEEFE !important;
-//             }  
-//         }
-//     }
-// }
 
-
-// .editable-field {
-//     display: inline-flex;
-//     align-items: center;
-//     flex-wrap: wrap;
-//     outline: none;
-//     width: 100%;
-//     min-height: 30px;
-//   }
-  
-//   .chip {
-//     background-color: #e0e0e0;
-//     border-radius: 16px;
-//     border: 1.6px solid var(--purple-1);
-//     padding: 4px 8px;
-//     margin: 2px;
-//     display: inline-flex;
-//     align-items: center;
-//     cursor: pointer;
-//   }
-  
-//   .chip:hover {
-//     background-color: #d0d0d0;
-//   }
-  
-//   .chip::after {
-//     content: ' ✕';
-//     color: red;
-//     padding-left: 4px;
-//     font-weight: bold;
-//     cursor: pointer;
-//   }
-  
-//   .input-placeholder {
-//     display: inline-block;
-//     min-width: 5px;
-//     outline: none;
-//   }
-
-//   .editable-field:empty::before {
-//     content: attr(placeholder);
-//     color: #aaa;
-//   }
-  
-//   .member-suggestions {
-//     border: 1px solid #ccc;
-//     border-top: none;
-//     max-height: 150px;
-//     overflow-y: auto;
-//     background-color: #fff;
-//   }
-  
-//   .suggestion {
-//     padding: 8px;
-//     cursor: pointer;
-//   }
-  
-//   .suggestion:hover {
-//     background-color: #f0f0f0;
-//   }
