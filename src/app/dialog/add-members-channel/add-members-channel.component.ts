@@ -140,7 +140,6 @@ export class AddMembersChannelComponent {
       }
     });
     this.selectedMembers = []; 
-    debugger
     await this.channelService.addChannelIdToMembers(this.channel.membersId, this.channel.id);
     await this.channelService.updateMemberIdsToChannel(this.channel.id, this.channel.membersId);
     this.dialogRef.close();

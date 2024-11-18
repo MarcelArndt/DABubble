@@ -18,6 +18,7 @@ import { map, Observable, startWith } from 'rxjs';
 import { Member } from '../../../../interface/message';
 import { MemberService } from '../../../../services/member/member.service';
 import { ChannelService } from '../../../../services/channel/channel.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 @Component({
@@ -60,6 +61,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     MAT_DIALOG_DATA) public data: Channel, 
     private memberService: MemberService,
     private channelService: ChannelService,
+    private authenticationService: AuthenticationService
   ) {
     this.channel = data; 
   }
@@ -166,6 +168,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       this.addSelectedMembers();
       this.channel.isPublic = false;
     }
+    this.channel.membersId.push(this.authenticationService.currentMember.id);
     this.channelService.addChannelToFirebase(this.channel);
     this.dialogRef.close();
   }
@@ -173,9 +176,9 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
   isFormValid(): boolean {
       if (this.selectAllPeople) {
-          return true; // 'Add all members' gewählt
+          return true; 
       } else {
-          return this.selectedMembers.length > 0; // Nur valide, wenn bestimmte Mitglieder ausgewählt wurden
+          return this.selectedMembers.length > 0; 
       }
   }
 }
