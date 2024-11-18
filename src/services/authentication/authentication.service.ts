@@ -94,22 +94,9 @@ export class AuthenticationService {
     return(allEmails)
   }
 
-  async checkIsEmailAlreadyExists(email:string = ''){
+  async checkIsEmailAlreadyExists(email:string = ''): Promise<boolean>{
     let collection:string [] = await this.pullAllEmails();
-    if(collection.indexOf(email) > 0) return true
-    return false
-  }
-
-  async checkIsEmailAlreadyExistsV2(email: string): Promise<boolean> {
-    try {
-      const signInMethods = await fetchSignInMethodsForEmail(this.auth, email);
-      console.log('Sign-in methods:', signInMethods);
-      console.log('Sign-in methods length:', signInMethods.length);
-      return signInMethods.length > 0;
-    } catch (error) {
-      console.error('Error checking email:', error);
-      return false;
-    }
+    return collection.includes(email);
   }
 
   signUpWithGoogle() {
@@ -182,8 +169,10 @@ export class AuthenticationService {
   async resetPassword(email:string){
     sendPasswordResetEmail(this.auth, email)
     .then(() => {
+      console.log('E-mail send to: ', email);
     })
     .catch((error) => {
+      console.error(error);
     });
   }
 
