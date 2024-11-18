@@ -9,8 +9,7 @@
             </ng-container>
 
             <ng-template #messageList>
-                <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i"
-                    (deleteEvent)="handleDeleteMessage(i)">
+                <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i">
                 </app-message>
             </ng-template>
 
@@ -30,8 +29,7 @@
             </ng-container>
 
             <ng-template #messageList>
-                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i"
-                    (deleteEvent)="handleDeleteMessage(i)">
+                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i">
                 </app-message>
             </ng-template>
 

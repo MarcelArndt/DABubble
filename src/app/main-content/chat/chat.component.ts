@@ -71,14 +71,4 @@ export class ChatComponent {
     }
   }
 
-  handleDeleteMessage(index: number) {
-    // this.object.deleteMessage(index);
-    // this.message = [...this.object.message];
-    // this.shouldScroll = false;
-  }
-
-  // deleteMessage(index: number) {
-  //   this.shouldScroll = false;
-  // }
-
 }

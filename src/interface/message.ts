@@ -43,7 +43,8 @@ export interface Thread {
     like: string[],
     rocket: string[]
   },
-  attachment: string[]
+  attachment: string[],
+  threadId: string
 }
 
 export interface Attachment {

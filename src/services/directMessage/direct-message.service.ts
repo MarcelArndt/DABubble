@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { addDoc, collection } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { doc, getDoc, getDocs, onSnapshot, setDoc } from '@firebase/firestore';
+import { deleteDoc, doc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from '@firebase/firestore';
 import { Subject } from 'rxjs';
+import { ChannelService } from '../channel/channel.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +19,9 @@ export class DirectMessageService {
 
 
   constructor(
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private channelService: ChannelService
   ) { }
-
 
   async createDirectMessage(messageField: string, imagePreviews: any) {
     this.createDirectMessageChannel();
@@ -40,6 +41,10 @@ export class DirectMessageService {
         rocket: []
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
+    });
+
+    await updateDoc(messageDocRef, {
+      messageId: messageDocRef.id
     });
     this.messagesUpdated.next();
   }
@@ -71,7 +76,6 @@ export class DirectMessageService {
     return unsub;
   }
 
-
   async readDirectUserData(memberId: string) {
     const docRef = doc(this.authenticationService.getReference(), "member", memberId);
     const docSnap = await getDoc(docRef);
@@ -86,5 +90,17 @@ export class DirectMessageService {
 
   generateChannelId(userOne: string, userTwo: string): string {
     return [userOne, userTwo].sort().join('');
+  }
+
+  async deleteMessage(messageId: string) {
+    const baseRef = this.authenticationService.getReference();
+    const messageRef = doc(baseRef, "directMessagesChannels", this.directMessageChannelId, "messages", messageId);
+    await deleteDoc(messageRef);
+    const messagesCollectionRef = collection(baseRef, "directMessagesChannels", this.directMessageChannelId, "messages");
+    const querySnapshot = await getDocs(messagesCollectionRef);
+    if (querySnapshot.empty) {
+      this.allDirectMessages = [];
+      this.messagesUpdated.next();
+    }
   }
 }

@@ -6,6 +6,8 @@ import { EventService } from '../../../../services/event/event.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { MainContentService } from '../../../../services/main-content/main-content.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { DirectMessageService } from '../../../../services/directMessage/direct-message.service';
+import { ThreadService } from '../../../../services/thread/thread.service';
 
 
 @Component({
@@ -24,14 +26,16 @@ export class MessageOptionsComponent {
   @Input() isMessageHover: any;
   @Input() isMessageEditMenuOpen: any;
   @Input() editMessageText: any;
+  @Input() isThread: boolean = false;
 
-  @Output() deleteEvent = new EventEmitter<void>();
   @Output() toggleEdit = new EventEmitter<void>();
 
   constructor(
-    public messageService: MessagesService, 
-    private eventService: EventService, 
-    private mainContentService: MainContentService,  
+    public directMessage: DirectMessageService,
+    public messageService: MessagesService,
+    public threadService: ThreadService,
+    private eventService: EventService,
+    private mainContentService: MainContentService,
     public auth: AuthenticationService) { }
 
   toggleEditMode() {
@@ -57,8 +61,15 @@ export class MessageOptionsComponent {
     }
   }
 
-  onDelete() {
-    this.deleteEvent.emit();
+  handleOnDelete() {
+    if (this.isThread) {
+      this.threadService.deleteMessageThread(this.message.threadId);
+    } else if (this.directMessage.isDirectMessage) {
+      this.directMessage.deleteMessage(this.message.messageId);
+      console.log('ja')
+    } else {
+      this.messageService.deleteMessage(this.message.messageId);
+    }
   }
 
   openThread() {
@@ -67,8 +78,8 @@ export class MessageOptionsComponent {
     this.checkWindowAndOpenThread();
   }
 
-  checkWindowAndOpenThread(){
-    window.innerWidth <= 1285 ? this.mainContentService.openThreadForMobile() : this.mainContentService.openThread();    
+  checkWindowAndOpenThread() {
+    window.innerWidth <= 1285 ? this.mainContentService.openThreadForMobile() : this.mainContentService.openThread();
   }
 
   openEditMenu() {

@@ -119,8 +119,5 @@ export class ThreadComponent implements OnInit {
     }
   }
 
-  handleDeleteMessage(i: any) {
-    console.log(i)
-  }
 
 }

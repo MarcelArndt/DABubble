@@ -10,8 +10,7 @@
             <div class="between-line"></div>
             </div>
 
-        <app-message *ngFor="let msg of messages; index as i" [message]="msg" [index]="i" [thread]="isThread"
-            (deleteEvent)="handleDeleteMessage(i)">
+        <app-message *ngFor="let msg of messages; index as i" [message]="msg" [index]="i" [thread]="isThread">
         </app-message>
 
     </div>
