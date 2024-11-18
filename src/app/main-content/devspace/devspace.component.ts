@@ -167,6 +167,7 @@ export class DevspaceComponent implements OnInit {
     window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
     this.directMessageService.isDirectMessage = false;
     this.channelService.currentChannelId = channel.id;
+    console.log(this.channelService.currentChannelId);
     await this.messageService.readChannel();
   }
 

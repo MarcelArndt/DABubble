@@ -50,7 +50,7 @@ export class AddMembersChannelComponent {
   myControl = new FormControl('');
   filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); 
 
-  channel: Channel;
+  channel!: Channel;
   members: Member[] = []; 
 
   selectedMembers: Member[] = [];
@@ -62,10 +62,18 @@ export class AddMembersChannelComponent {
     private memberService: MemberService,
     private channelService: ChannelService,
   ) {
-    this.channel = data; 
   }
+  // this 'data' is somehow the data from the welcome-channel. this 'data' needs to be fixed
 
   async ngOnInit() {
+    const fetchedChannel = await this.channelService.getChannelById(this.channelService.currentChannelId);
+
+    if (fetchedChannel) {
+      this.channel = fetchedChannel;
+    } else {
+      console.error('Channel not found');
+      throw new Error('Channel not found');
+    }
     this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
       this.members = updatedMembers;
     });

@@ -65,9 +65,17 @@ export class ChannelService {
 
 
   async addChannelToFirebase(channel: Channel) {
+    const firestore = this.authenticationService.getReference(); // Firestore-Instanz
     const userUid = this.authenticationService.getCurrentUserUid();
-    const docRef = doc(collection(this.authenticationService.getReference(), "channels"));
+  
+    if (!userUid) {
+      throw new Error("User UID is invalid or not found");
+    }
+  
+    const collectionRef = collection(firestore, "channels"); // Sammlung "channels"
+    const docRef = doc(collectionRef); // Automatische Dokument-ID
     channel.id = docRef.id;
+  
     await setDoc(docRef, {
       id: channel.id,
       title: channel.title,
@@ -77,37 +85,55 @@ export class ChannelService {
       description: channel.description,
       isPublic: channel.isPublic,
     });
+  
     await this.addChannelIdToCurrentUser(channel.id);
     await this.addChannelIdToMembers(channel.membersId, channel.id);
   }
 
 
   async addChannelIdToMembers(memberIds: string[], channelId: string) {
-    const batch = writeBatch(this.authenticationService.getReference());
+    const firestore = this.authenticationService.getReference();
+    const batch = writeBatch(firestore);
+  
     memberIds.forEach((memberId) => {
-      const memberRef = doc(this.authenticationService.getReference(), `member/${memberId}`);
+      const memberRef = doc(firestore, "member", memberId); // Korrekte Dokumentreferenz
       batch.update(memberRef, {
         channels: arrayUnion(channelId),
       });
     });
+  
     await batch.commit();
   }
+  
 
 
   async addChannelIdToCurrentUser(docRefid: string) {
-    const userDocRef = doc(this.authenticationService.getReference(), "member", this.authenticationService.getCurrentUserUid());
+    const userUid = this.authenticationService.getCurrentUserUid();
+    if (!userUid) {
+      throw new Error("User UID is invalid or not found");
+    }
+  
+    const userDocRef = doc(this.authenticationService.getReference(), "member", userUid);
     await updateDoc(userDocRef, {
-      channelIds: arrayUnion(docRefid)
+      channelIds: arrayUnion(docRefid),
     });
   }
+  
 
   async updateMemberIdsToChannel(channelId: string, memberIds: string[]) {
-    console.log(channelId, memberIds);
+    console.log('Channel ID:', channelId);
+  
+    if (!channelId) {
+      throw new Error("Invalid channelId provided.");
+    }
+  
     const batch = writeBatch(this.authenticationService.getReference());
     const channelDocRef = doc(this.authenticationService.getReference(), 'channels', channelId);
+    
     batch.update(channelDocRef, {
-      membersId: arrayUnion(...memberIds) 
+      membersId: arrayUnion(...memberIds)
     });
+    
     await batch.commit();
   }
   
