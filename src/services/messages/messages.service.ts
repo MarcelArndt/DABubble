@@ -45,7 +45,7 @@ export class MessagesService {
 
   listenToMessages(channelId: string) {
     const messagesCollectionRef = collection(this.authenticationService.getReference(), "channels", channelId, "messages");
-    onSnapshot(messagesCollectionRef, (querySnapshot) => {
+    const unsub = onSnapshot(messagesCollectionRef, (querySnapshot) => {
       const loadedMessages = querySnapshot.docs
         .map(doc => doc.data())
         .sort((a, b) => a['timestamp'] - b['timestamp']);
@@ -54,6 +54,9 @@ export class MessagesService {
         this.messagesUpdated.next();
       }
     });
+  
+    // Gib die Unsubscribe-Funktion zurück
+    return unsub;
   }
 
   async createMessage(message: string, imagePreviews: any) {

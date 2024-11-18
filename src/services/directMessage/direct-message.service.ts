@@ -23,6 +23,7 @@ export class DirectMessageService {
 
 
   async createDirectMessage(messageField: string, imagePreviews: any) {
+    this.createDirectMessageChannel();
     const now = new Date();
     const directMessageRef = doc(this.authenticationService.getReference(), "directMessagesChannels", this.directMessageChannelId);
     const messageCollectionRef = collection(directMessageRef, "messages");
@@ -40,7 +41,6 @@ export class DirectMessageService {
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
-    this.readDirectMessages()
     this.messagesUpdated.next();
   }
 
@@ -53,14 +53,23 @@ export class DirectMessageService {
     });
   }
 
- async readDirectMessages() {
+  readDirectMessages() {
     const messagesRef = collection(this.authenticationService.getReference(), "directMessagesChannels", this.directMessageChannelId, "messages");
-    const querySnapshot = await getDocs(messagesRef);
-    this.allDirectMessages = querySnapshot.docs
-      .map(doc => doc.data())
-      .sort((a, b) => a['timestamp'] - b['timestamp']);
-    this.messagesUpdated.next();
-    }
+    const unsub = onSnapshot(messagesRef, (snapshot) => {
+      this.allDirectMessages = snapshot.docs
+        .map((doc) => {
+          const data = doc.data() as { [key: string]: any };
+          return {
+            id: doc.id,
+            ...data,
+            timestamp: data['timestamp'] || 0,
+          };
+        })
+        .sort((a, b) => a.timestamp - b.timestamp);
+      this.messagesUpdated.next();
+    });
+    return unsub;
+  }
 
 
   async readDirectUserData(memberId: string) {
@@ -71,12 +80,11 @@ export class DirectMessageService {
       this.userOne = this.directMessageUserData['id'];
       this.userTwo = this.authenticationService.memberId;
       this.directMessageChannelId = this.generateChannelId(this.userOne, this.userTwo);
-      this.createDirectMessageChannel();
       this.readDirectMessages();
     }
   }
 
-   generateChannelId(userOne: string, userTwo: string): string {
+  generateChannelId(userOne: string, userTwo: string): string {
     return [userOne, userTwo].sort().join('');
   }
 }
