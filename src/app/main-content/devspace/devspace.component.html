@@ -33,7 +33,7 @@
         @if (channelsAreVisible) {
         <div class="dropDownChannelSection" @slideDown>
             <div class="dropDownChannels" *ngFor="let channel of channels; let i = index;">
-                <p class="channel" (click)="checkWindowAndOpenChannel(channel)"># {{channel.title}}</p>
+                <p class="channel" (click)="checkWindowAndOpenChannel(channel)"><mat-icon>tag</mat-icon>{{channel.title}}</p>
             </div>
         </div>
         <div class="addChannelButton" (click)="openCreateChannelDialog()">
@@ -56,7 +56,7 @@
                     <img class="userImage" src="{{member.imageUrl}}" alt="Member image">
                     <img class="onlineStatus" [src]="member.status ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="Online status">
                 </div>
-                <span>{{member.name}}</span>
+                <span class="contactName">{{member.name}}</span>
             </div>
         </div>
         }

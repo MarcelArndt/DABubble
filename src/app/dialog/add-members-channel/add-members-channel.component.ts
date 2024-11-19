@@ -57,8 +57,7 @@ export class AddMembersChannelComponent {
   filteredMembers: Member[] = [];
 
 
-  constructor(@Inject(
-    MAT_DIALOG_DATA) public data: Channel, 
+  constructor(
     private memberService: MemberService,
     private channelService: ChannelService,
   ) {
@@ -67,7 +66,6 @@ export class AddMembersChannelComponent {
 
   async ngOnInit() {
     const fetchedChannel = await this.channelService.getChannelById(this.channelService.currentChannelId);
-
     if (fetchedChannel) {
       this.channel = fetchedChannel;
     } else {

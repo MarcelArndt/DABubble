@@ -49,7 +49,6 @@ export class ChatHeaderComponent implements OnInit {
 
   addMembersToChannel(): void {
     const dialogRef = this.dialog.open(AddMembersChannelComponent, {
-      data: this.channel,
       width: '660px',
       height: 'auto',
       position: { top: '400px', right: '64px' },

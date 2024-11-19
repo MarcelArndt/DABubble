@@ -55,11 +55,41 @@ h4{
     @include nunito(700, 20px, black);
 }
 
-h2{
-    margin: 0px !important;
-    @include nunito(700, 32px, black);
-    button{
-        @include nunito(600, 18px, var(--purple-3));
+h2 {
+    margin: 0 !important; 
+    font-family: 'Nunito', sans-serif; 
+    font-weight: 700; 
+    font-size: 32px !important; 
+    color: black; 
+    max-width: 300px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+
+    button {
+        font-family: 'Nunito', sans-serif;
+        font-weight: 600;
+        font-size: 18px;
+        color: var(--purple-3);
+    }
+}
+
+.mat-mdc-button{
+    transition: background-color 0.125s ease-in-out;
+}
+
+.mdc-button__label{
+    transition: color 0.125s ease-in-out;
+}
+
+.mat-mdc-button .mdc-button__label{
+    color: var(--purple-3);
+}
+
+.mdc-button:hover{
+    background-color:  var(--purple-2);
+    .mdc-button__label{
+        color: white !important;
     }
 }
 
