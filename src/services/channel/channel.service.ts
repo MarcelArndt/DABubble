@@ -2,13 +2,14 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Channel } from '../../classes/channel.class';
 import { arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, serverTimestamp, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { MemberService } from '../member/member.service';
+import { Member } from '../../interface/message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChannelService {
 
+  currentChannelId: string = 'hJ97Bm4CAC43yxjtGeYL';
   currentChannelId: string = 'hJ97Bm4CAC43yxjtGeYL';
 
 
@@ -66,6 +67,38 @@ export class ChannelService {
   }
 
 
+  getAllChannelsWithChannelIdsFromCurrentUser(
+    currentMember: Member,
+    onChannelsUpdated: (channels: Channel[]) => void
+  ): void {
+    const channelsCollection = collection(this.authenticationService.getReference(), 'channels');
+    
+    onSnapshot(channelsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+      const channels: Channel[] = snapshot.docs
+        .map((doc) => {
+          const data = doc.data();
+          return {
+            id: data['id'],
+            title: data['title'],
+            messages: data['messages'],
+            membersId: data['membersId'],
+            admin: data['admin'],
+            description: data['description'],
+            isPublic: data['isPublic'],
+          };
+        })
+        .filter((channel) => currentMember.channelIds.includes(channel.id)); // Nur Channels des aktuellen Members
+      onChannelsUpdated(channels); // Die aktualisierte Channel-Liste zurückgeben
+    }, (error) => {
+      console.error('Fehler beim Abrufen der Channels: ', error);
+    });
+  }
+  
+  
+  
+  
+
+
   async addChannelToFirebase(channel: Channel) {
     const firestore = this.authenticationService.getReference(); // Firestore-Instanz
     const userUid = this.authenticationService.getCurrentUserUid();
@@ -102,7 +135,7 @@ export class ChannelService {
     memberIds.forEach((memberId) => {
       const memberRef = doc(firestore, "member", memberId); // Korrekte Dokumentreferenz
       batch.update(memberRef, {
-        channels: arrayUnion(channelId),
+        channelIds: arrayUnion(channelId),
       });
     });
   

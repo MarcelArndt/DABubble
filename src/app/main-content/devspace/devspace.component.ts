@@ -84,6 +84,7 @@ export class DevspaceComponent implements OnInit {
 
   members?: Member[];
   channels?: Channel[];
+  currentMember?: Member | null = null;
 
   //Searchbar
   @Input() icon: string = 'search';
@@ -126,14 +127,26 @@ export class DevspaceComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.channelService.getAllChannelsFromFirestore((updatedChannels: Channel[]) => {
-      this.channels = updatedChannels;  
-    });  
-    this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
+    this.authenticationService.currentMember$.subscribe((member) => {
+      this.currentMember = member;
+      if (this.currentMember) {
+        this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (updatedChannels: Channel[]) => {
+          this.channels = updatedChannels;
+          console.log('Channels aktualisiert:', this.channels);
+        });
+      } else {
+        console.log("Kein Member vorhanden");
+      }
+    });
+    this.authenticationService.observerUser();
+      this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
       this.members = updatedMembers;
     });
     // this.memberService.getCurrentMemberData()
   }
+  
+
+
 
   toggleNavBar() {
     this.navBarIsClosed = !this.navBarIsClosed;
@@ -175,7 +188,7 @@ export class DevspaceComponent implements OnInit {
 
   openDirectMessage(memberId: any) {
     this.directMessageService.isDirectMessage = true;
-    this.memberService.getCurrentMemberData();
+    this.memberService.setCurrentMemberData();
     this.directMessageService.readDirectUserData(memberId)
   }
 }

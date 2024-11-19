@@ -48,7 +48,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   ) {}
  
   ngOnInit(): void {
-    this.memberService.getCurrentMemberData();
+    this.memberService.setCurrentMemberData();
   }
 
   sendMessage() {
