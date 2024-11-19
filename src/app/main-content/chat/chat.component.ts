@@ -71,4 +71,12 @@ export class ChatComponent {
     }
   }
 
+  isUserDirectMessage() {
+    return this.directMessageService.userOne == this.directMessageService.userTwo
+  }
+
+  checkUserAdmin(admin: string) {
+    return this.auth.memberId == admin
+  }
+
 }

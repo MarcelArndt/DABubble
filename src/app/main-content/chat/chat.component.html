@@ -18,7 +18,9 @@
                     <mat-icon class="hashtag">tag</mat-icon>
                     <h2>{{auth.currentChannelData.title}}</h2>
                 </div>
-                <p>Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels <span># {{auth.currentChannelData.title}}</span></p>
+                    <p>{{ checkUserAdmin(auth.currentChannelData.admin)
+                     ? 'Du hast diesen Channel heute erstellt. ' 
+                     : ' hat diesen Channel heute erstellt.' }} Das ist der Anfang des Channels <span># {{auth.currentChannelData.title}}</span></p>
             </div>
 
         </div>
@@ -38,15 +40,17 @@
                     <img src="{{directMessageService.directMessageUserData.imageUrl}}">
                     <h2>{{directMessageService.directMessageUserData.name}}</h2>
                 </div>
-                <p>Diese Unterhaltung findet nur zwischen <span>&#64;{{directMessageService.directMessageUserData.name}}</span> und dir statt</p>
+                <div *ngIf="isUserDirectMessage()">
+                    <p><b>Dieser Raum ist nur für dich da.</b> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</p>
+                </div>
+                <div  *ngIf="isUserDirectMessage() == false">
+                    <p>Diese Unterhaltung findet nur zwischen <span>&#64;{{directMessageService.directMessageUserData.name}}</span> und dir statt</p>
+                </div>
             </div>
 
         </div>
 
     </div>
 
-    <app-chat-message-field
-     (messagesUpdated)="onMessagesUpdated()"
-     
-     ></app-chat-message-field>
+    <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"></app-chat-message-field>
 </section>
