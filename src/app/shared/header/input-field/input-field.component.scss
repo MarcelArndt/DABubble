@@ -57,7 +57,10 @@
         border-radius: 16px;
     }
 
-    input:-webkit-autofill {
+    input:-webkit-autofill,
+    input:-webkit-autofill:active,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
         -webkit-box-shadow: 0 0 0 0 rgba(0,0,0,0) inset !important;
         box-shadow:  0 0 0 0 rgba(0,0,0,0) white inset !important;
         background-color: rgba(0,0,0,0) !important;
