@@ -43,7 +43,7 @@ export class ProfileComponent {
   }
 
   async ngOnInit() {
-    await this.memberService.getCurrentMemberData();
+    await this.memberService.setCurrentMemberData();
     this.currentMember = this.authenticationService.currentMember || {} as Member;
   }
 

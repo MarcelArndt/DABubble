@@ -1,7 +1,7 @@
 @import '../../../mixin.scss';
 
 .new-message-container {
-    @include dFlex($ai: start, $jc: start);
+    @include dFlex($ai: start, $jc: center);
     box-sizing: border-box;
     position: relative;
 
@@ -14,12 +14,14 @@
     .answer-date-time-container {
         position: absolute;
         top: -18px;
-        left: 40%;
+        left: 50%; 
+        transform: translate(-50%);
         border-radius: 20px;
         border: 1px solid var(--border-light-purple);
         box-sizing: border-box;
         padding: 5px 10px;
         background-color: var(--secundary-bg);
+
 
         p {
             @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));

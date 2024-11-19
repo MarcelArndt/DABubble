@@ -155,7 +155,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
 
   async createChannel(){
-
     if (this.selectAllPeople) {
       this.members.forEach(member => {
       this.channel.membersId.push(member.id);

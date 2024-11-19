@@ -39,7 +39,7 @@ export class MessageComponent {
   constructor(
     public messageService: MessagesService,
     public directMessageService: DirectMessageService,
-    public auth: AuthenticationService) {}
+    public auth: AuthenticationService) { }
 
   resetHoverAndMenu() {
     this.isMessageHover = false;
@@ -62,6 +62,15 @@ export class MessageComponent {
 
   cancelEdit() {
     this.isEdit = false
+  }
+
+  parseDate(time: string) {
+    const now = new Date();
+    const timeTody = now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })
+    if (time == timeTody) {
+      return 'Heute'
+    }
+    return time
   }
 
 }

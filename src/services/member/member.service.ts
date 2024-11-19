@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Member } from '../../interface/message';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, setDoc, updateDoc } from '@firebase/firestore';
 import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
@@ -11,8 +11,8 @@ import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
 export class MemberService {
   allChannelMembers: any = [];
 
-  constructor(private authenticationService: AuthenticationService){
 
+  constructor(private authenticationService: AuthenticationService){
   }
 
   getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
@@ -53,7 +53,7 @@ export class MemberService {
   }
   
 
-  async getCurrentMemberData() {
+  async setCurrentMemberData() {
     const docRef = doc(this.authenticationService.getReference(), 'member', this.authenticationService.getCurrentUserUid());
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -68,6 +68,25 @@ export class MemberService {
       }
     } else {
       console.log("No such document!");
+    }
+  }
+
+  async getCurrentMember(): Promise<Member | undefined> {
+    const docRef = doc(this.authenticationService.getReference(), 'member', this.authenticationService.getCurrentUserUid());
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return {
+        id: data['id'],
+        name: data['name'],
+        email: data['email'],
+        imageUrl: data['imageUrl'],
+        status: data['status'],
+        channelIds: data['channelIds'],
+      }
+    } else {
+      console.log("No such document!");
+      return undefined; 
     }
   }
 

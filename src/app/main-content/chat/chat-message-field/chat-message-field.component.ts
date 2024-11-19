@@ -52,7 +52,7 @@ export class ChatMessageFieldComponent {
   ) { }
 
   async sendMessage() {
-    await this.memberService.getCurrentMemberData();
+    await this.memberService.setCurrentMemberData();
     this.messageService.createMessage(this.messageField, this.imagePreviews);
     this.messageField = '';
     this.imageUploads = [];

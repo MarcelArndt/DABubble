@@ -6,7 +6,7 @@ import { Member, Message, Thread } from '../../interface/message';
 import { Channel } from '../../classes/channel.class';
 import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
 import { CollectionReference, DocumentData, onSnapshot, QuerySnapshot, where, writeBatch } from '@firebase/firestore';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { query } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { debounceTime, map, catchError, switchMap } from 'rxjs/operators';
@@ -24,6 +24,8 @@ export class AuthenticationService {
   currentMember!: Member;
   currentChannelData: any = {};
   auth = inject(Auth);
+  private currentMemberSubject = new BehaviorSubject<Member | null>(null);
+  currentMember$ = this.currentMemberSubject.asObservable();
 
   constructor(
     private router: Router,
@@ -49,15 +51,35 @@ export class AuthenticationService {
       });
   }
 
-  observerUser() {
-    onAuthStateChanged(this.auth, (user) => {
+
+  observerUser(): void {
+    onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         this.memberId = user.uid;
-      } else {
-
-      }
+        const memberDoc = doc(this.getReference(), 'member', user.uid);
+        onSnapshot(
+          memberDoc,
+          (docSnap) => {
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              const member: Member = {
+                id: data['id'] || user.uid,
+                name: data['name'] || user.displayName || 'Unbekannt',
+                email: data['email'] || user.email || 'Keine E-Mail',
+                imageUrl: data['imageUrl'] || user.photoURL || '',
+                status: true,
+                channelIds: data['channelIds'] || [],
+              };
+              console.log("Aktualisierte Member-Daten:", member);
+              this.currentMemberSubject.next(member);
+            } 
+          } 
+        ); 
+      } 
     });
   }
+  
+  
 
   async updateAuthProfileData(currentMember: Member): Promise<void> {
     try {
@@ -107,13 +129,48 @@ export class AuthenticationService {
     const uid = this.getCurrentUserId();
     if (!uid) {
       throw new Error("Kein Benutzer angemeldet.");
-    }
+    };
     return uid;
   }
 
+  // getCurrentUserUid(): string | null {
+  //   const uid = this.getCurrentUserId();
+  //   if (!uid) {
+  //     console.warn("Kein Benutzer angemeldet.");
+  //     return null; // Anstatt eine Exception zu werfen, gib null zurück
+  //   }
+  //   return uid;
+  // }
+
   getReference() {
     return getFirestore();
-  } 
+  }  
+  
+  registerUser(email: string, password: string, fullName: string) {
+    createUserWithEmailAndPassword(this.auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        this.createUserCollection(fullName, email);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  }
+
+  async createUserCollection(fullName: string, email: string) {
+    const userId = this.getCurrentUserUid();
+    await setDoc(doc(this.getReference(), "member", userId), {
+      id: userId,
+      name: fullName,
+      email: email,
+      imageUrl: '',
+      status: true,
+      channelIds: [],
+      directMessageIds: [],
+    });
+  }
+
 
   // Lost Password
   async resetPassword(email:string){
