@@ -102,4 +102,12 @@ export class MessagesService {
     }
   }
 
+  async adminUserChannel(id: string) {
+    const docRef = doc(this.authenticationService.getReference(), "member", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data()['name'];
+    } 
+  }
+
 }

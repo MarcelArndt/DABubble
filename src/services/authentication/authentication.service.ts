@@ -116,9 +116,8 @@ export class AuthenticationService {
   signOutUser() {
     signOut(this.auth).then(() => {
       this.router.navigate(['login']);
-      console.log('Sie wurden erfolgreich amgemeldet')
     }).catch((error) => {
-
+      console.log('log out error:', error)
     });
   }
 

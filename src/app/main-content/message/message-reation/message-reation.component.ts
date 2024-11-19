@@ -21,12 +21,7 @@ export class MessageReationComponent {
   constructor(public messageService: MessagesService,  public auth: AuthenticationService) {}
 
   likeMessage() {
-    const userIdIndex = this.message.reactions.like.indexOf(this.auth.getCurrentUserUid());
-    if (userIdIndex === -1) {
-      this.message.reactions.like.push(this.auth.getCurrentUserUid());
-    } else {
-      this.message.reactions.like.splice(userIdIndex, 1);
-    }
+    
   }
 
   rocketMessage() {

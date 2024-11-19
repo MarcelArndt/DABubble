@@ -122,6 +122,7 @@ export class DevspaceComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private renderer: Renderer2,
     private elRef: ElementRef) {
+      
   }
 
   async ngOnInit() {
@@ -131,6 +132,7 @@ export class DevspaceComponent implements OnInit {
     this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
       this.members = updatedMembers;
     });
+    // this.memberService.getCurrentMemberData()
   }
 
   toggleNavBar() {
@@ -158,6 +160,7 @@ export class DevspaceComponent implements OnInit {
   }
 
   openCreateChannelDialog() {
+    this.memberService.getCurrentMemberData()
     const dialogRef = this.dialog.open(CreateChannelComponent);
     dialogRef.afterClosed().subscribe();
   }

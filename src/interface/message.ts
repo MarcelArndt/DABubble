@@ -5,7 +5,6 @@ export interface Member {
   imageUrl: string;
   status: boolean;
   channelIds: string[];
-  directMessageIds: string[];
 }
 
 export interface Channel {

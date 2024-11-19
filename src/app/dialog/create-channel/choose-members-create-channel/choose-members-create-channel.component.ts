@@ -146,7 +146,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       }
     });
     this.selectedMembers = [];
-    await this.channelService.updateMemberIdsToChannel(this.channel.id, this.channel.membersId);
   }
 
 
@@ -156,20 +155,21 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
 
   async createChannel(){
+
     if (this.selectAllPeople) {
       this.members.forEach(member => {
-        this.channel.membersId.push(member.id);
-        })
-        if (this.selectedMembers.length > 0) {
-          this.selectedMembers = [];
-        }
-        this.channel.isPublic = true;
+      this.channel.membersId.push(member.id);
+      })
+      if (this.selectedMembers.length > 0) {
+        this.selectedMembers = [];
+      }
+      this.channel.isPublic = true;
     } else if (!this.selectAllPeople) {
       this.addSelectedMembers();
       this.channel.isPublic = false;
     }
-    this.channel.membersId.push(this.authenticationService.currentMember.id);
-    this.channelService.addChannelToFirebase(this.channel);
+    this.channel.membersId.push(this.authenticationService.getCurrentUserUid());
+    await this.channelService.addChannelToFirebase(this.channel);
     this.dialogRef.close();
   }
 

@@ -241,35 +241,62 @@ h3 {
     margin-top: 16px;
 }
 
+.channel{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .channel,
 .contact {
     margin-bottom: 25px;
     margin-left: 25px;
     transition: background-color 0.125s ease-in-out;
     border-radius: 20px;
-    padding: 4px 20px 4px 20px;
+    @include padding(4px, 20px, 4px, 20px);
+    @include dFlex(start, center);
+    flex-direction: row;
+    gap: 8px;
     width: fit-content;
     font-family: 'Nunito';
     font-weight: 500;
     font-size: 18px;
-
     &:hover {
         background-color: var(--primary-bg);
         color: var(--purple-1);
         cursor: pointer;
+        mat-icon{
+            color: var(--purple-1);
+        }
     }
 }
 
 .contact {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     gap: 15px;
     margin-bottom: 13px;
-    padding: 4px, 20px, 4px, 20px;
     font-size: 18px;
     border-radius: 60px;
+    .contactName {
+        max-width: 120px; 
+        display: -webkit-box; 
+        -webkit-box-orient: vertical; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        -webkit-line-clamp: 2; 
+        line-height: 1.2em; 
+        max-height: calc(1.2em * 2); 
+    }
+    @supports not (-webkit-line-clamp: 2) {
+        .contactName {
+            max-height: calc(1.2em * 2); 
+            white-space: normal;
+        }
+    }
 }
+
 
 .addChannelButton {
     color: var(--text-black);

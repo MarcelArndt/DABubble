@@ -51,6 +51,15 @@ mat-dialog-container,
     }
 }
 
+.cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above) div.mat-mdc-autocomplete-panel {
+    border-radius: 30px !important;
+    border-top-left-radius: 0px !important;
+}
+
+div.mat-mdc-autocomplete-panel{
+    background-color: white !important;
+}
+
 .titleAndCloseContainer{
     @include dFlex(space-between, center);
     @include nunito(700, 24px, black);
