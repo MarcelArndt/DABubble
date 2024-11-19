@@ -83,7 +83,6 @@ export class MemberService {
         imageUrl: data['imageUrl'],
         status: data['status'],
         channelIds: data['channelIds'],
-        directMessageIds: data['directMessageIds'],
       }
     } else {
       console.log("No such document!");

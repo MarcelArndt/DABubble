@@ -173,7 +173,7 @@ export class DevspaceComponent implements OnInit {
   }
 
   openCreateChannelDialog() {
-    this.memberService.getCurrentMemberData()
+    this.memberService.setCurrentMemberData()
     const dialogRef = this.dialog.open(CreateChannelComponent);
     dialogRef.afterClosed().subscribe();
   }
