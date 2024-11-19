@@ -56,8 +56,6 @@ export class AuthenticationService {
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         this.memberId = user.uid;
-        console.log("Benutzer angemeldet:", user);
-        // Firestore-Dokument für den Member überwachen
         const memberDoc = doc(this.getReference(), 'member', user.uid);
         onSnapshot(
           memberDoc,
@@ -74,21 +72,13 @@ export class AuthenticationService {
               };
               console.log("Aktualisierte Member-Daten:", member);
               this.currentMemberSubject.next(member);
-            } else {
-              console.error("Mitgliedsdaten in Firestore nicht gefunden.");
-              this.currentMemberSubject.next(null);
-            }
-          },
-          (error) => {
-            console.error("Fehler beim Überwachen des Mitgliedsdokuments:", error);
-          }
-        );
-      } else {
-        console.log("Kein Benutzer angemeldet.");
-        this.currentMemberSubject.next(null);
-      }
+            } 
+          } 
+        ); 
+      } 
     });
   }
+  
   
 
   async updateAuthProfileData(currentMember: Member): Promise<void> {
