@@ -19,8 +19,8 @@
                     <h2>{{auth.currentChannelData.title}}</h2>
                 </div>
                     <p>{{ checkUserAdmin(auth.currentChannelData.admin)
-                     ? 'Du hast diesen Channel heute erstellt. ' 
-                     : ' hat diesen Channel heute erstellt.' }} Das ist der Anfang des Channels <span># {{auth.currentChannelData.title}}</span></p>
+                     ?  'Du hast diesen Channel heute erstellt. ' 
+                     :  auth.currentChannelData.adminName + ' hat diesen Channel heute erstellt.' }} Das ist der Anfang des Channels <span># {{auth.currentChannelData.title}}</span></p>
             </div>
 
         </div>

@@ -82,17 +82,7 @@ export class SignUpComponent {
     console.log('open a Lightbox here')
   }
 
-  /*
-  async onSubmit(pageNumber:number = 0){
-    if (this.myForm.valid){
-    this.fillValues();
-    this.registerUser();
-    this.sendClickToParentPageCounter(2);
-    }
-  }
-*/
-
-async checkForEmail(){
+checkForEmail(){
   this.fillValues();
   this.sendClickToParentPageCounter(2);
 }
@@ -101,6 +91,7 @@ async onSubmit(pageNumber:number = 0){
   if (this.myForm.valid){
   this.fillValues();
   this.sendClickToParentPageCounter(2);
+  this.registerUser();
   }
 }
 
