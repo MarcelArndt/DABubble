@@ -79,4 +79,39 @@ export class ChatComponent {
     return this.auth.memberId == admin
   }
 
+   isToday(date: Date): boolean {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  }
+  
+   formatTime(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = {
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Intl.DateTimeFormat("de-DE", options).format(date);
+  }
+  
+   formatDate(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    const formatter = new Intl.DateTimeFormat("de-DE", options).format(date);
+    const [datePart, timePart] = formatter.split(", ");
+    return `am ${datePart} um ${timePart}`;
+  }
+  
+   parseTime(time: { toDate: () => Date }): string {
+    const date = time.toDate();
+    return this.isToday(date) ? `heute` : this.formatDate(date);
+  }
+
 }

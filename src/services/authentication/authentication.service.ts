@@ -51,14 +51,6 @@ export class AuthenticationService {
       });
   }
 
-  // observerUser() {
-  //   onAuthStateChanged(this.auth, (user) => {
-  //     if (user) {
-  //     } else {
-
-  //     }
-  //   });
-  // }
 
   observerUser(): void {
     onAuthStateChanged(this.auth, async (user) => {
