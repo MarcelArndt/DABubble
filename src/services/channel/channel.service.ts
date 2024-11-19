@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Channel } from '../../classes/channel.class';
-import { arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
+import { arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, serverTimestamp, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { MemberService } from '../member/member.service';
 
@@ -80,6 +80,7 @@ export class ChannelService {
   
     await setDoc(docRef, {
       adminName: this.authenticationService.currentMember.name,
+      createdAt: serverTimestamp(),
       id: channel.id,
       title: channel.title,
       messages: [],
