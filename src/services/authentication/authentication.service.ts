@@ -51,6 +51,33 @@ export class AuthenticationService {
       });
   }
 
+  initializeCurrentMember(): void {
+    const userId = this.getCurrentUserUid();
+    if (!userId) {
+      console.error('Kein Benutzer angemeldet');
+      return;
+    };
+    const docRef = doc(this.getReference(), 'member', userId);
+    onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const member: Member = {
+          id: data['id'],
+          name: data['name'],
+          email: data['email'],
+          imageUrl: data['imageUrl'],
+          status: data['status'],
+          channelIds: data['channelIds'] || [],
+        };
+        // Aktuelle Member-Daten im BehaviorSubject speichern
+        this.currentMemberSubject.next(member);
+      } else {
+        console.log('Mitgliedsdaten nicht gefunden!');
+        this.currentMemberSubject.next(null);
+      }
+    });
+  }
+
 
   observerUser(): void {
     onAuthStateChanged(this.auth, async (user) => {
@@ -79,7 +106,6 @@ export class AuthenticationService {
     });
   }
   
-  
 
   async updateAuthProfileData(currentMember: Member): Promise<void> {
     try {
@@ -96,7 +122,6 @@ export class AuthenticationService {
       console.error("Error while updating the data in firebase-authentication:", error);
     }
   }
-
 
   signUpWithGoogle() {
     signInWithPopup(this.auth, this.provider)
@@ -132,15 +157,6 @@ export class AuthenticationService {
     };
     return uid;
   }
-
-  // getCurrentUserUid(): string | null {
-  //   const uid = this.getCurrentUserId();
-  //   if (!uid) {
-  //     console.warn("Kein Benutzer angemeldet.");
-  //     return null; // Anstatt eine Exception zu werfen, gib null zurück
-  //   }
-  //   return uid;
-  // }
 
   getReference() {
     return getFirestore();
