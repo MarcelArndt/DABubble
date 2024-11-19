@@ -142,7 +142,6 @@ export class DevspaceComponent implements OnInit {
       this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
       this.members = updatedMembers;
     });
-    // this.memberService.getCurrentMemberData()
   }
   
 
@@ -173,7 +172,7 @@ export class DevspaceComponent implements OnInit {
   }
 
   openCreateChannelDialog() {
-    this.memberService.getCurrentMemberData()
+    this.memberService.setCurrentMemberData()
     const dialogRef = this.dialog.open(CreateChannelComponent);
     dialogRef.afterClosed().subscribe();
   }

@@ -65,27 +65,32 @@ export class AuthenticationService {
       if (user) {
         this.memberId = user.uid;
         console.log("Benutzer angemeldet:", user);
-  
-        // Firestore-Dokument für den Member abrufen
-        const docRef = doc(this.getReference(), 'member', user.uid);
-        const docSnap = await getDoc(docRef);
-  
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          const member: Member = {
-            id: data['id'] || user.uid,
-            name: data['name'] || user.displayName || 'Unbekannt',
-            email: data['email'] || user.email || 'Keine E-Mail',
-            imageUrl: data['imageUrl'] || user.photoURL || '',
-            status: true,
-            channelIds: data['channelIds'] || [],
-            directMessageIds: data['directMessageIds'] || [],
-          };
-          this.currentMemberSubject.next(member);
-        } else {
-          console.error("Mitgliedsdaten in Firestore nicht gefunden.");
-          this.currentMemberSubject.next(null);
-        }
+        // Firestore-Dokument für den Member überwachen
+        const memberDoc = doc(this.getReference(), 'member', user.uid);
+        onSnapshot(
+          memberDoc,
+          (docSnap) => {
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              const member: Member = {
+                id: data['id'] || user.uid,
+                name: data['name'] || user.displayName || 'Unbekannt',
+                email: data['email'] || user.email || 'Keine E-Mail',
+                imageUrl: data['imageUrl'] || user.photoURL || '',
+                status: true,
+                channelIds: data['channelIds'] || [],
+              };
+              console.log("Aktualisierte Member-Daten:", member);
+              this.currentMemberSubject.next(member);
+            } else {
+              console.error("Mitgliedsdaten in Firestore nicht gefunden.");
+              this.currentMemberSubject.next(null);
+            }
+          },
+          (error) => {
+            console.error("Fehler beim Überwachen des Mitgliedsdokuments:", error);
+          }
+        );
       } else {
         console.log("Kein Benutzer angemeldet.");
         this.currentMemberSubject.next(null);
@@ -224,7 +229,6 @@ export class AuthenticationService {
           imageUrl: data['imageUrl'],
           status: data['status'],
           channelIds: data['channelIds'] || [],
-          directMessageIds: data['directMessageIds'] || [],
         };
         // Aktuelle Member-Daten im BehaviorSubject speichern
         this.currentMemberSubject.next(member);

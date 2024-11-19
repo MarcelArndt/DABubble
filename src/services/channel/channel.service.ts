@@ -10,12 +10,10 @@ import { Member } from '../../interface/message';
 export class ChannelService {
 
   currentChannelId: string = 'hJ97Bm4CAC43yxjtGeYL';
-  currentChannelId: string = 'hJ97Bm4CAC43yxjtGeYL';
 
 
   constructor(
     private authenticationService: AuthenticationService,
-    private memberService: MemberService
   ){
   }
 
