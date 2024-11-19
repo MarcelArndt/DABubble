@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { SignInService } from '../../../../services/sign-in/sign-in.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-choose-avatar',
@@ -10,6 +12,8 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './choose-avatar.component.scss'
 })
 export class ChooseAvatarComponent {
+
+  constructor(public signIn: SignInService, public auth:AuthenticationService, ){}
 
   @Output() eventInProfil = new EventEmitter();
   sendClickToParentPageCounter(index:number = 0){
@@ -70,6 +74,13 @@ export class ChooseAvatarComponent {
       this.defaultImage = URL.createObjectURL(file);
       this.indexNumber = 0;
     }
+  }
+
+  onSubmit(){
+    this.signIn.image = this.selectedImage as File;
+    console.log(this.signIn.userEmail, this.signIn.fullName, this.signIn.image);
+    this.signIn.signUpUser();
+    this.sendClickToParentPageCounter(3);
   }
 
 }

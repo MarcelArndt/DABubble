@@ -7,6 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, A
 import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { SignInService } from '../../../../services/sign-in/sign-in.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class SignUpComponent {
 
   myForm: FormGroup
 
-  constructor(private auth: AuthenticationService, private fb: FormBuilder) {
+  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signIn: SignInService) {
     this.myForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email], [this.emailAsyncValidator()]],
@@ -59,7 +60,7 @@ export class SignUpComponent {
       return of(control.value).pipe(
         debounceTime(300), // optional, um Anfragen zu minimieren
         switchMap(email => 
-          this.auth.checkIsEmailAlreadyExists(email).then(
+          this.signIn.checkIsEmailAlreadyExists(email).then(
             exists => (exists ? { emailExists: true } : null)
           )
         ),
@@ -69,29 +70,23 @@ export class SignUpComponent {
   }
 
   fillValues(){
-    this.fullName = this.myForm.value.fullName || '';
-    this.email = this.myForm.value.email || '';
-    this.password = this.myForm.value.password || '';
+    this.signIn.fullName = this.myForm.value.fullName || '';
+    this.signIn.userEmail = this.myForm.value.email || '';
+    this.signIn.password = this.myForm.value.password || '';
   }
 
   registerUser() {
-    this.auth.registerUser(this.email, this.password, this.fullName);
+    this.signIn.signUpUser();
   }
 
   openDataProtect(){
     console.log('open a Lightbox here')
   }
 
-checkForEmail(){
-  this.fillValues();
-  this.sendClickToParentPageCounter(2);
-}
-
 async onSubmit(pageNumber:number = 0){
   if (this.myForm.valid){
   this.fillValues();
-  this.sendClickToParentPageCounter(2);
-  this.registerUser();
+  this.sendClickToParentPageCounter(pageNumber);
   }
 }
 

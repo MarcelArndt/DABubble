@@ -21,13 +21,13 @@ export class StorageService {
     });
   }
 
-  async getDownloadURLFromFirebase(file: File, folderName: string = 'User') {
-    const fileRef = ref(this.auth.storage, `${folderName}/${this.auth.getCurrentUserUid()}/${file.name}`);
+  async getDownloadURLFromFirebase(file: File, folderName: string = 'User', id:string = '') {
+    const fileRef = ref(this.auth.storage, `${folderName}/${id ? id: this.auth.getCurrentUserUid()}/${file.name}`);
     return getDownloadURL(fileRef);
   }
 
-  async uploadImage(file: File, folderName: string = 'User'): Promise<string> {
-    const fileRef = ref(this.auth.storage, `${folderName}/${this.auth.getCurrentUserUid()}/${file.name}`);
+  async uploadImage(file: File, folderName: string = 'User', id:string = ''): Promise<string> {
+    const fileRef = ref(this.auth.storage, `${folderName}/${id ? id: this.auth.getCurrentUserUid()}/${file.name}`);
 
     return uploadBytes(fileRef, file)
       .then(() => {

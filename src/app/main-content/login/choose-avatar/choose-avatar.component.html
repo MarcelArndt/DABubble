@@ -9,7 +9,7 @@
     <div class="currentName">Frederik Beck</div>
     <p class="string">Choose your avatar....</p>
     <div class="default-presets">
-        <div [ngClass]="{'active': indexNumber === 1}" (click)="selectPicture('./img/profile-pic/001.svg' , 1)"><img src="./img/profile-pic/001.svg"></div>
+        <div [ngClass]="{'active': indexNumber === 1}" (click)="selectPicture('./img/profile-pic/001.svg', 1)"><img src="./img/profile-pic/001.svg"></div>
         <div [ngClass]="{'active': indexNumber === 2}" (click)="selectPicture('./img/profile-pic/002.svg', 2)"><img src="./img/profile-pic/002.svg"></div>
         <div [ngClass]="{'active': indexNumber === 3}" (click)="selectPicture('./img/profile-pic/003.svg', 3)"><img src="./img/profile-pic/003.svg"></div>
         <div [ngClass]="{'active': indexNumber === 4}" (click)="selectPicture('./img/profile-pic/004.svg', 4)"><img src="./img/profile-pic/004.svg"></div>
@@ -37,6 +37,6 @@
          </div>
       
     </div>
-        <div class="set-right"> <button (click)="sendClickToParentPageCounter(3)">Create Account</button> </div>
+        <div class="set-right"> <button (click)="onSubmit()">Create Account</button> </div>
 
 </div>

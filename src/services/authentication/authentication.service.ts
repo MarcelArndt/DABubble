@@ -75,29 +75,6 @@ export class AuthenticationService {
     }
   }
 
-  /// Email Validation
-  async pullAllEmails(){
-    const membersCollection = collection(this.getReference(), 'member');
-    let allEmails:string[] = [];
-    await getDocs(membersCollection)
-    .then((snapshot) => {
-      snapshot.forEach((doc) => {
-        const userData = doc.data();
-        if (userData['email']) {
-          allEmails.push(userData['email']);
-        }
-      });
-    })
-    .catch((error) => {
-      console.error('Error fetching documents:', error);
-    });
-    return(allEmails)
-  }
-
-  async checkIsEmailAlreadyExists(email:string = ''): Promise<boolean>{
-    let collection:string [] = await this.pullAllEmails();
-    return collection.includes(email);
-  }
 
   signUpWithGoogle() {
     signInWithPopup(this.auth, this.provider)
@@ -136,33 +113,7 @@ export class AuthenticationService {
 
   getReference() {
     return getFirestore();
-  }  
-  
-  registerUser(email: string, password: string, fullName: string) {
-    createUserWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        this.createUserCollection(fullName, email);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
-  }
-
-  async createUserCollection(fullName: string, email: string) {
-    const userId = this.getCurrentUserUid();
-    await setDoc(doc(this.getReference(), "member", userId), {
-      id: userId,
-      name: fullName,
-      email: email,
-      imageUrl: '',
-      status: true,
-      channelIds: [],
-      directMessageIds: [],
-    });
-  }
-
+  } 
 
   // Lost Password
   async resetPassword(email:string){
