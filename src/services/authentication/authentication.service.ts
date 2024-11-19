@@ -106,7 +106,6 @@ export class AuthenticationService {
     });
   }
   
-
   async updateAuthProfileData(currentMember: Member): Promise<void> {
     try {
       const user = this.auth.currentUser;
