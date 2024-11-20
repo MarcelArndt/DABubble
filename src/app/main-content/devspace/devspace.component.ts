@@ -132,10 +132,10 @@ export class DevspaceComponent implements OnInit {
       if (this.currentMember) {
         this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (updatedChannels: Channel[]) => {
           this.channels = updatedChannels;
-          console.log('Channels aktualisiert:', this.channels);
+          // console.log('Channels aktualisiert:', this.channels);
         });
       } else {
-        console.log("Kein Member vorhanden");
+        // console.log("Kein Member vorhanden");
       }
     });
     this.authenticationService.observerUser();

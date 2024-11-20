@@ -97,7 +97,7 @@ export class AuthenticationService {
                 status: true,
                 channelIds: data['channelIds'] || [],
               };
-              console.log("Aktualisierte Member-Daten:", member);
+              // console.log("Aktualisierte Member-Daten:", member);
               this.currentMemberSubject.next(member);
             } 
           } 

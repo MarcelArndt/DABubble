@@ -79,7 +79,6 @@ export class ThreadComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.threadFirstMessage);
     this.threadService.threadUpdated.subscribe(() => {
       this.messages = [...this.threadService.threadMessages];
       this.shouldScroll = true;

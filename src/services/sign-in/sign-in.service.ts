@@ -34,7 +34,6 @@ async getProfilPictureUrl(userId:string='', imageFile:File){
     imageUrl: await this.getProfilPictureUrl(userId, imageFile),
     status: true,
     channelIds: [],
-    directMessageIds: [],
   });
 }
 

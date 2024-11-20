@@ -57,6 +57,7 @@ export class MessageComponent {
   }
 
   saveText() {
+    console.log(this.editMessageText)
     this.isEdit = false
   }
 

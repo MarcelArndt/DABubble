@@ -44,7 +44,6 @@ export class MessageTextComponent {
   }
 
   save() {
-    this.message.message = this.editMessageText;
     this.saveText.emit();
   }
 

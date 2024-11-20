@@ -66,7 +66,6 @@ export class MessageOptionsComponent {
       this.threadService.deleteMessageThread(this.message.threadId);
     } else if (this.directMessage.isDirectMessage) {
       this.directMessage.deleteMessage(this.message.messageId);
-      console.log('ja')
     } else {
       this.messageService.deleteMessage(this.message.messageId);
     }
