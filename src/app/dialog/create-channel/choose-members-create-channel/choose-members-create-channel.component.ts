@@ -90,7 +90,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    // Überprüfen, ob der eingegebene Wert in der Mitgliederliste vorhanden und noch nicht ausgewählt ist
     const memberToAdd = this.members.find(
       member => 
         member.name.toLowerCase() === value.toLowerCase() &&
@@ -99,18 +98,15 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     if (memberToAdd) {
       this.selectedMembers.push(memberToAdd);
     }
-    // Leere das Eingabefeld
     event.chipInput!.clear();
   }
 
 
   selected(event: MatAutocompleteSelectedEvent): void {
     const selectedMember: Member = event.option.value;
-    // Überprüfen, ob das Mitglied noch nicht ausgewählt wurde
     if (!this.selectedMembers.some(member => member.id === selectedMember.id)) {
       this.selectedMembers.push(selectedMember);
     }
-    // Leere das Eingabefeld
     this.myControl.setValue('');
   }
 
@@ -126,12 +122,10 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
   edit(member: Member, event: MatChipEditedEvent): void {
     const value = event.value.trim();
-    // Entferne das Mitglied, wenn es keinen Namen mehr hat
     if (!value) {
       this.remove(member);
       return;
     }
-    // Bearbeite das bestehende Mitglied
     const index = this.selectedMembers.indexOf(member);
     if (index >= 0) {
       this.selectedMembers[index].name = value;
@@ -156,9 +150,9 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
   async createChannel(){
     if (this.selectAllPeople) {
-      this.members.forEach(member => {
-      this.channel.membersId.push(member.id);
-      })
+      // this.members.forEach(member => {
+      // this.channel.membersId.push(member.id);
+      // })
       if (this.selectedMembers.length > 0) {
         this.selectedMembers = [];
       }
@@ -166,8 +160,8 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     } else if (!this.selectAllPeople) {
       this.addSelectedMembers();
       this.channel.isPublic = false;
+      this.channel.membersId.push(this.authenticationService.getCurrentUserUid());
     }
-    this.channel.membersId.push(this.authenticationService.getCurrentUserUid());
     await this.channelService.addChannelToFirebase(this.channel);
     this.dialogRef.close();
   }

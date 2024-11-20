@@ -43,7 +43,7 @@ export class ChannelService {
   }
   
 
-  async getAllChannelsFromFirestore(onChannelsUpdated: (channels: Channel[]) => void): Promise<void> {
+  async getAllPublicChannelsFromFirestore(onChannelsUpdated: (channels: Channel[]) => void): Promise<void> {
     const channelsCollection = collection(this.authenticationService.getReference(), 'channels');
     onSnapshot(channelsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
       const channels: Channel[] = snapshot.docs.map((doc) => {
@@ -57,7 +57,8 @@ export class ChannelService {
           description: data['description'],
           isPublic: data['isPublic'],
         };
-      });
+      })
+      .filter((channel) => channel.isPublic === true); 
       onChannelsUpdated(channels);
     }, (error) => {
       console.error("Fehler beim Abrufen der Channels: ", error);
@@ -70,7 +71,6 @@ export class ChannelService {
     onChannelsUpdated: (channels: Channel[]) => void
   ): void {
     const channelsCollection = collection(this.authenticationService.getReference(), 'channels');
-    
     onSnapshot(channelsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
       const channels: Channel[] = snapshot.docs
         .map((doc) => {
@@ -85,17 +85,13 @@ export class ChannelService {
             isPublic: data['isPublic'],
           };
         })
-        .filter((channel) => currentMember.channelIds.includes(channel.id)); // Nur Channels des aktuellen Members
-      onChannelsUpdated(channels); // Die aktualisierte Channel-Liste zurückgeben
+        .filter((channel) => currentMember.channelIds.includes(channel.id)); 
+      onChannelsUpdated(channels); 
     }, (error) => {
       console.error('Fehler beim Abrufen der Channels: ', error);
     });
   }
   
-  
-  
-  
-
 
   async addChannelToFirebase(channel: Channel) {
     const firestore = this.authenticationService.getReference(); // Firestore-Instanz

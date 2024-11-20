@@ -127,15 +127,15 @@ export class DevspaceComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.channelService.getAllPublicChannelsFromFirestore((updatedChannels: Channel[]) => {
+      this.channels = updatedChannels;
+    });
     this.authenticationService.currentMember$.subscribe((member) => {
       this.currentMember = member;
       if (this.currentMember) {
         this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (updatedChannels: Channel[]) => {
-          this.channels = updatedChannels;
-          // console.log('Channels aktualisiert:', this.channels);
+          this.channels = [...(this.channels || []), ...updatedChannels.filter(channel => !this.channels?.some(c => c.id === channel.id))];
         });
-      } else {
-        // console.log("Kein Member vorhanden");
       }
     });
     this.authenticationService.observerUser();
@@ -144,8 +144,6 @@ export class DevspaceComponent implements OnInit {
     });
   }
   
-
-
 
   toggleNavBar() {
     this.navBarIsClosed = !this.navBarIsClosed;
