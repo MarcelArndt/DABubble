@@ -9,7 +9,7 @@
             </ng-container>
 
             <ng-template #messageList>
-                <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i" (messageSent)="scrollToBottom()">
+                <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i">
                 </app-message>
             </ng-template>
 
@@ -31,7 +31,7 @@
             </ng-container>
 
             <ng-template #messageList>
-                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i" (messageSent)="scrollToBottom()">
+                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i">
                 </app-message>
             </ng-template>
 
@@ -52,5 +52,8 @@
 
     </div>
 
-    <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"></app-chat-message-field>
+    <app-chat-message-field 
+    (messagesUpdated)="onMessagesUpdated()" 
+    (messageSent)="scrollToBottom()">
+    </app-chat-message-field>
 </section>

@@ -84,7 +84,6 @@ export class ChatComponent {
     }
   }
 
-
   onScroll(): void {
     const container = this.messageContainer.nativeElement;
     // Prüfen, ob der Benutzer am unteren Rand ist

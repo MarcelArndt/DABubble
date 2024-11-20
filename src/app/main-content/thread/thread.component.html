@@ -10,9 +10,9 @@
             <div class="between-line"></div>
             </div>
 
-        <app-message *ngFor="let msg of messages; index as i" [message]="msg" [index]="i" [thread]="isThread" (messageSent)="scrollToBottom()">
+        <app-message *ngFor="let msg of messages; index as i" [message]="msg" [index]="i" [thread]="isThread">
         </app-message>
 
     </div>
-    <app-thread-message-field class="thread-item"></app-thread-message-field>
+    <app-thread-message-field class="thread-item" (messageSent)="scrollToBottom()"></app-thread-message-field>>
 </section>

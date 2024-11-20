@@ -59,7 +59,6 @@ export class ChatMessageFieldComponent {
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
-    this.messageSent.emit()
   }
 
   async sendDirectMessage() {
@@ -67,10 +66,10 @@ export class ChatMessageFieldComponent {
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
-    this.messageSent.emit()
   }
 
   handleSendMessage() {
+    this.messageSent.emit()
     if (this.directMessageService.isDirectMessage) {
       this.sendDirectMessage();
     } else {
