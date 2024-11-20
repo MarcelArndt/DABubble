@@ -182,7 +182,6 @@ export class AuthenticationService {
       imageUrl: '',
       status: true,
       channelIds: [],
-      directMessageIds: [],
     });
   }
 
