@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { ThreadService } from '../../../../services/thread/thread.service';
+import { DirectMessageService } from '../../../../services/directMessage/direct-message.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MemberService } from '../../../../services/member/member.service';
 
 @Component({
   selector: 'app-message-text',
@@ -18,6 +22,7 @@ export class MessageTextComponent {
   @Input() message: any;
   @Input() isEdit: any;
   @Input() editMessageText: any;
+  @Input() isThread: boolean = false;
 
   @Output() saveText = new EventEmitter<void>();
   @Output() cancelEdit = new EventEmitter<void>();
@@ -25,8 +30,12 @@ export class MessageTextComponent {
   @ViewChild('textArea') textArea!: ElementRef<HTMLTextAreaElement>;
 
   constructor(
-    public messageService: MessagesService, 
-    public auth: AuthenticationService
+    public messageService: MessagesService,
+    public memberService: MemberService,
+    public auth: AuthenticationService,
+    public threadService: ThreadService,
+    public directMessage: DirectMessageService,
+    private sanitizer: DomSanitizer
   ) { }
 
   autoGrow() {
@@ -44,10 +53,32 @@ export class MessageTextComponent {
   }
 
   save() {
+    if (this.isThread) {
+      this.threadService.updateThreadMessage(this.editMessageText, this.message.threadId);
+    } else if (this.directMessage.isDirectMessage) {
+      this.directMessage.updateDirectMessage(this.message.messageId, this.editMessageText);
+    } else {
+      this.messageService.updateMessage(this.message.messageId, this.editMessageText);
+    }
     this.saveText.emit();
   }
 
   cancel() {
     this.cancelEdit.emit();
+  }
+
+  highlightAtTags(text: string): SafeHtml {
+    if (!text) return '';
+    const validNames = this.memberService.allMembersNames;
+    const color = this.messageService.checkUser(this.message) ? 'blue' : 'var(--text-blue)';
+    const regex = /@([a-zA-Z]+(?:\s[a-zA-Z]+)?)/g;
+    const highlightedText = text.replace(regex, (match, name) => {
+      const plainName = name.trim();
+      if (validNames.includes(plainName)) {
+        return `<span style="color: ${color};">${match}</span>`;
+      }
+      return match;
+    });
+    return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
   }
 }

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Member } from '../../interface/message';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, setDoc, updateDoc } from '@firebase/firestore';
+import { collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QuerySnapshot, setDoc, updateDoc } from '@firebase/firestore';
 import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
 
 @Injectable({
@@ -10,9 +10,10 @@ import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
 })
 export class MemberService {
   allChannelMembers: any = [];
+  allMembersNames: any = []
 
 
-  constructor(private authenticationService: AuthenticationService){
+  constructor(private authenticationService: AuthenticationService) {
   }
 
   getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
@@ -51,7 +52,7 @@ export class MemberService {
       this.allChannelMembers.push(docSnap.data())
     }
   }
-  
+
 
   async setCurrentMemberData() {
     const docRef = doc(this.authenticationService.getReference(), 'member', this.authenticationService.getCurrentUserUid());
@@ -86,7 +87,7 @@ export class MemberService {
       }
     } else {
       console.log("No such document!");
-      return undefined; 
+      return undefined;
     }
   }
 
@@ -110,4 +111,13 @@ export class MemberService {
       imageUrl: downloadURL
     });
   }
+
+  async allMembersName() {
+    this.allMembersNames = [];
+    const querySnapshot = await getDocs(collection(this.authenticationService.getReference(), "member"));
+    querySnapshot.forEach((doc) => {
+      this.allMembersNames.push(doc.data()['name'])
+    });
+  }
+
 }

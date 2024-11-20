@@ -64,11 +64,12 @@ export class ThreadService {
   async readMessageThread(messageId: string) {
     this.threadFirstMessage = {};
     const docRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId, "messages", messageId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      this.threadFirstMessage = docSnap.data();
-      this.threadFirstMessageUpdated.next();
-    }
+    onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        this.threadFirstMessage = docSnap.data(); // Daten auslesen
+        this.threadFirstMessageUpdated.next(); // Benachrichtige Observer
+      }
+    });
   }
 
   async deleteMessageThread(messageId: string) {
@@ -87,6 +88,13 @@ export class ThreadService {
 
     await updateDoc(message, {
       answers: increment(-1)
+    });
+  }
+
+  async updateThreadMessage(newMessage: string, threadId: string) {
+    const washingtonRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId, 'messages', this.currentMessageId, 'threads', threadId);
+    await updateDoc(washingtonRef, {
+      message: newMessage
     });
   }
 }

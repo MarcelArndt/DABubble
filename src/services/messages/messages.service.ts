@@ -5,6 +5,7 @@ import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, update
 import { MemberService } from '../member/member.service';
 import { ChannelService } from '../channel/channel.service';
 import { Subject } from 'rxjs';
+import { ThreadService } from '../thread/thread.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,13 @@ export class MessagesService {
   // Messages
   messages: any = [];
   messagesUpdated = new Subject<void>();
+  editMessageText: string = '';
 
   constructor(
     public authenticationService: AuthenticationService,
     private memberService: MemberService,
-    private channelService: ChannelService
+    private channelService: ChannelService,
+    private threadService: ThreadService
   ) { }
 
   async readChannel() {
@@ -107,9 +110,16 @@ export class MessagesService {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return docSnap.data()['name'];
-    } 
+    }
   }
 
-  
+  async updateMessage(messageId: string, newMessage: string) {
+    const washingtonRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId, 'messages', messageId);
+    await updateDoc(washingtonRef, {
+      message: newMessage
+    });
+  }
+
+
 
 }

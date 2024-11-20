@@ -7,7 +7,7 @@
 
         <div class="message-container" [ngStyle]="isEdit ? {'width': '100%'} : {'width': 'auto'}">
             <app-message-name [message]="message"></app-message-name>
-            <app-message-text [message]="message" [isEdit]="isEdit" [editMessageText]="editMessageText" (cancelEdit)="cancelEdit()" (saveText)="saveText()"></app-message-text>
+            <app-message-text [isThread]="thread" [message]="message" [isEdit]="isEdit" [editMessageText]="editMessageText" (cancelEdit)="cancelEdit()" (saveText)="saveText()"></app-message-text>
             <app-message-images [message]="message" [isEdit]="isEdit"></app-message-images>
             <app-message-answer *ngIf="thread == false && directMessageService.isDirectMessage == false" [message]="message"></app-message-answer>
             <app-message-reation *ngIf="threadFirstMessage == false" [message]="message"></app-message-reation>

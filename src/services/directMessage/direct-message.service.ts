@@ -103,4 +103,11 @@ export class DirectMessageService {
       this.messagesUpdated.next();
     }
   }
+
+  async updateDirectMessage(messageId: string, newMessage: string) {
+    const washingtonRef = doc(this.authenticationService.getReference(), "directMessagesChannels",  this.directMessageChannelId, 'messages', messageId);
+    await updateDoc(washingtonRef, {
+      message: newMessage
+    });
+  }
 }
