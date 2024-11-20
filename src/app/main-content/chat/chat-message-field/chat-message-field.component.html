@@ -9,7 +9,7 @@
     </ul>
   </div>
 
-  <app-images-preview [imagePreviews]="imagePreviews"></app-images-preview>
+  <app-images-preview *ngIf="imagePreviews.length > 0" [imagePreviews]="imagePreviews"></app-images-preview>
 
   <div class="message-field-container">
     <textarea placeholder="Naricht an #Entwicklerteam" [(ngModel)]="messageField" (input)="onInput($event)"></textarea>
