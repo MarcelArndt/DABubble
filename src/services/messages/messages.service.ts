@@ -1,30 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Message } from '../../interface/message';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
+import { addDoc, deleteDoc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
 import { MemberService } from '../member/member.service';
 import { ChannelService } from '../channel/channel.service';
 import { Subject } from 'rxjs';
+import { ReferencesService } from '../references/references.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessagesService {
-
-
-  // Messages
   messages: any = [];
   messagesUpdated = new Subject<void>();
+  editMessageText: string = '';
 
   constructor(
-    public authenticationService: AuthenticationService,
+    private authenticationService: AuthenticationService,
     private memberService: MemberService,
-    private channelService: ChannelService
+    private channelService: ChannelService,
+    private referencesServic: ReferencesService,
   ) { }
-
+  
   async readChannel() {
-    const docRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId);
-    const channel = await getDoc(docRef);
+    const channel = await getDoc(this.referencesServic.getChannelDocRef());
     if (channel.exists()) {
       await this.loadInitialMessages(this.channelService.currentChannelId);
       this.listenToMessages(this.channelService.currentChannelId);
@@ -35,8 +33,7 @@ export class MessagesService {
   }
 
   async loadInitialMessages(channelId: string) {
-    const messagesCollectionRef = collection(this.authenticationService.getReference(), "channels", channelId, "messages");
-    const querySnapshot = await getDocs(messagesCollectionRef);
+    const querySnapshot = await getDocs(this.referencesServic.getCollectionMessage());
     this.messages = querySnapshot.docs
       .map(doc => doc.data())
       .sort((a, b) => a['timestamp'] - b['timestamp']);
@@ -44,8 +41,7 @@ export class MessagesService {
   }
 
   listenToMessages(channelId: string) {
-    const messagesCollectionRef = collection(this.authenticationService.getReference(), "channels", channelId, "messages");
-    const unsub = onSnapshot(messagesCollectionRef, (querySnapshot) => {
+    const unsub = onSnapshot(this.referencesServic.getCollectionMessage(), (querySnapshot) => {
       const loadedMessages = querySnapshot.docs
         .map(doc => doc.data())
         .sort((a, b) => a['timestamp'] - b['timestamp']);
@@ -54,23 +50,18 @@ export class MessagesService {
         this.messagesUpdated.next();
       }
     });
-
-    // Gib die Unsubscribe-Funktion zurück
     return unsub;
   }
 
   async createMessage(message: string, imagePreviews: any) {
-    const now = new Date();
-    const cityDocRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId);
-    const messageCollectionRef = collection(cityDocRef, "messages");
-    const messageDocRef = await addDoc(messageCollectionRef, {
+    const messageDocRef = await addDoc(this.referencesServic.getCollectionMessage(), {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
-      time: `${now.getHours()}:${now.getMinutes()}`,
+      time: this.authenticationService.time,
       message: message,
       profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      timestamp: now.getTime(),
+      createdAt: this.authenticationService.date,
+      timestamp: this.authenticationService.now.getTime(),
       reactions: {
         like: [],
         rocket: []
@@ -79,10 +70,14 @@ export class MessagesService {
       lastAnswer: '',
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
+    this.updateMessageId(messageDocRef)
+    this.messagesUpdated.next();
+  }
+
+  async updateMessageId(messageDocRef: any) {
     await updateDoc(messageDocRef, {
       messageId: messageDocRef.id,
     });
-    this.messagesUpdated.next();
   }
 
   checkUser(message: any): boolean {
@@ -90,12 +85,8 @@ export class MessagesService {
   }
 
   async deleteMessage(messageId: string) {
-    const baseRef = this.authenticationService.getReference();
-    const channelId = this.channelService.currentChannelId;
-    const messageRef = doc(baseRef, "channels", channelId, "messages", messageId);
-    await deleteDoc(messageRef);
-    const messagesCollectionRef = collection(baseRef, "channels", channelId, "messages");
-    const querySnapshot = await getDocs(messagesCollectionRef);
+    await deleteDoc(this.referencesServic.getMessageDocRefId(messageId));
+    const querySnapshot = await getDocs(this.referencesServic.getCollectionMessage());
     if (querySnapshot.empty) {
       this.messages = [];
       this.messagesUpdated.next();
@@ -103,13 +94,16 @@ export class MessagesService {
   }
 
   async adminUserChannel(id: string) {
-    const docRef = doc(this.authenticationService.getReference(), "member", id);
-    const docSnap = await getDoc(docRef);
+    const docSnap = await getDoc(this.referencesServic.getMemberDocRef(id));
     if (docSnap.exists()) {
       return docSnap.data()['name'];
-    } 
+    }
   }
 
-  
+  async updateMessage(messageId: string, newMessage: string) {
+    await updateDoc(this.referencesServic.getMessageDocRefId(messageId), {
+      message: newMessage
+    });
+  }
 
 }

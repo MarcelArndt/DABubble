@@ -35,7 +35,7 @@ export class ChatMessageFieldComponent {
   imagePreviews: (string | ArrayBuffer | null)[] = [];
   public isDirectMessage: boolean = true;
 
-  users = ['JohnDoe', 'JaneSmith', 'AlexMiller', 'ChrisJohnson'];
+  users: string[] = [];
   showUserList: boolean = false;
   filteredUsers: string[] = [];
   selectedIndex = -1;
@@ -44,12 +44,13 @@ export class ChatMessageFieldComponent {
   // @Output() messagesUpdated = new EventEmitter<void>();
 
   constructor(
-    public object: MessagesService,
     public memberService: MemberService,
     public messageService: MessagesService,
     public storageService: StorageService,
     public directMessageService: DirectMessageService
-  ) { }
+  ) { 
+    this.allUsers()
+  }
 
   async sendMessage() {
     await this.memberService.setCurrentMemberData();
@@ -122,6 +123,10 @@ export class ChatMessageFieldComponent {
     }
   }
 
+  allUsers() {
+    this.memberService.allMembersName();
+  }
+
   selectUser(user: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
     this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
@@ -130,6 +135,7 @@ export class ChatMessageFieldComponent {
   }
 
   addTag() {
+    this.users = this.memberService.allMembersNames
     this.messageField += '@';
     this.showUserList = true;
     this.filteredUsers = this.users;

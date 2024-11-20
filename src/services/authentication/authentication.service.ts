@@ -1,18 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User, fetchSignInMethodsForEmail} from '@angular/fire/auth';
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User} from '@angular/fire/auth';
+import { doc, getFirestore, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { Member, Message, Thread } from '../../interface/message';
-import { Channel } from '../../classes/channel.class';
-import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
-import { CollectionReference, DocumentData, onSnapshot, QuerySnapshot, where, writeBatch } from '@firebase/firestore';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { query } from '@angular/animations';
-import { HttpClient } from '@angular/common/http';
-import { debounceTime, map, catchError, switchMap } from 'rxjs/operators';
-import { AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { MemberService } from '../member/member.service';
+import { Member } from '../../interface/message';
+import { getStorage } from '@angular/fire/storage';
+import { onSnapshot } from '@firebase/firestore';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +20,10 @@ export class AuthenticationService {
   auth = inject(Auth);
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
+
+  now = new Date();
+  time = `${this.now.getHours().toString().padStart(2, '0')}:${this.now.getMinutes().toString().padStart(2, '0')}`;
+  date = this.now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
 
   constructor(
     private router: Router,
@@ -93,7 +91,7 @@ export class AuthenticationService {
                 status: true,
                 channelIds: data['channelIds'] || [],
               };
-              console.log("Aktualisierte Member-Daten:", member);
+              // console.log("Aktualisierte Member-Daten:", member);
               this.currentMemberSubject.next(member);
             } 
           } 
@@ -157,6 +155,34 @@ export class AuthenticationService {
     return getFirestore();
   }  
   
+<<<<<<< HEAD
+=======
+  registerUser(email: string, password: string, fullName: string) {
+    createUserWithEmailAndPassword(this.auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        this.createUserCollection(fullName, email);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  }
+
+  async createUserCollection(fullName: string, email: string) {
+    const userId = this.getCurrentUserUid();
+    await setDoc(doc(this.getReference(), "member", userId), {
+      id: userId,
+      name: fullName,
+      email: email,
+      imageUrl: '',
+      status: true,
+      channelIds: [],
+    });
+  }
+
+
+>>>>>>> fad1a4b9fb7f5d4fa800ab84acb1748f0741c633
   // Lost Password
   async resetPassword(email:string){
     sendPasswordResetEmail(this.auth, email)

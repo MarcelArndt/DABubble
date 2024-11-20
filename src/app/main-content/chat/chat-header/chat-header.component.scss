@@ -59,9 +59,6 @@ section {
     }
 }
 
-
-
-
 .add-members-container {
     @include heightWidth($w: auto, $h: 100%);
     @include dFlex($ai: center, $jc: space-between);
