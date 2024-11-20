@@ -155,34 +155,6 @@ export class AuthenticationService {
     return getFirestore();
   }  
   
-<<<<<<< HEAD
-=======
-  registerUser(email: string, password: string, fullName: string) {
-    createUserWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        this.createUserCollection(fullName, email);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
-  }
-
-  async createUserCollection(fullName: string, email: string) {
-    const userId = this.getCurrentUserUid();
-    await setDoc(doc(this.getReference(), "member", userId), {
-      id: userId,
-      name: fullName,
-      email: email,
-      imageUrl: '',
-      status: true,
-      channelIds: [],
-    });
-  }
-
-
->>>>>>> fad1a4b9fb7f5d4fa800ab84acb1748f0741c633
   // Lost Password
   async resetPassword(email:string){
     sendPasswordResetEmail(this.auth, email)
