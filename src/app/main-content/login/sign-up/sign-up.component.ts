@@ -47,7 +47,6 @@ export class SignUpComponent {
   @Output() eventInChild = new EventEmitter();
 
 
-
   sendClickToParentPageCounter(index: number = 0) {
     this.eventInChild.emit(index);
   }
@@ -58,7 +57,7 @@ export class SignUpComponent {
         return of(null);
       }
       return of(control.value).pipe(
-        debounceTime(300), // optional, um Anfragen zu minimieren
+        debounceTime(300),
         switchMap(email => 
           this.signIn.checkIsEmailAlreadyExists(email).then(
             exists => (exists ? { emailExists: true } : null)

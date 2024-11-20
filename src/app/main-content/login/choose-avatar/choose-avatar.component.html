@@ -37,6 +37,6 @@
          </div>
       
     </div>
-        <div class="set-right"> <button (click)="onSubmit()">Create Account</button> </div>
+        <div class="set-right"> <button [disabled]="!selectedImage" (click)="onSubmit()">Create Account</button> </div>
 
 </div>

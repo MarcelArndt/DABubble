@@ -19,7 +19,6 @@ export class SignInService {
   password:string = '';
   fullName:String = '';
 
-
 /// registration of User
 async getProfilPictureUrl(userId:string='', imageFile:File){
   await this.storage.uploadImage(this.image as File, 'member', userId);
@@ -46,12 +45,10 @@ async getProfilPictureUrl(userId:string='', imageFile:File){
     createUserWithEmailAndPassword(this.auth.auth, this.userEmail, this.password)
       .then((userCredential) => {
         this.setProfilForMember(userCredential.user.uid);
-        console.log('User successfuly created');
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log('Ops, somtehing went wrong.');
       });
   }
 

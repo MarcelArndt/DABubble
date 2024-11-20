@@ -34,16 +34,12 @@ export class AuthenticationService {
     this.storage = getStorage();
     this.observerUser();
   }
-
   // Authentication 
 
   signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        // console.log('Anmeldung erfolgreich')
-        // console.log(user);
-
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -161,32 +157,6 @@ export class AuthenticationService {
     return getFirestore();
   }  
   
-  registerUser(email: string, password: string, fullName: string) {
-    createUserWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        this.createUserCollection(fullName, email);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
-  }
-
-  async createUserCollection(fullName: string, email: string) {
-    const userId = this.getCurrentUserUid();
-    await setDoc(doc(this.getReference(), "member", userId), {
-      id: userId,
-      name: fullName,
-      email: email,
-      imageUrl: '',
-      status: true,
-      channelIds: [],
-      directMessageIds: [],
-    });
-  }
-
-
   // Lost Password
   async resetPassword(email:string){
     sendPasswordResetEmail(this.auth, email)
