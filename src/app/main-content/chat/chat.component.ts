@@ -30,6 +30,7 @@ export class ChatComponent {
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   private shouldScroll: boolean = true;
   public isLoading: boolean = true;
+  private userScrolledUp = false;
 
   constructor(
     public object: MessagesService, 
@@ -52,12 +53,23 @@ export class ChatComponent {
   }
 
   onMessagesUpdated() {
+    // Nachrichten aktualisieren
     this.message = [...this.messageService.messages];
-    this.shouldScroll = true;
+    
+    // Prüfen, ob der Benutzer am unteren Rand ist
+    const container = this.messageContainer.nativeElement;
+    const isAtBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
+
+    if (isAtBottom) {
+      this.shouldScroll = true; // Scrollen erlauben, wenn am unteren Rand
+    } else {
+      this.shouldScroll = false; // Nicht scrollen, wenn Benutzer nach oben gescrollt hat
+      this.userScrolledUp = true; // Benutzer hat nach oben gescrollt
+    }
   }
 
   ngAfterViewChecked() {
-    if (this.shouldScroll) { 
+    if (this.shouldScroll && !this.userScrolledUp) {
       this.scrollToBottom();
       this.shouldScroll = false;
     }
@@ -65,9 +77,25 @@ export class ChatComponent {
 
   scrollToBottom(): void {
     try {
-      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+      const container = this.messageContainer.nativeElement;
+      container.scrollTop = container.scrollHeight;
     } catch (err) {
       console.error('Error scrolling to bottom:', err);
+    }
+  }
+
+
+  onScroll(): void {
+    const container = this.messageContainer.nativeElement;
+    // Prüfen, ob der Benutzer am unteren Rand ist
+    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10; // Toleranz von 10px
+
+    if (isAtBottom) {
+      this.userScrolledUp = false; // Benutzer ist wieder unten
+      console.log(this.userScrolledUp)
+    } else {
+      this.userScrolledUp = true; // Benutzer hat nach oben gescrollt
+      console.log(this.userScrolledUp)
     }
   }
 

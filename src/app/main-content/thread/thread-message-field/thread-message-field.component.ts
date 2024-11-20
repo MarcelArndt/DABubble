@@ -38,6 +38,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   selectedIndex = -1;
   @ViewChild('userListContainer') userListContainer!: ElementRef;
 
+  @Output() messageSent = new EventEmitter<void>();
   @Output() messagesUpdated = new EventEmitter<void>();
 
   constructor(
@@ -62,6 +63,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
     this.messageField = '';
     this.imageUploadsThread = [];
     this.imagePreviews = [];
+    this.messageSent.emit()
   }
 
   toggleEmojis(event: Event): void {

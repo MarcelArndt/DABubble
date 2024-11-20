@@ -40,6 +40,7 @@ export class ChatMessageFieldComponent {
   filteredUsers: string[] = [];
   selectedIndex = -1;
   @ViewChild('userListContainer') userListContainer!: ElementRef;
+  @Output() messageSent = new EventEmitter<void>();
 
   // @Output() messagesUpdated = new EventEmitter<void>();
 
@@ -58,6 +59,7 @@ export class ChatMessageFieldComponent {
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
+    this.messageSent.emit()
   }
 
   async sendDirectMessage() {
@@ -65,6 +67,7 @@ export class ChatMessageFieldComponent {
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
+    this.messageSent.emit()
   }
 
   handleSendMessage() {

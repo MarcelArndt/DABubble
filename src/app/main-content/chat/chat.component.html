@@ -1,7 +1,7 @@
 <section>
     <app-chat-header></app-chat-header>
 
-    <div class="main-message-container" #messageContainer>
+    <div class="main-message-container" #messageContainer (scroll)="onScroll()">
 
         <div *ngIf="directMessageService.isDirectMessage == false" class="mesage-container">
             <ng-container *ngIf="isLoading; else messageList">
@@ -9,7 +9,7 @@
             </ng-container>
 
             <ng-template #messageList>
-                <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i">
+                <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i" (messageSent)="scrollToBottom()">
                 </app-message>
             </ng-template>
 
@@ -31,7 +31,7 @@
             </ng-container>
 
             <ng-template #messageList>
-                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i">
+                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i" (messageSent)="scrollToBottom()">
                 </app-message>
             </ng-template>
 

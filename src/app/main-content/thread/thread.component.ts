@@ -68,6 +68,7 @@ export class ThreadComponent implements OnInit {
   threadFirstMessage: any= {};
   isThread: boolean = true;
   isThreadFirstMessage: boolean = true;
+  private userScrolledUp = false;
 
   @ViewChild('threadContainer') private threadContainer!: ElementRef;
   private shouldScroll: boolean = true;
@@ -94,20 +95,34 @@ export class ThreadComponent implements OnInit {
   }
 
   ngAfterViewChecked() {
-    if (this.shouldScroll && this.threadContainer) { 
-      this.scrollToBottom();
+    if (this.shouldScroll && !this.userScrolledUp) {
+      setTimeout(() => this.scrollToBottom(), 0);
       this.shouldScroll = false;
     }
   }
 
   scrollToBottom(): void {
     try {
-      if (this.threadContainer) {
-        const element = this.threadContainer.nativeElement;
-        element.scrollTop = element.scrollHeight + 50;
+      if (!this.threadContainer) {
+        return;
       }
+      const container = this.threadContainer.nativeElement;
+      container.scrollTop = container.scrollHeight;
     } catch (err) {
-      console.error('Error scrolling to bottom:', err);
+    }
+  }
+
+  onScroll(): void {
+    const container = this.threadContainer.nativeElement;
+    // Prüfen, ob der Benutzer am unteren Rand ist
+    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10; // Toleranz von 10px
+
+    if (isAtBottom) {
+      this.userScrolledUp = false; // Benutzer ist wieder unten
+      console.log(this.userScrolledUp)
+    } else {
+      this.userScrolledUp = true; // Benutzer hat nach oben gescrollt
+      console.log(this.userScrolledUp)
     }
   }
 
