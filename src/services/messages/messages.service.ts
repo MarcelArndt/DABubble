@@ -19,7 +19,7 @@ export class MessagesService {
     private memberService: MemberService,
     private channelService: ChannelService,
     private referencesServic: ReferencesService,
-  ) { }
+  ) {}
   
   async readChannel() {
     const channel = await getDoc(this.referencesServic.getChannelDocRef());
@@ -36,7 +36,7 @@ export class MessagesService {
     const querySnapshot = await getDocs(this.referencesServic.getCollectionMessage());
     this.messages = querySnapshot.docs
       .map(doc => doc.data())
-      .sort((a, b) => a['timestamp'] - b['timestamp']);
+      .sort((a, b) => Number(a['timestamp']) - Number(b['timestamp']));
     this.messagesUpdated.next();
   }
 
@@ -61,7 +61,7 @@ export class MessagesService {
       message: message,
       profileImage: this.authenticationService.currentMember.imageUrl,
       createdAt: this.authenticationService.date,
-      timestamp: this.authenticationService.now.getTime(),
+      timestamp: Date.now(),
       reactions: {
         like: [],
         rocket: []
