@@ -21,8 +21,8 @@ export class SignInService {
 
 /// registration of User
 async getProfilPictureUrl(userId:string='', imageFile:File){
-  await this.storage.uploadImage(this.image as File, 'member', userId);
-  return await this.storage.getDownloadURLFromFirebase(imageFile, 'member', userId)
+  await this.storage.uploadImage(this.image as File, 'User', userId);
+  return await this.storage.getDownloadURLFromFirebase(imageFile, 'User', userId)
  }
 
  async createUserCollection(userId:string, imageFile:File) {
