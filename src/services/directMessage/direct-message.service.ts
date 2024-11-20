@@ -19,16 +19,17 @@ export class DirectMessageService {
 
 
   constructor(private authenticationService: AuthenticationService, private referencesServic: ReferencesService) {}
-
+ 
   async createDirectMessage(messageField: string, imagePreviews: any) {
+    const now = new Date();
     this.createDirectMessageChannel();
     const messageDocRef = await addDoc(this.referencesServic.getCollectionDirectMessages(this.directMessageChannelId), {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
-      time: this.authenticationService.time,
+      time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
       message: messageField,
       profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: this.authenticationService.date,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
       timestamp: Date.now(),
       reactions: {
         like: [],
@@ -50,7 +51,7 @@ export class DirectMessageService {
     await setDoc(this.referencesServic.getDirectMessageDocRef(this.directMessageChannelId), {
       memberOne: this.directMessageUserData['id'],
       memberTwo: this.authenticationService.memberId,
-      timestamp: this.authenticationService.now.getTime()
+      timestamp: Date.now()
     });
   }
 

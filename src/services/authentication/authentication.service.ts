@@ -21,10 +21,6 @@ export class AuthenticationService {
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
 
-  now = new Date();
-  time = `${this.now.getHours().toString().padStart(2, '0')}:${this.now.getMinutes().toString().padStart(2, '0')}`;
-  date = this.now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
-
   constructor(
     private router: Router,
   ) {

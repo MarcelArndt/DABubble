@@ -17,13 +17,14 @@ export class ThreadService {
   constructor(private authenticationService: AuthenticationService, private referencesServic: ReferencesService) {}
 
   async createThread(message: string, imagePreviews: any) {
+    const now = new Date();
     const threadDocRef = await addDoc(this.referencesServic.getCollectionThread(this.currentMessageId), {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
-      time: this.authenticationService.time,
+      time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
       message: message,
       profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: this.authenticationService.date,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
       reactions: {
         like: [],
         rocket: []
@@ -36,7 +37,7 @@ export class ThreadService {
     });
     await updateDoc(this.referencesServic.getMessageDocRefId(this.currentMessageId), {
       answers: increment(1),
-      lastAnswer: this.authenticationService.time
+      lastAnswer: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
     });
   }
 

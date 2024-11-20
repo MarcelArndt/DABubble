@@ -61,7 +61,7 @@ export class MessagesService {
       time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
       message: message,
       profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: this.authenticationService.date,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
       timestamp: Date.now(),
       reactions: {
         like: [],
