@@ -73,7 +73,7 @@ button{
 
 h1{
     @include figtree($fw: 600, $fs: clamp(42px,8vw,56px), $c: var(--purple-3));
-    margin-bottom: clamp(0px,4vw,18px);
+    margin-bottom: 24px;
 }
 
 p{
@@ -88,7 +88,7 @@ p{
 
 a{
     @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--purple-2));
-    margin: 0px 8px;
+    margin: 12px 0px;
     padding: 8px 16px;
     border: 1px solid  transparent;
     border-radius: 36px;
@@ -113,6 +113,7 @@ a{
     @include heightWidth($w: 90%, $h: auto);
     @include dFlex;
     position: relative;
+    margin: 16px 0px;
 
     span{
         @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--text-black));

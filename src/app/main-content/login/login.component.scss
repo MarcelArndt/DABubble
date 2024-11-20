@@ -1,6 +1,6 @@
 @import '../../../mixin.scss';
 .MainWrapper{
-    @include heightWidth($w: 100%, $h: 95dvh);
+    @include heightWidth($w: 100%, $h: 100dvh);
     @include dFlex;
     flex-direction: column;
     justify-content:flex-start;
@@ -17,17 +17,18 @@
     @include heightWidth($w: 100%, $h: 100%);
     @include dFlex($jc: space-between);
     max-width: 600px;
-    background-color: var(--secundary-bg);
-    border-radius: 24px;
     flex-direction: column;
-    padding: 28px 0px;
-    max-height: 65dvh;
+    justify-content: center;
     box-shadow: 0px 2px 3px rgba(16, 0, 159, 0.1);
+    margin-top: calc(136px);
+    padding: 28px 0px;
+    background-color: var(--secundary-bg);
+    max-height: 75%;
+    border-radius: 24px;
     overflow-y: scroll;
-    margin-top: calc(148px);
-
     @include respond-to-maxWidth(medium) {
         @include heightWidth($w: 90%, $h: 100%);
+        justify-content: start;
     }
 }
 
@@ -124,3 +125,17 @@
     display: none;
 }
 
+
+@media (orientation: portrait) {
+    .whiteBox{
+      max-height: 700px;
+    }
+
+    .MainWrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        
+    }
+  }
