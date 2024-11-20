@@ -54,10 +54,11 @@ export class MessagesService {
   }
 
   async createMessage(message: string, imagePreviews: any) {
+   const now = new Date();
     const messageDocRef = await addDoc(this.referencesServic.getCollectionMessage(), {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
-      time: this.authenticationService.time,
+      time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
       message: message,
       profileImage: this.authenticationService.currentMember.imageUrl,
       createdAt: this.authenticationService.date,
