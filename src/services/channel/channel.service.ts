@@ -9,7 +9,7 @@ import { Member } from '../../interface/message';
 })
 export class ChannelService {
 
-  currentChannelId: string = 'hJ97Bm4CAC43yxjtGeYL';
+  currentChannelId: string = 'uZaX2y9zpsBqyaOddLWh';
 
 
   constructor(
