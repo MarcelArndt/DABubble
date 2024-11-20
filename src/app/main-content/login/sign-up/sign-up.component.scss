@@ -121,11 +121,13 @@ a{
     width: 75%;
     display: flex;
     justify-content: flex-end;
-    padding-bottom: 32px;
+
 
     @include respond-to-maxWidth(medium) {
         justify-content: center;
+        padding-bottom: 32px;
     }
+
 }
 
 .flow{

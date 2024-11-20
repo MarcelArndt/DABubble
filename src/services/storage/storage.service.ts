@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
+import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from '@firebase/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -40,4 +40,21 @@ export class StorageService {
         throw error; // Weitergeben des Fehlers zur Fehlerbehandlung
       });
   }
+
+  uploadImagesMessage(imagesUpload: File[]): Promise<string[]> {
+    const uploadPromises = imagesUpload.map(image => {
+      const storageRef = this.auth.storage;
+      const imagePath = `messagesImages/${this.auth.getCurrentUserUid()}/${image.name}`;
+      const imageRef = ref(storageRef, imagePath);
+      
+      return uploadBytes(imageRef, image)
+        .then(() => getDownloadURL(imageRef))
+        .catch(error => {
+          console.error(`Fehler beim Hochladen von ${image.name}:`, error);
+          throw error;
+        });
+    });
+    return Promise.all(uploadPromises);
+  }
+
 }

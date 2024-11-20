@@ -2,7 +2,8 @@
 .submenu{
     @include heightWidth($w: 100%, $h: auto);
     @include dFlex;
-    margin-top: 36px;
+    margin-top: 12px;
+    padding-bottom: 24px;
 
     @include respond-to-maxWidth(medium) {
         margin-top: 18px;
@@ -10,7 +11,7 @@
 
     .mobil{
         @include respond-to-maxWidth(medium) {
-            margin-top: 36px;
+            margin-top: 12px;
             display: flex;
             flex-direction: column;
             list-style: none;
