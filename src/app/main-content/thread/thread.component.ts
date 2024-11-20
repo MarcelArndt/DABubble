@@ -114,15 +114,11 @@ export class ThreadComponent implements OnInit {
 
   onScroll(): void {
     const container = this.threadContainer.nativeElement;
-    // Prüfen, ob der Benutzer am unteren Rand ist
-    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10; // Toleranz von 10px
-
+    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10;
     if (isAtBottom) {
-      this.userScrolledUp = false; // Benutzer ist wieder unten
-      console.log(this.userScrolledUp)
+      this.userScrolledUp = false;
     } else {
-      this.userScrolledUp = true; // Benutzer hat nach oben gescrollt
-      console.log(this.userScrolledUp)
+      this.userScrolledUp = true; 
     }
   }
 

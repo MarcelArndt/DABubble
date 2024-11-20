@@ -53,18 +53,14 @@ export class ChatComponent {
   }
 
   onMessagesUpdated() {
-    // Nachrichten aktualisieren
     this.message = [...this.messageService.messages];
-    
-    // Prüfen, ob der Benutzer am unteren Rand ist
     const container = this.messageContainer.nativeElement;
     const isAtBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
-
     if (isAtBottom) {
-      this.shouldScroll = true; // Scrollen erlauben, wenn am unteren Rand
+      this.shouldScroll = true; 
     } else {
-      this.shouldScroll = false; // Nicht scrollen, wenn Benutzer nach oben gescrollt hat
-      this.userScrolledUp = true; // Benutzer hat nach oben gescrollt
+      this.shouldScroll = false; 
+      this.userScrolledUp = true; 
     }
   }
 
@@ -86,15 +82,11 @@ export class ChatComponent {
 
   onScroll(): void {
     const container = this.messageContainer.nativeElement;
-    // Prüfen, ob der Benutzer am unteren Rand ist
-    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10; // Toleranz von 10px
-
+    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10; 
     if (isAtBottom) {
-      this.userScrolledUp = false; // Benutzer ist wieder unten
-      console.log(this.userScrolledUp)
+      this.userScrolledUp = false; 
     } else {
-      this.userScrolledUp = true; // Benutzer hat nach oben gescrollt
-      console.log(this.userScrolledUp)
+      this.userScrolledUp = true;
     }
   }
 
