@@ -31,7 +31,7 @@ export class ChatMessageFieldComponent {
   openEmojis: boolean = false;
   messageField: string = ''
   openData: boolean = false;
-  imageUploads: string[] = [];
+  imageUploads: File[] = [];
   imagePreviews: (string | ArrayBuffer | null)[] = [];
   public isDirectMessage: boolean = true;
 
@@ -42,20 +42,18 @@ export class ChatMessageFieldComponent {
   @ViewChild('userListContainer') userListContainer!: ElementRef;
   @Output() messageSent = new EventEmitter<void>();
 
-  // @Output() messagesUpdated = new EventEmitter<void>();
-
   constructor(
     public memberService: MemberService,
     public messageService: MessagesService,
     public storageService: StorageService,
     public directMessageService: DirectMessageService
-  ) { 
+  ) {
     this.allUsers()
   }
 
   async sendMessage() {
     await this.memberService.setCurrentMemberData();
-    this.messageService.createMessage(this.messageField, this.imagePreviews);
+    this.messageService.createMessage(this.messageField, this.imageUploads);
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
@@ -90,12 +88,14 @@ export class ChatMessageFieldComponent {
   }
 
   onFileSelected(event: Event): void {
-    const files = (event.target as HTMLInputElement).files;
-    if (files) {
-      Array.from(files).forEach(file => {
+    const input = event.target as HTMLInputElement;
+    if (input && input.files) {
+      Array.from(input.files).forEach(file => {
+        this.imageUploads.push(file); 
+        
         const reader = new FileReader();
         reader.onload = () => {
-          this.imagePreviews.push(reader.result); // Lokale Verwaltung von Previews
+          this.imagePreviews.push(reader.result);
         };
         reader.readAsDataURL(file);
       });

@@ -5,6 +5,7 @@ import { MemberService } from '../member/member.service';
 import { ChannelService } from '../channel/channel.service';
 import { Subject } from 'rxjs';
 import { ReferencesService } from '../references/references.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class MessagesService {
     private memberService: MemberService,
     private channelService: ChannelService,
     private referencesServic: ReferencesService,
+    private storageService: StorageService,
   ) {}
   
   async readChannel() {
@@ -53,26 +55,28 @@ export class MessagesService {
     return unsub;
   }
 
-  async createMessage(message: string, imagePreviews: any) {
-   const now = new Date();
-    const messageDocRef = await addDoc(this.referencesServic.getCollectionMessage(), {
-      user: this.authenticationService.getCurrentUserUid(),
-      name: this.authenticationService.currentMember.name,
-      time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
-      message: message,
-      profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      timestamp: Date.now(),
-      reactions: {
-        like: [],
-        rocket: []
-      },
-      answers: 0,
-      lastAnswer: '',
-      attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
-    });
-    this.updateMessageId(messageDocRef)
-    this.messagesUpdated.next();
+  async createMessage(message: string, imageUpload: File[]) {
+      const downloadURLs = await this.storageService.uploadImagesMessage(imageUpload);
+      const now = new Date();
+      const messageData = {
+        user: this.authenticationService.getCurrentUserUid(),
+        name: this.authenticationService.currentMember.name,
+        time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
+        message: message,
+        profileImage: this.authenticationService.currentMember.imageUrl,
+        createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+        timestamp: Date.now(),
+        reactions: {
+          like: [],
+          rocket: []
+        },
+        answers: 0,
+        lastAnswer: '',
+        attachment: downloadURLs
+      };
+      const messageDocRef = await addDoc(this.referencesServic.getCollectionMessage(), messageData);
+      this.updateMessageId(messageDocRef);
+      this.messagesUpdated.next();
   }
 
   async updateMessageId(messageDocRef: any) {
