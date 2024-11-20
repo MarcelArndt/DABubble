@@ -29,7 +29,7 @@ export class DirectMessageService {
       message: messageField,
       profileImage: this.authenticationService.currentMember.imageUrl,
       createdAt: this.authenticationService.date,
-      timestamp: this.authenticationService.now.getTime(),
+      timestamp: Date.now(),
       reactions: {
         like: [],
         rocket: []

@@ -29,7 +29,7 @@ export class ThreadService {
         rocket: []
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string'),
-      timestamp: this.authenticationService.now.getTime(),
+      timestamp: Date.now(),
     });
     await updateDoc(threadDocRef, {
       threadId: threadDocRef.id
@@ -45,7 +45,7 @@ export class ThreadService {
     onSnapshot(this.referencesServic.getCollectionThread(messageId), (querySnapshot) => {
       const threadsData = querySnapshot.docs
         .map(doc => doc.data())
-        .sort((a, b) => a['timestamp'] - b['timestamp']);
+        .sort((a, b) => Number(a['timestamp']) - Number(b['timestamp']));
       this.threadMessages = threadsData;
       this.threadUpdated.next();
     });
