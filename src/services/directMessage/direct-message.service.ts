@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection } from '@angular/fire/firestore';
+import { addDoc } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { deleteDoc, doc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from '@firebase/firestore';
+import { deleteDoc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from '@firebase/firestore';
 import { Subject } from 'rxjs';
-import { ChannelService } from '../channel/channel.service';
+import { ReferencesService } from '../references/references.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,49 +18,44 @@ export class DirectMessageService {
   messagesUpdated = new Subject<void>();
 
 
-  constructor(
-    private authenticationService: AuthenticationService,
-    private channelService: ChannelService
-  ) { }
+  constructor(private authenticationService: AuthenticationService, private referencesServic: ReferencesService) {}
 
   async createDirectMessage(messageField: string, imagePreviews: any) {
     this.createDirectMessageChannel();
-    const now = new Date();
-    const directMessageRef = doc(this.authenticationService.getReference(), "directMessagesChannels", this.directMessageChannelId);
-    const messageCollectionRef = collection(directMessageRef, "messages");
-    const messageDocRef = await addDoc(messageCollectionRef, {
+    const messageDocRef = await addDoc(this.referencesServic.getCollectionDirectMessages(this.directMessageChannelId), {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
-      time: `${now.getHours()}:${now.getMinutes()}`,
+      time: this.authenticationService.time,
       message: messageField,
       profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-      timestamp: now.getTime(),
+      createdAt: this.authenticationService.date,
+      timestamp: this.authenticationService.now.getTime(),
       reactions: {
         like: [],
         rocket: []
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string')
     });
-
-    await updateDoc(messageDocRef, {
-      messageId: messageDocRef.id
-    });
+    this.updateDirectMessageId(messageDocRef)
     this.messagesUpdated.next();
   }
 
+  async updateDirectMessageId(messageDocRef: any) {
+    await updateDoc(messageDocRef, {
+      messageId: messageDocRef.id,
+    });
+  }
+
   async createDirectMessageChannel() {
-    const now = new Date();
-    const docRef = await setDoc(doc(this.authenticationService.getReference(), "directMessagesChannels", this.directMessageChannelId), {
+    await setDoc(this.referencesServic.getDirectMessageDocRef(this.directMessageChannelId), {
       memberOne: this.directMessageUserData['id'],
       memberTwo: this.authenticationService.memberId,
-      timestamp: now.getTime()
+      timestamp: this.authenticationService.now.getTime()
     });
   }
 
   readDirectMessages() {
-    const messagesRef = collection(this.authenticationService.getReference(), "directMessagesChannels", this.directMessageChannelId, "messages");
-    const unsub = onSnapshot(messagesRef, (snapshot) => {
+    const unsub = onSnapshot(this.referencesServic.getCollectionDirectMessages(this.directMessageChannelId), (snapshot) => {
       this.allDirectMessages = snapshot.docs
         .map((doc) => {
           const data = doc.data() as { [key: string]: any };
@@ -77,8 +72,7 @@ export class DirectMessageService {
   }
 
   async readDirectUserData(memberId: string) {
-    const docRef = doc(this.authenticationService.getReference(), "member", memberId);
-    const docSnap = await getDoc(docRef);
+    const docSnap = await getDoc(this.referencesServic.getMemberDocRef(memberId));
     if (docSnap.exists()) {
       this.directMessageUserData = docSnap.data();
       this.userOne = this.directMessageUserData['id'];
@@ -93,11 +87,8 @@ export class DirectMessageService {
   }
 
   async deleteMessage(messageId: string) {
-    const baseRef = this.authenticationService.getReference();
-    const messageRef = doc(baseRef, "directMessagesChannels", this.directMessageChannelId, "messages", messageId);
-    await deleteDoc(messageRef);
-    const messagesCollectionRef = collection(baseRef, "directMessagesChannels", this.directMessageChannelId, "messages");
-    const querySnapshot = await getDocs(messagesCollectionRef);
+    await deleteDoc(this.referencesServic.getDirektMessageDocRefId(this.directMessageChannelId, messageId));
+    const querySnapshot = await getDocs(this.referencesServic.getCollectionDirectMessages(this.directMessageChannelId));
     if (querySnapshot.empty) {
       this.allDirectMessages = [];
       this.messagesUpdated.next();
@@ -105,8 +96,7 @@ export class DirectMessageService {
   }
 
   async updateDirectMessage(messageId: string, newMessage: string) {
-    const washingtonRef = doc(this.authenticationService.getReference(), "directMessagesChannels",  this.directMessageChannelId, 'messages', messageId);
-    await updateDoc(washingtonRef, {
+    await updateDoc(this.referencesServic.getDirektMessageDocRefId(this.directMessageChannelId, messageId), {
       message: newMessage
     });
   }

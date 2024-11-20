@@ -1,18 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User, fetchSignInMethodsForEmail} from '@angular/fire/auth';
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User} from '@angular/fire/auth';
+import { doc, getFirestore, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { Member, Message, Thread } from '../../interface/message';
-import { Channel } from '../../classes/channel.class';
-import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
-import { CollectionReference, DocumentData, onSnapshot, QuerySnapshot, where, writeBatch } from '@firebase/firestore';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { query } from '@angular/animations';
-import { HttpClient } from '@angular/common/http';
-import { debounceTime, map, catchError, switchMap } from 'rxjs/operators';
-import { AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { MemberService } from '../member/member.service';
+import { Member } from '../../interface/message';
+import { getStorage } from '@angular/fire/storage';
+import { onSnapshot } from '@firebase/firestore';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +20,10 @@ export class AuthenticationService {
   auth = inject(Auth);
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
+
+  now = new Date();
+  time = `${this.now.getHours().toString().padStart(2, '0')}:${this.now.getMinutes().toString().padStart(2, '0')}`;
+  date = this.now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
 
   constructor(
     private router: Router,
@@ -41,9 +39,6 @@ export class AuthenticationService {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        // console.log('Anmeldung erfolgreich')
-        // console.log(user);
-
       })
       .catch((error) => {
         const errorCode = error.code;

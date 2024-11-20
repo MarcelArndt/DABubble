@@ -32,7 +32,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   imageUploadsThread: string[] = [];
   imagePreviews: (string | ArrayBuffer | null)[] = [];
 
-  users = ['JohnDoe', 'JaneSmith', 'AlexMiller', 'ChrisJohnson'];
+  users: string[] = [];
   showUserList: boolean = false;
   filteredUsers: string[] = [];
   selectedIndex = -1;
@@ -41,11 +41,16 @@ export class ThreadMessageFieldComponent  implements OnInit{
   @Output() messagesUpdated = new EventEmitter<void>();
 
   constructor(
-    public object: MessagesService, 
     public auth: AuthenticationService,
     private memberService: MemberService,
     public threadService: ThreadService,
-  ) {}
+  ) {
+    this.allUsers()
+  }
+
+  allUsers() {
+    this.memberService.allMembersName();
+  }
  
   ngOnInit(): void {
     this.memberService.setCurrentMemberData();
@@ -115,6 +120,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   }
 
   addTag() {
+    this.users = this.memberService.allMembersNames
     this.messageField += '@';
     this.showUserList = true;
     this.filteredUsers = this.users; 

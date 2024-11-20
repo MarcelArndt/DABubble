@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, updateDoc } from '@angular/fire/firestore';
-import { ChannelService } from '../channel/channel.service';
+import { addDoc, deleteDoc, getDocs, increment, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
+import { ReferencesService } from '../references/references.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,45 +14,35 @@ export class ThreadService {
   threadFirstMessageUpdated = new Subject<void>();
   currentMessageId: string = '';
 
-
-  constructor(
-    private authenticationService: AuthenticationService,
-    private channelService: ChannelService
-  ) {}
+  constructor(private authenticationService: AuthenticationService, private referencesServic: ReferencesService) {}
 
   async createThread(message: string, imagePreviews: any) {
-    const now = new Date();
-    const channelDocRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId);
-    const messageDocRef = doc(channelDocRef, "messages", this.currentMessageId);
-    const threadCollectionRef = collection(messageDocRef, "threads");
-    const threadDocRef = await addDoc(threadCollectionRef, {
+    const threadDocRef = await addDoc(this.referencesServic.getCollectionThread(this.currentMessageId), {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
-      time: `${now.getHours()}:${now.getMinutes()}`,
+      time: this.authenticationService.time,
       message: message,
       profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      createdAt: this.authenticationService.date,
       reactions: {
         like: [],
         rocket: []
       },
       attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string'),
-      timestamp: now.getTime(),
+      timestamp: this.authenticationService.now.getTime(),
     });
     await updateDoc(threadDocRef, {
       threadId: threadDocRef.id
     });
-    await updateDoc(messageDocRef, {
+    await updateDoc(this.referencesServic.getMessageDocRefId(this.currentMessageId), {
       answers: increment(1),
-      lastAnswer: `${now.getHours()}:${now.getMinutes()}`
+      lastAnswer: this.authenticationService.time
     });
   }
 
   async readThread(messageId: string) {
     this.threadMessages = [];
-    const messageDocRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId, "messages", messageId);
-    const threadCollectionRef = collection(messageDocRef, "threads");
-    onSnapshot(threadCollectionRef, (querySnapshot) => {
+    onSnapshot(this.referencesServic.getCollectionThread(messageId), (querySnapshot) => {
       const threadsData = querySnapshot.docs
         .map(doc => doc.data())
         .sort((a, b) => a['timestamp'] - b['timestamp']);
@@ -63,37 +53,28 @@ export class ThreadService {
 
   async readMessageThread(messageId: string) {
     this.threadFirstMessage = {};
-    const docRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId, "messages", messageId);
-    onSnapshot(docRef, (docSnap) => {
+    onSnapshot(this.referencesServic.getMessageDocRefId(messageId), (docSnap) => {
       if (docSnap.exists()) {
-        this.threadFirstMessage = docSnap.data(); // Daten auslesen
-        this.threadFirstMessageUpdated.next(); // Benachrichtige Observer
+        this.threadFirstMessage = docSnap.data(); 
+        this.threadFirstMessageUpdated.next(); 
       }
     });
   }
 
   async deleteMessageThread(messageId: string) {
-    const baseRef = this.authenticationService.getReference();
-    const channelId = this.channelService.currentChannelId;
-    const message = doc(baseRef, "channels", channelId, "messages", this.currentMessageId);
-    const messageRef = doc(baseRef, "channels", channelId, "messages", this.currentMessageId, 'threads', messageId);
-    await deleteDoc(messageRef);
-
-    const messagesCollectionRef = collection(baseRef, "channels", channelId, "messages", this.currentMessageId, 'threads');
-    const querySnapshot = await getDocs(messagesCollectionRef);
+    await deleteDoc(this.referencesServic.getThreadDocRef(this.currentMessageId, messageId));
+    const querySnapshot = await getDocs(this.referencesServic.getCollectionThread(this.currentMessageId));
     if (querySnapshot.empty) {
       this.threadMessages = [];
       this.threadUpdated.next();
     }
-
-    await updateDoc(message, {
+    await updateDoc(this.referencesServic.getMessageDocRefId(this.currentMessageId), {
       answers: increment(-1)
     });
   }
 
   async updateThreadMessage(newMessage: string, threadId: string) {
-    const washingtonRef = doc(this.authenticationService.getReference(), "channels", this.channelService.currentChannelId, 'messages', this.currentMessageId, 'threads', threadId);
-    await updateDoc(washingtonRef, {
+    await updateDoc(this.referencesServic.getThreadDocRef(this.currentMessageId, threadId), {
       message: newMessage
     });
   }

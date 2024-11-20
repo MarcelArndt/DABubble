@@ -44,7 +44,6 @@ export class ChatMessageFieldComponent {
   // @Output() messagesUpdated = new EventEmitter<void>();
 
   constructor(
-    public object: MessagesService,
     public memberService: MemberService,
     public messageService: MessagesService,
     public storageService: StorageService,
