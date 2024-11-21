@@ -132,7 +132,6 @@ export class DevspaceComponent implements OnInit {
     });
     this.authenticationService.currentMember$.subscribe((member) => {
       this.currentMember = member;
-  
       if (this.currentMember) {
         this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (exclusiveChannels: Channel[]) => {
           this.channels = [

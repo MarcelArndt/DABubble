@@ -125,14 +125,12 @@ export class ChannelService {
   async addChannelIdToMembers(memberIds: string[], channelId: string) {
     const firestore = this.authenticationService.getReference();
     const batch = writeBatch(firestore);
-  
     memberIds.forEach((memberId) => {
-      const memberRef = doc(firestore, "member", memberId); // Korrekte Dokumentreferenz
+      const memberRef = doc(firestore, "member", memberId); 
       batch.update(memberRef, {
         channelIds: arrayUnion(channelId),
       });
     });
-  
     await batch.commit();
   }
   
@@ -151,20 +149,15 @@ export class ChannelService {
   }
   
 
-  async updateMemberIdsToChannel(channelId: string, memberIds: string[]) {
-    console.log('Channel ID:', channelId);
-  
+  async updateMemberIdsToChannel(channelId: string, memberIds: string[]) {  
     if (!channelId) {
       throw new Error("Invalid channelId provided.");
-    }
-  
+    };
     const batch = writeBatch(this.authenticationService.getReference());
     const channelDocRef = doc(this.authenticationService.getReference(), 'channels', channelId);
-    
     batch.update(channelDocRef, {
       membersId: arrayUnion(...memberIds)
     });
-    
     await batch.commit();
   }
   

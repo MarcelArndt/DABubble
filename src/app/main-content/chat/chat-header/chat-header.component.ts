@@ -11,6 +11,7 @@ import { MemberService } from '../../../../services/member/member.service';
 import { AddMembersChannelComponent } from '../../../dialog/add-members-channel/add-members-channel.component';
 import { Channel } from '../../../../classes/channel.class';
 import { ChannelService } from '../../../../services/channel/channel.service';
+import { ShowMembersOfChannelComponent } from '../../../dialog/show-members-of-channel/show-members-of-channel.component';
 
 
 @Component({
@@ -49,6 +50,17 @@ export class ChatHeaderComponent implements OnInit {
 
   addMembersToChannel(): void {
     const dialogRef = this.dialog.open(AddMembersChannelComponent, {
+      width: '660px',
+      height: 'auto',
+      position: { top: '400px', right: '64px' },
+      autoFocus: false,
+      panelClass: 'custom-dialog'
+  });
+    dialogRef.afterClosed().subscribe();
+  }
+
+  showMembersOfChannel(): void {
+    const dialogRef = this.dialog.open(ShowMembersOfChannelComponent, {
       width: '660px',
       height: 'auto',
       position: { top: '400px', right: '64px' },

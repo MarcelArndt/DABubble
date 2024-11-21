@@ -101,6 +101,13 @@ section {
     }
 }
 
+.serverSVG{
+    width: 32px;
+    height: 32px;
+    border: 3px solid white;
+    border-radius: 50px;
+}
+
 .showMemberListButtonContainer{
     @include dFlex($ai: center, $jc: space-between);
     @include padding(8px, 20px, 8px, 8px);

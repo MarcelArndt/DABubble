@@ -7,16 +7,24 @@
         </button>
 
         <div class="add-members-container">
-            <div class="showMemberListButtonContainer">
-                <div class="active-members-image-container" *ngFor="let img of memberService.allChannelMembers">
-                    <img style="margin-left: -10px;" src="{{img.imageUrl}}" alt="">
+            @if (auth.currentChannelData.isPublic) { 
+                <div class="showMemberListButtonContainer">
+                    <img class="serverSVG" src="/img/devspace/titleAndServerSvg.svg">
+                    <p>Public</p>
                 </div>
-                <p>{{auth.currentChannelData?.membersId?.length}}</p>
-            </div>
+            } 
+            @else {
+                <div class="showMemberListButtonContainer" (click)="showMembersOfChannel()">
+                    <div class="active-members-image-container" *ngFor="let img of memberService.allChannelMembers">
+                        <img style="margin-left: -10px;" src="{{img.imageUrl}}" alt="">
+                    </div>
+                    <p>{{auth.currentChannelData?.membersId?.length}}</p>
+                </div>
 
-            <button>
-                <mat-icon (click)="addMembersToChannel()" class="add-members">person_add</mat-icon>
-            </button>
+                <button>
+                    <mat-icon (click)="addMembersToChannel()" class="add-members">person_add</mat-icon>
+                </button>
+            }
         </div>
     </div>
     <div class="direct-message-header" *ngIf="directMessageService.isDirectMessage">
