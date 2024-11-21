@@ -11,7 +11,7 @@
       </ul>
     </div>
   
-    <app-thread-images-preview [imagePreviews]="imagePreviews"></app-thread-images-preview>
+    <app-thread-images-preview [imagePreviews]="imagePreviewsThread"></app-thread-images-preview>
   
     <div class="message-field-container">
       <textarea placeholder="Naricht an #Entwicklerteam" [(ngModel)]="messageField" (input)="onInput($event)"></textarea>
@@ -22,7 +22,7 @@
           <label for="file-upload-thread" class="flie-label">
             <mat-icon class="open-file">add</mat-icon>
           </label>
-          <input id="file-upload-thread" type="file" [(ngModel)]="imageUploadsThread" (change)="onFileSelected($event)" multiple>
+          <input id="file-upload-thread" type="file" (change)="onFileSelected($event)" multiple>
   
   
           <div class="between-line"></div>
@@ -30,7 +30,7 @@
           <button (click)="addTag()"><mat-icon>alternate_email</mat-icon></button>
         </div>
   
-        <button [disabled]="!(imagePreviews.length > 0 || messageField.length > 0)" class="send-btn"
+        <button [disabled]="!(imagePreviewsThread.length > 0 || messageField.length > 0)" class="send-btn"
           (click)="sendMessage()"><mat-icon>send</mat-icon></button>
       </div>
   

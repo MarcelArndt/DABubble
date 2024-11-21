@@ -29,8 +29,8 @@ export class ThreadMessageFieldComponent  implements OnInit{
   openEmojis: boolean = false;
   messageField: string = ''
   openData: boolean = false;
-  imageUploadsThread: string[] = [];
-  imagePreviews: (string | ArrayBuffer | null)[] = [];
+  imageUploadsThread: File[] = [];
+  imagePreviewsThread: (string | ArrayBuffer | null)[] = [];
 
   users: string[] = [];
   showUserList: boolean = false;
@@ -57,12 +57,12 @@ export class ThreadMessageFieldComponent  implements OnInit{
     this.memberService.setCurrentMemberData();
   }
 
-  sendMessage() {
-    this.threadService.createThread(this.messageField, this.imagePreviews);
+  async sendMessage() {
+    await this.threadService.createThread(this.messageField, this.imageUploadsThread);
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploadsThread = [];
-    this.imagePreviews = [];
+    this.imagePreviewsThread = [];
     this.messageSent.emit()
   }
 
@@ -79,12 +79,14 @@ export class ThreadMessageFieldComponent  implements OnInit{
   }
 
   onFileSelected(event: Event): void {
-    const files = (event.target as HTMLInputElement).files;
-    if (files) {
-      Array.from(files).forEach(file => {
+    const input = event.target as HTMLInputElement;
+    if (input && input.files) {
+      Array.from(input.files).forEach(file => {
+        this.imageUploadsThread.push(file); 
+        
         const reader = new FileReader();
         reader.onload = () => {
-          this.imagePreviews.push(reader.result); // Lokale Verwaltung von Previews
+          this.imagePreviewsThread.push(reader.result);
         };
         reader.readAsDataURL(file);
       });

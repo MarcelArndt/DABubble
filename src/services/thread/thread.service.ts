@@ -3,6 +3,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { addDoc, deleteDoc, getDocs, increment, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
 import { ReferencesService } from '../references/references.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,16 @@ export class ThreadService {
   threadFirstMessageUpdated = new Subject<void>();
   currentMessageId: string = '';
 
-  constructor(private authenticationService: AuthenticationService, private referencesServic: ReferencesService) {}
+  constructor(
+    private authenticationService: AuthenticationService, 
+    private referencesServic: ReferencesService,
+    private storageService: StorageService,)
+     { }
 
-  async createThread(message: string, imagePreviews: any) {
+  async createThread(message: string, imageUpload: File[]) {
     const now = new Date();
-    const threadDocRef = await addDoc(this.referencesServic.getCollectionThread(this.currentMessageId), {
+    const downloadURLs = await this.storageService.uploadImagesMessage(imageUpload);
+    const threadData = {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
       time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
@@ -29,12 +35,22 @@ export class ThreadService {
         like: [],
         rocket: []
       },
-      attachment: imagePreviews.filter((item: any): item is string => typeof item === 'string'),
+      attachment: downloadURLs,
       timestamp: Date.now(),
-    });
+    };
+    const threadDocRef = await addDoc(this.referencesServic.getCollectionThread(this.currentMessageId), threadData);
+    await this.updateThredId(threadDocRef);
+    await this.updateMessageAnswer();
+  }
+
+  async updateThredId(threadDocRef: any) {
     await updateDoc(threadDocRef, {
       threadId: threadDocRef.id
     });
+  }
+
+  async updateMessageAnswer() {
+    const now = new Date();
     await updateDoc(this.referencesServic.getMessageDocRefId(this.currentMessageId), {
       answers: increment(1),
       lastAnswer: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
@@ -56,8 +72,8 @@ export class ThreadService {
     this.threadFirstMessage = {};
     onSnapshot(this.referencesServic.getMessageDocRefId(messageId), (docSnap) => {
       if (docSnap.exists()) {
-        this.threadFirstMessage = docSnap.data(); 
-        this.threadFirstMessageUpdated.next(); 
+        this.threadFirstMessage = docSnap.data();
+        this.threadFirstMessageUpdated.next();
       }
     });
   }

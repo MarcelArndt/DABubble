@@ -60,7 +60,7 @@ export class ChatMessageFieldComponent {
   }
 
   async sendDirectMessage() {
-    await this.directMessageService.createDirectMessage(this.messageField, this.imagePreviews);
+    await this.directMessageService.createDirectMessage(this.messageField, this.imageUploads);
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
