@@ -43,22 +43,32 @@ export class MessageOptionsComponent {
     this.isMessageEditMenuOpen = false;
   }
 
-  likeMessage() {
-    const userIdIndex = this.message.reactions.like.indexOf(this.auth.getCurrentUserUid());
-    if (userIdIndex === -1) {
-      this.message.reactions.like.push(this.auth.getCurrentUserUid());
+  reactionMessage(reaction: string) {
+    if (this.isThread) {
+      // this.threadService.
+    } else if (this.directMessage.isDirectMessage) {
+      // this.directMessage.
     } else {
-      this.message.reactions.like.splice(userIdIndex, 1);
+      this.messageService.reaction(reaction ,this.message.messageId)
     }
   }
 
+  likeMessage() {
+    // const userIdIndex = this.message.reactions.like.indexOf(this.auth.getCurrentUserUid());
+    // if (userIdIndex === -1) {
+    //   this.message.reactions.like.push(this.auth.getCurrentUserUid());
+    // } else {
+    //   this.message.reactions.like.splice(userIdIndex, 1);
+    // }
+  }
+
   rocketMessage() {
-    const userIdIndex = this.message.reactions.rocket.indexOf(this.auth.getCurrentUserUid());
-    if (userIdIndex === -1) {
-      this.message.reactions.rocket.push(this.auth.getCurrentUserUid());
-    } else {
-      this.message.reactions.rocket.splice(userIdIndex, 1);
-    }
+    // const userIdIndex = this.message.reactions.rocket.indexOf(this.auth.getCurrentUserUid());
+    // if (userIdIndex === -1) {
+    //   this.message.reactions.rocket.push(this.auth.getCurrentUserUid());
+    // } else {
+    //   this.message.reactions.rocket.splice(userIdIndex, 1);
+    // }
   }
 
   handleOnDelete() {

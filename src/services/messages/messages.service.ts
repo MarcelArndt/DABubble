@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, arrayRemove, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
+import { addDoc, arrayRemove, arrayUnion, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
 import { MemberService } from '../member/member.service';
 import { ChannelService } from '../channel/channel.service';
-import { Subject } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 import { ReferencesService } from '../references/references.service';
 import { StorageService } from '../storage/storage.service';
 
@@ -126,16 +126,38 @@ export class MessagesService {
     await updateDoc(docRef, {
       attachment: updatedArray
     });
-     await this.checkMessageLength(messageId);
+    await this.checkMessageLength(messageId);
   }
 
   async checkMessageLength(messageId: string) {
     const docSnap = await getDoc(this.referencesServic.getMessageDocRefId(messageId));
     if (docSnap.exists()) {
       if (docSnap.data()["message"].length == 0 && docSnap.data()["attachment"].length == 0) {
-      await this.deleteMessage(messageId);
+        await this.deleteMessage(messageId);
       }
-    } 
+    }
   }
+
+  async reaction(reaction: string, messageId: string) {
+    const uid = this.authenticationService.getCurrentUserUid(); // Benutzer-ID
+    const user = await firstValueFrom(this.authenticationService.currentMember$); // Benutzerdaten
+    const docRef = this.referencesServic.getMessageDocRefId(messageId);
+    const reactionEntry = { uid, name: user?.name };
+    const docSnapshot = await getDoc(docRef); // Dokument abrufen
+    const data = docSnapshot.data();
+    if (!data || !data["reactions"]) {
+      await updateDoc(docRef, { [`reactions.${reaction}`]: arrayUnion(reactionEntry) });
+      console.log(`Reaktion '${reaction}' hinzugefügt.`);
+      return;
+    }
+    const currentReactions = data["reactions"][reaction] || [];
+    const hasReacted = currentReactions.some((entry: any) => entry.uid === uid);
+    await updateDoc(docRef, {
+      [`reactions.${reaction}`]: hasReacted
+        ? arrayRemove(reactionEntry)
+        : arrayUnion(reactionEntry),
+    });
+  }
+
 
 }

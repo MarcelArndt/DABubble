@@ -1,6 +1,6 @@
 <div class="options" *ngIf="isMessageHover" [ngClass]="messageService.checkUser(message) ? '' : 'option-menu'">
-  <button class="options-btn" (click)="rocketMessage()"><img src="/img/reactions/rocket.svg" alt=""></button>
-  <button class="options-btn" (click)="likeMessage()"><mat-icon class="like-icon"><img src="/img/reactions/like.svg" alt=""></mat-icon></button>
+  <button class="options-btn" (click)="reactionMessage('rocket')"><img src="/img/reactions/rocket.svg" alt=""></button>
+  <button class="options-btn" (click)="reactionMessage('like')"><mat-icon class="like-icon"><img src="/img/reactions/like.svg" alt=""></mat-icon></button>
   <button class="options-btn"><mat-icon class="icon">sentiment_satisfied</mat-icon></button>
   <button class="options-btn" (click)="openThread()"><mat-icon class="icon">comment</mat-icon></button>
   <button *ngIf="messageService.checkUser(message)" class="options-btn" (click)="openEditMenu()"><mat-icon class="icon">more_vert</mat-icon></button>

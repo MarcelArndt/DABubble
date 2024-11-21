@@ -20,16 +20,20 @@ export class MessageReationComponent {
 
   constructor(public messageService: MessagesService,  public auth: AuthenticationService) {}
 
+  reactionMessage(reaction: string) {
+    
+  }
+
   likeMessage() {
     
   }
 
   rocketMessage() {
-    const userIdIndex = this.message.reactions.rocket.indexOf(this.auth.getCurrentUserUid());
-    if (userIdIndex === -1) {
-      this.message.reactions.rocket.push(this.auth.getCurrentUserUid());
-    } else {
-      this.message.reactions.rocket.splice(userIdIndex, 1);
-    }
+    // const userIdIndex = this.message.reactions.rocket.indexOf(this.auth.getCurrentUserUid());
+    // if (userIdIndex === -1) {
+    //   this.message.reactions.rocket.push(this.auth.getCurrentUserUid());
+    // } else {
+    //   this.message.reactions.rocket.splice(userIdIndex, 1);
+    // }
   }
 }
