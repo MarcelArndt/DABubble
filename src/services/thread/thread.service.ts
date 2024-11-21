@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, deleteDoc, getDocs, increment, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, getDoc, getDocs, increment, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
 import { ReferencesService } from '../references/references.service';
 import { StorageService } from '../storage/storage.service';
@@ -94,5 +94,32 @@ export class ThreadService {
     await updateDoc(this.referencesServic.getThreadDocRef(this.currentMessageId, threadId), {
       message: newMessage
     });
+    await this.deleteMessageThread(threadId);
+  }
+
+  async deleteImages(attachmentUrl: string, messageId: string) {
+    const docRef = this.referencesServic.getThreadDocRef(this.currentMessageId, messageId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) {
+      throw new Error("Dokument existiert nicht.");
+    }
+    const attachmentArray = docSnap.data()?.["attachment"];
+    if (!Array.isArray(attachmentArray)) {
+      throw new Error("Attachment ist kein Array oder nicht vorhanden.");
+    }
+    const updatedArray = attachmentArray.filter((url: string) => url !== attachmentUrl);
+    await updateDoc(docRef, {
+      attachment: updatedArray
+    });
+     await this.checkMessageLength(messageId);
+  }
+
+  async checkMessageLength(messageId: string) {
+    const docSnap = await getDoc(this.referencesServic.getThreadDocRef(this.currentMessageId, messageId));
+    if (docSnap.exists()) {
+      if (docSnap.data()["message"].length == 0 && docSnap.data()["attachment"].length == 0) {
+      await this.deleteMessageThread(messageId);
+      }
+    } 
   }
 }

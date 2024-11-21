@@ -25,7 +25,6 @@ export class DirectMessageService {
     private storageService: StorageService,
   ) {}
 
- 
   async createDirectMessage(messageField: string, imageUpload: File[]) {
     const downloadURLs = await this.storageService.uploadImagesMessage(imageUpload);
     const now = new Date();
@@ -108,5 +107,34 @@ export class DirectMessageService {
     await updateDoc(this.referencesServic.getDirektMessageDocRefId(this.directMessageChannelId, messageId), {
       message: newMessage
     });
+    await this.checkMessageLength(messageId);
+  }
+
+  async deleteImages(attachmentUrl: string, messageId: string) {
+    const docRef = this.referencesServic.getDirektMessageDocRefId(this.directMessageChannelId, messageId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) {
+      throw new Error("Dokument existiert nicht.");
+    }
+    const attachmentArray = docSnap.data()?.["attachment"];
+    if (!Array.isArray(attachmentArray)) {
+      throw new Error("Attachment ist kein Array oder nicht vorhanden.");
+    }
+    const updatedArray = attachmentArray.filter((url: string) => url !== attachmentUrl);
+    await updateDoc(docRef, {
+      attachment: updatedArray
+    });
+     await this.checkMessageLength(messageId);
+  }
+
+  async checkMessageLength(messageId: string) {
+    const docSnap = await getDoc(this.referencesServic.getDirektMessageDocRefId(this.directMessageChannelId, messageId));
+    if (docSnap.exists()) {
+      if (docSnap.data()["message"].length == 0 && docSnap.data()["attachment"].length == 0) {
+      await this.deleteMessage(messageId);
+      console.log(docSnap.data()["message"].length == 0)
+      console.log(docSnap.data()["attachment"].length == 0)
+      }
+    } 
   }
 }

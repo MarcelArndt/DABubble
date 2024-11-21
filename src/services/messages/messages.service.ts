@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, deleteDoc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
+import { addDoc, arrayRemove, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
 import { MemberService } from '../member/member.service';
 import { ChannelService } from '../channel/channel.service';
 import { Subject } from 'rxjs';
@@ -21,8 +21,8 @@ export class MessagesService {
     private channelService: ChannelService,
     private referencesServic: ReferencesService,
     private storageService: StorageService,
-  ) {}
-  
+  ) { }
+
   async readChannel() {
     const channel = await getDoc(this.referencesServic.getChannelDocRef());
     if (channel.exists()) {
@@ -56,27 +56,27 @@ export class MessagesService {
   }
 
   async createMessage(message: string, imageUpload: File[]) {
-      const downloadURLs = await this.storageService.uploadImagesMessage(imageUpload);
-      const now = new Date();
-      const messageData = {
-        user: this.authenticationService.getCurrentUserUid(),
-        name: this.authenticationService.currentMember.name,
-        time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
-        message: message,
-        profileImage: this.authenticationService.currentMember.imageUrl,
-        createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
-        timestamp: Date.now(),
-        reactions: {
-          like: [],
-          rocket: []
-        },
-        answers: 0,
-        lastAnswer: '',
-        attachment: downloadURLs
-      };
-      const messageDocRef = await addDoc(this.referencesServic.getCollectionMessage(), messageData);
-      this.updateMessageId(messageDocRef);
-      this.messagesUpdated.next();
+    const downloadURLs = await this.storageService.uploadImagesMessage(imageUpload);
+    const now = new Date();
+    const messageData = {
+      user: this.authenticationService.getCurrentUserUid(),
+      name: this.authenticationService.currentMember.name,
+      time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
+      message: message,
+      profileImage: this.authenticationService.currentMember.imageUrl,
+      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      timestamp: Date.now(),
+      reactions: {
+        like: [],
+        rocket: []
+      },
+      answers: 0,
+      lastAnswer: '',
+      attachment: downloadURLs
+    };
+    const messageDocRef = await addDoc(this.referencesServic.getCollectionMessage(), messageData);
+    this.updateMessageId(messageDocRef);
+    this.messagesUpdated.next();
   }
 
   async updateMessageId(messageDocRef: any) {
@@ -109,6 +109,33 @@ export class MessagesService {
     await updateDoc(this.referencesServic.getMessageDocRefId(messageId), {
       message: newMessage
     });
+    await this.checkMessageLength(messageId);
+  }
+
+  async deleteImages(attachmentUrl: string, messageId: string) {
+    const docRef = this.referencesServic.getMessageDocRefId(messageId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) {
+      throw new Error("Dokument existiert nicht.");
+    }
+    const attachmentArray = docSnap.data()?.["attachment"];
+    if (!Array.isArray(attachmentArray)) {
+      throw new Error("Attachment ist kein Array oder nicht vorhanden.");
+    }
+    const updatedArray = attachmentArray.filter((url: string) => url !== attachmentUrl);
+    await updateDoc(docRef, {
+      attachment: updatedArray
+    });
+     await this.checkMessageLength(messageId);
+  }
+
+  async checkMessageLength(messageId: string) {
+    const docSnap = await getDoc(this.referencesServic.getMessageDocRefId(messageId));
+    if (docSnap.exists()) {
+      if (docSnap.data()["message"].length == 0 && docSnap.data()["attachment"].length == 0) {
+      await this.deleteMessage(messageId);
+      }
+    } 
   }
 
 }

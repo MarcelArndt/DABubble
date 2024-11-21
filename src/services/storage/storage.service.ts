@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from '@firebase/storage';
+import { deleteObject, getDownloadURL, ref, uploadBytes, uploadBytesResumable } from '@firebase/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  constructor(private auth: AuthenticationService) {}
+  constructor(private auth: AuthenticationService) { }
 
   uploadMultipleImages(files: FileList, folderName: string = 'User') {
     Array.from(files).forEach((file, index) => {
@@ -21,13 +21,13 @@ export class StorageService {
     });
   }
 
-  async getDownloadURLFromFirebase(file: File, folderName: string = 'User', id:string = '') {
-    const fileRef = ref(this.auth.storage, `${folderName}/${id ? id: this.auth.getCurrentUserUid()}/${file.name}`);
+  async getDownloadURLFromFirebase(file: File, folderName: string = 'User', id: string = '') {
+    const fileRef = ref(this.auth.storage, `${folderName}/${id ? id : this.auth.getCurrentUserUid()}/${file.name}`);
     return getDownloadURL(fileRef);
   }
 
-  async uploadImage(file: File, folderName: string = 'User', id:string = ''): Promise<string> {
-    const fileRef = ref(this.auth.storage, `${folderName}/${id ? id: this.auth.getCurrentUserUid()}/${file.name}`);
+  async uploadImage(file: File, folderName: string = 'User', id: string = ''): Promise<string> {
+    const fileRef = ref(this.auth.storage, `${folderName}/${id ? id : this.auth.getCurrentUserUid()}/${file.name}`);
 
     return uploadBytes(fileRef, file)
       .then(() => {
@@ -46,7 +46,7 @@ export class StorageService {
       const storageRef = this.auth.storage;
       const imagePath = `messagesImages/${this.auth.getCurrentUserUid()}/${image.name}`;
       const imageRef = ref(storageRef, imagePath);
-      
+
       return uploadBytes(imageRef, image)
         .then(() => getDownloadURL(imageRef))
         .catch(error => {
@@ -55,6 +55,27 @@ export class StorageService {
         });
     });
     return Promise.all(uploadPromises);
+  }
+
+  async deleteMessageImages(downloadUrl: string) {
+    try {
+      const regex = /\/o\/(.*?)\?/;
+      const match = downloadUrl.match(regex);
+      if (match && match[1]) {
+        const encodedPath = match[1];
+        const decodedPath = decodeURIComponent(encodedPath);
+  
+        const storageRef =  this.auth.storage;
+        const desertRef = ref(storageRef, decodedPath);
+  
+        await deleteObject(desertRef);
+        console.log('Bild erfolgreich gelöscht.');
+      } else {
+        console.error('Speicherpfad konnte nicht aus der URL extrahiert werden.');
+      }
+    } catch (error) {
+      console.error('Fehler beim Löschen des Bildes:', error);
+    }
   }
 
 }
