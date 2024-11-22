@@ -71,6 +71,7 @@ h3{
 
 h2{
     margin: 0px;
+    @include nunito(700, 32px, black);
 }
 
 .addButtonContainer{

@@ -62,8 +62,8 @@ export class AddMembersChannelComponent {
     private channelService: ChannelService,
   ) {
   }
-  // this 'data' is somehow the data from the welcome-channel. this 'data' needs to be fixed
 
+  
   async ngOnInit() {
     const fetchedChannel = await this.channelService.getChannelById(this.channelService.currentChannelId);
     if (fetchedChannel) {

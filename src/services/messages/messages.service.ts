@@ -29,8 +29,8 @@ export class MessagesService {
       await this.loadInitialMessages(this.channelService.currentChannelId);
       this.listenToMessages(this.channelService.currentChannelId);
       this.authenticationService.currentChannelData = channel.data();
-      this.memberService.allChannelMembers = [];
-      this.memberService.allMembersInChannel();
+      // this.memberService.allChannelMembers = []; // allMembersInChannel returnt jetzt alle members eines exklusiven channels. sollte das hier nun geaendert werden?
+      // this.memberService.allMembersInChannel();
     }
   }
 

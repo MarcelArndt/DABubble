@@ -61,9 +61,9 @@ export class ChatHeaderComponent implements OnInit {
 
   showMembersOfChannel(): void {
     const dialogRef = this.dialog.open(ShowMembersOfChannelComponent, {
-      width: '660px',
+      width: '400px',
       height: 'auto',
-      position: { top: '400px', right: '64px' },
+      position: { top: '200px', right: '64px' },
       autoFocus: false,
       panelClass: 'custom-dialog'
   });
