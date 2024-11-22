@@ -21,6 +21,9 @@
             @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
             margin-left: 10px;
         }
+        span {
+            @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+        }
     }
 
     .add-reaction-btn {

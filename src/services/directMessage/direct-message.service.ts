@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { addDoc } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { deleteDoc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from '@firebase/firestore';
-import { Subject } from 'rxjs';
+import { arrayRemove, arrayUnion, deleteDoc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from '@firebase/firestore';
+import { firstValueFrom, Subject } from 'rxjs';
 import { ReferencesService } from '../references/references.service';
 import { StorageService } from '../storage/storage.service';
 
@@ -136,5 +136,26 @@ export class DirectMessageService {
       console.log(docSnap.data()["attachment"].length == 0)
       }
     } 
+  }
+
+  async reaction(reaction: string, messageId: string) {
+    const uid = this.authenticationService.getCurrentUserUid(); 
+    const user = await firstValueFrom(this.authenticationService.currentMember$);
+    const docRef = this.referencesServic.getDirektMessageDocRefId(this.directMessageChannelId, messageId);
+    const reactionEntry = { uid, name: user?.name };
+    const docSnapshot = await getDoc(docRef); 
+    const data = docSnapshot.data();
+    if (!data || !data["reactions"]) {
+      await updateDoc(docRef, { [`reactions.${reaction}`]: arrayUnion(reactionEntry) });
+      console.log(`Reaktion '${reaction}' hinzugefügt.`);
+      return;
+    }
+    const currentReactions = data["reactions"][reaction] || [];
+    const hasReacted = currentReactions.some((entry: any) => entry.uid === uid);
+    await updateDoc(docRef, {
+      [`reactions.${reaction}`]: hasReacted
+        ? arrayRemove(reactionEntry)
+        : arrayUnion(reactionEntry),
+    });
   }
 }

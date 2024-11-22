@@ -7,4 +7,11 @@
         <img src="/img/reactions/rocket.svg" alt="">
         <p>{{message.reactions.rocket.length}}</p>
     </button>
+
+    <div *ngFor="let reaction of check()">
+        <button (click)="reactionMessage(reaction.name)" *ngIf="reaction.count > 0">
+          <span>{{ reaction.name }}</span> 
+          <p>{{ reaction.count }}</p>
+        </button>
+      </div>
 </div>
