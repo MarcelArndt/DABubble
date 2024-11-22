@@ -14,8 +14,10 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class ImagesPreviewComponent {
   @Input() imagePreviews: any
+  @Input() imageUploads: any;
   
   deleteImage(i: any) {
     this.imagePreviews.splice(i, 1);
+    this.imageUploads.splice(i, 1);
   }
 }

@@ -13,9 +13,11 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './thread-images-preview.component.scss'
 })
 export class ThreadImagesPreviewComponent {
-  @Input() imagePreviews: (string | ArrayBuffer | null)[] = [];
+  @Input() imagePreviewsThread: (string | ArrayBuffer | null)[] = [];
+  @Input() imageUploadsThread: any;
   
   deleteImage(i: any) {
-    this.imagePreviews.splice(i, 1);
+    this.imagePreviewsThread.splice(i, 1);
+    this.imageUploadsThread.splice(i, 1);
   }
 }

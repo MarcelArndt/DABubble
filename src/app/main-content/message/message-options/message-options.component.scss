@@ -2,6 +2,7 @@
 
 .options {
     background-color: white;
+    position: relative;
     box-sizing: border-box;
     padding: 0px 10px;
     position: absolute;
@@ -71,4 +72,11 @@
 
 .like-icon {
 width: 100%;
+}
+
+.emojis-container {
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    z-index: 100;
 }

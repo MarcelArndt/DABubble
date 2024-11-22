@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { MainContentService } from '../../../../services/main-content/main-conte
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { DirectMessageService } from '../../../../services/directMessage/direct-message.service';
 import { ThreadService } from '../../../../services/thread/thread.service';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 
 @Component({
@@ -16,7 +17,8 @@ import { ThreadService } from '../../../../services/thread/thread.service';
   imports: [
     CommonModule,
     MatIcon,
-    FormsModule
+    FormsModule,
+    PickerComponent,
   ],
   templateUrl: './message-options.component.html',
   styleUrl: './message-options.component.scss'
@@ -27,6 +29,7 @@ export class MessageOptionsComponent {
   @Input() isMessageEditMenuOpen: any;
   @Input() editMessageText: any;
   @Input() isThread: boolean = false;
+  openEmojis: boolean = false;
 
   @Output() toggleEdit = new EventEmitter<void>();
 
@@ -43,32 +46,31 @@ export class MessageOptionsComponent {
     this.isMessageEditMenuOpen = false;
   }
 
-  reactionMessage(reaction: string) {
-    if (this.isThread) {
-      // this.threadService.
-    } else if (this.directMessage.isDirectMessage) {
-      // this.directMessage.
-    } else {
-      this.messageService.reaction(reaction ,this.message.messageId)
+  toggleEmojis(event: Event): void {
+    event.stopPropagation();
+    this.openEmojis = !this.openEmojis;
+  }
+
+  @HostListener('document:click', ['$event'])
+  closeEmojisOnOutsideClick(event: Event): void {
+    if (this.openEmojis && !(event.target as HTMLElement).closest('.emojis-container')) {
+      this.openEmojis = false;
     }
   }
 
-  likeMessage() {
-    // const userIdIndex = this.message.reactions.like.indexOf(this.auth.getCurrentUserUid());
-    // if (userIdIndex === -1) {
-    //   this.message.reactions.like.push(this.auth.getCurrentUserUid());
-    // } else {
-    //   this.message.reactions.like.splice(userIdIndex, 1);
-    // }
+  addEmoji(event: any) {
+    this.openEmojis = false;
+    this.reactionMessage(event.emoji.native);
   }
 
-  rocketMessage() {
-    // const userIdIndex = this.message.reactions.rocket.indexOf(this.auth.getCurrentUserUid());
-    // if (userIdIndex === -1) {
-    //   this.message.reactions.rocket.push(this.auth.getCurrentUserUid());
-    // } else {
-    //   this.message.reactions.rocket.splice(userIdIndex, 1);
-    // }
+  reactionMessage(reaction: string) {
+    if (this.isThread) {
+      this.threadService.reaction(reaction ,this.message.threadId)
+    } else if (this.directMessage.isDirectMessage) {
+      this.directMessage.reaction(reaction ,this.message.messageId)
+    } else {
+      this.messageService.reaction(reaction ,this.message.messageId)
+    }
   }
 
   handleOnDelete() {

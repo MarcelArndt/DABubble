@@ -115,13 +115,7 @@ export class MessagesService {
   async deleteImages(attachmentUrl: string, messageId: string) {
     const docRef = this.referencesServic.getMessageDocRefId(messageId);
     const docSnap = await getDoc(docRef);
-    if (!docSnap.exists()) {
-      throw new Error("Dokument existiert nicht.");
-    }
     const attachmentArray = docSnap.data()?.["attachment"];
-    if (!Array.isArray(attachmentArray)) {
-      throw new Error("Attachment ist kein Array oder nicht vorhanden.");
-    }
     const updatedArray = attachmentArray.filter((url: string) => url !== attachmentUrl);
     await updateDoc(docRef, {
       attachment: updatedArray
@@ -147,7 +141,6 @@ export class MessagesService {
     const data = docSnapshot.data();
     if (!data || !data["reactions"]) {
       await updateDoc(docRef, { [`reactions.${reaction}`]: arrayUnion(reactionEntry) });
-      console.log(`Reaktion '${reaction}' hinzugefügt.`);
       return;
     }
     const currentReactions = data["reactions"][reaction] || [];
@@ -158,6 +151,5 @@ export class MessagesService {
         : arrayUnion(reactionEntry),
     });
   }
-
 
 }

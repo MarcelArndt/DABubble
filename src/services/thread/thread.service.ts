@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, deleteDoc, getDoc, getDocs, increment, onSnapshot, updateDoc } from '@angular/fire/firestore';
-import { Subject } from 'rxjs';
+import { addDoc, arrayRemove, arrayUnion, deleteDoc, getDoc, getDocs, increment, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { firstValueFrom, Subject } from 'rxjs';
 import { ReferencesService } from '../references/references.service';
 import { StorageService } from '../storage/storage.service';
 
@@ -16,10 +16,9 @@ export class ThreadService {
   currentMessageId: string = '';
 
   constructor(
-    private authenticationService: AuthenticationService, 
+    private authenticationService: AuthenticationService,
     private referencesServic: ReferencesService,
-    private storageService: StorageService,)
-     { }
+    private storageService: StorageService,) { }
 
   async createThread(message: string, imageUpload: File[]) {
     const now = new Date();
@@ -94,7 +93,7 @@ export class ThreadService {
     await updateDoc(this.referencesServic.getThreadDocRef(this.currentMessageId, threadId), {
       message: newMessage
     });
-    await this.deleteMessageThread(threadId);
+    await this.checkMessageLength(threadId);
   }
 
   async deleteImages(attachmentUrl: string, messageId: string) {
@@ -111,15 +110,36 @@ export class ThreadService {
     await updateDoc(docRef, {
       attachment: updatedArray
     });
-     await this.checkMessageLength(messageId);
+    await this.checkMessageLength(messageId);
   }
 
   async checkMessageLength(messageId: string) {
     const docSnap = await getDoc(this.referencesServic.getThreadDocRef(this.currentMessageId, messageId));
     if (docSnap.exists()) {
       if (docSnap.data()["message"].length == 0 && docSnap.data()["attachment"].length == 0) {
-      await this.deleteMessageThread(messageId);
+        await this.deleteMessageThread(messageId);
       }
-    } 
+    }
+  }
+
+  async reaction(reaction: string, messageId: string) {
+    const uid = this.authenticationService.getCurrentUserUid();
+    const user = await firstValueFrom(this.authenticationService.currentMember$);
+    const docRef = this.referencesServic.getThreadDocRef(this.currentMessageId, messageId);
+    const reactionEntry = { uid, name: user?.name };
+    const docSnapshot = await getDoc(docRef); // Dokument abrufen
+    const data = docSnapshot.data();
+    if (!data || !data["reactions"]) {
+      await updateDoc(docRef, { [`reactions.${reaction}`]: arrayUnion(reactionEntry) });
+      console.log(`Reaktion '${reaction}' hinzugefügt.`);
+      return;
+    }
+    const currentReactions = data["reactions"][reaction] || [];
+    const hasReacted = currentReactions.some((entry: any) => entry.uid === uid);
+    await updateDoc(docRef, {
+      [`reactions.${reaction}`]: hasReacted
+        ? arrayRemove(reactionEntry)
+        : arrayUnion(reactionEntry),
+    });
   }
 }
