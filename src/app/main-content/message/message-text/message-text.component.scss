@@ -1,15 +1,16 @@
 @import '../../../../mixin.scss';
 
 .message {
-    background-color: var(--primary-bg);
     box-sizing: border-box;
-    padding: 10px;
     border-radius: 0 20px 20px 20px;
     margin: 10px 0;
     width: auto;
 
     .message-text {
         @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+    }
+    .text-hover {
+        @include nunito($fw: 400, $fs: 18px, $c: black);
     }
 
     textarea {
@@ -45,9 +46,26 @@
 .myMessage {
     background-color: var(--purple-2);
     border-radius: 20px 0px 20px 20px;
+
+    .message-bg {
+        background-color: var(--purple-2);
+        padding: 10px;
+        border-radius: 20px 0px 20px 20px;
+    }
+
 }
 
 .memberMessage {
     background-color: var(--primary-bg);
     border-radius: 0 20px 20px 20px;
+
+    .message-bg {
+        background-color: var(--primary-bg);
+        padding: 10px;
+        border-radius: 0 20px 20px 20px;
+    }
+
+    .bg {
+        background-color: white !important;
+    }
 }

@@ -23,6 +23,7 @@ export class MessageTextComponent {
   @Input() isEdit: any;
   @Input() editMessageText: any;
   @Input() isThread: boolean = false;
+  @Input() isMessageHover: any;
 
   @Output() saveText = new EventEmitter<void>();
   @Output() cancelEdit = new EventEmitter<void>();
