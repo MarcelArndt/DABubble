@@ -19,23 +19,23 @@ export class MessagesService {
     private authenticationService: AuthenticationService,
     private memberService: MemberService,
     private channelService: ChannelService,
-    private referencesServic: ReferencesService,
+    private referencesService: ReferencesService,
     private storageService: StorageService,
   ) { }
 
+
   async readChannel() {
-    const channel = await getDoc(this.referencesServic.getChannelDocRef());
+    const channel = await getDoc(this.referencesService.getChannelDocRef());
     if (channel.exists()) {
       await this.loadInitialMessages(this.channelService.currentChannelId);
       this.listenToMessages(this.channelService.currentChannelId);
       this.authenticationService.currentChannelData = channel.data();
-      // this.memberService.allChannelMembers = []; // allMembersInChannel returnt jetzt alle members eines exklusiven channels. sollte das hier nun geaendert werden?
-      // this.memberService.allMembersInChannel();
+      await this.memberService.allMembersInChannel();
     }
   }
 
   async loadInitialMessages(channelId: string) {
-    const querySnapshot = await getDocs(this.referencesServic.getCollectionMessage());
+    const querySnapshot = await getDocs(this.referencesService.getCollectionMessage());
     this.messages = querySnapshot.docs
       .map(doc => doc.data())
       .sort((a, b) => Number(a['timestamp']) - Number(b['timestamp']));
@@ -43,7 +43,7 @@ export class MessagesService {
   }
 
   listenToMessages(channelId: string) {
-    const unsub = onSnapshot(this.referencesServic.getCollectionMessage(), (querySnapshot) => {
+    const unsub = onSnapshot(this.referencesService.getCollectionMessage(), (querySnapshot) => {
       const loadedMessages = querySnapshot.docs
         .map(doc => doc.data())
         .sort((a, b) => a['timestamp'] - b['timestamp']);
@@ -74,7 +74,7 @@ export class MessagesService {
       lastAnswer: '',
       attachment: downloadURLs
     };
-    const messageDocRef = await addDoc(this.referencesServic.getCollectionMessage(), messageData);
+    const messageDocRef = await addDoc(this.referencesService.getCollectionMessage(), messageData);
     this.updateMessageId(messageDocRef);
     this.messagesUpdated.next();
   }
@@ -90,8 +90,8 @@ export class MessagesService {
   }
 
   async deleteMessage(messageId: string) {
-    await deleteDoc(this.referencesServic.getMessageDocRefId(messageId));
-    const querySnapshot = await getDocs(this.referencesServic.getCollectionMessage());
+    await deleteDoc(this.referencesService.getMessageDocRefId(messageId));
+    const querySnapshot = await getDocs(this.referencesService.getCollectionMessage());
     if (querySnapshot.empty) {
       this.messages = [];
       this.messagesUpdated.next();
@@ -99,21 +99,21 @@ export class MessagesService {
   }
 
   async adminUserChannel(id: string) {
-    const docSnap = await getDoc(this.referencesServic.getMemberDocRef(id));
+    const docSnap = await getDoc(this.referencesService.getMemberDocRef(id));
     if (docSnap.exists()) {
       return docSnap.data()['name'];
     }
   }
 
   async updateMessage(messageId: string, newMessage: string) {
-    await updateDoc(this.referencesServic.getMessageDocRefId(messageId), {
+    await updateDoc(this.referencesService.getMessageDocRefId(messageId), {
       message: newMessage
     });
     await this.checkMessageLength(messageId);
   }
 
   async deleteImages(attachmentUrl: string, messageId: string) {
-    const docRef = this.referencesServic.getMessageDocRefId(messageId);
+    const docRef = this.referencesService.getMessageDocRefId(messageId);
     const docSnap = await getDoc(docRef);
     const attachmentArray = docSnap.data()?.["attachment"];
     const updatedArray = attachmentArray.filter((url: string) => url !== attachmentUrl);
@@ -124,7 +124,7 @@ export class MessagesService {
   }
 
   async checkMessageLength(messageId: string) {
-    const docSnap = await getDoc(this.referencesServic.getMessageDocRefId(messageId));
+    const docSnap = await getDoc(this.referencesService.getMessageDocRefId(messageId));
     if (docSnap.exists()) {
       if (docSnap.data()["message"].length == 0 && docSnap.data()["attachment"].length == 0) {
         await this.deleteMessage(messageId);
@@ -135,7 +135,7 @@ export class MessagesService {
   async reaction(reaction: string, messageId: string) {
     const uid = this.authenticationService.getCurrentUserUid(); // Benutzer-ID
     const user = await firstValueFrom(this.authenticationService.currentMember$); // Benutzerdaten
-    const docRef = this.referencesServic.getMessageDocRefId(messageId);
+    const docRef = this.referencesService.getMessageDocRefId(messageId);
     const reactionEntry = { uid, name: user?.name };
     const docSnapshot = await getDoc(docRef); // Dokument abrufen
     const data = docSnapshot.data();
