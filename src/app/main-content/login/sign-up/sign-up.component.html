@@ -13,7 +13,7 @@
             <div class="emailSection">
             <div class="errorBox">
               @if(myForm.get('email')?.hasError('emailExists')){
-                <span>Diese E-Mail ist bereits registriert.</span>
+                <span>This E-Mail is already in use</span>
               }
              </div>
             <app-input-field formControlName="email" type="email" icon="mail" placeholder="example@email.com" [required]="true" minlength="6" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"  ></app-input-field>
@@ -34,7 +34,7 @@
                     </div>
             </div>
             </div>
-            <div class="set-right"> <button [disabled]="!myForm.valid " (click)="onSubmit(2)" >Go On</button> </div>
+            <div class="set-right"> <button [disabled]="!myForm.valid " (click)="onSubmit()" >Go On</button> </div>
         </form>
 
 </div>

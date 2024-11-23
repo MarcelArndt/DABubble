@@ -26,20 +26,19 @@ async getProfilPictureUrl(userId:string='', imageFile:File){
   return await this.storage.getDownloadURLFromFirebase(imageFile, 'User', userId)
  }
 
- async createUserCollection(userId:string, imageFile:File, isGooglePhoto:boolean = false) {
+ async createUserCollection(userId:string, imageFile:File) {
   await setDoc(doc(this.auth.getReference(), "member", userId), {
     id: userId,
     name: this.fullName,
     email: this.userEmail,
-    imageUrl: isGooglePhoto? this.googlePhotoUrl : await this.getProfilPictureUrl(userId, imageFile),
+    imageUrl: await this.getProfilPictureUrl(userId, imageFile),
     status: true,
     channelIds: [],
   });
-  if(isGooglePhoto) console.log(this.googlePhotoUrl);
 }
 
- async setProfilForMember(userid:string, isGooglePhoto:boolean = false){
-  await this.createUserCollection(userid, this.image as File, isGooglePhoto);
+ async setProfilForMember(userid:string){
+  await this.createUserCollection(userid, this.image as File);
  }
 
   async signUpUser() {
@@ -50,6 +49,7 @@ async getProfilPictureUrl(userId:string='', imageFile:File){
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorMessage);
       });
   }
 
@@ -76,62 +76,4 @@ async getProfilPictureUrl(userId:string='', imageFile:File){
     let collection:string [] = await this.pullAllEmails();
     return collection.includes(email);
   }
-
-
-
-    // Sign-In
-
-  createLoginBodyRequest(email: string, password: string){
-    return { email: email, password: password, returnSecureToken: true,}
-  }
-
-  //trying to login with login data.
- async tryToLogin(requestBody:object){
-    try{    
-      const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAhm5cFWdasUGKr8ujq9Mp45pCnZteW34c',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-        }
-      );
-      return response;
-    }catch(error ){
-      return {ok:false};
-    }
-
-  }
-
-  async checkForSignIn(email: string, password: string){
-    try{
-    const requestBody = this.createLoginBodyRequest(email, password)
-    const response = await this.tryToLogin(requestBody);
-    if(response.ok) this.router.navigate(['start']);
-  }catch(error){
-    console.log('bad Request');
-  }
-  }
-
-
-  //Goggle Sign-In
-
-  async signInWithGoogle(){
-    signInWithPopup(this.auth.auth, this.googleProvider)
-    .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const user = result.user;
-      this.userEmail = user.email || '';
-      this.fullName = user.displayName || '';
-      this.googlePhotoUrl = user.photoURL || '';
-      console.log(user);
-      this.setProfilForMember(user.uid, true)
-      .then(() => {this.router.navigate(['start']);});
-      this.googlePhotoUrl = '';
-    }).catch((error) => {
-    });
-  }
-
 }

@@ -6,6 +6,7 @@ import { Member } from '../../interface/message';
 import { getStorage } from '@angular/fire/storage';
 import { onSnapshot } from '@firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
+import { SignInService } from '../sign-in/sign-in.service';
 
 
 @Injectable({
@@ -20,6 +21,7 @@ export class AuthenticationService {
   auth = inject(Auth);
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
+  loginFailed = false;
 
   constructor(
     private router: Router,
@@ -34,9 +36,10 @@ export class AuthenticationService {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+        this.loginFailed = false;
       }).then(() => {this.router.navigate(['start'])})
       .catch((error) => {
-        console.log('login war fehlgeschlagen')
+        this.loginFailed = true;
       });
   }
 
