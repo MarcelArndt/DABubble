@@ -139,3 +139,10 @@
         
     }
   }
+
+  
+@media (orientation: landscape) and (max-height: 850px){
+    .whiteBox{
+      justify-content: start;
+    }
+  }

@@ -38,10 +38,9 @@ export class AuthenticationService {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-      })
+      }).then(() => {this.router.navigate(['start'])})
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        console.log('login war fehlgeschlagen')
       });
   }
 
@@ -114,20 +113,6 @@ export class AuthenticationService {
     } catch (error) {
       console.error("Error while updating the data in firebase-authentication:", error);
     }
-  }
-
-  signUpWithGoogle() {
-    signInWithPopup(this.auth, this.provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential?.accessToken;
-        const user = result.user;
-      }).catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
   }
 
   signOutUser() {
