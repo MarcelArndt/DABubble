@@ -3,6 +3,7 @@ import { InputFieldComponent } from '../../../shared/header/input-field/input-fi
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { SignInService } from '../../../../services/sign-in/sign-in.service';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class SignInComponent {
   email: string = '';
   password: string = '';
 
-  constructor(private auth: AuthenticationService, private router: Router) {}
+  constructor(private auth: AuthenticationService, private router: Router, private signIn: SignInService) {}
 
   myFormLogin = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -36,8 +37,7 @@ export class SignInComponent {
 
   signInUser() {
     this.fillValues();
-    this.auth.signInUser(this.email, this.password);
-    this.router.navigate(['start']);
+    this.signIn.checkForSignIn(this.email, this.password);
   }
 
   fillValues(){
@@ -45,9 +45,9 @@ export class SignInComponent {
     this.password = this.myFormLogin.value.password || '';
   }
 
-  signInWithGoogle() {
-    this.auth.signUpWithGoogle();
-    this.router.navigate(['start']);
+  async signInWithGoogle() {
+    //this.auth.signUpWithGoogle();
+   await this.signIn.signInWithGoogle();
   }
 
 }

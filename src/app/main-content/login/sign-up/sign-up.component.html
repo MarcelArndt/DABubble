@@ -7,8 +7,7 @@
 
     <p>With your name and email address you have your new DABubble account.</p>
     <div class="input-area">   
-
-        <div class="form" [formGroup]="myForm">
+        <form class="form" [formGroup]="myForm">
             <app-input-field formControlName="fullName" type="text" icon="person" placeholder="Firstname & Lastname" [required]="true" minlength="3" pattern="[A-Za-zäöüÄÖÜß._\-\s]+"  ></app-input-field>
             
             <div class="emailSection">
@@ -36,6 +35,6 @@
             </div>
             </div>
             <div class="set-right"> <button [disabled]="!myForm.valid " (click)="onSubmit(2)" >Go On</button> </div>
-        </div>
+        </form>
 
 </div>
