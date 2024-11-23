@@ -3,6 +3,11 @@
     <p>We recommend that you use the email address you use at work.</p>
     <form class="form" [formGroup]="myFormLogin">
         <div class="input-area">   
+            <div class="errorBox">
+            @if(myFormLogin.valid && auth.loginFailed){
+                <span>Wrong E-Mail or Password</span>
+              }
+            </div>
             <app-input-field formControlName="email" type="email" icon="mail" placeholder="example@email.com" [required]="true" minlength="6" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"  ></app-input-field>
             <app-input-field  formControlName="password" type="password" icon="lock" placeholder="Password" minlength="8"  [required]="true"></app-input-field>
         </div>
@@ -11,11 +16,11 @@
 
         <div class="hrElement"><span>Or Else</span></div>
 
-        <button class="google-button" (click)="signInWithGoogle()"><img src="./img/main-assets/google.svg"><span>Sign in with Google</span></button>
+        <button class="google-button" (click)="googleSignIn()"><img src="./img/main-assets/google.svg"><span>Sign in with Google</span></button>
 
         <div class="button-collection">
             <button [disabled]="!myFormLogin.valid" (click)="signInUser()" >Log In</button>
-            <button class="specialButton"  routerLink="/start">Guest-Login</button>
+            <button class="specialButton" routerLink="/start">Guest-Login</button>
 
         </div>
     </form>

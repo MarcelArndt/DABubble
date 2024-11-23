@@ -166,3 +166,16 @@ a{
     }
 }
 
+
+.errorBox{
+    position: relative;
+    width: 65%;
+    padding-left: 24px;
+    span{
+        display: block;
+        position: absolute;
+        top: -3px;
+        left: 0px;
+        @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: red);
+    }
+}

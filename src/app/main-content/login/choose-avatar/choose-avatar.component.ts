@@ -78,7 +78,6 @@ export class ChooseAvatarComponent {
 
   onSubmit(){
     this.signIn.image = this.selectedImage as File;
-    console.log(this.signIn.userEmail, this.signIn.fullName, this.signIn.image);
     this.signIn.signUpUser();
     this.sendClickToParentPageCounter(3);
   }

@@ -21,6 +21,7 @@ export class AuthenticationService {
   auth = inject(Auth);
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
+  loginFailed = false;
   private currentChannelDataSubject = new BehaviorSubject<Channel | null>(null);
   currentChannelData$ = this.currentChannelDataSubject.asObservable();
 
@@ -38,9 +39,10 @@ export class AuthenticationService {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+        this.loginFailed = false;
       }).then(() => {this.router.navigate(['start'])})
       .catch((error) => {
-        console.log('login war fehlgeschlagen')
+        this.loginFailed = true;
       });
   }
 

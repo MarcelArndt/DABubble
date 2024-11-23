@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { SignInService } from '../../../../services/sign-in/sign-in.service';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup,  signInWithEmailAndPassword } from '@angular/fire/auth';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class SignInComponent {
   email: string = '';
   password: string = '';
 
-  constructor(private auth: AuthenticationService, private router: Router, private signIn: SignInService) {}
+  constructor(public auth: AuthenticationService, private router: Router, public signIn: SignInService) {}
 
   myFormLogin = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -37,7 +38,7 @@ export class SignInComponent {
 
   signInUser() {
     this.fillValues();
-    this.signIn.checkForSignIn(this.email, this.password);
+    this.auth.signInUser(this.email, this.password);
   }
 
   fillValues(){
@@ -45,9 +46,25 @@ export class SignInComponent {
     this.password = this.myFormLogin.value.password || '';
   }
 
-  async signInWithGoogle() {
-    //this.auth.signUpWithGoogle();
-   await this.signIn.signInWithGoogle();
+  async checkAlreadySignIn(){
+    if(!await this.signIn.checkIsEmailAlreadyExists(this.signIn.userEmail)){
+      this.sendClickToParentPageCounter(2);
+    } else {
+      this.router.navigate(['start']);
+    }
   }
+  async googleSignIn(){
+    signInWithPopup(this.auth.auth, this.signIn.googleProvider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const user = result.user;
+      this.signIn.userEmail = user.email || '';
+      this.signIn.fullName = user.displayName || '';
+      this.signIn.password = '';
+      this.checkAlreadySignIn();
+    }).catch((error) => {
+    });
+  }
+
 
 }

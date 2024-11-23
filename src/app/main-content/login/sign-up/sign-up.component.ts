@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, AfterViewInit, ViewChild } from '@angular/core';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
-import { RouterModule } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, AbstractControl, AsyncValidatorFn, ValidationErrors, FormBuilder } from '@angular/forms';
 import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class SignUpComponent {
 
   myForm: FormGroup
 
-  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signIn: SignInService) {
+  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signIn: SignInService, private router: Router) {
     this.myForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email], [this.emailAsyncValidator()]],
@@ -45,7 +45,6 @@ export class SignUpComponent {
   password: string = '';
 
   @Output() eventInChild = new EventEmitter();
-
 
   sendClickToParentPageCounter(index: number = 0) {
     this.eventInChild.emit(index);
@@ -82,10 +81,11 @@ export class SignUpComponent {
     console.log('open a Lightbox here')
   }
 
-async onSubmit(pageNumber:number = 0){
+
+async onSubmit(){
   if (this.myForm.valid){
   this.fillValues();
-  this.sendClickToParentPageCounter(pageNumber);
+  this.sendClickToParentPageCounter(2);
   }
 }
 
