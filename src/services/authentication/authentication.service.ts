@@ -6,7 +6,6 @@ import { Member } from '../../interface/message';
 import { getStorage } from '@angular/fire/storage';
 import { onSnapshot } from '@firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
-import { SignInService } from '../sign-in/sign-in.service';
 import { Channel } from '../../classes/channel.class';
 
 
