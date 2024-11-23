@@ -31,11 +31,16 @@
             </button>
         </div>
         @if (channelsAreVisible) {
-        <div class="dropDownChannelSection" @slideDown>
-            <div class="dropDownChannels" *ngFor="let channel of channels; let i = index;">
-                <p class="channel" (click)="checkWindowAndOpenChannel(channel)"><mat-icon>tag</mat-icon>{{channel.title}}</p>
-            </div>
-        </div>
+            <div class="dropDownChannelSection" @slideDown>
+                <div
+                  class="channel"
+                  *ngFor="let channel of channels; let i = index"
+                  (click)="checkWindowAndOpenChannel(channel)"
+                >
+                  <mat-icon>tag</mat-icon>
+                  <span class="channel-text">{{ channel.title }}</span>
+                </div>
+            </div>              
         <div class="addChannelButton" (click)="openCreateChannelDialog()">
             <mat-icon class="material-icons">add_circle_outline</mat-icon>
             Add Channel

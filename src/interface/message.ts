@@ -5,6 +5,7 @@ export interface Member {
   imageUrl: string;
   status: boolean;
   channelIds: string[];
+  ignoreList: string[];
 }
 
 export interface Channel {

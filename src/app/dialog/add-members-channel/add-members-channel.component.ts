@@ -51,7 +51,7 @@ export class AddMembersChannelComponent {
   filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); 
 
   channel: Channel = new Channel();
-  members: Member[] = []; 
+  members: Member[] = [];
 
   selectedMembers: Member[] = [];
   filteredMembers: Member[] = [];

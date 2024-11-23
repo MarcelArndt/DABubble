@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Member } from '../../interface/message';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QuerySnapshot, setDoc, updateDoc } from '@firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QuerySnapshot, setDoc, updateDoc } from '@firebase/firestore';
 import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
 
 @Injectable({
@@ -16,6 +16,21 @@ export class MemberService {
   constructor(private authenticationService: AuthenticationService) {
   }
 
+  async addChannelIdToIgnoreList(memberId: string, channelId: string) {
+    const memberRef = doc(this.authenticationService.getReference(), 'member', memberId);
+    await updateDoc(memberRef, {
+      ignoreList: arrayUnion(channelId),
+    });
+  }
+
+  async removeChannelIdFromMember(memberId: string, channelId: string) {
+    const memberRef = doc(this.authenticationService.getReference(), 'member', memberId);
+    await updateDoc(memberRef, {
+      channelIds: arrayRemove(channelId),
+    });
+  }
+  
+
   getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
     const membersCollection = collection(this.authenticationService.getReference(), 'member');
     onSnapshot(membersCollection, (snapshot: QuerySnapshot<DocumentData>) => {
@@ -28,6 +43,7 @@ export class MemberService {
           imageUrl: data['imageUrl'],
           status: data['status'],
           channelIds: data['channelIds'] || [],
+          ignoreList: data['ignoreList'] || [],
         };
       });
       onMembersUpdated(members);
@@ -72,6 +88,7 @@ export class MemberService {
         imageUrl: data['imageUrl'],
         status: data['status'],
         channelIds: data['channelIds'],
+        ignoreList: data['ignoreList'] || [],
       }
     } else {
       console.log("No such document!");
@@ -90,6 +107,7 @@ export class MemberService {
         imageUrl: data['imageUrl'],
         status: data['status'],
         channelIds: data['channelIds'],
+        ignoreList: data['ignoreList'] || [],
       }
     } else {
       console.log("No such document!");

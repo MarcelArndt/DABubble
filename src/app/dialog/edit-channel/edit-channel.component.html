@@ -1,10 +1,41 @@
-<h2 mat-dialog-title>Hi</h2>
+<div class="dialog">
+  <div class="titleContainer">
+    <h2><mat-icon class="tagIcon">tag</mat-icon>{{previousChannel.title}}</h2>
+    <mat-icon (click)="dialogRef.close()" class="closeIcon">close</mat-icon>
+  </div>
 
-<mat-dialog-content>
+  <div [ngClass]="{'box': !editIsOpen, 'box-edit': editIsOpen}" class="width100">
+    <div class="titleContainer">
+      <h3>Channel-Name</h3>
+      <button 
+        *ngIf="authenticationService.getCurrentUserId() === previousChannel.admin" 
+        class="editButton" 
+        (click)="editIsOpen ? saveNewChannel() : openEditChannel()">
+        {{ editIsOpen ? 'Save' : 'Edit' }}
+      </button>
+    </div>  
+    <h3 *ngIf="!editIsOpen" class="channelTitle"><mat-icon class="tagIcon">tag</mat-icon>{{previousChannel.title}}</h3>
+    <input *ngIf="editIsOpen" [(ngModel)]="newChannel.title" class="channelInput"/>
+  </div>
 
-</mat-dialog-content>
+  <div [ngClass]="{'box': !editIsOpen, 'box-edit': editIsOpen}" class="width100">
+    <div class="titleContainer">
+      <h3>Description</h3>
+      <button 
+        *ngIf="authenticationService.getCurrentUserId() === previousChannel.admin" 
+        class="editButton" 
+        (click)="editIsOpen ? saveNewChannel() : openEditChannel()">
+        {{ editIsOpen ? 'Save' : 'Edit' }}
+      </button>
+    </div>  
+    <p class="description" *ngIf="!editIsOpen">{{previousChannel.description}}</p>
+    <textarea *ngIf="editIsOpen" [(ngModel)]="newChannel.description" class="descriptionInput"></textarea>
+    <p class="horizontalLine"></p>
+    <h3>Created by</h3>
+    <p class="creator">{{channelCreator}}</p>
+  </div>
 
-<mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="" cdkFocusInitial>Ok</button>
-</mat-dialog-actions>
+  <div class="buttonContainer">
+    <button class="bottomButton" mat-flat-button (click)="leaveChannel()">Leave channel</button>
+  </div>
+</div>

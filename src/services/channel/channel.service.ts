@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Channel } from '../../classes/channel.class';
-import { arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, serverTimestamp, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
+import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, serverTimestamp, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Member } from '../../interface/message';
 
@@ -16,6 +16,32 @@ export class ChannelService {
     private authenticationService: AuthenticationService,
   ){
   }
+  
+
+  async removeMemberIdFromChannel(channelId: string, memberId: string) {
+    const channelRef = doc(this.authenticationService.getReference(), 'channels', channelId);
+    await updateDoc(channelRef, {
+      membersId: arrayRemove(memberId),
+    });
+  }
+  
+
+  async updateChannelDetails(channelId: string, updates: Partial<Channel>) {
+    if (!channelId) {
+      throw new Error('Channel ID is invalid or not provided.');
+    }
+  
+    const channelDocRef = doc(this.authenticationService.getReference(), 'channels', channelId);
+  
+    try {
+      await updateDoc(channelDocRef, updates);
+      console.log(`Channel ${channelId} updated successfully with:`, updates);
+    } catch (error) {
+      console.error(`Failed to update channel ${channelId}:`, error);
+      throw error;
+    }
+  }
+  
 
   async getChannelById(channelId: string): Promise<Channel | null> {
     try {
