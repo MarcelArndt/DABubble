@@ -49,7 +49,7 @@ app-devspace {
     flex-direction: column;
     flex: auto;
 
-    @include respond-to-maxWidth(large) {
+    @include respond-to-maxWidth('XXL') {
         max-width: 302px;
         position: absolute;
         top: 0;
@@ -74,7 +74,7 @@ app-devspace {
 }
 
 app-chat {
-    @include heightWidth($w: 45%, $h: 100%);
+    @include heightWidth($w: 42%, $h: 100%);
     flex: auto;
 }
 
@@ -101,6 +101,8 @@ app-thread {
         z-index: 4;
     }
 }
+
+
 
 .focus-app-thread{
     @include respond-to-maxWidth('XL') {
