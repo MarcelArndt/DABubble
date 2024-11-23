@@ -50,7 +50,7 @@ export class AddMembersChannelComponent {
   myControl = new FormControl('');
   filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); 
 
-  channel!: Channel;
+  channel: Channel = new Channel();
   members: Member[] = []; 
 
   selectedMembers: Member[] = [];

@@ -4,6 +4,7 @@ $breakpoints: (
   medium: 900px,
   large: 1285px,
   XL: 1440px,
+  XXL: 1800px,
 );
 
 @mixin respond-to-maxWidth($breakpoint) {

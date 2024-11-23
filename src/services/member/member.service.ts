@@ -37,28 +37,16 @@ export class MemberService {
   }
 
 
-  // async allMembersInChannel() {
-  //   let membersId = this.authenticationService.currentChannelData.membersId;
-  //   for (const id of membersId) {
-  //     await this.search(id);
-  //   }
-  // }
-
-
-  // async search(ids: any) {
-  //   const docRef = doc(this.authenticationService.getReference(), "member", ids);
-  //   const docSnap = await getDoc(docRef);
-  //   if (docSnap.exists()) {
-  //     this.allChannelMembers.push(docSnap.data())
-  //   }
-  // }
-
   async allMembersInChannel(): Promise<Member[]> {
-    const membersId: string[] = this.authenticationService.currentChannelData.membersId;
+    const membersId: string[] = this.authenticationService.currentChannelData?.membersId ?? [];
+    if (membersId.length === 0) {
+      console.warn('No members found');
+      return []; 
+    }
     const memberPromises = membersId.map(id => this.search(id));
     const members = await Promise.all(memberPromises);
     this.allChannelMembers = members.filter(member => member !== null) as Member[];
-    return this.allChannelMembers; 
+    return this.allChannelMembers;
   }
   
 
@@ -70,7 +58,6 @@ export class MemberService {
     }
     return null;
   }
-
 
 
   async setCurrentMemberData() {

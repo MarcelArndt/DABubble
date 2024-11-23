@@ -4,10 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { MessagesService } from '../../../../services/messages/messages.service';
 import { ThreadImagesPreviewComponent } from "./thread-images-preview/thread-images-preview.component";
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
-import { Thread } from '../../../../interface/message';
 import { ThreadService } from '../../../../services/thread/thread.service';
 import { MemberService } from '../../../../services/member/member.service';
 
@@ -27,7 +25,7 @@ import { MemberService } from '../../../../services/member/member.service';
 })
 export class ThreadMessageFieldComponent  implements OnInit{
   openEmojis: boolean = false;
-  messageField: string = ''
+  messageField: string = '';
   openData: boolean = false;
   imageUploadsThread: File[] = [];
   imagePreviewsThread: (string | ArrayBuffer | null)[] = [];

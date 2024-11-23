@@ -41,6 +41,7 @@ export class ChatHeaderComponent implements OnInit {
 
   async ngOnInit() {
     this.channel = await this.channelService.getChannelById(this.channelService.currentChannelId);
+    this.memberService.allChannelMembers = await this.memberService.allMembersInChannel();
   }
 
   openEditChannel(): void {

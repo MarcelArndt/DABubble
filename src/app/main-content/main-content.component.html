@@ -9,6 +9,7 @@
     </app-devspace>
     <div class="main-content-wrapper">
         <app-chat [ngClass]="{
+            'flexUnset': threadIsOpen,
             'focus-app': chatAsTopLayer, 
             'hidden': threadAsTopLayer
             }"

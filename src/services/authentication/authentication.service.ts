@@ -7,6 +7,7 @@ import { getStorage } from '@angular/fire/storage';
 import { onSnapshot } from '@firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { SignInService } from '../sign-in/sign-in.service';
+import { Channel } from '../../classes/channel.class';
 
 
 @Injectable({
@@ -22,6 +23,8 @@ export class AuthenticationService {
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
   loginFailed = false;
+  private currentChannelDataSubject = new BehaviorSubject<Channel | null>(null);
+  currentChannelData$ = this.currentChannelDataSubject.asObservable();
 
   constructor(
     private router: Router,
@@ -31,6 +34,7 @@ export class AuthenticationService {
     this.observerUser();
   }
   // Authentication 
+  
 
   signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
