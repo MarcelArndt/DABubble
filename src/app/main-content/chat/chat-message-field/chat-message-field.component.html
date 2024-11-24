@@ -11,8 +11,7 @@
 
   <app-images-preview 
   *ngIf="imagePreviews.length > 0" 
-  [imagePreviews]="imagePreviews"
-  [imageUploads]="imageUploads"></app-images-preview>
+   ></app-images-preview>
 
   <div class="message-field-container">
     <textarea placeholder="Naricht an #Entwicklerteam" [(ngModel)]="messageField" (input)="onInput($event)"></textarea>

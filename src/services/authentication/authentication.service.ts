@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User} from '@angular/fire/auth';
+import { Auth, verifyPasswordResetCode, confirmPasswordReset, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User} from '@angular/fire/auth';
 import { doc, getFirestore, setDoc } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { Member } from '../../interface/message';
 import { getStorage } from '@angular/fire/storage';
 import { onSnapshot } from '@firebase/firestore';
@@ -16,6 +16,10 @@ export class AuthenticationService {
   private provider;
   public storage;
   memberId: string = '';
+  oobCode:string = '';
+  infoBannerIsSubmit:boolean = false;
+  infoBannertext:string = '';
+  infoBannerIcon:string = '';
   currentMember!: Member;
   currentChannelData: any = {};
   auth = inject(Auth);
@@ -33,12 +37,26 @@ export class AuthenticationService {
   // Authentication 
   
 
+  enableInfoBanner(text:string, icon:string = '', time:number = 3000,){
+    this.infoBannerIcon = icon;
+    this.infoBannertext = text;
+    this.infoBannerIsSubmit = true;
+    setTimeout(() => {
+      this.infoBannerIsSubmit = false;
+    }, 1750)
+  }
+
   signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         this.loginFailed = false;
-      }).then(() => {this.router.navigate(['start'])})
+        this.enableInfoBanner('Sign-In Succesfully');
+      }).then(() => {        
+        setTimeout(() => {
+        this.router.navigate(['start'])
+      }, 1750);
+    })
       .catch((error) => {
         this.loginFailed = true;
       });
@@ -132,6 +150,7 @@ export class AuthenticationService {
   getCurrentUserUid(): string {
     const uid = this.getCurrentUserId();
     if (!uid) {
+      this.router.navigate(['login']);
       throw new Error("Kein Benutzer angemeldet.");
     };
     return uid;
@@ -145,19 +164,16 @@ export class AuthenticationService {
   async resetPassword(email:string){
     sendPasswordResetEmail(this.auth, email)
     .then(() => {
-      console.log('E-mail send to: ', email);
     })
     .catch((error) => {
       console.error(error);
     });
   }
 
-  async saveNewPassword(newPassword:string = '85736251'){
-    console.log(newPassword);
-    console.log(this.auth.currentUser);
-    updatePassword(this.auth.currentUser!, newPassword).then(() => {
-    }).catch((error) => {
-    });
+  async saveNewPassword(newPassword:string = 'Test-Example-003'){
+    const email = await verifyPasswordResetCode(this.auth, this.oobCode);
+    await confirmPasswordReset(this.auth, this.oobCode, newPassword);
+    this.oobCode = '';
   }
 
 }

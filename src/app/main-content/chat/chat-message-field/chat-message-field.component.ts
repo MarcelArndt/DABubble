@@ -53,14 +53,14 @@ export class ChatMessageFieldComponent {
 
   async sendMessage() {
     await this.memberService.setCurrentMemberData();
-    this.messageService.createMessage(this.messageField, this.imageUploads);
+    this.messageService.createMessage(this.messageField);
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
   }
 
   async sendDirectMessage() {
-    await this.directMessageService.createDirectMessage(this.messageField, this.imageUploads);
+    await this.directMessageService.createDirectMessage(this.messageField);
     this.messageField = '';
     this.imageUploads = [];
     this.imagePreviews = [];
@@ -91,7 +91,7 @@ export class ChatMessageFieldComponent {
     const input = event.target as HTMLInputElement;
     if (input && input.files) {
       Array.from(input.files).forEach(file => {
-        this.imageUploads.push(file); 
+        this.storageService.uploadImageMessage(file)
         
         const reader = new FileReader();
         reader.onload = () => {

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { StorageService } from '../../../../../services/storage/storage.service';
 
 @Component({
   selector: 'app-images-preview',
@@ -13,11 +14,13 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './images-preview.component.scss'
 })
 export class ImagesPreviewComponent {
-  @Input() imagePreviews: any
-  @Input() imageUploads: any;
+
+  constructor(
+    public storageService: StorageService,
+  ) {}
   
-  deleteImage(i: any) {
-    this.imagePreviews.splice(i, 1);
-    this.imageUploads.splice(i, 1);
+  deleteImage(attachment: any ,i: any) {
+    this.storageService.messageImages.splice(i, 1)
+    this.storageService.deleteMessageImages(attachment)
   }
 }

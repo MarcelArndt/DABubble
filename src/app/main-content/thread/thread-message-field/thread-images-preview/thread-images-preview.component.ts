@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { StorageService } from '../../../../../services/storage/storage.service';
 
 @Component({
   selector: 'app-thread-images-preview',
@@ -13,11 +14,13 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './thread-images-preview.component.scss'
 })
 export class ThreadImagesPreviewComponent {
-  @Input() imagePreviewsThread: (string | ArrayBuffer | null)[] = [];
-  @Input() imageUploadsThread: any;
+
+  constructor(
+    public storageService: StorageService
+  ) {}
   
-  deleteImage(i: any) {
-    this.imagePreviewsThread.splice(i, 1);
-    this.imageUploadsThread.splice(i, 1);
+  deleteImage(attachment: any,i: any) {
+    this.storageService.messageImages.splice(i, 1)
+    this.storageService.deleteMessageImages(attachment)
   }
 }

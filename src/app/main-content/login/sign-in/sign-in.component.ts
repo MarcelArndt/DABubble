@@ -1,10 +1,11 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { SignInService } from '../../../../services/sign-in/sign-in.service';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup,  signInWithEmailAndPassword } from '@angular/fire/auth';
+import { timeout } from 'rxjs';
 
 
 @Component({
@@ -50,6 +51,7 @@ export class SignInComponent {
     if(!await this.signIn.checkIsEmailAlreadyExists(this.signIn.userEmail)){
       this.sendClickToParentPageCounter(2);
     } else {
+      
       this.router.navigate(['start']);
     }
   }

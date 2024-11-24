@@ -55,8 +55,7 @@ export class MessagesService {
     return unsub;
   }
 
-  async createMessage(message: string, imageUpload: File[]) {
-    const downloadURLs = await this.storageService.uploadImagesMessage(imageUpload);
+  async createMessage(message: string) {
     const now = new Date();
     const messageData = {
       user: this.authenticationService.getCurrentUserUid(),
@@ -72,11 +71,12 @@ export class MessagesService {
       },
       answers: 0,
       lastAnswer: '',
-      attachment: downloadURLs
+      attachment: this.storageService.messageImages
     };
     const messageDocRef = await addDoc(this.referencesService.getCollectionMessage(), messageData);
     this.updateMessageId(messageDocRef);
     this.messagesUpdated.next();
+    this.storageService.messageImages
   }
 
   async updateMessageId(messageDocRef: any) {
