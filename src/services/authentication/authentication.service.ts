@@ -154,7 +154,9 @@ export class AuthenticationService {
   }
 
   async saveNewPassword(newPassword:string = '85736251'){
-    updatePassword(this.auth.currentUser as User, newPassword).then(() => {
+    console.log(newPassword);
+    console.log(this.auth.currentUser);
+    updatePassword(this.auth.currentUser!, newPassword).then(() => {
     }).catch((error) => {
     });
   }

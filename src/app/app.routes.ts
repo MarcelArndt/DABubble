@@ -38,5 +38,5 @@ export const routes: Routes = [
       { path: '', redirectTo: 'channels/welcome', pathMatch: 'full' }, // Standard auf Welcome-Channel
     ]
   },
-  { path:'lost-password/auth/action', component: ResetPasswordComponent}, 
+  { path:'lost-password', component: ResetPasswordComponent}, 
 ];
