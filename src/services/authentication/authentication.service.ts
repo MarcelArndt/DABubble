@@ -17,6 +17,7 @@ export class AuthenticationService {
   public storage;
   memberId: string = '';
   oobCode:string = '';
+  enableAnimation = true;
   infoBannerIsSubmit:boolean = false;
   infoBannertext:string = '';
   infoBannerIcon:string = '';

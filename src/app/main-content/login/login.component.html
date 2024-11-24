@@ -1,10 +1,17 @@
 <app-headmenu-login (eventInHead)="changePageNumber($event)" ></app-headmenu-login>
-<app-login-animation></app-login-animation>
-<app-login-animation-inside></app-login-animation-inside>
+@if(auth.enableAnimation){<app-login-animation></app-login-animation>}
+@if(auth.enableAnimation){<app-login-animation-inside></app-login-animation-inside>}
+@if(!auth.enableAnimation){
+    <div class="logo-mainWrapper">
+        <div class="max-wrapper">
+            <div class="logo"><img [src]="darkmode.isDarkMode() ? './img/main-assets/main-logo-dark.svg' : './img/main-assets/main-logo.svg'"></div>
+        </div>
+    </div>}
+
 
 <section class="MainWrapper">
- 
-    <div class='whiteBox'>
+
+    <div class='whiteBox'> 
         <app-sign-in [ngClass]='getClass(0)'(eventInSignIn)="changePageNumber($event)"></app-sign-in>
         <app-sign-up [ngClass]='getClass(1)'(eventInChild)="changePageNumber($event)"></app-sign-up>
         <app-choose-avatar [ngClass]='getClass(2)' (eventInProfil)="changePageNumber($event)"></app-choose-avatar>

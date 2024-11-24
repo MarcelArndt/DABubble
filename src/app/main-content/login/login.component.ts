@@ -13,6 +13,7 @@ import { LostPasswordComponent } from './lost-password/lost-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { InfoBannerComponent } from '../../shared/info-banner/info-banner.component';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { DarkModeService } from '../../../services/darkMode/dark-mode.service';
 
 
 interface Page {
@@ -31,7 +32,7 @@ interface Page {
 })
 
 export class LoginComponent {
-  constructor(public auth: AuthenticationService ){}
+  constructor(public auth: AuthenticationService, public darkmode: DarkModeService ){}
   pageNumber:number = 0;
   pageNumberTrashHolder:number = 0;
   isStepForwards = false;
@@ -49,6 +50,25 @@ export class LoginComponent {
       this.checkforStepDirection();
     }  
   } 
+
+  setAnimationToken(){
+
+
+    let token = sessionStorage.getItem("dabubbleStartAnimation");
+
+    this.auth.enableAnimation = token? false : true;
+    if(!token){
+
+      setTimeout(() => {
+        this.auth.enableAnimation = false;
+        sessionStorage.setItem("dabubbleStartAnimation", 'false');
+      },3000);
+    }
+  }
+
+  ngOnInit(){
+    this.setAnimationToken();
+  }
   
 
   checkforStepDirection(){
