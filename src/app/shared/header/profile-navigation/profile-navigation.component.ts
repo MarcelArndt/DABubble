@@ -8,6 +8,8 @@ import { DarkModeService } from '../../../../services/darkMode/dark-mode.service
 import { ProfileComponent } from '../../../dialog/profile/profile.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { Member } from '../../../../interface/message';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile-navigation',
@@ -17,6 +19,7 @@ import { AuthenticationService } from '../../../../services/authentication/authe
     MatMenuModule,
     MatIcon,
     RouterModule,
+    CommonModule
   ],
   templateUrl: './profile-navigation.component.html',
   styleUrl: './profile-navigation.component.scss'
@@ -29,6 +32,16 @@ export class ProfileNavigationComponent {
   currentImgPath = './img/profile-pic/006.svg'
   switchMobilOn = false
 
+  currentMember$;
+
+  constructor(
+    public darkMode: DarkModeService, 
+    public auth: AuthenticationService,
+  ) { 
+    this.currentMember$ = this.auth.currentMember$; // Reaktiver Zugriff
+  }
+
+
   openDialog(): void {
     const dialogRef = this.dialog.open(ProfileComponent, {
       width: '360px',
@@ -40,8 +53,10 @@ export class ProfileNavigationComponent {
     dialogRef.afterClosed().subscribe();
   }
 
-
-  constructor(public darkMode: DarkModeService, private auth: AuthenticationService) { }
+  ngOnInit() {
+    let windowWidth = window.innerWidth;
+    this.switchMobilOn = windowWidth < this.sizeThreshold ? false : true;
+  }
 
   toggleTheme() {
     this.darkMode.toggleDarkMode();
@@ -55,11 +70,6 @@ export class ProfileNavigationComponent {
   onResize(event: Event): void {
     let windowWidth = window.innerWidth;
     this.toInnerHTML = windowWidth < this.sizeThreshold ? `<mat-icon> keyboard_arrow_down </mat-icon>` : `<img src="${this.currentImgPath}">`;
-    this.switchMobilOn = windowWidth < this.sizeThreshold ? false : true;
-  }
-
-  ngOnInit() {
-    let windowWidth = window.innerWidth;
     this.switchMobilOn = windowWidth < this.sizeThreshold ? false : true;
   }
 

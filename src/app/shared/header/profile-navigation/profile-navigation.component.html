@@ -1,7 +1,11 @@
 <nav class="profil"> 
-    <div class="name">Frederik Beck</div>
+    <div class="name">{{ (currentMember$ | async)?.name }}</div>
 
-    <div class="profilPicture"><img src="./img/profile-pic/006.svg">   <div class="statusSymbol"></div> </div>
+    <div class="profilPicture">
+        <img [src]="(currentMember$ | async)?.imageUrl || './img/profile-pic/006.svg'" alt="Profile Picture">
+        <div class="statusSymbol">
+        </div> 
+    </div>
      
     <div class="profilButton" mat-button [matMenuTriggerFor]="profilMenu">
         @if(switchMobilOn){
