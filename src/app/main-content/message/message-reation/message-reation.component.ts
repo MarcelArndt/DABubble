@@ -12,7 +12,7 @@ import { ThreadService } from '../../../../services/thread/thread.service';
   imports: [
     CommonModule,
     FormsModule,
-    
+
   ],
   templateUrl: './message-reation.component.html',
   styleUrl: './message-reation.component.scss'
@@ -22,18 +22,18 @@ export class MessageReationComponent {
   @Input() isThread: boolean = false;
 
   constructor(
-    public messageService: MessagesService,  
+    public messageService: MessagesService,
     public auth: AuthenticationService,
     public directMessage: DirectMessageService,
-    private threadService: ThreadService) {}
+    private threadService: ThreadService) { }
 
   reactionMessage(reaction: string) {
     if (this.isThread) {
-      this.threadService.reaction(reaction ,this.message.threadId)
+      this.threadService.reaction(reaction, this.message.threadId)
     } else if (this.directMessage.isDirectMessage) {
-      this.directMessage.reaction(reaction ,this.message.messageId)
+      this.directMessage.reaction(reaction, this.message.messageId)
     } else {
-      this.messageService.reaction(reaction ,this.message.messageId)
+      this.messageService.reaction(reaction, this.message.messageId)
     }
   }
 
@@ -43,4 +43,17 @@ export class MessageReationComponent {
       .filter(key => key !== "rocket" && key !== "like") // Filtere unerwünschte Namen
       .map(key => ({ name: key, count: re[key].length })); // Erstelle ein Objekt mit Name und Länge
   }
+
+// checkReactionName(message: any[]): string {
+//   if (!message || message.length === 0) {
+//     return '';
+//   }
+//   if (message.length > 3) {
+//     return message
+//       .slice(0, 3) 
+//       .map((element) => element.name) 
+//       .join(', ') + ', ...'; 
+//   }
+//   return message.map((element) => element.name).join(', ');
+// }
 }

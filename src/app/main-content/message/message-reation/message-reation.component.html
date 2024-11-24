@@ -2,6 +2,7 @@
     <button *ngIf="message.reactions.like.length" (click)="reactionMessage('like')">
         <img src="/img/reactions/like.svg" alt="">
         <p>{{message.reactions.like.length}}</p>
+        <!-- <div class="show-members">{{message.reactions.like[0].name}}</div> -->
     </button>
     <button *ngIf="message.reactions.rocket.length" (click)="reactionMessage('rocket')">
         <img src="/img/reactions/rocket.svg" alt="">

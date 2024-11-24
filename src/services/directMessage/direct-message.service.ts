@@ -25,8 +25,7 @@ export class DirectMessageService {
     private storageService: StorageService,
   ) {}
 
-  async createDirectMessage(messageField: string, imageUpload: File[]) {
-    const downloadURLs = await this.storageService.uploadImagesMessage(imageUpload);
+  async createDirectMessage(messageField: string) {
     const now = new Date();
     this.createDirectMessageChannel();
     const messageData = {
@@ -41,11 +40,12 @@ export class DirectMessageService {
         like: [],
         rocket: []
       },
-      attachment: downloadURLs
+      attachment: this.storageService.messageImages
     };
     const messageDocRef = await addDoc(this.referencesServic.getCollectionDirectMessages(this.directMessageChannelId), messageData);
     this.updateDirectMessageId(messageDocRef)
     this.messagesUpdated.next();
+    this.storageService.messageImages = [];
   }
 
   async updateDirectMessageId(messageDocRef: any) {

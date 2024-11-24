@@ -8,6 +8,7 @@ import { ThreadImagesPreviewComponent } from "./thread-images-preview/thread-ima
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { ThreadService } from '../../../../services/thread/thread.service';
 import { MemberService } from '../../../../services/member/member.service';
+import { StorageService } from '../../../../services/storage/storage.service';
 
 @Component({
   selector: 'app-thread-message-field',
@@ -43,6 +44,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
     public auth: AuthenticationService,
     private memberService: MemberService,
     public threadService: ThreadService,
+    public storageService: StorageService
   ) {
     this.allUsers()
   }
@@ -56,7 +58,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   }
 
   async sendMessage() {
-    await this.threadService.createThread(this.messageField, this.imageUploadsThread);
+    await this.threadService.createThread(this.messageField);
     this.messagesUpdated.emit();
     this.messageField = '';
     this.imageUploadsThread = [];
@@ -80,7 +82,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
     const input = event.target as HTMLInputElement;
     if (input && input.files) {
       Array.from(input.files).forEach(file => {
-        this.imageUploadsThread.push(file); 
+        this.storageService.uploadImageMessageThread(file)
         
         const reader = new FileReader();
         reader.onload = () => {

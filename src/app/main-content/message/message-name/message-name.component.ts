@@ -21,6 +21,8 @@ export class MessageNameComponent {
     public auth: AuthenticationService
   ) { }
 
-
+ openProfileUser() {
+  
+ }
 
 }

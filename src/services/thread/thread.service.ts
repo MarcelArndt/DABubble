@@ -20,9 +20,8 @@ export class ThreadService {
     private referencesServic: ReferencesService,
     private storageService: StorageService,) { }
 
-  async createThread(message: string, imageUpload: File[]) {
+  async createThread(message: string) {
     const now = new Date();
-    const downloadURLs = await this.storageService.uploadImagesMessage(imageUpload);
     const threadData = {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
@@ -34,12 +33,13 @@ export class ThreadService {
         like: [],
         rocket: []
       },
-      attachment: downloadURLs,
+      attachment: this.storageService.messageImagesThread,
       timestamp: Date.now(),
     };
     const threadDocRef = await addDoc(this.referencesServic.getCollectionThread(this.currentMessageId), threadData);
     await this.updateThredId(threadDocRef);
     await this.updateMessageAnswer();
+    this.storageService.messageImagesThread = [];
   }
 
   async updateThredId(threadDocRef: any) {

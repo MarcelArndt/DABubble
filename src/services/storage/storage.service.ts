@@ -6,6 +6,8 @@ import { deleteObject, getDownloadURL, ref, uploadBytes, uploadBytesResumable } 
   providedIn: 'root'
 })
 export class StorageService {
+  public messageImages: any = [];
+  public messageImagesThread: any = [];
 
   constructor(private auth: AuthenticationService) { }
 
@@ -40,6 +42,37 @@ export class StorageService {
         throw error; // Weitergeben des Fehlers zur Fehlerbehandlung
       });
   }
+  async uploadImageMessage(file: File): Promise<string> {
+    const fileRef = ref(this.auth.storage, `messagesImages/${this.auth.getCurrentUserUid()}/${file.name}`);
+  
+    return uploadBytes(fileRef, file)
+      .then(() => getDownloadURL(fileRef))
+      .then((url) => {
+        console.log('File uploaded and URL retrieved:', url);
+        this.messageImages.push(url);
+        console.log(this.messageImages);
+        return url;
+      })
+      .catch((error) => {
+        console.error('Error uploading file:', error);
+        throw error;
+      });
+  }
+  async uploadImageMessageThread(file: File): Promise<string> {
+    const fileRef = ref(this.auth.storage, `messagesImages/${this.auth.getCurrentUserUid()}/${file.name}`);
+  
+    return uploadBytes(fileRef, file)
+      .then(() => getDownloadURL(fileRef))
+      .then((url) => {
+        console.log('File uploaded and URL retrieved:', url);
+        this.messageImagesThread.push(url);
+        return url; 
+      })
+      .catch((error) => {
+        console.error('Error uploading file:', error);
+        throw error;
+      });
+  }
 
   uploadImagesMessage(imagesUpload: File[]): Promise<string[]> {
     const uploadPromises = imagesUpload.map(image => {
@@ -57,6 +90,7 @@ export class StorageService {
     return Promise.all(uploadPromises);
   }
 
+
   async deleteMessageImages(downloadUrl: string) {
     try {
       const regex = /\/o\/(.*?)\?/;
@@ -67,7 +101,8 @@ export class StorageService {
   
         const storageRef =  this.auth.storage;
         const desertRef = ref(storageRef, decodedPath);
-  
+        console.log(desertRef)
+
         await deleteObject(desertRef);
         console.log('Bild erfolgreich gelöscht.');
       } else {

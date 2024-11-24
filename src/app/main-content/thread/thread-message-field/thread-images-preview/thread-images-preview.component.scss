@@ -64,3 +64,7 @@
         }
     }
 }
+
+mat-icon {
+    @include materialSymbols($c: red, $fs: 24px);
+}
