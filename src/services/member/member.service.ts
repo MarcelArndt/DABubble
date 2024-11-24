@@ -64,6 +64,7 @@ export class MemberService {
   }
 
 
+
   async allMembersInChannel(): Promise<Member[]> {
     const membersId: string[] = this.authenticationService.currentChannelData?.membersId ?? [];
     if (membersId.length === 0) {

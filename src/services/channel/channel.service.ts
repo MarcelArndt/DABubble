@@ -55,7 +55,6 @@ export class ChannelService {
     return new Date(timestamp); 
   }
   
-  
 
   async getChannelById(channelId: string): Promise<Channel | null> {
     try {

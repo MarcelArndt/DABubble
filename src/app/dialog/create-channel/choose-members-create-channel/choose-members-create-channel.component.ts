@@ -19,6 +19,7 @@ import { Member } from '../../../../interface/message';
 import { MemberService } from '../../../../services/member/member.service';
 import { ChannelService } from '../../../../services/channel/channel.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
 
 
 @Component({
@@ -61,14 +62,15 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     MAT_DIALOG_DATA) public data: Channel, 
     private memberService: MemberService,
     private channelService: ChannelService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private messageService: MessagesService
   ) {
     this.channel = data; 
   }
 
   async ngOnInit() {
     this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
-      this.members = updatedMembers;
+      this.members = updatedMembers.filter(member => member.id !== this.authenticationService.getCurrentUserUid());
     });
     this.filteredMembers$ = this.myControl.valueChanges.pipe(
       startWith(''),
@@ -76,17 +78,16 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     );
   }
 
+
   private _filter(value: string): Member[] {
     const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
-    
     return this.members.filter(member => {
       const memberName = member.name ? member.name.toLowerCase() : ''; 
       return memberName.includes(filterValue) &&
-             !this.selectedMembers.some(selected => selected.id === member.id);
+      !this.selectedMembers.some(selected => selected.id === member.id);
     });
   }
   
-
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -148,7 +149,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   };
 
 
-  async createChannel(){
+  async createChannel() {
     if (this.selectAllPeople && this.selectedMembers.length > 0) {
       this.selectedMembers = [];
       this.channel.isPublic = true;
@@ -159,8 +160,11 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       await this.channelService.addChannelIdToMembers(this.channel.membersId, this.channel.id);
     }
     await this.channelService.addChannelToFirebase(this.channel);
+    this.channelService.currentChannelId = this.channel.id;
+    await this.messageService.readChannel();
     this.dialogRef.close();
   }
+  
 
 
   isFormValid(): boolean {
