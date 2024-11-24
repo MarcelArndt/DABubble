@@ -14,6 +14,7 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 import { SearchbarComponent } from '../../shared/header/searchbar/searchbar.component';
 import { MessagesService } from '../../../services/messages/messages.service';
 import { DirectMessageService } from '../../../services/directMessage/direct-message.service';
+import { combineLatest } from 'rxjs';
 
 
 @Component({
@@ -123,32 +124,91 @@ export class DevspaceComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private renderer: Renderer2,
     private elRef: ElementRef) {
-      
   }
 
+
   async ngOnInit() {
+    this.initializeMemberAndChannels(); // Initialisiere Mitglieder und priorisiere aktuellen Benutzer
+    this.initializePublicChannels();   // Lade öffentliche Kanäle und exklusive Kanäle
+    this.authenticationService.observerUser(); // Beobachte den aktuellen Benutzer
+  }
+
+  initializeMemberAndChannels(): void {
+    const members$ = this.memberService.getAllMembersFromFirestoreObservable();
+    const currentMember$ = this.authenticationService.currentMember$;
+  
+    combineLatest([members$, currentMember$]).subscribe(([updatedMembers, currentMember]) => {
+      this.currentMember = currentMember;
+      this.members = this.memberService.prioritizeCurrentMember(updatedMembers, this.currentMember);
+    });
+  }
+  
+  initializePublicChannels(): void {
     this.authenticationService.currentMember$.subscribe((member) => {
       this.currentMember = member;
+  
       this.channelService.getAllPublicChannelsFromFirestore((publicChannels: Channel[]) => {
-        if (this.currentMember?.ignoreList) {
-          this.channels = publicChannels.filter(channel => !this.currentMember?.ignoreList.includes(channel.id));
-        } else {
-          this.channels = publicChannels;
-        }});
+        this.channels = this.filterIgnoredChannels(publicChannels);
+        this.channelService.sortChannelsByDate(this.channels);
+      });
+  
       if (this.currentMember) {
-        this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (exclusiveChannels: Channel[]) => {
-          this.channels = [
-            ...exclusiveChannels,
-            ...(this.channels || []).filter(channel => channel.isPublic),
-          ];
-        });
+        this.loadExclusiveChannels();
       }
     });
-    this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
-      this.members = updatedMembers;
-    });
-    this.authenticationService.observerUser();
   }
+  
+  loadExclusiveChannels(): void {
+    if (!this.currentMember) return;
+  
+    this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (exclusiveChannels: Channel[]) => {
+      this.channels = [
+        ...exclusiveChannels,
+        ...(this.channels || []).filter(channel => channel.isPublic),
+      ];
+      this.channelService.sortChannelsByDate(this.channels);
+    });
+  }
+  
+  filterIgnoredChannels(channels: Channel[]): Channel[] {
+    if (!this.currentMember?.ignoreList) {
+      return channels;
+    }
+    return channels.filter(channel => !this.currentMember?.ignoreList.includes(channel.id));
+  }
+  
+
+
+  // async ngOnInit() {
+  //   const members$ = this.memberService.getAllMembersFromFirestoreObservable();
+  //   const currentMember$ = this.authenticationService.currentMember$;
+  //   combineLatest([members$, currentMember$]).subscribe(([updatedMembers, currentMember]) => {
+  //     this.currentMember = currentMember;
+  //       this.members = this.memberService.prioritizeCurrentMember(updatedMembers, this.currentMember);
+  //   });
+  //   this.authenticationService.currentMember$.subscribe((member) => {
+  //     this.currentMember = member;
+  //     this.channelService.getAllPublicChannelsFromFirestore((publicChannels: Channel[]) => {
+  //       if (this.currentMember?.ignoreList) {
+  //         this.channels = publicChannels.filter(channel => !this.currentMember?.ignoreList.includes(channel.id));
+  //       } else {
+  //         this.channels = publicChannels;
+  //       }
+  //       this.channelService.sortChannelsByDate(this.channels);
+  //     });
+  //     if (this.currentMember) {
+  //       this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (exclusiveChannels: Channel[]) => {
+  //         this.channels = [
+  //           ...exclusiveChannels,
+  //           ...(this.channels || []).filter(channel => channel.isPublic),
+  //         ];
+  //         this.channelService.sortChannelsByDate(this.channels);
+  //       });
+  //     }
+  //   });
+  //   this.authenticationService.observerUser();
+  // }
+  
   
   
   toggleNavBar() {

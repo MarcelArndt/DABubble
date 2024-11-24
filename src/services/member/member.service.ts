@@ -16,6 +16,17 @@ export class MemberService {
   constructor(private authenticationService: AuthenticationService) {
   }
 
+
+  getAllMembersFromFirestoreObservable(): Observable<Member[]> {
+    return new Observable((observer) => {
+      this.getAllMembersFromFirestore((members: Member[]) => {
+        observer.next(members);
+        observer.complete();
+      });
+    });
+  }
+  
+
   async addChannelIdToIgnoreList(memberId: string, channelId: string) {
     const memberRef = doc(this.authenticationService.getReference(), 'member', memberId);
     await updateDoc(memberRef, {
@@ -51,6 +62,7 @@ export class MemberService {
       console.error("Fehler beim Abrufen der Mitglieder: ", error);
     });
   }
+
 
 
   async allMembersInChannel(): Promise<Member[]> {
@@ -113,6 +125,17 @@ export class MemberService {
       console.log("No such document!");
       return undefined;
     }
+  }
+
+
+  prioritizeCurrentMember(members: Member[], currentMember: Member | null | undefined): Member[] {
+    if (!currentMember) {
+      return members; 
+    }
+      return [
+      currentMember,
+      ...members.filter(member => member.id !== currentMember.id)
+    ];
   }
 
 

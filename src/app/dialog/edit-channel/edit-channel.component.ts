@@ -71,17 +71,12 @@ export class EditChannelComponent {
 
   async saveNewChannel() {
     try {
-      // Aktualisiere den Channel in der Firebase
       await this.channelService.updateChannelDetails(this.channelService.currentChannelId, {
         title: this.newChannel.title,
         description: this.newChannel.description,
       });
-
-      // Synchronisiere die Änderungen mit previousChannel
       this.previousChannel.title = this.newChannel.title;
       this.previousChannel.description = this.newChannel.description;
-
-      // Schließe den Edit-Modus
       this.editIsOpen = false;
     } catch (error) {
       console.error('Failed to update channel:', error);
@@ -91,25 +86,17 @@ export class EditChannelComponent {
   async leaveChannel() {
     this.authenticationService.currentMember$.subscribe(async (currentMember) => {
       if (!currentMember || !this.previousChannel) {
-        console.error('Fehler: currentMember oder previousChannel nicht verfügbar.');
         return;
       }
-      try {
-        if (!this.previousChannel.isPublic) {
-          await this.memberService.removeChannelIdFromMember(currentMember.id, this.previousChannel.id);
-          await this.channelService.removeMemberIdFromChannel(currentMember.id, this.previousChannel.id);
-        } else {
-          await this.memberService.addChannelIdToIgnoreList(currentMember.id, this.previousChannel.id);
-          console.log(currentMember);
-        }
-      } catch (error) {
-        console.error('Fehler beim Verlassen des Kanals:', error);
+      if (!this.previousChannel.isPublic) {
+        await this.memberService.removeChannelIdFromMember(currentMember.id, this.previousChannel.id);
+        await this.channelService.removeMemberIdFromChannel(currentMember.id, this.previousChannel.id);
+      } else {
+        await this.memberService.addChannelIdToIgnoreList(currentMember.id, this.previousChannel.id);
       }
     });
     this.channelService.currentChannelId = 'uZaX2y9zpsBqyaOddLWh';
     await this.messageService.readChannel();
     this.dialogRef.close();
   }
-  
-  
 }

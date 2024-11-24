@@ -6,6 +6,7 @@ export class Channel {
     admin: string = '';
     description: string = '';
     isPublic: boolean = true;
+    createdAt: string = '';
 
     constructor(init?: Partial<Channel>) {
         Object.assign(this, init);

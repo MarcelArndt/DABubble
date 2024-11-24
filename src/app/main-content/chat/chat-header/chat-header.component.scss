@@ -48,6 +48,7 @@ section {
     border-radius: 20px;
     background-color: var(--secundary-bg);
     cursor: pointer;
+    @include padding(8px, 20px, 8px, 20px);
 
     &:hover {
         background-color: var(--primary-bg);
