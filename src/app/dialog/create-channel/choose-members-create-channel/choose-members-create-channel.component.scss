@@ -1,5 +1,9 @@
 @import '../../../../mixin.scss';
 
+mat-icon{
+    @include materialSymbols()
+}
+
 .dialogWindow{
     @include nunito(400, 24px, black);
     @include dFlex(center, start);

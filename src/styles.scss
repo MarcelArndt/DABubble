@@ -1,6 +1,9 @@
 @import '@ctrl/ngx-emoji-mart/picker';
 @import 'mixin.scss';
 
+mat-icon{
+    @include materialSymbols()
+}
 
 :root {
     --primary-bg: #ECEEFE;

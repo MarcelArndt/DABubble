@@ -1,5 +1,9 @@
 @import '../../../mixin.scss';
 
+mat-icon{
+    @include materialSymbols()
+}
+
 .dialogWindow{
     @include padding(40px, 40px, 40px, 40px);
     display: flex;

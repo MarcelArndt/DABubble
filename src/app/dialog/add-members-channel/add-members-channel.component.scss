@@ -1,5 +1,9 @@
 @import '../../../mixin.scss';
 
+mat-icon{
+    @include materialSymbols()
+}
+
 .mat-mdc-dialog-surface,
 mat-dialog-container,
 .mdc-dialog--open .mat-mdc-dialog-surface,

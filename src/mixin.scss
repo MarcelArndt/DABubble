@@ -88,10 +88,10 @@ $breakpoints: (
     right: $rig;
     height: $w;
     width: $h;
-    border-radius: 50%;
+    border-radius: 50px;
     position: absolute;
     background-color: var(--green);
-    border: 2px solid var(--primary-bg);
+    border: 2px solid white;
 }
 
 @mixin matIcon($fs: 32px, $p: 0px 12px, $c: var(--btn-gray), $chover: var(--purple-2), $scale: 100%) {
