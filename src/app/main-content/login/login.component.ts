@@ -11,6 +11,8 @@ import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
 import { SuccessCreatingAccountComponent } from './success-creating-account/success-creating-account.component';
 import { LostPasswordComponent } from './lost-password/lost-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { InfoBannerComponent } from '../../shared/info-banner/info-banner.component';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 
 interface Page {
@@ -23,12 +25,13 @@ interface Page {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [LoginAnimationComponent, CommonModule, LoginAnimationInsideComponent, RouterModule, HeadmenuLoginComponent, SubmenuLoginComponent, SignUpComponent, SignInComponent, ChooseAvatarComponent, SuccessCreatingAccountComponent, LostPasswordComponent, ResetPasswordComponent],
+  imports: [LoginAnimationComponent, InfoBannerComponent, CommonModule, LoginAnimationInsideComponent, RouterModule, HeadmenuLoginComponent, SubmenuLoginComponent, SignUpComponent, SignInComponent, ChooseAvatarComponent, SuccessCreatingAccountComponent, LostPasswordComponent, ResetPasswordComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss',]
 })
 
 export class LoginComponent {
+  constructor(public auth: AuthenticationService ){}
   pageNumber:number = 0;
   pageNumberTrashHolder:number = 0;
   isStepForwards = false;

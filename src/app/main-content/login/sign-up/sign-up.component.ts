@@ -86,6 +86,7 @@ async onSubmit(){
   if (this.myForm.valid){
   this.fillValues();
   this.sendClickToParentPageCounter(2);
+  this.myForm.reset();
   }
 }
 

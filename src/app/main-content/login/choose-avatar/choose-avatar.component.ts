@@ -3,11 +3,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { SignInService } from '../../../../services/sign-in/sign-in.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { InfoBannerComponent } from '../../../shared/info-banner/info-banner.component';
 
 @Component({
   selector: 'app-choose-avatar',
   standalone: true,
-  imports: [ MatIcon, CommonModule ],
+  imports: [ MatIcon, CommonModule],
   templateUrl: './choose-avatar.component.html',
   styleUrl: './choose-avatar.component.scss'
 })
@@ -24,6 +25,7 @@ export class ChooseAvatarComponent {
   fileError: string | null = null;
   selectedImage: File | null = null;
   indexNumber:number = 0;
+  isSubmit:boolean = false
 
   async downloadImage(url:string):Promise<Blob>{
     let response = await fetch(url)
@@ -77,9 +79,11 @@ export class ChooseAvatarComponent {
   }
 
   onSubmit(){
+    this.auth.infoBannerIsSubmit = true;
     this.signIn.image = this.selectedImage as File;
     this.signIn.signUpUser();
-    this.sendClickToParentPageCounter(3);
+    this.auth.enableInfoBanner('Account is created');
+    this.sendClickToParentPageCounter(0);
   }
 
 }

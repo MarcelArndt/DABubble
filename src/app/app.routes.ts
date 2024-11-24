@@ -19,6 +19,7 @@ import { ResetPasswordComponent } from './main-content/login/reset-password/rese
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
+  { path: 'lost-password', component: ResetPasswordComponent}, 
   { path: 'login', component: LoginComponent },
   {
     path: 'start',
@@ -38,5 +39,4 @@ export const routes: Routes = [
       { path: '', redirectTo: 'channels/welcome', pathMatch: 'full' }, // Standard auf Welcome-Channel
     ]
   },
-  { path:'lost-password', component: ResetPasswordComponent}, 
 ];
