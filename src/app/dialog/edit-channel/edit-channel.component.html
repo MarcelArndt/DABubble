@@ -34,8 +34,7 @@
     <h3>Created by</h3>
     <p class="creator">{{channelCreator}}</p>
   </div>
-
   <div class="buttonContainer">
-    <button class="bottomButton" mat-flat-button (click)="leaveChannel()">Leave channel</button>
+    <button class="bottomButton" mat-flat-button [disabled]="previousChannel.id === 'uZaX2y9zpsBqyaOddLWh'" (click)="leaveChannel()">Leave channel</button>
   </div>
 </div>

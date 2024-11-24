@@ -68,7 +68,6 @@ export class AddMembersChannelComponent {
     const fetchedChannel = await this.channelService.getChannelById(this.channelService.currentChannelId);
     if (fetchedChannel) {
       this.channel = fetchedChannel;
-      console.log(this.channel);
     } else {
       throw new Error('Channel not found');
     }

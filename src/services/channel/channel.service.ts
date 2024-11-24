@@ -30,17 +30,31 @@ export class ChannelService {
     if (!channelId) {
       throw new Error('Channel ID is invalid or not provided.');
     }
-  
     const channelDocRef = doc(this.authenticationService.getReference(), 'channels', channelId);
-  
     try {
       await updateDoc(channelDocRef, updates);
-      console.log(`Channel ${channelId} updated successfully with:`, updates);
     } catch (error) {
       console.error(`Failed to update channel ${channelId}:`, error);
       throw error;
     }
   }
+
+
+  sortChannelsByDate(channels: Channel[]): Channel[] {
+    return channels.sort((a, b) => {
+      const dateA = this.getTimestampAsDate(a.createdAt).getTime();
+      const dateB = this.getTimestampAsDate(b.createdAt).getTime();
+      return dateB - dateA; 
+    });
+  }
+  
+  private getTimestampAsDate(timestamp: any): Date {
+    if (timestamp && typeof timestamp.toDate === 'function') {
+      return timestamp.toDate(); 
+    }
+    return new Date(timestamp); 
+  }
+  
   
 
   async getChannelById(channelId: string): Promise<Channel | null> {
@@ -57,6 +71,7 @@ export class ChannelService {
           admin: data['admin'],
           description: data['description'] || '',
           isPublic: data['isPublic'] || false,
+          createdAt: data['createdAt'] || '',
         };
       } else {
         console.warn(`Channel with ID ${channelId} does not exist.`);
@@ -82,6 +97,7 @@ export class ChannelService {
           admin: data['admin'],
           description: data['description'],
           isPublic: data['isPublic'],
+          createdAt: data['createdAt'] || '',
         };
       })
       .filter((channel) => channel.isPublic === true); 
@@ -109,6 +125,7 @@ export class ChannelService {
             admin: data['admin'],
             description: data['description'],
             isPublic: data['isPublic'],
+            createdAt: data['createdAt'] || '',
           };
         })
         .filter((channel) => currentMember.channelIds.includes(channel.id)); 
@@ -122,15 +139,12 @@ export class ChannelService {
   async addChannelToFirebase(channel: Channel) {
     const firestore = this.authenticationService.getReference(); // Firestore-Instanz
     const userUid = this.authenticationService.getCurrentUserUid();
-  
     if (!userUid) {
       throw new Error("User UID is invalid or not found");
     }
-  
     const collectionRef = collection(firestore, "channels"); // Sammlung "channels"
     const docRef = doc(collectionRef); // Automatische Dokument-ID
     channel.id = docRef.id;
-  
     await setDoc(docRef, {
       adminName: this.authenticationService.currentMember.name,
       createdAt: serverTimestamp(),
@@ -142,7 +156,6 @@ export class ChannelService {
       description: channel.description,
       isPublic: channel.isPublic,
     });
-  
     await this.addChannelIdToCurrentUser(channel.id);
     await this.addChannelIdToMembers(channel.membersId, channel.id);
   }
@@ -160,7 +173,6 @@ export class ChannelService {
     await batch.commit();
   }
   
-
 
   async addChannelIdToCurrentUser(docRefid: string) {
     const userUid = this.authenticationService.getCurrentUserUid();
