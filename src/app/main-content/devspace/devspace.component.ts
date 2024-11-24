@@ -127,21 +127,24 @@ export class DevspaceComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.channelService.getAllPublicChannelsFromFirestore((publicChannels: Channel[]) => {
-      this.channels = publicChannels;
-    });
     this.authenticationService.currentMember$.subscribe((member) => {
       this.currentMember = member;
+      this.channelService.getAllPublicChannelsFromFirestore((publicChannels: Channel[]) => {
+        if (this.currentMember?.ignoreList) {
+          this.channels = publicChannels.filter(channel => !this.currentMember?.ignoreList.includes(channel.id));
+        } else {
+          this.channels = publicChannels;
+        }});
       if (this.currentMember) {
         this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (exclusiveChannels: Channel[]) => {
           this.channels = [
             ...exclusiveChannels,
-            ...(this.channels || []).filter(channel => channel.isPublic)
+            ...(this.channels || []).filter(channel => channel.isPublic),
           ];
         });
-      } 
+      }
     });
-      this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
+    this.memberService.getAllMembersFromFirestore((updatedMembers: Member[]) => {
       this.members = updatedMembers;
     });
     this.authenticationService.observerUser();

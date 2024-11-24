@@ -101,6 +101,13 @@ section {
     }
 }
 
+.chatTitle{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 360px;
+    white-space: nowrap;
+}
+
 .serverSVG{
     width: 32px;
     height: 32px;

@@ -63,6 +63,7 @@ export class AuthenticationService {
           imageUrl: data['imageUrl'],
           status: data['status'],
           channelIds: data['channelIds'] || [],
+          ignoreList: data['ignoreList'] || [],
         };
         // Aktuelle Member-Daten im BehaviorSubject speichern
         this.currentMemberSubject.next(member);
@@ -91,6 +92,7 @@ export class AuthenticationService {
                 imageUrl: data['imageUrl'] || user.photoURL || '',
                 status: true,
                 channelIds: data['channelIds'] || [],
+                ignoreList: data['ignoreList'] || [],
               };
               // console.log("Aktualisierte Member-Daten:", member);
               this.currentMemberSubject.next(member);

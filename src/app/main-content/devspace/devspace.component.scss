@@ -240,12 +240,6 @@ h3 {
     margin-top: 16px;
 }
 
-.channel{
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
 .channel,
 .contact {
     margin-bottom: 25px;
@@ -269,6 +263,8 @@ h3 {
         }
     }
 }
+
+
 
 .contact {
     display: flex;
@@ -295,6 +291,44 @@ h3 {
         }
     }
 }
+
+.channel {
+    margin-bottom: 15px; 
+    margin-left: 0;
+    transition: background-color 0.125s ease-in-out;
+    border-radius: 10px; 
+    padding: 8px 15px;
+    display: flex;
+    align-items: center; 
+    gap: 8px;
+    width: 100%; 
+    font-family: 'Nunito';
+    font-weight: 500;
+    font-size: 16px; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+  
+    &:hover {
+      background-color: var(--primary-bg);
+      color: var(--purple-1);
+      cursor: pointer;
+  
+      mat-icon {
+        color: var(--purple-1);
+      }
+    }
+  }
+  
+
+  .channel-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex: 1; 
+    max-width: 180px;
+    width: 100%;
+  }  
 
 
 .addChannelButton {
@@ -443,7 +477,7 @@ h3 {
     
 }
 
-.dropDownChannelSection{
-    overflow: auto;
+.dropDownChannelSection {
+    overflow-y: auto; /* Aktiviert nur vertikales Scrollen */
     max-height: 50%;
-}
+  }
