@@ -13,7 +13,8 @@
     <button (click)="handleOnDelete()">Delete</button>
   </div>
 
-  <div class="emojis-container" *ngIf="openEmojis">
-    <emoji-mart title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"></emoji-mart>
+  <div class="emojis-container" *ngIf="openEmojis"  [ngClass]="messageService.checkUser(message) ? 'emojis-container' : 'emojis-container-member'">>
+      <emoji-mart [style] =" { width: 100 } " title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"></emoji-mart>
+
   </div>
 </div>

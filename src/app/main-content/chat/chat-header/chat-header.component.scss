@@ -67,7 +67,7 @@ section {
         margin: 0 15px;
 
         @media(max-width: 660px) {
-            @include nunito($fw: 700, $fs: 18px);
+            @include nunito($fw: 700, $fs: 20px);
             margin: 0 5px;
         }
     }

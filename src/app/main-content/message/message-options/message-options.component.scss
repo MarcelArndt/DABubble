@@ -76,10 +76,27 @@
 
 .emojis-container {
     position: absolute;
-    top: 50px;
-    right: 0px;
+    width: 100%;
     z-index: 100;
+    left: -50px;
+
+    @media(max-width: 660px) {
+        left: -15px;
+    }
 }
+.emojis-container-member {
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    left: -55px;
+   
+    @media(max-width: 660px) {
+        left: -130px;
+    }
+}
+
+
+
 
 .option-btn-container {
     @include dFlex();

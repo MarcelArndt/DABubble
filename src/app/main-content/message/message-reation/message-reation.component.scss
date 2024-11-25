@@ -46,6 +46,10 @@
             transition: all 0.2s ease;
             padding: 10px;
 
+            @media(max-width: 660px) {
+              display: none;
+            }
+
             img {
                 margin-bottom: 5px;
             }

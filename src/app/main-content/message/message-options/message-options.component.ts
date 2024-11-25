@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -30,16 +30,17 @@ export class MessageOptionsComponent {
   @Input() editMessageText: any;
   @Input() isThread: boolean = false;
   openEmojis: boolean = false;
-
   @Output() toggleEdit = new EventEmitter<void>();
 
   constructor(
+    private renderer: Renderer2,
     public directMessage: DirectMessageService,
     public messageService: MessagesService,
     public threadService: ThreadService,
     private eventService: EventService,
     private mainContentService: MainContentService,
     public auth: AuthenticationService) { }
+
 
   toggleEditMode() {
     this.toggleEdit.emit();

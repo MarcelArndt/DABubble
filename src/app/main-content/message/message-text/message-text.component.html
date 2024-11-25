@@ -12,7 +12,7 @@
 
     <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()"></textarea>
 
-    <p *ngIf="isEdit" class="edit-info-text">Esc to <span (click)="cancel()">Cancel</span> • Enter to <span
+    <p *ngIf="isEdit" class="edit-info-text" [ngClass]="isThread ? 'edit-thread-text' : ''">Esc to <span (click)="cancel()">Cancel</span> • Enter to <span
             (click)="save()">Speichern</span></p>
         </div>
 </div>
