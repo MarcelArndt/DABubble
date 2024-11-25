@@ -4,11 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MessageNameComponent } from '../../../main-content/message/message-name/message-name.component';
+import { MessageNameComponent } from '../../main-content/message/message-name/message-name.component';
 import { MatIcon } from '@angular/material/icon';
-import { MemberService } from '../../../../services/member/member.service';
+import { MemberService } from '../../../services/member/member.service';
 import { CommonModule } from '@angular/common';
-import { DirectMessageService } from '../../../../services/directMessage/direct-message.service';
+import { DirectMessageService } from '../../../services/directMessage/direct-message.service';
 
 @Component({
   selector: 'app-current-profile',

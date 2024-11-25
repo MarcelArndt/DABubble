@@ -50,7 +50,6 @@ export class StorageService {
       .then((url) => {
         console.log('File uploaded and URL retrieved:', url);
         this.messageImages.push(url);
-        console.log(this.messageImages);
         return url;
       })
       .catch((error) => {

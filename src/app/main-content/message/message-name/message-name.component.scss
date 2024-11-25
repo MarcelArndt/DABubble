@@ -3,6 +3,7 @@
 .name {
     h5 {
         @include nunito($fw: 700, $fs: 18px);
+        cursor: pointer;
     }
 
     p {

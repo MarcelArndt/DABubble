@@ -11,6 +11,7 @@ import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
 export class MemberService {
   allChannelMembers: Member[] = [];
   allMembersNames: any = []
+  currentProfileMember: any = {};
 
 
   constructor(private authenticationService: AuthenticationService) {
@@ -25,7 +26,7 @@ export class MemberService {
       });
     });
   }
-  
+
 
   async addChannelIdToIgnoreList(memberId: string, channelId: string) {
     const memberRef = doc(this.authenticationService.getReference(), 'member', memberId);
@@ -40,7 +41,7 @@ export class MemberService {
       channelIds: arrayRemove(channelId),
     });
   }
-  
+
 
   getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
     const membersCollection = collection(this.authenticationService.getReference(), 'member');
@@ -69,14 +70,14 @@ export class MemberService {
     const membersId: string[] = this.authenticationService.currentChannelData?.membersId ?? [];
     if (membersId.length === 0) {
       console.warn('No members found');
-      return []; 
+      return [];
     }
     const memberPromises = membersId.map(id => this.search(id));
     const members = await Promise.all(memberPromises);
     this.allChannelMembers = members.filter(member => member !== null) as Member[];
     return this.allChannelMembers;
   }
-  
+
 
   async search(id: string): Promise<Member | null> {
     const docRef = doc(this.authenticationService.getReference(), "member", id);
@@ -130,9 +131,9 @@ export class MemberService {
 
   prioritizeCurrentMember(members: Member[], currentMember: Member | null | undefined): Member[] {
     if (!currentMember) {
-      return members; 
+      return members;
     }
-      return [
+    return [
       currentMember,
       ...members.filter(member => member.id !== currentMember.id)
     ];
@@ -165,6 +166,14 @@ export class MemberService {
     querySnapshot.forEach((doc) => {
       this.allMembersNames.push(doc.data()['name'])
     });
+  }
+
+  async getProfilMember(id: string) {
+    const docRef = doc(this.authenticationService.getReference(), "member", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      this.currentProfileMember = docSnap.data();
+    }
   }
 
 }
