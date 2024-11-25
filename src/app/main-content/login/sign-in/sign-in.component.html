@@ -1,7 +1,7 @@
 <div class="content-inside-wrapper">
     <h1>Login</h1>
     <p>We recommend that you use the email address you use at work.</p>
-    <form class="form" [formGroup]="myFormLogin" (keydown)="onKeyDown($event)">
+    <form class="form" [formGroup]="myFormLogin" (keypress)="onKeyDown($event)">
         <div class="input-area">   
             <div class="errorBox">
             @if(myFormLogin.valid && auth.loginFailed){
@@ -9,7 +9,7 @@
               }
             </div>
             <app-input-field formControlName="email" type="email" icon="mail" placeholder="example@email.com" [required]="true" minlength="6" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"  ></app-input-field>
-            <app-input-field  formControlName="password" type="password" icon="lock" placeholder="Password" minlength="8"  [required]="true"></app-input-field>
+            <app-input-field  formControlName="password" type="password" icon="lock" placeholder="Password" minlength="8" [required]="true"></app-input-field>
         </div>
 
         <a (click)="sendClickToParentPageCounter(7)">Forgot Password?</a>
