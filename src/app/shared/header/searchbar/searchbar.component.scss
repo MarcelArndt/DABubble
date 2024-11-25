@@ -85,7 +85,8 @@
     @include nunito(400, 18px, var(--text-black));
     border-radius: 30px;
     border-top-left-radius: 4px;
-    width: 440px;
+    width: 520px;
+    animation: fadeIn 0.125s ease-in-out;
     /* Custom scrollbar styling */
     &::-webkit-scrollbar {
         width: 8px; /* Breite des Scrollbalkens */
@@ -101,6 +102,15 @@
     &::-webkit-scrollbar-thumb:hover {
         background-color: var(--purple-1); /* Hover-Farbe des Thumbs */
         cursor: grab;
+    }
+}
+
+@keyframes fadeIn {
+    from  {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 

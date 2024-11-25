@@ -70,26 +70,32 @@ export class SearchbarComponent {
     this.initializeSearchListeners();
   }
 
-  // ngAfterViewInit() {
-  //   // Zugriff auf die Dropdown-Elemente nach dem View-Init
-  //   this.addClickEventListenerToDropdownItems();
-  // }
+  ngAfterViewInit() {
+    // Zugriff auf die Dropdown-Elemente nach dem View-Init
+    this.addGlobalClickEventListener();
+  }
   
-  // addClickEventListenerToDropdownItems() {
-  //   const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
-  //   if (dropdownElement) {
-  //     const dropdownItems = dropdownElement.querySelectorAll('.dropDownItem');
-  //     dropdownItems.forEach((item: HTMLElement, index: number) => {
-  //       item.addEventListener('click', () => this.onDropdownItemClick(index));
-  //     });
-  //   }
-  // }
+  addGlobalClickEventListener() {
+    document.addEventListener('click', (event: MouseEvent) => {
+      const inputElement = this.elRef.nativeElement.querySelector('input');
+      const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
+      
+      const clickedInsideInput = inputElement?.contains(event.target as Node);
+      const clickedInsideDropdown = dropdownElement?.contains(event.target as Node);
+  
+      // Wenn weder auf das Eingabefeld noch auf das Dropdown geklickt wurde, Dropdown schließen
+      if (!clickedInsideInput && !clickedInsideDropdown) {
+        this.hideDropdown();
+      }
+    });
+  }
+  
   
 
-  // onDropdownItemClick(index: number) {
-  //   this.activeDropdownIndex = index;
-  //   this.selectDropdownItem(); // Setzt die Logik fort, um das richtige Element auszuwählen
-  // }
+  onDropdownItemClick(index: number) {
+    this.activeDropdownIndex = index;
+    this.selectDropdownItem(); // Setzt die Logik fort, um das richtige Element auszuwählen
+  }
 
   
   initializeSearchListeners() {
