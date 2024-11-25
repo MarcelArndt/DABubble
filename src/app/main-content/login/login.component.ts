@@ -52,13 +52,9 @@ export class LoginComponent {
   } 
 
   setAnimationToken(){
-
-
     let token = sessionStorage.getItem("dabubbleStartAnimation");
-
     this.auth.enableAnimation = token? false : true;
     if(!token){
-
       setTimeout(() => {
         this.auth.enableAnimation = false;
         sessionStorage.setItem("dabubbleStartAnimation", 'false');

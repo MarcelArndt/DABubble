@@ -33,6 +33,11 @@ export class SignInComponent {
 
   @Output() eventInSignIn = new EventEmitter();
 
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') event.preventDefault();
+    if (this.myFormLogin.valid) this.signInUser();
+  }
+
   sendClickToParentPageCounter(index: number = 0) {
     this.eventInSignIn.emit(index);
   }
