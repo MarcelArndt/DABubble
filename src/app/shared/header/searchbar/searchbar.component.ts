@@ -35,7 +35,7 @@ export class SearchbarComponent {
   allHints = [
     "Type '@' to search for members.",
     "Type '#' to search for channels.",
-    // "Type a message to search in channels"
+    "Select a Channel with '#' and search for messages."
   ];
 
 
@@ -69,6 +69,28 @@ export class SearchbarComponent {
   ngOnInit() {
     this.initializeSearchListeners();
   }
+
+  // ngAfterViewInit() {
+  //   // Zugriff auf die Dropdown-Elemente nach dem View-Init
+  //   this.addClickEventListenerToDropdownItems();
+  // }
+  
+  // addClickEventListenerToDropdownItems() {
+  //   const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
+  //   if (dropdownElement) {
+  //     const dropdownItems = dropdownElement.querySelectorAll('.dropDownItem');
+  //     dropdownItems.forEach((item: HTMLElement, index: number) => {
+  //       item.addEventListener('click', () => this.onDropdownItemClick(index));
+  //     });
+  //   }
+  // }
+  
+
+  // onDropdownItemClick(index: number) {
+  //   this.activeDropdownIndex = index;
+  //   this.selectDropdownItem(); // Setzt die Logik fort, um das richtige Element auszuwählen
+  // }
+
   
   initializeSearchListeners() {
     this.authenticationService.currentMember$.pipe(
@@ -90,17 +112,28 @@ export class SearchbarComponent {
         );
       })
     ).subscribe(() => {
-      this.displayHints = false;
       this.showDropdown = this.members.length > 0 || this.channels.length > 0 || this.messages.length > 0;
     });
   }
 
 
   onSearchInput(query: string) {
-    this.searchQuery = query.trim(); // Speichere die aktuelle Eingabe
-    this.searchChanges$.next(this.searchQuery); // Aktualisiere das Observable für die Eingabeänderungen
+    this.searchQuery = query.trim();
+    this.searchChanges$.next(this.searchQuery);
+    this.displayHints = !this.searchQuery.trim(); 
+    this.toggleHintsBasedOnInput(this.searchQuery); // Überwacht den Wert des Inputfelds
   }
   
+
+  toggleHintsBasedOnInput(query: string) {
+    if (query === '') {
+      // Wenn das Inputfeld leer ist, zeige die Hinweise an
+      this.displayHints = true;
+    } else {
+      // Wenn das Inputfeld nicht leer ist, blende die Hinweise aus
+      this.displayHints = false;
+    }
+  }
   
   async processSearchQuery(
     query: string, 
@@ -144,44 +177,70 @@ export class SearchbarComponent {
   }
 
   navigateDropdown(direction: number) {
-    if (!this.showDropdown || (this.members.length === 0 && this.channels.length === 0 && this.messages.length === 0)) {
-      return;
-    }
-    const totalResults = this.members.length + this.channels.length + this.messages.length;
-    // Navigation innerhalb der Dropdown-Liste
+    if (!this.showDropdown && !this.displayHints) return;
+    const totalResults = this.displayHints ? this.allHints.length : this.members.length + this.channels.length + this.messages.length;
     this.activeDropdownIndex = (this.activeDropdownIndex + direction + totalResults) % totalResults;
-    // Scrollen, falls das ausgewählte Element außerhalb des sichtbaren Bereichs liegt
-    const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
-    const activeElement = dropdownElement?.children[this.activeDropdownIndex];
-    if (activeElement) {
-      activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
     this.setActiveDropdownIndex(this.activeDropdownIndex);
   }
   
 
   selectDropdownItem() {
     if (this.activeDropdownIndex < 0) return;
-
-    let selectedItem: Member | Channel | Message | null = null;
-    let itemType: string | null = null;
-
-    if (this.activeDropdownIndex < this.members.length) {
-      selectedItem = this.members[this.activeDropdownIndex];
-      itemType = 'member';
-    } else if (this.activeDropdownIndex < this.members.length + this.channels.length) {
-      selectedItem = this.channels[this.activeDropdownIndex - this.members.length];
-      itemType = 'channel';
-    } else {
-      selectedItem = this.messages[this.activeDropdownIndex - this.members.length - this.channels.length];
-      itemType = 'message';
-    }
-
-    if (selectedItem) {
-      this.handleSelectItem(selectedItem, itemType);
-      this.activeDropdownIndex = -1;
+    // Wenn der aktive Index in den Hinweisen liegt
+    if ((this.activeDropdownIndex < this.allHints.length) && this.displayHints) {
+      const hint = this.allHints[this.activeDropdownIndex];
+      console.log(this.activeDropdownIndex);
+      if (hint.includes('@')) {
+        this.searchQuery = '@';  // Setzt das @ im Suchfeld
+        this.onSearchInput(this.searchQuery);
+        this.members = []; // Lade Mitglieder
+        this.showDropdown = true;
+      } else if (hint.includes('#')) {
+        this.searchQuery = '#';  // Setzt das # im Suchfeld
+        this.onSearchInput(this.searchQuery);
+        this.channels = []; // Lade Kanäle
+        this.showDropdown = true;
+      }
+      this.displayHints = false;  // Blende die Hinweise aus
+    } 
+    else if ( !this.displayHints) {
+      // Wenn der aktive Index innerhalb der Mitglieder oder Kanäle ist, wähle diese aus
+      let selectedItem: Member | Channel | Message | null = null;
+      let itemType: string = '';
+      if (this.activeDropdownIndex < this.members.length) {
+        selectedItem = this.members[this.activeDropdownIndex];
+        itemType = 'member';
+      } else if (this.activeDropdownIndex < this.members.length + this.channels.length) {
+        selectedItem = this.channels[this.activeDropdownIndex - this.members.length];
+        itemType = 'channel';
+      }
+      if (selectedItem) {
+        this.handleSelectItem(selectedItem, itemType);
+        this.activeDropdownIndex = -1;
+      }
     }
   }
+  
+
+  // selectDropdownItem() {
+  //   if (this.activeDropdownIndex < 0) return;
+  //   let selectedItem: Member | Channel | Message | null = null;
+  //   let itemType: string | null = null;
+  //   if (this.activeDropdownIndex < this.members.length) {
+  //     selectedItem = this.members[this.activeDropdownIndex];
+  //     itemType = 'member';
+  //   } else if (this.activeDropdownIndex < this.members.length + this.channels.length) {
+  //     selectedItem = this.channels[this.activeDropdownIndex - this.members.length];
+  //     itemType = 'channel';
+  //   } else {
+  //     selectedItem = this.messages[this.activeDropdownIndex - this.members.length - this.channels.length];
+  //     itemType = 'message';
+  //   }
+  //   if (selectedItem) {
+  //     this.handleSelectItem(selectedItem, itemType);
+  //     this.activeDropdownIndex = -1;
+  //   }
+  // }
 
   handleSelectItem(selectedItem: Member | Channel | Message, itemType: string) {
     if (itemType === 'channel') {
@@ -189,26 +248,25 @@ export class SearchbarComponent {
       this.searchQuery = `#${(selectedItem as Channel).title} `;
     } else if (itemType === 'member') {
       this.searchQuery = `@${(selectedItem as Member).name} `;
-    } else if (itemType === 'message') {
-      console.log(`Open message: ${(selectedItem as Message).message}`);
-    }
+    } 
     this.members = [];
     this.channels = [];
     this.messages = [];
     this.showDropdown = false;
     this.displayHints = false;
   }
+  
 
   setActiveDropdownIndex(index: number) {
     this.activeDropdownIndex = index;
-      const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
-    const allElements = Array.from(dropdownElement?.querySelectorAll('div.active, div:not(.active)') || []);
-    
+    const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
+    const allElements = dropdownElement?.querySelectorAll('.dropDownItem') || []; 
     const activeElement = allElements[index] as HTMLElement;
     if (activeElement) {
       activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }
+  
   
   
 }
