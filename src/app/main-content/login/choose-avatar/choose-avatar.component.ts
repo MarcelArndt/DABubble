@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { SignInService } from '../../../../services/sign-in/sign-in.service';
+import { SignUpService } from '../../../../services/sign-up/sign-up.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
-import { InfoBannerComponent } from '../../../shared/info-banner/info-banner.component';
 
 @Component({
   selector: 'app-choose-avatar',
@@ -14,7 +13,7 @@ import { InfoBannerComponent } from '../../../shared/info-banner/info-banner.com
 })
 export class ChooseAvatarComponent {
 
-  constructor(public signIn: SignInService, public auth:AuthenticationService, ){}
+  constructor(public signUp: SignUpService, public auth:AuthenticationService, ){}
 
   @Output() eventInProfil = new EventEmitter();
   sendClickToParentPageCounter(index:number = 0){
@@ -80,8 +79,8 @@ export class ChooseAvatarComponent {
 
   onSubmit(){
     this.auth.infoBannerIsSubmit = true;
-    this.signIn.image = this.selectedImage as File;
-    this.signIn.signUpUser();
+    this.signUp.image = this.selectedImage as File;
+    this.signUp.signUpUser();
     this.auth.enableInfoBanner('Account is created');
     this.sendClickToParentPageCounter(0);
   }

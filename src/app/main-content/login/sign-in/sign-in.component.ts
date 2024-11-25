@@ -3,7 +3,7 @@ import { InputFieldComponent } from '../../../shared/header/input-field/input-fi
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
-import { SignInService } from '../../../../services/sign-in/sign-in.service';
+import { SignUpService } from '../../../../services/sign-up/sign-up.service';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup,  signInWithEmailAndPassword } from '@angular/fire/auth';
 import { timeout } from 'rxjs';
 
@@ -24,7 +24,7 @@ export class SignInComponent {
   email: string = '';
   password: string = '';
 
-  constructor(public auth: AuthenticationService, private router: Router, public signIn: SignInService) {}
+  constructor(public auth: AuthenticationService, private router: Router, public signUp: SignUpService ) {}
 
   myFormLogin = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -53,7 +53,7 @@ export class SignInComponent {
   }
 
   async checkAlreadySignIn(){
-    if(!await this.signIn.checkIsEmailAlreadyExists(this.signIn.userEmail)){
+    if(!await this.signUp.checkIsEmailAlreadyExists(this.signUp.userEmail)){
       this.sendClickToParentPageCounter(2);
     } else {
       
@@ -61,14 +61,14 @@ export class SignInComponent {
     }
   }
   async googleSignIn(){
-    this.signIn.isGoogleAcc = true;
-    signInWithPopup(this.auth.auth, this.signIn.googleProvider)
+    this.signUp.isGoogleAcc = true;
+    signInWithPopup(this.auth.auth, this.signUp.googleProvider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const user = result.user;
-      this.signIn.userEmail = user.email || '';
-      this.signIn.fullName = user.displayName || '';
-      this.signIn.password = '123456';
+      this.signUp.userEmail = user.email || '';
+      this.signUp.fullName = user.displayName || '';
+      this.signUp.password = '123456';
       this.checkAlreadySignIn();
     }).catch((error) => {
     });

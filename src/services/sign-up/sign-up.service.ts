@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
-import { Router, RouterLink, RouterModule } from '@angular/router';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup,  signInWithEmailAndPassword } from '@angular/fire/auth';
+import { collection, doc, getDocs, setDoc } from '@angular/fire/firestore';
+import { Router, } from '@angular/router';
+import { createUserWithEmailAndPassword, GoogleAuthProvider,} from '@angular/fire/auth';
 import { AuthenticationService} from '../authentication/authentication.service';
 import { StorageService } from '../storage/storage.service';
-import { Member } from '../../interface/message';
+
+
 @Injectable({
   providedIn: 'root'
 })
-export class SignInService {
+export class SignUpService {
 
   constructor(private auth: AuthenticationService, private storage: StorageService, private router: Router ) { 
   }
