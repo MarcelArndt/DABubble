@@ -82,12 +82,18 @@ export class SignUpComponent {
   }
 
 
-async onSubmit(){
-  if (this.myForm.valid){
-  this.fillValues();
-  this.sendClickToParentPageCounter(2);
-  this.myForm.reset();
+  async onSubmit() {
+    if (this.myForm.valid) {
+      this.fillValues();
+      this.sendClickToParentPageCounter(2);
+  
+      this.myForm.reset();
+      Object.keys(this.myForm.controls).forEach(key => {
+        const control = this.myForm.get(key);
+        control?.markAsPristine();
+        control?.markAsUntouched();
+        control?.setErrors(null);
+      });
+    }
   }
-}
-
 }

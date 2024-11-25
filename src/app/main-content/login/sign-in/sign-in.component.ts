@@ -4,8 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { SignUpService } from '../../../../services/sign-up/sign-up.service';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup,  signInWithEmailAndPassword } from '@angular/fire/auth';
-import { timeout } from 'rxjs';
+import { GoogleAuthProvider, signInWithPopup} from '@angular/fire/auth';
 
 
 @Component({
@@ -34,8 +33,12 @@ export class SignInComponent {
   @Output() eventInSignIn = new EventEmitter();
 
   onKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') event.preventDefault();
-    if (this.myFormLogin.valid) this.signInUser();
+    if (event.key === 'Enter') {
+      event.preventDefault(); 
+      if (this.myFormLogin.valid) {
+        this.signInUser();
+      }
+    }
   }
 
   sendClickToParentPageCounter(index: number = 0) {

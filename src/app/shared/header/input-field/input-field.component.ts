@@ -48,11 +48,31 @@ export class InputFieldComponent implements ControlValueAccessor {
   private onTouched = () => {};
   public value:string = '';
 
-  // Wird aufgerufen, wenn der Wert von außen gesetzt wird
-  writeValue(value: any): void {
-    this.inputControl.setValue(value, { emitEvent: false }); // Wert ohne Event-Emission setzen
+
+  ngOnInit(): void {
+    const validators = [];
+    if (this.required) {
+      validators.push(Validators.required);
+    }
+    if (this.minlength) {
+      validators.push(Validators.minLength(parseInt(this.minlength, 10)));
+    }
+    if (this.pattern) {
+      validators.push(Validators.pattern(this.pattern));
+    }
+  
+    // Setze die Validatoren dynamisch
+    this.inputControl.setValidators(validators);
+    this.inputControl.updateValueAndValidity();
   }
 
+  // Wird aufgerufen, wenn der Wert von außen gesetzt wird
+  writeValue(value: any): void {
+    this.value = value || ''; // Setze den Wert zurück
+    this.inputControl.setValue(this.value, { emitEvent: false }); // Aktualisiere den FormControl-Wert
+    this.inputControl.markAsPristine(); // Markiere als sauber
+    this.inputControl.markAsUntouched(); // Markiere als unberührt
+  }
   // Registriert die onChange Funktion, die an das Formular weitergibt
   registerOnChange(fn: any): void {
     this.onChange = fn;
