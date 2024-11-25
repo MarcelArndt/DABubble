@@ -43,6 +43,7 @@ export class ChatMessageFieldComponent {
   @Output() messageSent = new EventEmitter<void>();
 
   constructor(
+    public auth: AuthenticationService,
     public memberService: MemberService,
     public messageService: MessagesService,
     public storageService: StorageService,
@@ -67,12 +68,14 @@ export class ChatMessageFieldComponent {
   }
 
   handleSendMessage() {
+    if (this.messageField.trim() || this.storageService.messageImages.length > 0) {
     this.messageSent.emit()
     if (this.directMessageService.isDirectMessage) {
       this.sendDirectMessage();
     } else {
       this.sendMessage();
     }
+  }
   }
 
   toggleEmojis(event: Event): void {
@@ -172,5 +175,12 @@ export class ChatMessageFieldComponent {
       }
     }, 0);
   }
+
+  checkEnterKey(event: KeyboardEvent): void {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    this.handleSendMessage();
+  }
+}
 }
 

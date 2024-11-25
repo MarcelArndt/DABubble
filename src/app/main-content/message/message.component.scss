@@ -26,6 +26,11 @@
         p {
             @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
         }
+
+        @media(max-width: 450px) {
+        width: 80%;
+        text-align: center;
+        }
     }
 
 }
@@ -36,8 +41,12 @@
 }
 
 .border-none {
-    padding: 10px 0;
+    padding: 50px 0;
     border-top: none;
+
+    @media(max-width: 660px) {
+    padding: 20px 0;
+    }
 }
 
 .hover {
@@ -49,6 +58,12 @@
     &:hover {
         background-color: var(--primary-bg);
     }
+
+    @media(max-width: 660px) {
+        padding: 5px 15px;
+        flex-direction: column;
+        align-items: end;
+    }
 }
 
 .text-dark {
@@ -57,4 +72,10 @@
 
 .text.light {
     @include nunito($fw: 400, $fs: 18px, $c: var(--secundary-bg));
+}
+
+.align-start {
+    @media (max-width: 660px) {
+      align-items: start;
+    }
 }

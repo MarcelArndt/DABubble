@@ -8,9 +8,17 @@
 
     .message-text {
         @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+
+        @media(max-width: 660px) {
+            @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
+        }
     }
     .text-hover {
         @include nunito($fw: 400, $fs: 18px, $c: black);
+
+        @media(max-width: 660px) {
+            @include nunito($fw: 400, $fs: 16px, $c: black);
+        }
     }
 
     textarea {
@@ -24,6 +32,10 @@
         padding: 10px;
         background-color: var(--purple-2);
         word-break: unset;
+
+        @media(max-width: 660px) {
+            @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
+        }
     }
 
     .edit-info-text {

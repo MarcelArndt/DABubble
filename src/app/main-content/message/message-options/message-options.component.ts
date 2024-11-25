@@ -87,6 +87,9 @@ export class MessageOptionsComponent {
     this.eventService.emitEvent('openThread');
     this.mainContentService.displayThread();
     this.checkWindowAndOpenThread();
+    this.threadService.currentMessageId = this.message.messageId;
+    this.threadService.readMessageThread(this.message.messageId)
+    this.threadService.readThread(this.message.messageId);
   }
 
   checkWindowAndOpenThread() {

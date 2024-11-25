@@ -40,20 +40,29 @@ export class MessageReationComponent {
   check() {
     const re = this.message.reactions;
     return Object.keys(re)
-      .filter(key => key !== "rocket" && key !== "like") // Filtere unerwünschte Namen
-      .map(key => ({ name: key, count: re[key].length })); // Erstelle ein Objekt mit Name und Länge
+      .filter(key => key !== "rocket" && key !== "like")
+      .map(key => ({ name: key, count: re[key].length }));
   }
 
-// checkReactionName(message: any[]): string {
-//   if (!message || message.length === 0) {
-//     return '';
-//   }
-//   if (message.length > 3) {
-//     return message
-//       .slice(0, 3) 
-//       .map((element) => element.name) 
-//       .join(', ') + ', ...'; 
-//   }
-//   return message.map((element) => element.name).join(', ');
-// }
+  checkReactionName(message: any[]) {
+    let reactionNames: any = [];
+    message.forEach(names => {
+      reactionNames.push(names.name)
+    })
+    let namesString: any = reactionNames.join(" and ")
+    return namesString
+  }
+
+  checkReactionNameEm(reactions: any, emoji: string): string {
+    if (!reactions[emoji] || !Array.isArray(reactions[emoji])) {
+      return '';
+    }
+    const names = reactions[emoji].map((reaction: any) => reaction.name);
+    if (names.length > 3) {
+      return `${names.slice(0, 3).join(' and ')} and ...`;
+    }
+    return names.join(' and ');
+  }
+
+
 }
