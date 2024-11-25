@@ -14,6 +14,16 @@ app-main-header {
     }
 }
 
+.main-wrapper{
+    width: 100%;
+    @include dFlex;
+}
+
+.content-wrapper{
+    width: 100%;
+    max-width: 1920px;
+}
+
 .main-content {
     @include dFlex($ai: center, $jc: space-between);
     @include heightWidth($h: calc(100vh - 120px));
