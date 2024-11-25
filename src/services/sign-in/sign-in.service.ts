@@ -18,7 +18,7 @@ export class SignInService {
   userEmail:string = '';
   password:string = '';
   fullName:String = '';
-  googlePhotoUrl:String = '';
+  isGoogleAcc:boolean = false;
 
 /// registration of User
 async getProfilPictureUrl(userId:string='', imageFile:File){
@@ -42,15 +42,17 @@ async getProfilPictureUrl(userId:string='', imageFile:File){
  }
 
   async signUpUser() {
-    createUserWithEmailAndPassword(this.auth.auth, this.userEmail, this.password)
+    if(!this.isGoogleAcc){ 
+      createUserWithEmailAndPassword(this.auth.auth, this.userEmail, this.password)
       .then((userCredential) => {
         this.setProfilForMember(userCredential.user.uid);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-      });
+      });} else{
+        this.setProfilForMember(this.auth.getCurrentUserId()!);
+        this.router.navigate(['start']);
+      }
+      this.isGoogleAcc = false
   }
 
    /// Email Validation

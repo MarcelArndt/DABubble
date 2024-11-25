@@ -66,9 +66,14 @@ export class MessageComponent {
 
   parseDate(time: string) {
     const now = new Date();
-    const timeTody = now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })
-    if (time == timeTody) {
-      return 'Heute'
+    const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
+    const weekday = formatter.format(now);
+    const day = now.getDate(); 
+    const month = now.toLocaleString('en-US', { month: 'long' });
+    const createdAt = `${weekday}, ${day} ${month}`;
+
+    if (time == createdAt) {
+      return 'Today'
     }
     return time
   }

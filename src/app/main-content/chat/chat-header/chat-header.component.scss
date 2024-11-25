@@ -6,6 +6,10 @@ section {
     padding: 0 30px;
     border-radius: 20px 20px 0 0;
     box-shadow: 0 4px 4px -2px var(--primary-bg);
+
+    @media(max-width: 660px) {
+        padding: 15px;
+    }
 }
 
 .channel-header {
@@ -48,7 +52,11 @@ section {
     border-radius: 20px;
     background-color: var(--secundary-bg);
     cursor: pointer;
-    @include padding(8px, 20px, 8px, 20px);
+    padding: 5px 10px;
+
+    @media(max-width: 660px) {
+        padding: 5px 0;
+    }
 
     &:hover {
         background-color: var(--primary-bg);
@@ -57,14 +65,21 @@ section {
     p {
         @include nunito($fw: 700, $fs: 24px);
         margin: 0 15px;
+
+        @media(max-width: 660px) {
+            @include nunito($fw: 700, $fs: 20px);
+            margin: 0 5px;
+        }
     }
 }
 
 .add-members-container {
     @include heightWidth($w: auto, $h: 100%);
     @include dFlex($ai: center, $jc: space-between);
+
     .active-members-image-container {
         display: flex;
+
         img {
             @include heightWidth($w: 35px, $h: 35px);
             @include image($br: 50%);
@@ -86,14 +101,17 @@ section {
         border-radius: 100%;
         cursor: pointer;
         padding: 24px;
-        mat-icon{
+
+        mat-icon {
             transition: color 0.125s ease-in-out, transform 0.125s ease-in-out;
             padding: 16px;
 
         }
+
         &:hover {
             cursor: pointer;
-            mat-icon{
+
+            mat-icon {
                 transform: scale(1.2);
                 color: var(--purple-1);
             }
@@ -102,36 +120,69 @@ section {
     }
 }
 
-.chatTitle{
+.chatTitle {
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 360px;
     white-space: nowrap;
 }
 
-.serverSVG{
+.serverSVG {
     width: 32px;
     height: 32px;
     border: 3px solid white;
     border-radius: 50px;
 }
 
-.showMemberListButtonContainer{
+.showMemberListButtonContainer {
     @include dFlex($ai: center, $jc: space-between);
     @include padding(8px, 20px, 8px, 8px);
     border-radius: 50px;
     @include dFlex($ai: center, $jc: space-between);
     transition: background-color 0.125s ease-in-out;
-    p{
+
+    p {
         transition: color 0.125s ease-in-out;
     }
+
     &:hover {
         background-color: var(--primary-bg);
         cursor: pointer;
-        p{
+
+        p {
             color: var(--purple-1) !important;
         }
     }
+
+    @media(max-width: 660px) {
+        display: none;
+    }
+}
+
+.showMemberListButtonContainerPuplic {
+    @include dFlex($ai: center, $jc: space-between);
+    @include padding(8px, 20px, 8px, 8px);
+    border-radius: 50px;
+    @include dFlex($ai: center, $jc: space-between);
+    transition: background-color 0.125s ease-in-out;
+
+    p {
+        transition: color 0.125s ease-in-out;
+
+        @media(max-width: 660px) {
+            display: none;
+        }
+    }
+
+    &:hover {
+        background-color: var(--primary-bg);
+        cursor: pointer;
+
+        p {
+            color: var(--purple-1) !important;
+        }
+    }
+
 }
 
 mat-icon {

@@ -22,13 +22,19 @@ export class ThreadService {
 
   async createThread(message: string) {
     const now = new Date();
+    const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
+    const weekday = formatter.format(now);
+    const day = now.getDate(); 
+    const month = now.toLocaleString('en-US', { month: 'long' });
+    const createdAt = `${weekday}, ${day} ${month}`;
+
     const threadData = {
       user: this.authenticationService.getCurrentUserUid(),
       name: this.authenticationService.currentMember.name,
       time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
       message: message,
       profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),
+      createdAt: createdAt,
       reactions: {
         like: [],
         rocket: []

@@ -11,27 +11,27 @@
     border-radius: 20px 20px 0px 20px;
     border: 2px solid var(--border-light-purple);
     @include dFlex();
-
-
-    .options-btn {
-        @include heightWidth($w: 40px, $h: 40px);
-        @include dFlex();
-        border: none;
-        margin: 0 3px;
-        text-align: center;
-        border-radius: 50%;
-        background-color: white;
-        cursor: pointer;
-
-        &:hover {
-            background-color: var(--border-light-purple);
-        }
-    }
+    gap: 5px;
 
     .optionsMenu {
         background-color: white;
         margin-top: 20px;
     }
+
+    @media(max-width: 660px) {
+    left: 15px;
+    top: 35px;
+    }
+}
+
+.thread-active {
+    left: 50px;
+    top: 25px;
+
+    @media(max-width: 660px) {
+        left: 15px;
+        top: 5px;
+        }
 }
 
 .edit-message-menu {
@@ -63,20 +63,58 @@
     right: 50px;
     left: auto;
     border-radius: 20px 20px 20px 0px;
+
+    @media(max-width: 660px) {
+    right: 15px;
+    }
 }
 
 .icon {
-@include materialSymbols($c: black, $fs: 24px);
-@include dFlex();
-}
-
-.like-icon {
-width: 100%;
+    @include materialSymbols($c: black, $fs: 24px);
+    @include dFlex();
 }
 
 .emojis-container {
     position: absolute;
-    top: 50px;
-    right: 0px;
+    width: 100%;
     z-index: 100;
+    left: -50px;
+
+    @media(max-width: 660px) {
+        left: -15px;
+    }
+}
+.emojis-container-member {
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    left: -55px;
+   
+    @media(max-width: 660px) {
+        left: -130px;
+    }
+}
+
+
+
+
+.option-btn-container {
+    @include dFlex();
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+
+    img {
+    object-fit: contain;
+    }
+
+    &:hover {
+        background-color: var(--border-light-purple);
+    }
+
+    @media(max-width: 660px) {
+        width: 30px;
+        height: 30px;
+    }
 }

@@ -1,7 +1,7 @@
 <div class="content-inside-wrapper">
     <h1>Login</h1>
     <p>We recommend that you use the email address you use at work.</p>
-    <form class="form" [formGroup]="myFormLogin">
+    <form class="form" [formGroup]="myFormLogin" (keydown)="onKeyDown($event)">
         <div class="input-area">   
             <div class="errorBox">
             @if(myFormLogin.valid && auth.loginFailed){

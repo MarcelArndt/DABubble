@@ -58,6 +58,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   }
 
   async sendMessage() {
+    if (this.messageField.trim() || this.storageService.messageImagesThread.length > 0) {
     await this.threadService.createThread(this.messageField);
     this.messagesUpdated.emit();
     this.messageField = '';
@@ -65,6 +66,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
     this.imagePreviewsThread = [];
     this.messageSent.emit()
   }
+}
 
   toggleEmojis(event: Event): void {
     event.stopPropagation();
@@ -158,6 +160,13 @@ export class ThreadMessageFieldComponent  implements OnInit{
         items[this.selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }, 0);
+  }
+
+  checkEnterKey(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
   }
 }
 

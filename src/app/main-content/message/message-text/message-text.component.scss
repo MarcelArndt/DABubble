@@ -8,9 +8,17 @@
 
     .message-text {
         @include nunito($fw: 400, $fs: 18px, $c: var(--text-black));
+
+        @media(max-width: 660px) {
+            @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
+        }
     }
     .text-hover {
         @include nunito($fw: 400, $fs: 18px, $c: black);
+
+        @media(max-width: 660px) {
+            @include nunito($fw: 400, $fs: 16px, $c: black);
+        }
     }
 
     textarea {
@@ -24,12 +32,16 @@
         padding: 10px;
         background-color: var(--purple-2);
         word-break: unset;
+
+        @media(max-width: 660px) {
+            @include nunito($fw: 400, $fs: 16px, $c: var(--text-black));
+        }
     }
 
     .edit-info-text {
         position: absolute;
-        bottom: 50px;
-        left: 30px;
+        bottom: 30px;
+        left: 15px;
         @include nunito($fw: 400, $fs: 12px, $c: var(--text-black));
 
         span {
@@ -42,6 +54,11 @@
         }
     }
 }
+
+.edit-thread-text {
+    bottom: 0px !important;
+}
+
 
 .myMessage {
     background-color: var(--purple-2);

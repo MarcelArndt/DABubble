@@ -19,6 +19,10 @@
         object-fit: cover;
         object-position: center;
 
+        @media(max-width: 440px) {
+            height: 100%;
+            width: 100%;
+        }
     }
 
     .edit-images {

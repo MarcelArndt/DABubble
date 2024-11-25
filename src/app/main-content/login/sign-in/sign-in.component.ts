@@ -33,6 +33,11 @@ export class SignInComponent {
 
   @Output() eventInSignIn = new EventEmitter();
 
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') event.preventDefault();
+    if (this.myFormLogin.valid) this.signInUser();
+  }
+
   sendClickToParentPageCounter(index: number = 0) {
     this.eventInSignIn.emit(index);
   }
@@ -56,13 +61,14 @@ export class SignInComponent {
     }
   }
   async googleSignIn(){
+    this.signIn.isGoogleAcc = true;
     signInWithPopup(this.auth.auth, this.signIn.googleProvider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const user = result.user;
       this.signIn.userEmail = user.email || '';
       this.signIn.fullName = user.displayName || '';
-      this.signIn.password = '';
+      this.signIn.password = '123456';
       this.checkAlreadySignIn();
     }).catch((error) => {
     });

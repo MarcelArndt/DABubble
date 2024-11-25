@@ -13,10 +13,14 @@ section {
 
     h3 {
         @include nunito($fw: 700, $fs: 25px);
+
+        @media(max-width: 660px) {
+            @include nunito($fw: 700, $fs: 20px);
+        }
     }
 
     .hashtag {
-        @include materialSymbols($c: var(--purple-2));
+        @include materialSymbols($c: var(--purple-2), $fs: 14px);
         margin: 0 5px;
     }
 
