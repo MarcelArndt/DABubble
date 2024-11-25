@@ -1,20 +1,53 @@
 import { Component, ElementRef, HostListener, Renderer2, Input} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { MemberService } from '../../../../services/member/member.service';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { ChannelService } from '../../../../services/channel/channel.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
+import { Channel } from '../../../../classes/channel.class';
+import { Member, Message } from '../../../../interface/message';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, firstValueFrom, Observable, of, switchMap } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-searchbar',
   standalone: true,
   imports: [
     MatIconModule,
-    CommonModule 
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './searchbar.component.html',
   styleUrl: './searchbar.component.scss'
 })
 export class SearchbarComponent {
+  searchQuery = ''; 
+  members: Member[] = [];
+  channels: Channel[] = [];
+  messages: Message[] = [];
+  showDropdown = false;
+  displayHints = false;
+  activeDropdownIndex = -1; // Aktives Element im Dropdown
+  previousSearchChannel: Channel | null = null;
+  searchChanges$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(private renderer: Renderer2, private elRef: ElementRef) {}
+  allHints = [
+    "Type '@' to search for members.",
+    "Type '#' to search for channels.",
+    // "Type a message to search in channels"
+  ];
+
+
+  constructor(
+    private renderer: Renderer2, 
+    private elRef: ElementRef,
+    private memberService: MemberService,
+    private authenticationService: AuthenticationService,
+    private channelService: ChannelService,
+    private messageService: MessagesService
+  ) {
+  }
 
   @Input() icon: string = 'search'; 
   @Input() addClass: string[] = [];
@@ -33,6 +66,149 @@ export class SearchbarComponent {
     this.renderer.removeClass(parent, 'active');
   }
 
+  ngOnInit() {
+    this.initializeSearchListeners();
+  }
+  
+  initializeSearchListeners() {
+    this.authenticationService.currentMember$.pipe(
+      filter(currentMember => !!currentMember), // Nur fortfahren, wenn der Benutzer verfügbar ist
+      switchMap(currentMember => {
+        if (!currentMember) {
+          console.error('No current user is signed in.');
+          return of([]); // Rückgabe von leeren Ergebnissen, wenn der Benutzer nicht vorhanden ist
+        }
+
+        // Wenn der Benutzer verfügbar ist, lade Mitglieder und Kanäle
+        const members$ = this.memberService.getAllMembersFromFirestoreObservable();
+        const channels$ = this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember);
+
+        return this.searchChanges$.pipe(
+          debounceTime(300), 
+          distinctUntilChanged(),
+          switchMap(query => this.processSearchQuery(query, members$, channels$))
+        );
+      })
+    ).subscribe(() => {
+      this.displayHints = false;
+      this.showDropdown = this.members.length > 0 || this.channels.length > 0 || this.messages.length > 0;
+    });
+  }
 
 
+  onSearchInput(query: string) {
+    this.searchQuery = query.trim(); // Speichere die aktuelle Eingabe
+    this.searchChanges$.next(this.searchQuery); // Aktualisiere das Observable für die Eingabeänderungen
+  }
+  
+  
+  async processSearchQuery(
+    query: string, 
+    members$: Observable<Member[]>, 
+    channels$: Observable<Channel[]>
+  ) {
+    this.members = [];
+    this.channels = [];
+    this.messages = [];
+
+    if (query.startsWith('@')) {
+      const members = await firstValueFrom(members$);
+      this.members = members.filter(member => member.name.toLowerCase().includes(query.slice(1).toLowerCase()));
+    } else if (query.startsWith('#')) {
+      const channels = await firstValueFrom(channels$);
+      this.channels = channels.filter(channel => channel.title.toLowerCase().includes(query.slice(1).toLowerCase()));
+    } 
+    // else if (this.previousSearchChannel && query.includes(' ')) {
+    //   // Wir könnten hier Nachrichten laden, wenn die vorherige Suche einen Channel beinhaltete.
+    //   const messages = await this.messageService.getMessagesForChannel(this.previousSearchChannel.id);
+    //   this.messages = messages.filter(message => message.message.toLowerCase().includes(query.toLowerCase()));
+    // }
+  }
+
+  showHints() {
+    if (!this.searchQuery.trim()) {
+      this.members = [];
+      this.channels = [];
+      this.messages = [];
+      this.displayHints = true;
+      this.showDropdown = true;
+    }
+  }
+
+  hideDropdown() {
+    setTimeout(() => {
+      this.displayHints = false;
+      this.showDropdown = false;
+      this.activeDropdownIndex = -1;
+    }, 200);
+  }
+
+  navigateDropdown(direction: number) {
+    if (!this.showDropdown || (this.members.length === 0 && this.channels.length === 0 && this.messages.length === 0)) {
+      return;
+    }
+    const totalResults = this.members.length + this.channels.length + this.messages.length;
+    // Navigation innerhalb der Dropdown-Liste
+    this.activeDropdownIndex = (this.activeDropdownIndex + direction + totalResults) % totalResults;
+    // Scrollen, falls das ausgewählte Element außerhalb des sichtbaren Bereichs liegt
+    const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
+    const activeElement = dropdownElement?.children[this.activeDropdownIndex];
+    if (activeElement) {
+      activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    this.setActiveDropdownIndex(this.activeDropdownIndex);
+  }
+  
+
+  selectDropdownItem() {
+    if (this.activeDropdownIndex < 0) return;
+
+    let selectedItem: Member | Channel | Message | null = null;
+    let itemType: string | null = null;
+
+    if (this.activeDropdownIndex < this.members.length) {
+      selectedItem = this.members[this.activeDropdownIndex];
+      itemType = 'member';
+    } else if (this.activeDropdownIndex < this.members.length + this.channels.length) {
+      selectedItem = this.channels[this.activeDropdownIndex - this.members.length];
+      itemType = 'channel';
+    } else {
+      selectedItem = this.messages[this.activeDropdownIndex - this.members.length - this.channels.length];
+      itemType = 'message';
+    }
+
+    if (selectedItem) {
+      this.handleSelectItem(selectedItem, itemType);
+      this.activeDropdownIndex = -1;
+    }
+  }
+
+  handleSelectItem(selectedItem: Member | Channel | Message, itemType: string) {
+    if (itemType === 'channel') {
+      this.previousSearchChannel = selectedItem as Channel;
+      this.searchQuery = `#${(selectedItem as Channel).title} `;
+    } else if (itemType === 'member') {
+      this.searchQuery = `@${(selectedItem as Member).name} `;
+    } else if (itemType === 'message') {
+      console.log(`Open message: ${(selectedItem as Message).message}`);
+    }
+    this.members = [];
+    this.channels = [];
+    this.messages = [];
+    this.showDropdown = false;
+    this.displayHints = false;
+  }
+
+  setActiveDropdownIndex(index: number) {
+    this.activeDropdownIndex = index;
+      const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
+    const allElements = Array.from(dropdownElement?.querySelectorAll('div.active, div:not(.active)') || []);
+    
+    const activeElement = allElements[index] as HTMLElement;
+    if (activeElement) {
+      activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+  
+  
 }

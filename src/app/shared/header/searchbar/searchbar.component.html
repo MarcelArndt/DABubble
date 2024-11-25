@@ -1,8 +1,49 @@
 <div class="searchbar" [ngClass]="addClass">
+  <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
+    <input 
+      [placeholder]="placeholder" 
+      [(ngModel)]="searchQuery" 
+      (input)="onSearchInput(searchQuery)" 
+      (keydown.arrowUp)="navigateDropdown(-1)" 
+      (keydown.arrowDown)="navigateDropdown(1)" 
+      (keydown.enter)="selectDropdownItem()" 
+      (focus)="showHints()" 
+      (blur)="hideDropdown()"
+    >
+    <mat-icon>{{icon}}</mat-icon>
+  </div>
+  
+  <div class="dropdown" *ngIf="showDropdown || displayHints">
 
-    <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
-        <input [placeholder]="placeholder">
-        <mat-icon>{{icon}}</mat-icon>
-    </div>
+    @if(this.displayHints){
+        <div *ngFor="let hint of allHints">
+          <span><mat-icon>info</mat-icon>{{ hint }}</span>
+        </div>
+    } @else {
+      <div *ngIf="members.length > 0">
+        <div *ngFor="let member of members; let i = index" [class.active]="i === activeDropdownIndex" (click)="selectDropdownItem()" >
+          <div class="contact">
+            <div class="contactPictureContainer">
+              <img class="contactPicture" [src]="member.imageUrl" alt="User picture" *ngIf="member.imageUrl">
+              <img class="onlineStatus" [src]="member.status ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="User picture" *ngIf="member.status !== undefined">
+            </div>
+            <span>{{ member.name }}</span>
+          </div>
+        </div>
+      </div>
+    
+      <div *ngIf="channels.length > 0">
+        <div *ngFor="let channel of channels; let i = index" [class.active]="i === activeDropdownIndex" (click)="selectDropdownItem()">
+          <span>{{ channel.title }}</span>
+        </div>
+      </div>
+    
+      <div *ngIf="messages.length > 0">
+        <div *ngFor="let message of messages; let i = index" [class.active]="i === activeDropdownIndex" (click)="selectDropdownItem()">
+          <span>{{ message.message }}</span>
+        </div>
+      </div>
+    }
 
+  </div>
 </div>

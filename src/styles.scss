@@ -2,7 +2,9 @@
 @import 'mixin.scss';
 
 mat-icon{
-    @include materialSymbols()
+    @include materialSymbols();
+    height: unset !important;
+    width: unset  !important;
 }
 
 :root {
