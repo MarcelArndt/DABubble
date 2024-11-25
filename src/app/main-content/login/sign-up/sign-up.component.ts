@@ -7,7 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, A
 import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { SignInService } from '../../../../services/sign-in/sign-in.service';
+import { SignUpService } from '../../../../services/sign-up/sign-up.service';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class SignUpComponent {
 
   myForm: FormGroup
 
-  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signIn: SignInService, private router: Router) {
+  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signUp: SignUpService , private router: Router) {
     this.myForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email], [this.emailAsyncValidator()]],
@@ -58,7 +58,7 @@ export class SignUpComponent {
       return of(control.value).pipe(
         debounceTime(300),
         switchMap(email => 
-          this.signIn.checkIsEmailAlreadyExists(email).then(
+          this.signUp.checkIsEmailAlreadyExists(email).then(
             exists => (exists ? { emailExists: true } : null)
           )
         ),
@@ -68,13 +68,13 @@ export class SignUpComponent {
   }
 
   fillValues(){
-    this.signIn.fullName = this.myForm.value.fullName || '';
-    this.signIn.userEmail = this.myForm.value.email || '';
-    this.signIn.password = this.myForm.value.password || '';
+    this.signUp.fullName = this.myForm.value.fullName || '';
+    this.signUp.userEmail = this.myForm.value.email || '';
+    this.signUp.password = this.myForm.value.password || '';
   }
 
   registerUser() {
-    this.signIn.signUpUser();
+    this.signUp.signUpUser();
   }
 
   openDataProtect(){
