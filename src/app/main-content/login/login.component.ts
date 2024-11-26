@@ -14,6 +14,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { InfoBannerComponent } from '../../shared/info-banner/info-banner.component';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { DarkModeService } from '../../../services/darkMode/dark-mode.service';
+import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
+import { LightboxService } from '../../../services/lightbox/lightbox.service';
 
 
 interface Page {
@@ -26,13 +28,28 @@ interface Page {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [LoginAnimationComponent, InfoBannerComponent, CommonModule, LoginAnimationInsideComponent, RouterModule, HeadmenuLoginComponent, SubmenuLoginComponent, SignUpComponent, SignInComponent, ChooseAvatarComponent, SuccessCreatingAccountComponent, LostPasswordComponent, ResetPasswordComponent],
+  imports: [
+    LoginAnimationComponent, 
+    LightboxComponent, 
+    InfoBannerComponent, 
+    CommonModule, 
+    LoginAnimationInsideComponent, 
+    RouterModule, 
+    HeadmenuLoginComponent, 
+    SubmenuLoginComponent, 
+    SignUpComponent, 
+    SignInComponent,
+    ChooseAvatarComponent, 
+    SuccessCreatingAccountComponent, 
+    LostPasswordComponent, 
+    ResetPasswordComponent,
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss',]
 })
 
 export class LoginComponent {
-  constructor(public auth: AuthenticationService, public darkmode: DarkModeService ){}
+  constructor(public auth: AuthenticationService, public darkmode: DarkModeService, public lightbox: LightboxService  ){}
   pageNumber:number = 0;
   pageNumberTrashHolder:number = 0;
   isStepForwards = false;

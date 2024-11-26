@@ -8,6 +8,9 @@ import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SignUpService } from '../../../../services/sign-up/sign-up.service';
+import { LightboxService } from '../../../../services/lightbox/lightbox.service';
+import { PrivacyPolicyComponent } from '../../../imprint/privacy-policy/privacy-policy.component';
+
 
 
 @Component({
@@ -19,7 +22,7 @@ import { SignUpService } from '../../../../services/sign-up/sign-up.service';
     MatIcon,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule 
+    CommonModule,
   ],
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss','./sign-up-checkbox.scss']
@@ -30,7 +33,7 @@ export class SignUpComponent {
 
   myForm: FormGroup
 
-  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signUp: SignUpService , private router: Router) {
+  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signUp: SignUpService , private router: Router, public lightbox: LightboxService) {
     this.myForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email], [this.emailAsyncValidator()]],
@@ -77,8 +80,8 @@ export class SignUpComponent {
     this.signUp.signUpUser();
   }
 
-  openDataProtect(){
-    console.log('open a Lightbox here')
+  openLightbox(): void {
+    this.lightbox.openLightBox();
   }
 
 

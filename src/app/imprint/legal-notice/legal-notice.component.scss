@@ -19,7 +19,7 @@ h1{
 }
 
 a{
-    @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--text-blue)) ;
+    @include figtree($fw: 400, $fs: 16px, $c: var(--text-blue)) ;
     color:var(--text-blue) !important;
     text-wrap: nowrap;
     &:hover {
@@ -35,6 +35,7 @@ strong{
 .info-card{
     padding: 24px 0px;
     margin: 12px 0px;
+    min-height: 335px;
     margin-left: -24px;
     width: 30%;
     height: auto;
@@ -55,6 +56,7 @@ strong{
         gap: 5%;
         margin: 12px 0px 0px -24px;
         width: calc(80% - 24px);
+        min-height: auto;
     }
 
     @include respond-to-maxWidth(semiMedium) {

@@ -1,3 +1,4 @@
+@if(lightbox.lightboxIsOpen){<app-lightbox></app-lightbox>}
 <app-headmenu-login (eventInHead)="changePageNumber($event)" ></app-headmenu-login>
 @if(auth.enableAnimation){<app-login-animation></app-login-animation>}
 @if(auth.enableAnimation){<app-login-animation-inside></app-login-animation-inside>}
