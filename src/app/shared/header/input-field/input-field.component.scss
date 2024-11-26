@@ -25,8 +25,8 @@
             padding: 0px 0px 0px 12px;
          }
 
-        mat-icon{
-            @include materialSymbols;
+        .icon{
+            @include materialSymbols($fs: clamp(18px, 4vw, 24px));
             @include heightWidth($w: 32px, $h: 70px);
             @include respond-to-maxWidth(large) {
                font-size: 21px;
@@ -38,12 +38,13 @@
             margin: 0px 16px;
             @include respond-to-maxWidth(smallMedium) {
                 margin: 0px 0px 0px 4px;
-                padding: 0px 4px 0px 0px;
+                padding: 0px 12px 0px 12px;
             }
         }
     }
 
     input{
+
         @include heightWidth($h: 36px);
         @include figtree($fw: 300, $fs: 18px);
         @include respond-to-maxWidth(large) {
@@ -62,22 +63,11 @@
     flex-direction: row-reverse;
 
     .inputFrame{
-        mat-icon{  
+        .icon{  
             padding: 0px 12px 0px 0px;
             margin: 0px 0px;
         }
     }
-}
-
-.active{
-    border-color: var(--purple-2);
-    background-color: var(--secundary-bg);
-    .inputFrame{
-        mat-icon{  
-            color: var(--text-black);
-        }
-    }
-    
 }
 
 .error-messages {
@@ -94,4 +84,36 @@
         font-size: clamp(16px, 4vw, 18px);
     }
   }
+
+.visibility-button{
+    @include dFlex;
+    padding-block: 0px;
+    padding-inline:0px;
+    border: none;
+    font-size: 32px;
+    background-color: transparent;
+    padding-left: 8px;
+
+    .icon-search{
+        @include heightWidth($w: 32px, $h: 70px);
+        @include dFlex ($jc: start);  
+        @include materialSymbols($c: var(--text-gray), $fs: clamp(18px, 4vw, 24px));
+        @include respond-to-maxWidth(large) {
+            margin-right: 16px;
+         }
+
+        &:hover{
+            cursor: pointer;
+            scale: 1.1;
+        }
+    }
+ }
+
+ .active{
+    border-color: var(--purple-2);
+    background-color: var(--secundary-bg);
+    .icon, .icon-search{
+        color: var(--text-black) !important; 
+    }
+}
 

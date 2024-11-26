@@ -33,6 +33,7 @@ export class InputFieldComponent implements ControlValueAccessor {
   @Input() required: boolean = false;
   @Input() pattern:string = "";
   @Input() type: string = 'text';
+  @Input() isPasswordfield:boolean = false;
   @Input() minlength:string = "0";
 
   // [0] = true or false for is required to has a same Value
@@ -47,6 +48,7 @@ export class InputFieldComponent implements ControlValueAccessor {
   private onChange = (value: any) => {};
   private onTouched = () => {};
   public value:string = '';
+  public hidePassword:boolean = false;
 
 
   ngOnInit(): void {
@@ -61,33 +63,32 @@ export class InputFieldComponent implements ControlValueAccessor {
       validators.push(Validators.pattern(this.pattern));
     }
   
-    // Setze die Validatoren dynamisch
+
     this.inputControl.setValidators(validators);
     this.inputControl.updateValueAndValidity();
   }
 
-  // Wird aufgerufen, wenn der Wert von außen gesetzt wird
+
   writeValue(value: any): void {
-    this.value = value || ''; // Setze den Wert zurück
-    this.inputControl.setValue(this.value, { emitEvent: false }); // Aktualisiere den FormControl-Wert
-    this.inputControl.markAsPristine(); // Markiere als sauber
-    this.inputControl.markAsUntouched(); // Markiere als unberührt
+    this.value = value || ''; 
+    this.inputControl.setValue(this.value, { emitEvent: false }); 
+    this.inputControl.markAsPristine();
+    this.inputControl.markAsUntouched();
   }
-  // Registriert die onChange Funktion, die an das Formular weitergibt
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
     this.inputControl.valueChanges.subscribe(val => {
       this.value = val || '';
-      fn(val); // Überträgt den Wert an das Formular
+      fn(val); 
     });
   }
 
-  // Registriert die onTouched Funktion, um zu erkennen, ob das Feld berührt wurde
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
-  // Aktiviert oder deaktiviert den Input
+
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.inputControl.disable() : this.inputControl.enable();
   }
@@ -104,7 +105,11 @@ export class InputFieldComponent implements ControlValueAccessor {
     const parent = this.elRef.nativeElement.querySelector('.custom-input');
     this.renderer.removeClass(parent, 'active');
   }
-  
+
+  tooglePasswordVisibility(){
+    this.hidePassword = !this.hidePassword;
+    this.type = this.hidePassword? 'text' : 'password';
+  }
 
   getValue(){
    return this.value;

@@ -9,7 +9,7 @@
               }
             </div>
             <app-input-field formControlName="email" type="email" icon="mail" placeholder="example@email.com" [required]="true" minlength="6" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"  ></app-input-field>
-            <app-input-field  formControlName="password" type="password" icon="lock" placeholder="Password" minlength="8" [required]="true"></app-input-field>
+            <app-input-field  formControlName="password" [isPasswordfield]="true" type="password" icon="lock" placeholder="Password" minlength="8" [required]="true"></app-input-field>
         </div>
 
         <a (click)="sendClickToParentPageCounter(7)">Forgot Password?</a>

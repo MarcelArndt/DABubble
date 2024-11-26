@@ -19,7 +19,7 @@
             <app-input-field formControlName="email" type="email" icon="mail" placeholder="example@email.com" [required]="true" minlength="6" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"  ></app-input-field>
             </div>
 
-             <app-input-field formControlName="password" type="password" icon="lock" placeholder="Password" [required]="true" minlength="8" ></app-input-field>
+             <app-input-field formControlName="password" [isPasswordfield]="true" type="password" icon="lock" placeholder="Password" [required]="true" minlength="8" ></app-input-field>
             <div class="errorBox">
             @if(myForm.get('dataProtection')?.touched && !myForm.get('dataProtection')?.value){
                 <span>Please check Data Protection!</span>
