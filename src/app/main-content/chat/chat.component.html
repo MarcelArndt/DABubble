@@ -1,9 +1,10 @@
 <section>
-    <app-chat-header></app-chat-header>
+    <app-chat-header [ngStyle]="messageService.isWriteAMessage ? {'height':'auto'} : {'height':'10%'}"></app-chat-header>
 
     <div class="main-message-container" #messageContainer (scroll)="onScroll()">
 
-        <div *ngIf="directMessageService.isDirectMessage == false" class="mesage-container">
+        @if (!messageService.isWriteAMessage) {
+        <div *ngIf="!directMessageService.isDirectMessage" class="mesage-container">
             <ng-container *ngIf="isLoading; else messageList">
                 <div class="loader">Laden...</div>
             </ng-container>
@@ -18,9 +19,11 @@
                     <mat-icon class="hashtag">tag</mat-icon>
                     <h2>{{auth.currentChannelData.title}}</h2>
                 </div>
-                    <p>{{ checkUserAdmin(auth.currentChannelData.admin)
-                     ?  'Du hast diesen Channel ' + parseTime(auth.currentChannelData.createdAt) + ' erstellt. ' 
-                     :  auth.currentChannelData.adminName + ' hat diesen Channel ' +  parseTime(auth.currentChannelData.createdAt) + ' erstellt.' }} Das ist der Anfang des Channels <span># {{auth.currentChannelData.title}}</span></p>
+                <p>{{ checkUserAdmin(auth.currentChannelData.admin)
+                    ? 'Du hast diesen Channel ' + parseTime(auth.currentChannelData.createdAt) + ' erstellt. '
+                    : auth.currentChannelData.adminName + ' hat diesen Channel ' +
+                    parseTime(auth.currentChannelData.createdAt) + ' erstellt.' }} Das ist der Anfang des Channels
+                    <span># {{auth.currentChannelData.title}}</span></p>
             </div>
 
         </div>
@@ -31,29 +34,35 @@
             </ng-container>
 
             <ng-template #messageList>
-                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg" [index]="i">
+                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg"
+                    [index]="i">
                 </app-message>
             </ng-template>
 
-            <div class="welcome-direct-message" *ngIf="!isLoading && directMessageService.allDirectMessages.length == 0">
+            <div class="welcome-direct-message"
+                *ngIf="!isLoading && directMessageService.allDirectMessages.length == 0">
                 <div>
                     <img src="{{directMessageService.directMessageUserData.imageUrl}}">
                     <h2>{{directMessageService.directMessageUserData.name}}</h2>
                 </div>
                 <div *ngIf="isUserDirectMessage()">
-                    <p><b>Dieser Raum ist nur für dich da.</b> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</p>
+                    <p><b>Dieser Raum ist nur für dich da.</b> Mache dir Notizen, liste deine To-dos auf oder bewahre
+                        Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.
+                    </p>
                 </div>
-                <div  *ngIf="isUserDirectMessage() == false">
-                    <p>Diese Unterhaltung findet nur zwischen <span>&#64;{{directMessageService.directMessageUserData.name}}</span> und dir statt</p>
+                <div *ngIf="isUserDirectMessage() == false">
+                    <p>Diese Unterhaltung findet nur zwischen
+                        <span>&#64;{{directMessageService.directMessageUserData.name}}</span> und dir statt</p>
                 </div>
             </div>
 
         </div>
+        } @else {
+
+        }
 
     </div>
 
-    <app-chat-message-field 
-    (messagesUpdated)="onMessagesUpdated()" 
-    (messageSent)="scrollToBottom()">
-    </app-chat-message-field>
+    <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"
+        (messageSent)="scrollToBottom()"></app-chat-message-field>
 </section>

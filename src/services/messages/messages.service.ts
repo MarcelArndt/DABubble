@@ -14,6 +14,7 @@ export class MessagesService {
   messages: any = [];
   messagesUpdated = new Subject<void>();
   editMessageText: string = '';
+  isWriteAMessage: boolean = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -156,6 +157,10 @@ export class MessagesService {
         ? arrayRemove(reactionEntry)
         : arrayUnion(reactionEntry),
     });
+  }
+
+  async writeAMessage() {
+
   }
 
 }

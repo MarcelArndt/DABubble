@@ -242,6 +242,7 @@ export class DevspaceComponent implements OnInit {
   }
 
   async checkWindowAndOpenChannel(channel: any) {
+    this.messageService.isWriteAMessage = false;
     this.mainContentService.hideThread();
     window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
     this.directMessageService.isDirectMessage = false;
@@ -250,8 +251,13 @@ export class DevspaceComponent implements OnInit {
   }
 
   openDirectMessage(memberId: any) {
+    this.messageService.isWriteAMessage = false;
     this.directMessageService.isDirectMessage = true;
     this.memberService.setCurrentMemberData();
     this.directMessageService.readDirectUserData(memberId)
+  }
+
+  openWriteAMessage() {
+    this.messageService.isWriteAMessage = true;
   }
 }

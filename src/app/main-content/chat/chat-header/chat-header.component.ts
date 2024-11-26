@@ -12,6 +12,7 @@ import { AddMembersChannelComponent } from '../../../dialog/add-members-channel/
 import { Channel } from '../../../../classes/channel.class';
 import { ChannelService } from '../../../../services/channel/channel.service';
 import { ShowMembersOfChannelComponent } from '../../../dialog/show-members-of-channel/show-members-of-channel.component';
+import { MessagesService } from '../../../../services/messages/messages.service';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class ChatHeaderComponent implements OnInit {
     public auth: AuthenticationService,
     public directMessageService: DirectMessageService,
     public memberService: MemberService,
-    public channelService: ChannelService
+    public channelService: ChannelService,
+    public messageService: MessagesService
   ) {
   }
 

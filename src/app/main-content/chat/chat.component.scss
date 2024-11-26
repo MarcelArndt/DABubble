@@ -38,7 +38,7 @@ section {
 }
 
 app-chat-header {
-    @include heightWidth($h: 10%);
+    width: 100%;
     border-radius: 20px 20px 0 0;
 }
 
@@ -99,7 +99,7 @@ app-chat-message-field {
         @include dFlex($jc: start, $ai: center);
 
         mat-icon {
-        @include materialSymbols($c: var(--text-black), $fs: 24px);
+            @include materialSymbols($c: var(--text-black), $fs: 24px);
         }
 
         h2 {

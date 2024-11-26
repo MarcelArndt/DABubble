@@ -1,4 +1,5 @@
 <section>
+    @if (!messageService.isWriteAMessage) {
     <div class="channel-header" *ngIf="directMessageService.isDirectMessage == false">
         <button class="creator-team-btn" (click)="openEditChannel()">
             <mat-icon class="hashtag">tag</mat-icon>
@@ -7,22 +8,22 @@
         </button>
 
         <div class="add-members-container">
-            @if (auth.currentChannelData.isPublic) { 
-                <div class="showMemberListButtonContainerPuplic">
-                    <img class="serverSVG" src="/img/devspace/titleAndServerSvg.svg">
-                    <p>Public</p>
-                </div>
-            } 
+            @if (auth.currentChannelData.isPublic) {
+            <div class="showMemberListButtonContainerPuplic">
+                <img class="serverSVG" src="/img/devspace/titleAndServerSvg.svg">
+                <p>Public</p>
+            </div>
+            }
             @else {
-                <div class="showMemberListButtonContainer" (click)="showMembersOfChannel()">
-                    <div class="active-members-image-container" *ngFor="let member of this.memberService.allChannelMembers">
-                        <img style="margin-left: -10px;" src="{{member.imageUrl}}" alt="">
-                    </div>
-                    <p>{{auth.currentChannelData?.membersId?.length}}</p>
+            <div class="showMemberListButtonContainer" (click)="showMembersOfChannel()">
+                <div class="active-members-image-container" *ngFor="let member of this.memberService.allChannelMembers">
+                    <img style="margin-left: -10px;" src="{{member.imageUrl}}" alt="">
                 </div>
-                <button>
-                    <mat-icon (click)="addMembersToChannel()" class="add-members">person_add</mat-icon>
-                </button>
+                <p>{{auth.currentChannelData?.membersId?.length}}</p>
+            </div>
+            <button>
+                <mat-icon (click)="addMembersToChannel()" class="add-members">person_add</mat-icon>
+            </button>
             }
         </div>
     </div>
@@ -33,4 +34,8 @@
         </div>
         <h2>{{directMessageService.directMessageUserData.name}}</h2>
     </div>
+    } @else {
+    <h3 class="new-message-headline">Neue Naricht</h3>
+    <input class="wirte-message-field" type="search" name="" placeholder="To #channel or @someone or email address">
+    }
 </section>
