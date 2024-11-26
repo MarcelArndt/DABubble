@@ -9,8 +9,8 @@
     </div>
     <h3>{{currentMemberProfile.name}}</h3>
     <div class="active-container">
-        <div class="active-point" [ngStyle]="currentMemberProfile.status ? {'background-color': 'green'} : {'background-color': 'red'}"></div>
-        <p>{{ currentMemberProfile.status ? 'Active' : 'Offline' }}</p>
+        <div class="active-point" [ngStyle]="currentMemberProfile.status ? {'background-color': '#92C83E'} : {'background-color': 'gray'}"></div>
+        <p class="active-text" [ngClass]="currentMemberProfile.status ? 'active-text' : 'offline-text'">{{ currentMemberProfile.status ? 'Active' : 'Offline' }}</p>
     </div>
     <div class="email-container">
         <mat-icon>mail</mat-icon>

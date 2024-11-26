@@ -18,7 +18,6 @@ import { DirectMessageService } from '../../../services/directMessage/direct-mes
     MatInputModule,
     FormsModule,
     MatButtonModule,
-    MatDialogContent,
     MatIcon,
     CommonModule,
   ],

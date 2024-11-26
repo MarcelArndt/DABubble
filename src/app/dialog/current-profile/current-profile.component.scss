@@ -9,12 +9,18 @@ section {
     height: auto;
     width: 500px;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 40px;
 
     @media(max-width: 550px) {
     width: 100vw;
     padding: 20px;
     }
+    @media(max-width: 350px) {
+    width: 100vw;
+    padding: 10px;
+    }
+
+
 }
 
 .title-container {
@@ -59,14 +65,23 @@ section {
 h3 {
     @include nunito($fw: 700, $fs: 34px, $c: black);
     margin-bottom: 20px;
+
+    @media(max-width: 420px) {
+        @include nunito($fw: 700, $fs: 28px, $c: black);
+        margin-bottom: 20px;
+    }
 }
 
 .active-container {
     @include dFlex($jc: start);
-    margin-bottom: 30px;
+    margin-bottom: 45px;
 
-    p {
-        @include nunito($fw: 400, $fs: 18px, $c: green);
+    .active-text {
+        @include nunito($fw: 400, $fs: 20px, $c: #92C83E);
+    }
+
+    .offline-text {
+        @include nunito($fw: 400, $fs: 20px, $c: gray);
     }
 }
 
@@ -93,6 +108,12 @@ h3 {
 
 .email-adress {
     @include nunito($fw: 400, $fs: 20px, $c: blue);
+    margin-left: 35px;
+
+    @media(max-width: 420px) {
+        @include nunito($fw: 400, $fs: 18px, $c: blue);
+        margin-left: 0px;
+    }
 }
 
 .message-btn-container {
@@ -105,17 +126,34 @@ h3 {
         border: none;
         background-color: #444DF2;
         border-radius: 30px;
-        padding: 5px 20px;
+        padding: 10px 25px;
         cursor: pointer;
+
+        &:hover {
+            background-color: #797EF3;
+        }
+
+        @media(max-width: 420px) {
+            padding: 5px 20px;
+        }
 
 
         mat-icon {
             @include materialSymbols($c: white, $fs: 24px);
             margin-right: 10px;
+
+            @media(max-width: 420px) {
+                @include materialSymbols($c: white, $fs: 20px);
+                margin-right: 10px;
+            }
         }
 
         p {
             @include nunito($fw: 700, $fs: 24px, $c: white);
+
+            @media(max-width: 420px) {
+                @include nunito($fw: 700, $fs: 20px, $c: white);
+            }
         }
     }
 }

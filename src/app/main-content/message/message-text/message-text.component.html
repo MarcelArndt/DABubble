@@ -7,8 +7,7 @@
                 'text-light': messageService.checkUser(message),
                 'text-dark': !messageService.checkUser(message),
                 'text-hover': isMessageHover && !messageService.checkUser(message)
-            }"
-            [innerHTML]="highlightAtTags(message.message)"></p>
+            }" [innerHTML]="highlightAtTags(message.message)"></p>
 
     <textarea [(ngModel)]="editMessageText" *ngIf="isEdit" #textArea (input)="autoGrow()"></textarea>
 
