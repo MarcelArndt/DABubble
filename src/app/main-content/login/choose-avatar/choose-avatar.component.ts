@@ -9,7 +9,7 @@ import { AuthenticationService } from '../../../../services/authentication/authe
   standalone: true,
   imports: [ MatIcon, CommonModule],
   templateUrl: './choose-avatar.component.html',
-  styleUrl: './choose-avatar.component.scss'
+  styleUrls: ['./choose-avatar.component.scss', 'choose-avatar-profil-picture.scss']
 })
 export class ChooseAvatarComponent {
 

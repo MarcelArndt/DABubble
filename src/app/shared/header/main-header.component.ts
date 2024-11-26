@@ -12,7 +12,7 @@ import { DarkModeService } from '../../../services/darkMode/dark-mode.service';
   standalone: true,
   imports: [MatIconModule, MatButtonModule, MatMenuModule, CommonModule, SearchbarComponent, ProfileNavigationComponent],
   templateUrl: './main-header.component.html',
-  styleUrl: './main-header.component.scss'
+  styleUrls: ['./main-header.component.scss', 'main-header-material-design.scss']
 })
 export class MainHeaderComponent {
   windowWidth: number = window.innerWidth; 

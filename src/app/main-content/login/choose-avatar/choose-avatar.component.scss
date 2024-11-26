@@ -6,44 +6,6 @@
     flex-direction: column;
 }
 
-.currentProfil{
-    @include heightWidth($w: 30%, $h: auto);
-    margin-bottom: 8px;
-    img{
-        object-fit: cover;
-        aspect-ratio: 1/1;
-        width: 100%;
-        border-radius: 50%;
-    }
-
-    @include respond-to-maxWidth(small) {
-        @include heightWidth($w: 50%, $h: auto);
-    }
-}
-
-.default-presets{
-    @include heightWidth($w: 90%, $h: auto);
-    @include dFlex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 8px;
-    div{
-        width: 100%;
-        max-width: 68px;
-        img{
-            width: 100%;
-            object-fit: cover;
-            aspect-ratio: 1/1;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            &:hover{
-                cursor: pointer;
-                border-color: var(--purple-3);
-            }
-        }
-    }
-}
-
 button{
     @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--secundary-bg));
     min-width: clamp(125px, 4vw, 160px);
@@ -54,18 +16,15 @@ button{
     border: 1px solid transparent;
     background-color: var(--text-blue);
     text-wrap: nowrap;
-
     &:hover{
         background-color: var(--purple-2);
         cursor: pointer;
     }
-
     @include respond-to-maxWidth(smallMedium) {
         padding: 6px 12px;
         letter-spacing: 0px;
     }
 }
-
 .specialButton{
     position: relative;
     background-color: transparent;
@@ -77,7 +36,6 @@ button{
         background-color: var(--purple-2);
         cursor: pointer;
     }
-
     .hideInput{
         opacity: 0;
         content: '';
@@ -92,19 +50,6 @@ button{
         }
     }
 }
-
-.previewImage{
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
-    overflow: hidden;
-    img{
-        object-fit: cover;
-        aspect-ratio: 1/1;
-        width: 100%;
-    }
-}
-
 .input-area{
     @include heightWidth($w: 100%, $h: auto);
     @include dFlex ();
@@ -119,7 +64,6 @@ button{
         @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: red);  
     }
 }
-
 
 h1{
     @include heightWidth($w: 55%, $h: auto);
@@ -146,9 +90,7 @@ p{
     @include heightWidth($w: auto, $h: auto);
     @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--text-black));
     text-align: left;
-
 }
-
 
 .string{
     padding: 8px 0px;
@@ -158,9 +100,7 @@ p{
     @include respond-to-maxWidth(medium) {
         text-align: center;
     }
-
 }
-
 
 a{
     @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--purple-2));
@@ -168,7 +108,6 @@ a{
     padding: 8px 16px;
     border: 1px solid  transparent;
     border-radius: 36px;
-
     &:hover{
         cursor: pointer;
         border-color: var(--primary-bg);
@@ -183,7 +122,6 @@ a{
     padding-bottom: 0px;
     display: flex;
     justify-content: flex-end;
-
     @include respond-to-maxWidth(medium) {
         justify-content: center;
         padding-bottom: 32px;
@@ -199,7 +137,6 @@ a{
     text-align: center;
 }
 
-
 .set-left{
     margin-top: 8px;
     position: relative;
@@ -207,7 +144,6 @@ a{
     @include dFlex ($jc: flex-start);
     align-items: center;
     gap: 16px;
-
     @include respond-to-maxWidth(medium) {
         justify-content: center;
         flex-direction: column;
@@ -219,7 +155,6 @@ a{
           z-index: 2;
           padding: 0px 16px;
         }
-
         &::after{
             content: "";
             width: 100%;
@@ -247,11 +182,9 @@ a{
     position: absolute;
     top: calc((100% - 26px - 24px) / 2);
     left: 0px;
-
     mat-icon{
         font-size: clamp(18px, 4vw, 24px);
     }
-
     &:hover{
         color: var(--text-blue);
         border-color: var( --purple-3);

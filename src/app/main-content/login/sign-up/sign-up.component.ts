@@ -22,7 +22,7 @@ import { SignUpService } from '../../../../services/sign-up/sign-up.service';
     CommonModule 
   ],
   templateUrl: './sign-up.component.html',
-  styleUrl: './sign-up.component.scss'
+  styleUrls: ['./sign-up.component.scss','./sign-up-checkbox.scss']
 })
 
 
