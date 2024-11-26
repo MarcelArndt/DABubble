@@ -20,8 +20,7 @@
 
         <div class="button-collection">
             <button [disabled]="!myFormLogin.valid" (click)="signInUser()" >Log In</button>
-            <button class="specialButton" routerLink="/start">Guest-Login</button>
-
+            <button class="specialButton" (click)="guestLogin()">Guest-Login</button>
         </div>
     </form>
 </div>

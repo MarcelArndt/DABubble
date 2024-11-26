@@ -5,7 +5,7 @@
     </div>
 
     <div class="currentProfil"><img [src]="defaultImage ? defaultImage : './img/profile-pic/001.svg'"></div>
-    <div class="currentName">Frederik Beck</div>
+    <div class="currentName" [innerHTML]="signUp.fullName"></div>
     <p class="string">Choose your avatar....</p>
     <div class="default-presets">
         <div [ngClass]="{'active': indexNumber === 1}" (click)="selectPicture('./img/profile-pic/001.svg', 1)"><img src="./img/profile-pic/001.svg"></div>

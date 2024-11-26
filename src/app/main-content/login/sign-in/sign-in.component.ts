@@ -63,6 +63,12 @@ export class SignInComponent {
       this.router.navigate(['start']);
     }
   }
+
+  async guestLogin(){
+    this.fillValues();
+    this.auth.signInUser('guest@example.de', '9867534210');
+  }
+
   async googleSignIn(){
     this.signUp.isGoogleAcc = true;
     signInWithPopup(this.auth.auth, this.signUp.googleProvider)

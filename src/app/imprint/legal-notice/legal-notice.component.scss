@@ -1,0 +1,33 @@
+@import '../../../mixin.scss';
+
+.impressum{
+    width: 100%;
+    padding: 48px 16px 48px 16px;
+    @include figtree($fw: 500, $fs: 18px, $c: var(--text-black));
+    @include respond-to-maxWidth(medium) {
+        text-align: center;
+        padding: 48px 0px 48px 0px;
+    }
+}
+
+h1{
+    @include figtree($fw: 500, $fs: clamp(46px, 4vw, 62px), $c: var(--text-blue));
+    padding-bottom: 12px;
+    @include respond-to-maxWidth(medium) {
+        text-align: center;
+    }
+}
+
+a{
+    @include figtree($fw: 400, $fs: clamp(16px,4vw,18px), $c: var(--text-blue)) ;
+    color:var(--text-blue) !important;
+    text-wrap: nowrap;
+    &:hover {
+        cursor: pointer;
+        color: var(--purple-2) !important;
+    }
+}
+
+strong{
+    @include figtree($fw:400, $fs: 24px, $c: var(--text-blue));
+}
