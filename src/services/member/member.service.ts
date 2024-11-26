@@ -68,10 +68,10 @@ export class MemberService {
 
   async allMembersInChannel(): Promise<Member[]> {
     const membersId: string[] = this.authenticationService.currentChannelData?.membersId ?? [];
-    if (membersId.length === 0) {
-      console.warn('No members found');
-      return [];
-    }
+    // if (membersId.length === 0) {
+    //   console.warn('No members found');
+    //   return [];
+    // }
     const memberPromises = membersId.map(id => this.search(id));
     const members = await Promise.all(memberPromises);
     this.allChannelMembers = members.filter(member => member !== null) as Member[];

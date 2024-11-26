@@ -91,7 +91,6 @@ export class SearchbarComponent {
   }
   
   
-
   onDropdownItemClick(index: number) {
     this.activeDropdownIndex = index;
     this.selectDropdownItem(); // Setzt die Logik fort, um das richtige Element auszuwählen
