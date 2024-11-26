@@ -10,7 +10,6 @@
     width: 100%;
     max-width: 1920px;
     @include dFlex;
-
 }
 
 .inner-content-wrapper{
@@ -18,7 +17,7 @@
     border: 24px solid var(--secundary-bg);
     border-radius: 24px;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     @include dFlex ($jc: center, $ai: start);
     flex-direction: column;
     position: relative;
@@ -72,6 +71,7 @@
         @include heightWidth($w: 100%, $h: 100%);
         justify-content: start;
     }
+
 }
 
 .step-back-button{
