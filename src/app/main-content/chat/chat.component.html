@@ -3,7 +3,7 @@
 
     <div class="main-message-container" #messageContainer (scroll)="onScroll()">
 
-        @if (!messageService.isWriteAMessage) {
+        @if (!messageService.isWriteAMessage && !messageService.isSearchForMessages) {
         <div *ngIf="!directMessageService.isDirectMessage" class="mesage-container">
             <ng-container *ngIf="isLoading; else messageList">
                 <div class="loader">Laden...</div>
@@ -57,8 +57,29 @@
             </div>
 
         </div>
-        } @else {
+        } @else if (messageService.isWriteAMessage && !messageService.isSearchForMessages){
 
+        } @else if (messageService.isSearchForMessages){
+            <div *ngIf="!directMessageService.isDirectMessage" class="mesage-container">
+                <ng-container *ngIf="isLoading; else messageList">
+                    <div class="loader">Laden...</div>
+                </ng-container>
+                <ng-template #messageList>
+                    <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i">
+                    </app-message>
+                </ng-template>
+            </div>
+    
+            <div *ngIf="directMessageService.isDirectMessage" class="direct-message-container">
+                <ng-container *ngIf="isLoading; else messageList">
+                    <div class="loader">Laden...</div>
+                </ng-container>
+                <ng-template #messageList>
+                    <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg"
+                        [index]="i">
+                    </app-message>
+                </ng-template>
+            </div>
         }
 
     </div>

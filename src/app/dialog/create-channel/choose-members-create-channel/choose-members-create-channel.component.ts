@@ -150,13 +150,14 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
 
   async createChannel() {
-    if (this.selectAllPeople && this.selectedMembers.length > 0) {
+    if (this.selectAllPeople) {
       this.selectedMembers = [];
       this.channel.isPublic = true;
     } else if (!this.selectAllPeople) {
       this.addSelectedMembers();
       this.channel.isPublic = false;
       this.channel.membersId.push(this.authenticationService.getCurrentUserUid());
+      await this.channelService.addChannelIdToCurrentUser(this.channel.id);
       await this.channelService.addChannelIdToMembers(this.channel.membersId, this.channel.id);
     }
     await this.channelService.addChannelToFirebase(this.channel);

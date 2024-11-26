@@ -23,6 +23,7 @@ export interface Message {
   name: string,
   time: string,
   message: string,
+  timestamp: number,
   profileImage: string,
   createdAt: string,
   reactions: {

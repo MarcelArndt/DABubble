@@ -4,6 +4,8 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QuerySnapshot, setDoc, updateDoc } from '@firebase/firestore';
 import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
+import { MatDialog } from '@angular/material/dialog';
+import { CurrentProfileComponent } from '../../app/dialog/current-profile/current-profile.component';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +14,25 @@ export class MemberService {
   allChannelMembers: Member[] = [];
   allMembersNames: any = []
   currentProfileMember: any = {};
+  readonly dialog = inject(MatDialog);
 
 
   constructor(private authenticationService: AuthenticationService) {
+  }
+
+
+  async openProfileUser(id: string) {
+    this.currentProfileMember = await this.search(id);
+    this.openDialog();
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CurrentProfileComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+      }
+    });
   }
 
 
@@ -168,12 +186,6 @@ export class MemberService {
     });
   }
 
-  async getProfilMember(id: string) {
-    const docRef = doc(this.authenticationService.getReference(), "member", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      this.currentProfileMember = docSnap.data();
-    }
-  }
+
 
 }

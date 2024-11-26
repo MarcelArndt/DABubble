@@ -22,29 +22,10 @@ import { CurrentProfileComponent } from '../../../dialog/current-profile/current
 })
 export class MessageNameComponent {
   @Input() message: any;
-  currentProil: any = {};
-
-  readonly dialog = inject(MatDialog);
 
   constructor(
     public messageService: MessagesService,
-    public auth: AuthenticationService,
     public memberService: MemberService
   ) { }
-
-  async openProfileUser(id: string) {
-    await this.memberService.getProfilMember(id);
-    this.currentProil = this.memberService.currentProfileMember
-    this.openDialog();
-  }
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(CurrentProfileComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-      }
-    });
-  }
 
 }

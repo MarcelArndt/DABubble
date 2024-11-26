@@ -1,7 +1,7 @@
 
 <div class="main-wrapper">
     <div class="content-wrapper">
-    <app-main-header (backToDevSpaceEvent)="this.devSpaceAsTopLayer = true; this.devSpace.openNavBar()"></app-main-header>
+    <app-main-header (backToDevSpaceEvent)="this.devSpaceAsTopLayer = true; this.mainContentService.openNavBar()"></app-main-header>
     <div class="main-content">
         <app-devspace 
             #devSpace
@@ -15,13 +15,13 @@
                 'focus-app': chatAsTopLayer, 
                 'hidden': threadAsTopLayer
                 }"
-                (click)="this.devSpace.closeNavBar()">
+                (click)="this.mainContentService.closeNavBar()">
             </app-chat>
             <app-thread  [ngClass]="{
                 'focus-app-thread': threadAsTopLayer, 
                 'visible': threadIsOpen,
                 }"
-                (click)="this.devSpace.closeNavBar()">
+                (click)="this.mainContentService.closeNavBar()">
             </app-thread>
         </div>
     </div>

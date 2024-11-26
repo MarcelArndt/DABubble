@@ -9,6 +9,7 @@ import { Channel } from '../../../../classes/channel.class';
 import { Member, Message } from '../../../../interface/message';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, firstValueFrom, Observable, of, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { CurrentProfileComponent } from '../../../dialog/current-profile/current-profile.component';
 
 @Component({
   selector: 'app-searchbar',
@@ -42,7 +43,7 @@ export class SearchbarComponent {
   constructor(
     private renderer: Renderer2, 
     private elRef: ElementRef,
-    private memberService: MemberService,
+    public memberService: MemberService,
     private authenticationService: AuthenticationService,
     private channelService: ChannelService,
     private messageService: MessagesService
@@ -126,13 +127,14 @@ export class SearchbarComponent {
     this.searchQuery = query.trim();
     this.searchChanges$.next(this.searchQuery);
     this.displayHints = !this.searchQuery.trim(); 
-    this.toggleHintsBasedOnInput(this.searchQuery); // Überwacht den Wert des Inputfelds
+    this.toggleHintsBasedOnInput(query);
   }
   
 
   toggleHintsBasedOnInput(query: string) {
     if (query === '') {
-      // Wenn das Inputfeld leer ist, zeige die Hinweise an
+      this.messageService.readChannel();
+      this.messageService.isSearchForMessages = false;
       this.displayHints = true;
     } else {
       // Wenn das Inputfeld nicht leer ist, blende die Hinweise aus
@@ -140,28 +142,44 @@ export class SearchbarComponent {
     }
   }
   
-  async processSearchQuery(
-    query: string, 
-    members$: Observable<Member[]>, 
-    channels$: Observable<Channel[]>
-  ) {
-    this.members = [];
-    this.channels = [];
-    this.messages = [];
+  
+async processSearchQuery(
+  query: string, 
+  members$: Observable<Member[]>, 
+  channels$: Observable<Channel[]>
+) {
+  this.members = [];
+  this.channels = [];
+  this.messages = [];
 
-    if (query.startsWith('@')) {
-      const members = await firstValueFrom(members$);
-      this.members = members.filter(member => member.name.toLowerCase().includes(query.slice(1).toLowerCase()));
-    } else if (query.startsWith('#')) {
-      const channels = await firstValueFrom(channels$);
-      this.channels = channels.filter(channel => channel.title.toLowerCase().includes(query.slice(1).toLowerCase()));
-    } 
-    // else if (this.previousSearchChannel && query.includes(' ')) {
-    //   // Wir könnten hier Nachrichten laden, wenn die vorherige Suche einen Channel beinhaltete.
-    //   const messages = await this.messageService.getMessagesForChannel(this.previousSearchChannel.id);
-    //   this.messages = messages.filter(message => message.message.toLowerCase().includes(query.toLowerCase()));
-    // }
+  if (query.startsWith('@')) {
+    // Suche nach Mitgliedern
+    const members = await firstValueFrom(members$);
+    this.members = members.filter(member => 
+    member.name.toLowerCase().includes(query.slice(1).toLowerCase())
+    );
+  }  else if (query.startsWith('#')) {
+    // Suche nach Channels
+    const channels = await firstValueFrom(channels$);
+    this.channels = channels.filter(channel => 
+      channel.title.toLowerCase().includes(query.slice(1).toLowerCase()) &&
+      (!this.previousSearchChannel || channel.id !== this.previousSearchChannel.id) // Aktuellen Channel ausschließen
+    );
   }
+  if (this.previousSearchChannel && query.includes(' ')) {
+    const channelTitle = this.previousSearchChannel.title.toLowerCase(); 
+    const searchQuery = query.toLowerCase().replace(`#${channelTitle}`, '').trim(); 
+    const allMessages = await this.messageService.loadInitialMessagesByChannelId(this.previousSearchChannel.id);
+    this.messages = allMessages.filter((message: Message) => 
+      message.message.toLowerCase().includes(searchQuery)
+    );
+    this.messageService.isSearchForMessages = true;
+    this.messageService.messages = this.messages;
+    this.messageService.searchQuery = searchQuery; 
+    this.messageService.messagesUpdated.next();
+  }
+}
+
 
   showHints() {
     if (!this.searchQuery.trim()) {
@@ -215,9 +233,12 @@ export class SearchbarComponent {
       if (this.activeDropdownIndex < this.members.length) {
         selectedItem = this.members[this.activeDropdownIndex];
         itemType = 'member';
-      } else if (this.activeDropdownIndex < this.members.length + this.channels.length) {
-        selectedItem = this.channels[this.activeDropdownIndex - this.members.length];
+      } else if (this.activeDropdownIndex < this.channels.length) {
+        selectedItem = this.channels[this.activeDropdownIndex];
         itemType = 'channel';
+      } else if (this.activeDropdownIndex < this.messages.length) {
+        selectedItem = this.messages[this.activeDropdownIndex];
+        itemType = 'message';
       }
       if (selectedItem) {
         this.handleSelectItem(selectedItem, itemType);
@@ -227,39 +248,29 @@ export class SearchbarComponent {
   }
   
 
-  // selectDropdownItem() {
-  //   if (this.activeDropdownIndex < 0) return;
-  //   let selectedItem: Member | Channel | Message | null = null;
-  //   let itemType: string | null = null;
-  //   if (this.activeDropdownIndex < this.members.length) {
-  //     selectedItem = this.members[this.activeDropdownIndex];
-  //     itemType = 'member';
-  //   } else if (this.activeDropdownIndex < this.members.length + this.channels.length) {
-  //     selectedItem = this.channels[this.activeDropdownIndex - this.members.length];
-  //     itemType = 'channel';
-  //   } else {
-  //     selectedItem = this.messages[this.activeDropdownIndex - this.members.length - this.channels.length];
-  //     itemType = 'message';
-  //   }
-  //   if (selectedItem) {
-  //     this.handleSelectItem(selectedItem, itemType);
-  //     this.activeDropdownIndex = -1;
-  //   }
-  // }
-
   handleSelectItem(selectedItem: Member | Channel | Message, itemType: string) {
     if (itemType === 'channel') {
+      // Kanal auswählen
       this.previousSearchChannel = selectedItem as Channel;
       this.searchQuery = `#${(selectedItem as Channel).title} `;
+      this.channelService.currentChannelId = (selectedItem as Channel).id;
+      this.messageService.readChannel(); // Lädt den ausgewählten Kanal
     } else if (itemType === 'member') {
+      // Mitglied auswählen
       this.searchQuery = `@${(selectedItem as Member).name} `;
-    } 
+      this.memberService.openProfileUser((selectedItem as Member).id); // Öffnet das Profil
+    } if (itemType === 'message') {
+      const selectedMessage = selectedItem as Message;
+      this.searchQuery = `#${(this.previousSearchChannel as Channel).title} ${selectedMessage.message}`; // Setzt die Nachricht als Suchabfrage
+    }
+    // Dropdown und Daten zurücksetzen
     this.members = [];
     this.channels = [];
     this.messages = [];
     this.showDropdown = false;
     this.displayHints = false;
   }
+  
   
 
   setActiveDropdownIndex(index: number) {
@@ -273,5 +284,5 @@ export class SearchbarComponent {
   }
   
   
-  
+
 }

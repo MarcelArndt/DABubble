@@ -94,7 +94,9 @@ export class MessageOptionsComponent {
   }
 
   checkWindowAndOpenThread() {
-    window.innerWidth <= 1285 ? this.mainContentService.openThreadForMobile() : this.mainContentService.openThread();
+    if (window.innerWidth <= 1285) {
+      this.mainContentService.openThreadForMobile();
+    }
   }
 
   openEditMenu() {

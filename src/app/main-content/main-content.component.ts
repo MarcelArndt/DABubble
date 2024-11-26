@@ -57,5 +57,5 @@ export class MainContentComponent {
     this.messageService.readChannel();
   }
 
-
+  
 }

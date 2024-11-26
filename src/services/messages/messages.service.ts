@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { addDoc, arrayRemove, arrayUnion, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
+import { addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
 import { MemberService } from '../member/member.service';
 import { ChannelService } from '../channel/channel.service';
 import { firstValueFrom, Subject } from 'rxjs';
 import { ReferencesService } from '../references/references.service';
 import { StorageService } from '../storage/storage.service';
+import { Channel } from '../../classes/channel.class';
+import { MainContentService } from '../main-content/main-content.service';
+import { DirectMessageService } from '../directMessage/direct-message.service';
+import { Message } from '../../interface/message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessagesService {
-  messages: any = [];
+  messages: Message[] = [];
   messagesUpdated = new Subject<void>();
   editMessageText: string = '';
   isWriteAMessage: boolean = false;
+  isSearchForMessages: boolean = false;
+  searchQuery: string = '';
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -22,6 +28,8 @@ export class MessagesService {
     private channelService: ChannelService,
     private referencesService: ReferencesService,
     private storageService: StorageService,
+    private mainContentService: MainContentService,
+    private directMessageService: DirectMessageService
   ) { }
 
 
@@ -33,12 +41,36 @@ export class MessagesService {
       this.authenticationService.currentChannelData = channel.data();
       await this.memberService.allMembersInChannel();
     }
+    this.mainContentService.closeNavBar();
   }
+
+  async checkWindowAndOpenChannel(channel: Channel) {
+    this.isWriteAMessage = false;
+    this.mainContentService.hideThread();
+    this.directMessageService.isDirectMessage = false;
+    this.channelService.currentChannelId = channel.id;
+    if (window.innerWidth <= 1285 ) {
+      this.mainContentService.openChannelForMobile()
+    };
+    await this.readChannel();
+  }
+
+  async loadInitialMessagesByChannelId(channelId: string) {
+    const channelRef = doc(this.authenticationService.getReference(), "channels", channelId);
+    const messagesCollection = collection(channelRef, "messages");
+    const querySnapshot = await getDocs(messagesCollection);
+    this.messages = querySnapshot.docs
+      .map(doc => doc.data() as Message) // Typkonvertierung
+      .sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
+    this.messagesUpdated.next();
+    return this.messages;
+  }
+  
 
   async loadInitialMessages(channelId: string) {
     const querySnapshot = await getDocs(this.referencesService.getCollectionMessage());
     this.messages = querySnapshot.docs
-      .map(doc => doc.data())
+      .map(doc => doc.data() as Message)
       .sort((a, b) => Number(a['timestamp']) - Number(b['timestamp']));
     this.messagesUpdated.next();
   }
@@ -46,7 +78,7 @@ export class MessagesService {
   listenToMessages(channelId: string) {
     const unsub = onSnapshot(this.referencesService.getCollectionMessage(), (querySnapshot) => {
       const loadedMessages = querySnapshot.docs
-        .map(doc => doc.data())
+        .map(doc => doc.data() as Message)
         .sort((a, b) => a['timestamp'] - b['timestamp']);
       if (loadedMessages.length > 0) {
         this.messages = loadedMessages;

@@ -180,8 +180,6 @@ export class ChannelService {
       description: channel.description,
       isPublic: channel.isPublic,
     });
-    await this.addChannelIdToCurrentUser(channel.id);
-    await this.addChannelIdToMembers(channel.membersId, channel.id);
   }
 
 
@@ -203,7 +201,6 @@ export class ChannelService {
     if (!userUid) {
       throw new Error("User UID is invalid or not found");
     }
-  
     const userDocRef = doc(this.authenticationService.getReference(), "member", userUid);
     await updateDoc(userDocRef, {
       channelIds: arrayUnion(docRefid),

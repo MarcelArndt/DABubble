@@ -78,7 +78,6 @@ import { combineLatest } from 'rxjs';
   ]
 })
 export class DevspaceComponent implements OnInit {
-  navBarIsClosed: boolean = true;
   contactsAreVisible: boolean = true;
   channelsAreVisible: boolean = true;
   readonly dialog = inject(MatDialog);
@@ -119,7 +118,7 @@ export class DevspaceComponent implements OnInit {
     public messageService: MessagesService,
     private memberService: MemberService,
     private channelService: ChannelService,
-    private mainContentService: MainContentService,
+    public mainContentService: MainContentService,
     private directMessageService: DirectMessageService,
     private authenticationService: AuthenticationService,
     private renderer: Renderer2,
@@ -128,9 +127,9 @@ export class DevspaceComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.initializeMemberAndChannels(); // Initialisiere Mitglieder und priorisiere aktuellen Benutzer
-    this.initializePublicChannels();   // Lade öffentliche Kanäle und exklusive Kanäle
-    this.authenticationService.observerUser(); // Beobachte den aktuellen Benutzer
+    this.initializeMemberAndChannels(); 
+    this.initializePublicChannels(); 
+    this.authenticationService.observerUser();
   }
 
   initializeMemberAndChannels(): void {
@@ -211,21 +210,7 @@ export class DevspaceComponent implements OnInit {
   
   
   
-  toggleNavBar() {
-    this.navBarIsClosed = !this.navBarIsClosed;
-  }
 
-  closeNavBar() {
-    if (window.innerWidth <= 1250) {
-      this.navBarIsClosed = false;
-    }
-  }
-
-  openNavBar() {
-    if (window.innerWidth <= 450) {
-      this.navBarIsClosed = true;
-    }
-  }
 
   dropChannels() {
     this.channelsAreVisible = !this.channelsAreVisible;
@@ -239,15 +224,6 @@ export class DevspaceComponent implements OnInit {
     this.memberService.setCurrentMemberData()
     const dialogRef = this.dialog.open(CreateChannelComponent);
     dialogRef.afterClosed().subscribe();
-  }
-
-  async checkWindowAndOpenChannel(channel: any) {
-    this.messageService.isWriteAMessage = false;
-    this.mainContentService.hideThread();
-    window.innerWidth <= 1285 ? this.mainContentService.openChannelForMobile() : this.mainContentService.openChannel();
-    this.directMessageService.isDirectMessage = false;
-    this.channelService.currentChannelId = channel.id;
-    await this.messageService.readChannel();
   }
 
   openDirectMessage(memberId: any) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,18 +7,40 @@ import { BehaviorSubject } from 'rxjs';
 export class MainContentService {
 
     // Use BehaviorSubject for each layer toggle to hold the current state and allow subscriptions
+    private navBarIsClosedSubject = new BehaviorSubject<boolean>(false);
+
     private devSpaceAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private chatAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private threadAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private threadIsOpen$ = new BehaviorSubject<boolean>(false);
   
     // Expose Observables for components to subscribe
+    navBarIsClosed$: Observable<boolean> = this.navBarIsClosedSubject.asObservable();
+
     devSpaceAsTopLayerObs = this.devSpaceAsTopLayer$.asObservable();
     chatAsTopLayerObs = this.chatAsTopLayer$.asObservable();
     threadAsTopLayerObs = this.threadAsTopLayer$.asObservable();
     threadIsOpen = this.threadIsOpen$.asObservable();
 
+
   constructor() {
+  }
+
+  toggleNavBar() {
+    const currentState = this.navBarIsClosedSubject.value; // aktuellen Zustand abrufen
+    this.navBarIsClosedSubject.next(!currentState);
+  }
+
+  closeNavBar() {
+    // if (window.innerWidth <= 1250) {
+      this.navBarIsClosedSubject.next(false);
+    // }
+  }
+
+  openNavBar() {
+    if (window.innerWidth <= 450) {
+      this.navBarIsClosedSubject.next(true);
+    }
   }
 
   openChannelForMobile(){
@@ -58,11 +80,5 @@ export class MainContentService {
     this.threadIsOpen$.next(false);
   }
 
-  openChannel(){
-    // ... firebase
-  }
 
-  openThread(){
-    // ... firebase
-  }
 }
