@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, verifyPasswordResetCode, confirmPasswordReset, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User} from '@angular/fire/auth';
+import { Auth, verifyPasswordResetCode, confirmPasswordReset, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User } from '@angular/fire/auth';
 import { doc, getFirestore, setDoc } from '@angular/fire/firestore';
 import { RouterModule, Router } from '@angular/router';
 import { Member } from '../../interface/message';
 import { getStorage } from '@angular/fire/storage';
-import { onSnapshot } from '@firebase/firestore';
+import { onSnapshot, updateDoc } from '@firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { Channel } from '../../classes/channel.class';
 
@@ -16,11 +16,11 @@ export class AuthenticationService {
   private provider;
   public storage;
   memberId: string = '';
-  oobCode:string = '';
+  oobCode: string = '';
   enableAnimation = true;
-  infoBannerIsSubmit:boolean = false;
-  infoBannertext:string = '';
-  infoBannerIcon:string = '';
+  infoBannerIsSubmit: boolean = false;
+  infoBannertext: string = '';
+  infoBannerIcon: string = '';
   currentMember!: Member;
   currentChannelData: any = {};
   auth = inject(Auth);
@@ -33,12 +33,10 @@ export class AuthenticationService {
   ) {
     this.provider = new GoogleAuthProvider();
     this.storage = getStorage();
-    this.observerUser();
+    this.observerUser(); 
   }
-  // Authentication 
-  
 
-  enableInfoBanner(text:string, icon:string = '', time:number = 3000,){
+  enableInfoBanner(text: string, icon: string = '', time: number = 3000,) {
     this.infoBannerIcon = icon;
     this.infoBannertext = text;
     this.infoBannerIsSubmit = true;
@@ -47,20 +45,28 @@ export class AuthenticationService {
     }, 1750)
   }
 
-  signInUser(email: string, password: string) {
+   signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         this.loginFailed = false;
         this.enableInfoBanner('Sign-In Succesfully');
-      }).then(() => {        
+      }).then(() => {
         setTimeout(() => {
-        this.router.navigate(['start'])
-      }, 1750);
-    })
+          this.router.navigate(['start']);
+           this.updateLoginStatus(true);
+        }, 1750);
+      })
       .catch((error) => {
         this.loginFailed = true;
       });
+  }
+
+  async updateLoginStatus(boolean: boolean) {
+    const washingtonRef = doc(this.getReference(), "member", this.getCurrentUserUid());
+    await updateDoc(washingtonRef, {
+      status: boolean
+    });
   }
 
   initializeCurrentMember(): void {
@@ -112,13 +118,13 @@ export class AuthenticationService {
               };
               // console.log("Aktualisierte Member-Daten:", member);
               this.currentMemberSubject.next(member);
-            } 
-          } 
-        ); 
-      } 
+            }
+          }
+        );
+      }
     });
   }
-  
+
   async updateAuthProfileData(currentMember: Member): Promise<void> {
     try {
       const user = this.auth.currentUser;
@@ -135,7 +141,8 @@ export class AuthenticationService {
     }
   }
 
-  signOutUser() {
+ async signOutUser() {
+   await this.updateLoginStatus(false);
     signOut(this.auth).then(() => {
       this.router.navigate(['login']);
     }).catch((error) => {
@@ -159,19 +166,33 @@ export class AuthenticationService {
 
   getReference() {
     return getFirestore();
-  }  
-  
-  // Lost Password
-  async resetPassword(email:string){
-    sendPasswordResetEmail(this.auth, email)
-    .then(() => {
-    })
-    .catch((error) => {
-      console.error(error);
+  }
+
+  async setupOnDisconnect(): Promise<void> {
+    const firestore = this.getReference();
+    const userDocRef = doc(firestore, `member/${this.getCurrentUserUid()}`);
+    window.addEventListener('beforeunload', async () => {
+      try {
+        await setDoc(userDocRef, { status: false });
+        console.log('Disconnected and status set to false');
+      } catch (err) {
+        console.error('Failed to set status on disconnect:', err);
+      }
     });
   }
 
-  async saveNewPassword(newPassword:string = 'Test-Example-003'){
+
+  // Lost Password
+  async resetPassword(email: string) {
+    sendPasswordResetEmail(this.auth, email)
+      .then(() => {
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  async saveNewPassword(newPassword: string = 'Test-Example-003') {
     const email = await verifyPasswordResetCode(this.auth, this.oobCode);
     await confirmPasswordReset(this.auth, this.oobCode, newPassword);
     this.oobCode = '';

@@ -30,7 +30,7 @@
     <div class="direct-message-header" *ngIf="directMessageService.isDirectMessage">
         <div>
             <img src="{{directMessageService.directMessageUserData.imageUrl}}">
-            <div class="online-status"></div>
+            <div class="online-status" [ngStyle]="directMessageService.directMessageUserData.status ? {'background-color': '#92C83E'} : {'background-color': 'gray'}"></div>
         </div>
         <h2>{{directMessageService.directMessageUserData.name}}</h2>
     </div>
