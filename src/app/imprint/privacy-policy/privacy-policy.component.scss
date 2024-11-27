@@ -2,7 +2,7 @@
 
 .privacy-policy{
     width: 100%;
-    padding: 48px 16px 48px 16px;
+    padding: 48px 0px 48px 0x;
     @include figtree($fw: 500, $fs: 18px, $c: var(--text-black));
     @include respond-to-maxWidth(medium) {
         text-align: center;

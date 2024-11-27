@@ -2,7 +2,6 @@
 
 .impressum{
     width: 100%;
-    padding: 48px 16px 48px 16px;
     @include figtree($fw: 500, $fs: 18px, $c: var(--text-black));
     @include respond-to-maxWidth(medium) {
         text-align: center;
@@ -33,10 +32,7 @@ strong{
 }
 
 .info-card{
-    padding: 24px 0px;
-    margin: 12px 0px;
     min-height: 335px;
-    margin-left: -24px;
     width: 30%;
     height: auto;
     background-color: var(--primary-bg);
@@ -83,8 +79,7 @@ strong{
 }
 
 .card-holder-wrapper{
-    margin-left: -24px;
-    padding: 24px;
+    margin-bottom: 16px;
     width: 100%;
     @include dFlex($jc: center, $ai: center);
     gap: 5%;

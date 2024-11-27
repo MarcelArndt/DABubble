@@ -8,13 +8,18 @@ export class LightboxService {
   constructor(){}
 
   public lightboxIsOpen:boolean = false;
+  public setAnimationOff:boolean = false;
 
   openLightBox(){
     if(!this.lightboxIsOpen) this.lightboxIsOpen = true;
   }
 
   closeLightBox(){
-    if(this.lightboxIsOpen) this.lightboxIsOpen = false;
+    this.setAnimationOff = true;
+    setTimeout(() => {
+      if(this.lightboxIsOpen) this.lightboxIsOpen = false;
+      this.setAnimationOff = false;
+    }, 750)
   }
-
+  
 }
