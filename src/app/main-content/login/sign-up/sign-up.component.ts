@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink, RouterModule } from '@angular/router';
@@ -9,7 +9,8 @@ import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SignUpService } from '../../../../services/sign-up/sign-up.service';
 import { LightboxService } from '../../../../services/lightbox/lightbox.service';
-import { PrivacyPolicyComponent } from '../../../imprint/privacy-policy/privacy-policy.component';
+import { NavigationServiceService } from '../../../../services/NavigationService/navigation-service.service';
+import { Page } from '../../../../interface/pages';
 
 
 
@@ -33,7 +34,7 @@ export class SignUpComponent {
 
   myForm: FormGroup
 
-  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signUp: SignUpService , private router: Router, public lightbox: LightboxService) {
+  constructor(private auth: AuthenticationService, private fb: FormBuilder, public signUp: SignUpService , private router: Router, public lightbox: LightboxService, public navigation: NavigationServiceService ) {
     this.myForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email], [this.emailAsyncValidator()]],
@@ -47,7 +48,14 @@ export class SignUpComponent {
   email: string = '';
   password: string = '';
 
+  currentPage?:Page;
+  previousPage?:Page;
+  nextPage?:Page;
+
   @Output() eventInChild = new EventEmitter();
+  @Input() navigateToType!: (type: string) => void;
+  @Input() targetType!: string;
+
 
   sendClickToParentPageCounter(index: number = 0) {
     this.eventInChild.emit(index);
@@ -84,12 +92,10 @@ export class SignUpComponent {
     this.lightbox.openLightBox();
   }
 
-
   async onSubmit() {
     if (this.myForm.valid) {
       this.fillValues();
-      this.sendClickToParentPageCounter(2);
-  
+      this.navigation.navToPage(2);
       this.myForm.reset();
       Object.keys(this.myForm.controls).forEach(key => {
         const control = this.myForm.get(key);

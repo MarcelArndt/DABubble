@@ -1,10 +1,11 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { SignUpService } from '../../../../services/sign-up/sign-up.service';
 import { GoogleAuthProvider, signInWithPopup} from '@angular/fire/auth';
+import { NavigationServiceService } from '../../../../services/NavigationService/navigation-service.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class SignInComponent {
   email: string = '';
   password: string = '';
 
-  constructor(public auth: AuthenticationService, private router: Router, public signUp: SignUpService ) {}
+  constructor(public auth: AuthenticationService, private router: Router, public signUp: SignUpService, public navigation: NavigationServiceService ) {}
 
   myFormLogin = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -31,6 +32,14 @@ export class SignInComponent {
   });
 
   @Output() eventInSignIn = new EventEmitter();
+  @Input() navigateToType!: (type: string) => void;
+  @Input() targetType!: string;
+
+  navigate() {
+    if (this.targetType) {
+      this.navigateToType(this.targetType);
+    }
+  }
 
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {

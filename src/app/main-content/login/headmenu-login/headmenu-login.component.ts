@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-
+import { NavigationServiceService } from '../../../../services/NavigationService/navigation-service.service';
 
 @Component({
   selector: 'app-headmenu-login',
@@ -9,10 +9,6 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrl: './headmenu-login.component.scss'
 })
 export class HeadmenuLoginComponent {
-
-  @Output() eventInHead = new EventEmitter();
-  sendClickToParentPageCounter(index:number = 0){
-    this.eventInHead.emit(index);
-  }
+  constructor(public navigation: NavigationServiceService){}
 
 }

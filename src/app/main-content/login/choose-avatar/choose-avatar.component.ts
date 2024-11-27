@@ -3,6 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { SignUpService } from '../../../../services/sign-up/sign-up.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { NavigationServiceService } from '../../../../services/NavigationService/navigation-service.service';
 
 @Component({
   selector: 'app-choose-avatar',
@@ -13,12 +14,8 @@ import { AuthenticationService } from '../../../../services/authentication/authe
 })
 export class ChooseAvatarComponent {
 
-  constructor(public signUp: SignUpService, public auth:AuthenticationService, ){}
+  constructor(public signUp: SignUpService, public auth:AuthenticationService, public navigation: NavigationServiceService ){}
 
-  @Output() eventInProfil = new EventEmitter();
-  sendClickToParentPageCounter(index:number = 0){
-    this.eventInProfil.emit(index);
-  }
   previewUrl: string | ArrayBuffer | null = null;
   defaultImage : string | null = null;
   fileError: string | null = null;
@@ -82,7 +79,7 @@ export class ChooseAvatarComponent {
     this.signUp.image = this.selectedImage as File;
     this.signUp.signUpUser();
     this.auth.enableInfoBanner('Account is created');
-    this.sendClickToParentPageCounter(0);
+    this.navigation.navToPage(0);
   }
 
 }

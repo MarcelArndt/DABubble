@@ -8,14 +8,13 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { CommonModule } from '@angular/common';
 import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
-import { SuccessCreatingAccountComponent } from './success-creating-account/success-creating-account.component';
 import { LostPasswordComponent } from './lost-password/lost-password.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { InfoBannerComponent } from '../../shared/info-banner/info-banner.component';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { DarkModeService } from '../../../services/darkMode/dark-mode.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 import { LightboxService } from '../../../services/lightbox/lightbox.service';
+import { NavigationServiceService } from '../../../services/NavigationService/navigation-service.service';
 
 
 interface Page {
@@ -23,7 +22,6 @@ interface Page {
   type: string,
   subPages?: Page[];
 }
-
 
 @Component({
   selector: 'app-login',
@@ -40,16 +38,16 @@ interface Page {
     SignUpComponent, 
     SignInComponent,
     ChooseAvatarComponent, 
-    SuccessCreatingAccountComponent, 
     LostPasswordComponent, 
-    ResetPasswordComponent,
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss',]
+  styleUrls: ['./login.component.scss', './login-animation.scss']
 })
 
 export class LoginComponent {
-  constructor(public auth: AuthenticationService, public darkmode: DarkModeService, public lightbox: LightboxService  ){}
+  constructor(public auth: AuthenticationService, public darkmode: DarkModeService, public lightbox: LightboxService, private navigation: NavigationServiceService){
+  }
+
   pageNumber:number = 0;
   pageNumberTrashHolder:number = 0;
   isStepForwards = false;
@@ -59,14 +57,6 @@ export class LoginComponent {
     {index: 2, type: 'lostPassword', subPages: [{ index: 2.1, type: 'lostPassword-1'}, { index: 2.2, type: 'lostPassword-2'}]},
   ]
 
-
-  changePageNumber(index:number = 0){
-    if(index != this.pageNumber){
-      this.pageNumberTrashHolder = this.pageNumber;
-      this.pageNumber = index;
-      this.checkforStepDirection();
-    }  
-  } 
 
   setAnimationToken(){
     let token = sessionStorage.getItem("dabubbleStartAnimation");
@@ -83,47 +73,25 @@ export class LoginComponent {
     this.setAnimationToken();
   }
   
-
-  checkforStepDirection(){
-    this.isStepForwards =  this.pageNumberTrashHolder < this.pageNumber ? true : false;
-  }
-
-
-  navigateToType(type: string){
-    let nextPageElement = this.findPageByType(type, this.pageMap);
-    console.log(nextPageElement);
-  }
-
-
-// Is going though PageMap -> For Each Element in PageMap it checks the Type of it and it is looking for a Match. If the type the same, it will return the correct object. otherwise it returns undefined
-  findPageByType(type: string, pages: Page[]): Page | undefined {
-    for (let eachPage of this.pageMap){
-      if(eachPage.type == type) return eachPage;
-
-      if(eachPage.subPages){
-        let findInSubPages = this.findPageByType(type, eachPage.subPages);
-        if(findInSubPages) return findInSubPages;
-      }
-
-    }
-    return undefined;
-  }
-
-
-  getClass(index:number = 0){
+  setNavigationAnimationClass(currentHierarchyIndex:number = 0){
     let newClass = 'still-deactive';
-      if(index == this.pageNumber){
-        newClass = this.isStepForwards ? 'active-forwards' : 'active-backwards';
-      }
-      if(index - 1 == this.pageNumber && !this.isStepForwards){
-        newClass = 'deactive-backwards';
-      }
-      if(index + 1 == this.pageNumber && this.isStepForwards){
+    if(this.navigation.isUntouched && currentHierarchyIndex == 0){
+      newClass = 'still-active';
+    }
+    if(!this.navigation.isUntouched){
+      if(currentHierarchyIndex == this.navigation.lastIndex && this.navigation.movingForwards){
         newClass = 'deactive-forwards';
       }
-      if(this.pageNumberTrashHolder - 2 > this.pageNumber && index != this.pageNumber){
-        newClass = 'still-deactive';
+      if(currentHierarchyIndex == this.navigation.nextIndex && this.navigation.movingForwards){
+        newClass = 'active-forwards';
       }
+      if(currentHierarchyIndex == this.navigation.lastIndex && !this.navigation.movingForwards){
+        newClass = 'deactive-backwards';
+      }
+      if(currentHierarchyIndex == this.navigation.nextIndex && !this.navigation.movingForwards){
+        newClass = 'active-backwards';
+      }
+    }
     return newClass;
-}
+  }
 }
