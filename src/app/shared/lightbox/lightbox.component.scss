@@ -35,9 +35,9 @@
     @include heightWidth($w: 100%, $h: 100%);
     max-width: 800px;
     max-height: 85vh;
-    background-color: white;
+    background-color: var(--secundary-bg);
     border-radius: 32px;
-    border: 24px solid white;
+    border: 24px solid var(--secundary-bg);
     transform: translateX(300px);
     opacity: 0;
     animation: slide-in 0.5s ease-in-out forwards;
