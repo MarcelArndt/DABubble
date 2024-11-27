@@ -40,4 +40,14 @@ export class NavigationServiceService {
 
     this.currentNavIndex = hierarchieIndex;
   }
+
+  reset(){
+    this.currentNavIndex = 0;
+    this.lastIndex = 0;
+    this.nextIndex = 0;
+    this.isUntouched = true;
+    this.fadeRightIndex= 0; 
+    this.fadeLeftIndex = 0;
+    this.movingForwards = true;
+  }
 }

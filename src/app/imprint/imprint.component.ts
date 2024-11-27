@@ -3,6 +3,7 @@ import { MatIcon } from '@angular/material/icon';
 import { LegalNoticeComponent } from './legal-notice/legal-notice.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { NavigationServiceService } from '../../services/NavigationService/navigation-service.service';
 
 
 
@@ -14,7 +15,7 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
   styleUrl: './imprint.component.scss'
 })
 export class ImprintComponent {
-  constructor(public router: Router, public route: ActivatedRoute){}
+  constructor(public router: Router, public route: ActivatedRoute, public navigation: NavigationServiceService){}
   currentPage:string = '';
   backToLogin(){
     this.router.navigate(['login']);

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { NavigationServiceService } from '../../../../services/NavigationService/navigation-service.service';
 
 @Component({
   selector: 'app-submenu-login',
@@ -9,12 +10,11 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './submenu-login.component.scss'
 })
 export class SubmenuLoginComponent {
-  constructor(public router: Router){}
-  @Output() eventInSubMenu = new EventEmitter();
-  sendClickToParentPageCounter(index:number = 0){
-    this.eventInSubMenu.emit(index);
-  }
+  constructor(public router: Router, public navigation: NavigationServiceService){}
+
+
   sendTo(nextPage:string = 'privacy-policy'){
+    this.navigation.reset();
     this.router.navigate(['/imprint'], { queryParams: { sendToNextPage: nextPage} });
   }
 }

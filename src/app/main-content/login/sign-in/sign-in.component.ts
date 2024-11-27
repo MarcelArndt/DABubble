@@ -55,6 +55,7 @@ export class SignInComponent {
   }
 
   signInUser() {
+    this.navigation.reset();
     this.fillValues();
     this.auth.signInUser(this.email, this.password);
   }
@@ -75,10 +76,12 @@ export class SignInComponent {
 
   async guestLogin(){
     this.fillValues();
+    this.navigation.reset();
     this.auth.signInUser('guest@example.de', '9867534210');
   }
 
   async googleSignIn(){
+    this.navigation.reset();
     this.signUp.isGoogleAcc = true;
     signInWithPopup(this.auth.auth, this.signUp.googleProvider)
     .then((result) => {
