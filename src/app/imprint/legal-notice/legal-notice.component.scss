@@ -120,6 +120,8 @@ strong{
         min-height: 120px;
         min-width: 120px;
         aspect-ratio: 1/1;
+        padding-top: 24px;
+        padding-bottom: 24px;
     }
 
     @include respond-to-maxWidth(semiMedium) {
