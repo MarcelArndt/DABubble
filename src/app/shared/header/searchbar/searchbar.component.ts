@@ -262,6 +262,7 @@ async processSearchQuery(
     } if (itemType === 'message') {
       const selectedMessage = selectedItem as Message;
       this.searchQuery = `#${(this.previousSearchChannel as Channel).title} ${selectedMessage.message}`; // Setzt die Nachricht als Suchabfrage
+      this.onSearchInput(this.searchQuery);
     }
     // Dropdown und Daten zurücksetzen
     this.members = [];

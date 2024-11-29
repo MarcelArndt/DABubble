@@ -41,7 +41,7 @@ export class MessagesService {
       this.authenticationService.currentChannelData = channel.data();
       await this.memberService.allMembersInChannel();
     }
-    this.mainContentService.closeNavBar();
+    // this.mainContentService.closeNavBar();
   }
 
   async checkWindowAndOpenChannel(channel: Channel) {

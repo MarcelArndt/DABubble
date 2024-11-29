@@ -7,9 +7,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class MainContentService {
 
     // Use BehaviorSubject for each layer toggle to hold the current state and allow subscriptions
-    private navBarIsClosedSubject = new BehaviorSubject<boolean>(false);
+    private navBarIsClosedSubject = new BehaviorSubject<boolean>(true);
 
-    private devSpaceAsTopLayer$ = new BehaviorSubject<boolean>(false);
+    private devSpaceAsTopLayer$ = new BehaviorSubject<boolean>(true);
     private chatAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private threadAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private threadIsOpen$ = new BehaviorSubject<boolean>(false);
@@ -32,9 +32,7 @@ export class MainContentService {
   }
 
   closeNavBar() {
-    // if (window.innerWidth <= 1250) {
-      this.navBarIsClosedSubject.next(false);
-    // }
+    this.navBarIsClosedSubject.next(false);
   }
 
   openNavBar() {
@@ -45,12 +43,10 @@ export class MainContentService {
 
   openChannelForMobile(){
     this.makeChatAsTopLayer();
-    // this.openChannel();
   }
 
   openThreadForMobile(){
     this.makeThreadAsTopLayer();
-    // this.openChannel();
   }
 
   // Methods to update each layer’s state
