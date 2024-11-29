@@ -41,6 +41,11 @@
     display: none;
 }
 
+.still-active{
+    width: 100%;
+    @include dFlex;
+}
+
 
 
 @keyframes fade-out-forwards{

@@ -21,5 +21,9 @@ export class LightboxService {
       this.setAnimationOff = false;
     }, 750)
   }
+
+  stopPropagation(event: MouseEvent): void {
+    event.stopPropagation();
+  }
   
 }
