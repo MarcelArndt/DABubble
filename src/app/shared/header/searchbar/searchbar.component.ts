@@ -212,7 +212,6 @@ async processSearchQuery(
     // Wenn der aktive Index in den Hinweisen liegt
     if ((this.activeDropdownIndex < this.allHints.length) && this.displayHints) {
       const hint = this.allHints[this.activeDropdownIndex];
-      console.log(this.activeDropdownIndex);
       if (hint.includes('@')) {
         this.searchQuery = '@';  // Setzt das @ im Suchfeld
         this.onSearchInput(this.searchQuery);

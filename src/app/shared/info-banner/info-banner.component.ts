@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input, ViewEncapsulation} from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -6,7 +6,7 @@ import { MatIcon } from '@angular/material/icon';
   standalone: true,
   imports: [MatIcon],
   templateUrl: './info-banner.component.html',
-  styleUrl: './info-banner.component.scss'
+  styleUrl: './info-banner.component.scss',
 })
 export class InfoBannerComponent {
 @Input() text:string = '';

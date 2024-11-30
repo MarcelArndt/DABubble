@@ -367,9 +367,6 @@ async processSearchQuery(
     this.mainContentService.makeChatAsTopLayer();
   }
 
-  /////////////////
-
-
 
   initializeMemberAndChannels(): void {
     const members$ = this.memberService.getAllMembersFromFirestoreObservable();
@@ -414,37 +411,6 @@ async processSearchQuery(
     }
     return channels.filter(channel => !this.currentMember?.ignoreList.includes(channel.id));
   }
-  
-
-  // async ngOnInit() {
-  //   const members$ = this.memberService.getAllMembersFromFirestoreObservable();
-  //   const currentMember$ = this.authenticationService.currentMember$;
-  //   combineLatest([members$, currentMember$]).subscribe(([updatedMembers, currentMember]) => {
-  //     this.currentMember = currentMember;
-  //       this.members = this.memberService.prioritizeCurrentMember(updatedMembers, this.currentMember);
-  //   });
-  //   this.authenticationService.currentMember$.subscribe((member) => {
-  //     this.currentMember = member;
-  //     this.channelService.getAllPublicChannelsFromFirestore((publicChannels: Channel[]) => {
-  //       if (this.currentMember?.ignoreList) {
-  //         this.channels = publicChannels.filter(channel => !this.currentMember?.ignoreList.includes(channel.id));
-  //       } else {
-  //         this.channels = publicChannels;
-  //       }
-  //       this.channelService.sortChannelsByDate(this.channels);
-  //     });
-  //     if (this.currentMember) {
-  //       this.channelService.getAllChannelsWithChannelIdsFromCurrentUser(this.currentMember, (exclusiveChannels: Channel[]) => {
-  //         this.channels = [
-  //           ...exclusiveChannels,
-  //           ...(this.channels || []).filter(channel => channel.isPublic),
-  //         ];
-  //         this.channelService.sortChannelsByDate(this.channels);
-  //       });
-  //     }
-  //   });
-  //   this.authenticationService.observerUser();
-  // }
   
 
   dropChannels() {

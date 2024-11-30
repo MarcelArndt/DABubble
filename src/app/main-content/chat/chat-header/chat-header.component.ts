@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import { EditChannelComponent } from '../../../dialog/edit-channel/edit-channel.component';
@@ -13,6 +13,8 @@ import { Channel } from '../../../../classes/channel.class';
 import { ChannelService } from '../../../../services/channel/channel.service';
 import { ShowMembersOfChannelComponent } from '../../../dialog/show-members-of-channel/show-members-of-channel.component';
 import { MessagesService } from '../../../../services/messages/messages.service';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, firstValueFrom, Observable, of, switchMap } from 'rxjs';
+import { Member, Message } from '../../../../interface/message';
 
 
 @Component({
@@ -23,11 +25,22 @@ import { MessagesService } from '../../../../services/messages/messages.service'
     MatButtonModule,
     MatIcon,
     CommonModule,
+    FormsModule
   ],
   templateUrl: './chat-header.component.html',
-  styleUrl: './chat-header.component.scss'
+  styleUrls: ['../../../shared/header/searchbar/searchbar.component.scss', './chat-header.component.scss']
 })
 export class ChatHeaderComponent implements OnInit {
+  searchQuery = ''; 
+  members: Member[] = [];
+  channels: Channel[] = [];
+  showDropdown = false;
+  activeDropdownIndex = -1; // Aktives Element im Dropdown
+  previousSearchChannel: Channel | null = null;
+  searchChanges$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  searchMember = false;
+  allMembersInDevSpace$: Member[] = [];
+
   readonly dialog = inject(MatDialog);
   channel!: Channel | null;
 
@@ -37,14 +50,184 @@ export class ChatHeaderComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public memberService: MemberService,
     public channelService: ChannelService,
-    public messageService: MessagesService
+    public messageService: MessagesService,
+    private renderer: Renderer2, 
+    private elRef: ElementRef,
   ) {
   }
 
   async ngOnInit() {
     this.channel = await this.channelService.getChannelById(this.channelService.currentChannelId);
     this.memberService.allChannelMembers = await this.memberService.allMembersInChannel();
+    this.initializeSearchListeners();
   }
+
+  ngAfterViewInit() {
+    this.addGlobalClickEventListener();
+  }
+  
+  addGlobalClickEventListener() {
+    document.addEventListener('click', (event: MouseEvent) => {
+      const inputElement = this.elRef.nativeElement.querySelector('input');
+      const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
+      const clickedInsideInput = inputElement?.contains(event.target as Node);
+      const clickedInsideDropdown = dropdownElement?.contains(event.target as Node);
+      if (!clickedInsideInput && !clickedInsideDropdown) {
+        this.hideDropdown();
+      }
+    });
+  }
+  
+  
+  onDropdownItemClick(index: number) {
+    this.activeDropdownIndex = index;
+    this.selectDropdownItem(); 
+  }
+
+  
+  initializeSearchListeners() {
+    this.auth.currentMember$.pipe(
+      filter(currentMember => !!currentMember),
+      switchMap(currentMember => {
+        if (!currentMember) {
+          console.error('No current user is signed in.');
+          return of([]); 
+        }
+        const members$ = this.memberService.getAllMembersFromFirestoreObservable();
+        const channels$ = this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember);
+        return this.searchChanges$.pipe(
+          debounceTime(300), 
+          distinctUntilChanged(),
+          switchMap(query => this.processSearchQuery(query, members$, channels$))
+        );
+      })
+    ).subscribe(() => {
+      this.showDropdown = this.members.length > 0 || this.channels.length > 0;
+    });
+  }
+
+
+  onSearchInput(query: string) {
+    this.searchQuery = query.trim();
+    this.searchChanges$.next(this.searchQuery);
+  }
+  
+  
+  async processSearchQuery(
+    query: string,
+    members$: Observable<Member[]>,
+    channels$: Observable<Channel[]>
+  ) {
+    this.members = [];
+    this.channels = [];
+    // Bereits ausgewählte Objekte aus dem MessageService extrahieren
+    const selectedMemberIds = this.messageService.selectedObjects
+      .filter(obj => obj.type === 'member' || obj.type === 'email')
+      .map(obj => (obj.value as Member).id);
+    const selectedChannelIds = this.messageService.selectedObjects
+      .filter(obj => obj.type === 'channel')
+      .map(obj => (obj.value as Channel).id);
+    if (query.startsWith('@')) {
+      // Suche nach Mitgliedern
+      this.searchMember = true;
+      const members = await firstValueFrom(members$);
+      this.members = members.filter(member =>
+        member.name.toLowerCase().includes(query.slice(1).toLowerCase()) &&
+        !selectedMemberIds.includes(member.id) // Ausschließen, wenn bereits ausgewählt
+      );
+    } else if (query.length > 1 && query.startsWith('')) {
+      // Suche nach E-Mails
+      this.searchMember = false;
+      const members = await firstValueFrom(members$);
+      this.members = members.filter(member =>
+        member.email.toLowerCase().includes(query.toLowerCase()) &&
+        !selectedMemberIds.includes(member.id) // Ausschließen, wenn bereits ausgewählt
+      );
+    } else if (query.startsWith('#')) {
+      // Suche nach Channels
+      const channels = await firstValueFrom(channels$);
+      this.channels = channels.filter(channel =>
+        channel.title.toLowerCase().includes(query.slice(1).toLowerCase()) &&
+        !selectedChannelIds.includes(channel.id) // Ausschließen, wenn bereits ausgewählt
+      );
+    }
+  }
+  
+
+  hideDropdown() {
+    setTimeout(() => {
+      this.showDropdown = false;
+      this.activeDropdownIndex = -1;
+    }, 200);
+  }
+
+  navigateDropdown(direction: number) {
+    if (!this.showDropdown) return;
+    const totalResults = this.members.length + this.channels.length;
+    this.activeDropdownIndex = (this.activeDropdownIndex + direction + totalResults) % totalResults;
+    this.setActiveDropdownIndex(this.activeDropdownIndex);
+  }
+  
+
+  selectDropdownItem() {
+    if (this.activeDropdownIndex < 0) {
+      this.showDropdown = false;
+      return;
+    }
+      else{
+        let selectedItem: Member | Channel | Message | null = null;
+        let itemType: string = '';
+        if (this.activeDropdownIndex < this.members.length && this.searchMember) {
+          selectedItem = this.members[this.activeDropdownIndex];
+          itemType = 'member';
+        }  else if (this.activeDropdownIndex < this.members.length && !this.searchMember) {
+          selectedItem = this.members[this.activeDropdownIndex];
+          itemType = 'email';
+        } else if (this.activeDropdownIndex < this.channels.length) {
+          selectedItem = this.channels[this.activeDropdownIndex];
+          itemType = 'channel';
+        }
+        if (selectedItem) {
+          this.handleSelectItem(selectedItem, itemType);
+          this.activeDropdownIndex = -1;
+        }
+      }
+  }
+
+  handleSelectItem(selectedItem: Member | Channel , itemType: string) {
+    let label = '';
+    if (itemType === 'channel') {
+      label = `#${(selectedItem as Channel).title}`;
+    } else if (itemType === 'member') {
+      label = `@${(selectedItem as Member).name}`;
+    } else if (itemType === 'email') {
+      label = `${(selectedItem as Member).email}`; 
+    } 
+    this.messageService.selectedObjects.push({ label, type: itemType, value: selectedItem });
+    this.searchQuery = '';
+    this.members = [];
+    this.channels = [];
+    this.onSearchInput(this.searchQuery);
+    this.showDropdown = false;
+  }
+
+
+  setActiveDropdownIndex(index: number) {
+    this.activeDropdownIndex = index;
+    const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
+    const allElements = dropdownElement?.querySelectorAll('.dropDownItem') || []; 
+    const activeElement = allElements[index] as HTMLElement;
+    if (activeElement) {
+      activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  removeChip(index: number) {
+    this.messageService.selectedObjects.splice(index, 1);
+  }
+  
+
+ /////////////////
 
   openEditChannel(): void {
     const dialogRef = this.dialog.open(EditChannelComponent);

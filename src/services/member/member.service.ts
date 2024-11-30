@@ -16,10 +16,8 @@ export class MemberService {
   currentProfileMember: any = {};
   readonly dialog = inject(MatDialog);
 
-
   constructor(private authenticationService: AuthenticationService) {
   }
-
 
   async openProfileUser(id: string) {
     this.currentProfileMember = await this.search(id);
@@ -35,7 +33,6 @@ export class MemberService {
     });
   }
 
-
   getAllMembersFromFirestoreObservable(): Observable<Member[]> {
     return new Observable((observer) => {
       this.getAllMembersFromFirestore((members: Member[]) => {
@@ -44,7 +41,6 @@ export class MemberService {
       });
     });
   }
-
 
   async addChannelIdToIgnoreList(memberId: string, channelId: string) {
     const memberRef = doc(this.authenticationService.getReference(), 'member', memberId);

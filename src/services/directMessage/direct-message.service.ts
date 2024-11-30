@@ -27,20 +27,22 @@ export class DirectMessageService {
 
   async createDirectMessage(messageField: string) {
     const now = new Date();
-    const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
+    const formatter = new Intl.DateTimeFormat('de-DE', { weekday: 'long' }); // Optional: Sprachanpassung
     const weekday = formatter.format(now);
-    const day = now.getDate(); 
-    const month = now.toLocaleString('en-US', { month: 'long' });
+    const day = now.getDate();
+    const month = now.toLocaleString('de-DE', { month: 'long' }); // Optional: Lokale Monatsnamen
     const createdAt = `${weekday}, ${day} ${month}`;
-    
-    this.createDirectMessageChannel();
+    const member = await this.authenticationService.getCurrentMemberSafe();
+    if (!member) {
+      throw new Error('Benutzer ist nicht angemeldet oder currentMember ist undefined.');
+    }
     const messageData = {
       user: this.authenticationService.getCurrentUserUid(),
-      name: this.authenticationService.currentMember.name,
+      name: member.name,
       time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
       message: messageField,
-      profileImage: this.authenticationService.currentMember.imageUrl,
-      createdAt: createdAt,
+      profileImage: member.imageUrl,
+      createdAt: createdAt, // Manuell formatiertes Datum
       timestamp: Date.now(),
       reactions: {
         like: [],
@@ -48,12 +50,37 @@ export class DirectMessageService {
       },
       attachment: this.storageService.messageImages
     };
-    const messageDocRef = await addDoc(this.referencesServic.getCollectionDirectMessages(this.directMessageChannelId), messageData);
-    this.updateDirectMessageId(messageDocRef)
+    const messageDocRef = await addDoc(
+      this.referencesServic.getCollectionDirectMessages(this.directMessageChannelId),
+      messageData
+    );
+    await this.updateDirectMessageId(messageDocRef);
     this.messagesUpdated.next();
     this.storageService.messageImages = [];
   }
+  
+  
 
+
+async checkOrCreateDirectMessageChannel(targetMemberId: string): Promise<void> {
+  await this.readDirectUserData(targetMemberId);
+  if (!this.directMessageUserData || !this.directMessageUserData['id']) {
+    throw new Error("Error: directMessageUserData could not be found.");
+  }
+  const channelId = this.generateChannelId(
+    this.directMessageUserData['id'], 
+    this.authenticationService.getCurrentUserUid()
+  );
+  const docSnap = await getDoc(this.referencesServic.getDirectMessageDocRef(channelId));
+  if (!docSnap.exists()) {
+    this.directMessageChannelId = channelId;
+    await this.createDirectMessageChannel();  // Channel wird neu erstellt
+  } else {
+    this.directMessageChannelId = channelId;
+  }
+}
+
+  
   async updateDirectMessageId(messageDocRef: any) {
     await updateDoc(messageDocRef, {
       messageId: messageDocRef.id,
@@ -61,6 +88,12 @@ export class DirectMessageService {
   }
 
   async createDirectMessageChannel() {
+    if (!this.directMessageUserData || !this.directMessageUserData['id']) {
+      throw new Error("directMessageUserData or its ID is undefined.");
+    }
+    if (!this.authenticationService.memberId) {
+      throw new Error("Logged in member ID is undefined.");
+    }
     await setDoc(this.referencesServic.getDirectMessageDocRef(this.directMessageChannelId), {
       memberOne: this.directMessageUserData['id'],
       memberTwo: this.authenticationService.memberId,

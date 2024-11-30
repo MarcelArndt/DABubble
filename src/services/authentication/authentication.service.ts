@@ -4,8 +4,8 @@ import { doc, getFirestore, setDoc } from '@angular/fire/firestore';
 import { RouterModule, Router } from '@angular/router';
 import { Member } from '../../interface/message';
 import { getStorage } from '@angular/fire/storage';
-import { onSnapshot, updateDoc } from '@firebase/firestore';
-import { BehaviorSubject } from 'rxjs';
+import { getDoc, onSnapshot, updateDoc } from '@firebase/firestore';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { Channel } from '../../classes/channel.class';
 
 
@@ -45,22 +45,35 @@ export class AuthenticationService {
     }, 1750)
   }
 
-   signInUser(email: string, password: string) {
+  signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
         this.loginFailed = false;
         this.enableInfoBanner('Sign-In Succesfully');
-      }).then(() => {
+        this.initializeCurrentMember(); 
+      })
+      .then(() => {
         setTimeout(() => {
           this.router.navigate(['start']);
-           this.updateLoginStatus(true);
+          this.updateLoginStatus(true);
         }, 1750);
       })
       .catch((error) => {
         this.loginFailed = true;
+        console.error('Fehler beim Anmelden:', error);
       });
   }
+
+  async getCurrentMemberSafe(): Promise<Member | null> {
+    const member = await firstValueFrom(this.currentMember$);
+    if (!member) {
+      console.error('Aktueller Benutzer ist nicht verfügbar.');
+      return null; 
+    }
+    return member;
+  }
+  
+  
 
   async updateLoginStatus(boolean: boolean) {
     const washingtonRef = doc(this.getReference(), "member", this.getCurrentUserUid());
@@ -102,28 +115,39 @@ export class AuthenticationService {
       if (user) {
         this.memberId = user.uid;
         const memberDoc = doc(this.getReference(), 'member', user.uid);
-        onSnapshot(
-          memberDoc,
-          (docSnap) => {
-            if (docSnap.exists()) {
-              const data = docSnap.data();
-              const member: Member = {
-                id: data['id'] || user.uid,
-                name: data['name'] || user.displayName || 'Unbekannt',
-                email: data['email'] || user.email || 'Keine E-Mail',
-                imageUrl: data['imageUrl'] || user.photoURL || '',
-                status: true,
-                channelIds: data['channelIds'] || [],
-                ignoreList: data['ignoreList'] || [],
-              };
-              // console.log("Aktualisierte Member-Daten:", member);
-              this.currentMemberSubject.next(member);
-            }
+        const docSnap = await getDoc(memberDoc);
+        
+        // Falls der aktuelle Benutzer nicht existiert, hole die Daten neu.
+        if (!docSnap.exists()) {
+          console.error('Benutzerdaten nicht gefunden. Starte Initialisierung...');
+          this.initializeCurrentMember();
+          return;
+        }
+        onSnapshot(memberDoc, (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            const member: Member = {
+              id: data['id'] || user.uid,
+              name: data['name'] || user.displayName || 'Unbekannt',
+              email: data['email'] || user.email || 'Keine E-Mail',
+              imageUrl: data['imageUrl'] || user.photoURL || '',
+              status: true,
+              channelIds: data['channelIds'] || [],
+              ignoreList: data['ignoreList'] || [],
+            };
+            this.currentMemberSubject.next(member); // Hier wird der aktuelle Member gesetzt
+          } else {
+            console.error('Mitgliedsdaten nicht gefunden!');
+            this.currentMemberSubject.next(null);
           }
-        );
+        });
+      } else {
+        console.warn('Kein Benutzer angemeldet.');
+        this.currentMemberSubject.next(null);
       }
     });
   }
+  
 
   async updateAuthProfileData(currentMember: Member): Promise<void> {
     try {

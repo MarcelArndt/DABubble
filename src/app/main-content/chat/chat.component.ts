@@ -8,6 +8,7 @@ import { MessagesService } from '../../../services/messages/messages.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { MatIcon } from '@angular/material/icon';
 import { DirectMessageService } from '../../../services/directMessage/direct-message.service';
+import { InfoBannerComponent } from "../../shared/info-banner/info-banner.component";
 
 
 
@@ -19,7 +20,8 @@ import { DirectMessageService } from '../../../services/directMessage/direct-mes
     ChatMessageFieldComponent,
     CommonModule,
     MessageComponent,
-    MatIcon
+    MatIcon,
+    InfoBannerComponent
 ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'

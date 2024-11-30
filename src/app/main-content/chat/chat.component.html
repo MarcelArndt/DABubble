@@ -58,7 +58,9 @@
 
         </div>
         } @else if (messageService.isWriteAMessage && !messageService.isSearchForMessages){
-
+    @if(auth.infoBannerIsSubmit){
+    <app-info-banner class="info-banner" [text]=auth.infoBannertext [icon]=auth.infoBannerIcon></app-info-banner>
+    }
         } @else if (messageService.isSearchForMessages){
             <div *ngIf="!directMessageService.isDirectMessage" class="mesage-container">
                 <ng-container *ngIf="isLoading; else messageList">
@@ -81,8 +83,8 @@
                 </ng-template>
             </div>
         }
-
     </div>
+
 
     <app-chat-message-field (messagesUpdated)="onMessagesUpdated()"
         (messageSent)="scrollToBottom()"></app-chat-message-field>

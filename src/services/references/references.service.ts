@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { collection, doc } from '@firebase/firestore';
+import { collection, doc, DocumentReference } from '@firebase/firestore';
 import { ChannelService } from '../channel/channel.service';
 import { ThreadService } from '../thread/thread.service';
 
@@ -18,6 +18,10 @@ export class ReferencesService {
   }
 
   // Channels && Messages && Threads
+  getChannelDocRefById(channelId: string): DocumentReference {
+    return doc(this.getReference, "channels", channelId);
+  }
+
   getChannelDocRef() {
     return doc(this.getReference, "channels", this.channelService.currentChannelId);
   }

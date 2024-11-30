@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MatMenuModule } from '@angular/material/menu';
@@ -7,10 +7,15 @@ import { FormsModule } from '@angular/forms';
 import { ImagesPreviewComponent } from "./images-preview/images-preview.component";
 import { MessagesService } from '../../../../services/messages/messages.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
-import { Message, Thread } from '../../../../interface/message';
+import { Member, Message, Thread } from '../../../../interface/message';
 import { StorageService } from '../../../../services/storage/storage.service';
 import { MemberService } from '../../../../services/member/member.service';
 import { DirectMessageService } from '../../../../services/directMessage/direct-message.service';
+import { ChatHeaderComponent } from '../chat-header/chat-header.component';
+import { firstValueFrom } from 'rxjs';
+import { Channel } from '../../../../classes/channel.class';
+import { ChannelService } from '../../../../services/channel/channel.service';
+import { MainContentService } from '../../../../services/main-content/main-content.service';
 
 
 @Component({
@@ -27,7 +32,7 @@ import { DirectMessageService } from '../../../../services/directMessage/direct-
   templateUrl: './chat-message-field.component.html',
   styleUrl: './chat-message-field.component.scss'
 })
-export class ChatMessageFieldComponent {
+export class ChatMessageFieldComponent{
   openEmojis: boolean = false;
   messageField: string = ''
   openData: boolean = false;
@@ -45,9 +50,11 @@ export class ChatMessageFieldComponent {
   constructor(
     public auth: AuthenticationService,
     public memberService: MemberService,
+    public channelService: ChannelService,
     public messageService: MessagesService,
     public storageService: StorageService,
-    public directMessageService: DirectMessageService
+    public directMessageService: DirectMessageService,
+    public mainContentService: MainContentService
   ) {
     this.allUsers()
   }
@@ -67,15 +74,55 @@ export class ChatMessageFieldComponent {
     this.imagePreviews = [];
   }
 
-  handleSendMessage() {
-    if (this.messageField.trim() || this.storageService.messageImages.length > 0) {
-    this.messageSent.emit()
-    if (this.directMessageService.isDirectMessage) {
-      this.sendDirectMessage();
+  async handleSendMessage() {
+    if (this.messageService.isWriteAMessage) {
+      const members = await firstValueFrom(this.memberService.getAllMembersFromFirestoreObservable());
+      const currentMember = await this.auth.getCurrentMemberSafe();
+      if (!currentMember) {
+        console.log('No current member in handleSendMessage');
+        return;
+      }
+      const channels = await firstValueFrom(this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember));
+  
+      // Über alle ausgewählten Objekte iterieren
+      for (const selectedObject of this.messageService.selectedObjects) {
+        if (selectedObject.type === 'email' || selectedObject.type === 'member') {
+          const member = selectedObject.value as Member;
+          if (members.some(m => m.id === member.id)) {
+            await this.handleSendDirectMessageForChatHeader(member.id, this.messageField);
+          }
+        } else if (selectedObject.type === 'channel') {
+          const channel = selectedObject.value as Channel;
+          if (channels.some(c => c.id === channel.id)) {
+            await this.messageService.sendMessageToChannel(channel.id, this.messageField, currentMember);
+          }
+        }
+      }
+      this.messageField = '';  // Eingabefeld zurücksetzen
+      this.auth.enableInfoBanner('Message(s) have been sent.');
     } else {
-      this.sendMessage();
+      // Fallback: Falls keine Objekte ausgewählt wurden, reguläre Nachrichtenlogik ausführen
+      if (this.messageField.trim() || this.storageService.messageImages.length > 0) {
+        this.messageSent.emit();
+        if (this.directMessageService.isDirectMessage) {
+          await this.sendDirectMessage();
+        } else {
+          await this.sendMessage();
+        }
+      }
     }
   }
+  
+  
+
+  async handleSendDirectMessageForChatHeader(targetMemberId: string, message: string) {
+    try {
+      await this.directMessageService.checkOrCreateDirectMessageChannel(targetMemberId);
+      await this.directMessageService.createDirectMessage(message);
+      this.auth.enableInfoBanner('Message has been sent.');
+    } catch (error) {
+      console.error('Error while sending the direct message', error);
+    }
   }
 
   toggleEmojis(event: Event): void {

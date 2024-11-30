@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Channel } from '../../classes/channel.class';
+import { Member } from '../../interface/message';
 
 @Injectable({
   providedIn: 'root'
@@ -76,5 +78,15 @@ export class MainContentService {
     this.threadIsOpen$.next(false);
   }
 
+    
+  // Hilfsfunktion für die Überprüfung, ob das Objekt ein Member ist
+  isMember(obj: any): obj is Member {
+    return obj && typeof obj.id === 'string' && typeof obj.name === 'string' && typeof obj.email === 'string';
+  }
+  
+  // Hilfsfunktion für die Überprüfung, ob das Objekt ein Channel ist
+  isChannel(obj: any): obj is Channel {
+    return obj && typeof obj.id === 'string' && typeof obj.title === 'string';
+  }
 
 }

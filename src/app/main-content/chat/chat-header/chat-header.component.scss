@@ -20,20 +20,21 @@ section {
 .new-message-headline {
     @include nunito($fw: 700, $fs: 24px, $c: var(--text-black));
     margin-bottom: 10px;
-    margin-top: 10px;
+    margin-top: 24px;
 }
 
-.wirte-message-field {
+.write-message-field {
     @include nunito($fw: 400, $fs: 18px, $c: var(--text-gray));
     border: none;
-    border: 1px solid #ADB0D9;
-    width: 100%;
+    border: 1px solid var(--purple-2);
+    max-width: 100% !important;
+    min-width: 30% !important;
     height: 50px;
     border-radius: 25px;
     padding-left: 10px;
     margin-bottom: 15px;
     outline: none;
-
+    background-color: transparent;
     &::placeholder {
         @include nunito($fw: 400, $fs: 18px, $c: var(--text-gray));
     }
@@ -210,4 +211,79 @@ section {
 mat-icon {
     @include dFlex();
     @include materialSymbols($fs: 24px);
+}
+
+.searchbar{
+    @include padding(12px, 12px, 12px, 12px);
+    max-width: unset !important;
+    height: unset !important;
+    min-height: 64px !important;
+    margin-bottom: 16px;
+    margin-top: 16px;
+    border: 1px solid var(--purple-2) !important;
+    transition: border 0.125s ease-in-out;
+    input {
+        height: unset !important;
+    }
+    &:hover{
+        border: 1px solid var(--purple-3) !important;
+    }
+}
+
+.dropdown{
+    top: 60px !important;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    max-width: 100%;
+    flex: auto;
+  }
+  
+  .chip {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-bg);
+    padding: 2px;
+    border-radius: 20px;
+    border: 1px solid var(--purple-2);
+    font-size: 14px;
+    transition: color 0.125s ease-in-out;
+    &:hover{
+        button{
+            .closeIcon{
+                color: var(--purple-2)  !important;
+            }
+        }
+    }
+  }
+  
+  .chip button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 0px;
+  }
+
+  .closeIcon{
+    transition: color 0.125s ease-in-out;
+    padding-left: 0px !important;
+  }
+
+  span{
+    &:hover{
+        background-color: var(--primary-bg) !important;
+    }
+  }
+
+  .chipSpan{
+
+    @include padding(4px, 20px, 4px, 4px)
+  }
+
+.clearIcon{
+    margin-right: 16px;
 }

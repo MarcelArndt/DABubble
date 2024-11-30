@@ -9,7 +9,7 @@ import { StorageService } from '../storage/storage.service';
 import { Channel } from '../../classes/channel.class';
 import { MainContentService } from '../main-content/main-content.service';
 import { DirectMessageService } from '../directMessage/direct-message.service';
-import { Message } from '../../interface/message';
+import { Member, Message } from '../../interface/message';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,10 @@ export class MessagesService {
   isWriteAMessage: boolean = false;
   isSearchForMessages: boolean = false;
   searchQuery: string = '';
+  // selectedObject?: Member | Channel;
+  selectedObjects: Array<{ label: string, type: string, value: Member | Channel }> = [];
+
+
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -191,8 +195,48 @@ export class MessagesService {
     });
   }
 
-  async writeAMessage() {
+  async sendMessageToChannel(channelId: string, messageText: string, currentMember: Member) {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
+    const weekday = formatter.format(now);
+    const day = now.getDate(); 
+    const month = now.toLocaleString('en-US', { month: 'long' });
+    const createdAt = `${weekday}, ${day} ${month}`;
+    // Nachrichtendaten erstellen
+    const messageData = {
+      user: currentMember.id,
+      name: currentMember.name,
+      time: `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`,
+      message: messageText,
+      profileImage: currentMember.imageUrl,
+      createdAt: createdAt,
+      timestamp: Date.now(),
+      reactions: {
+        like: [],
+        rocket: []
+      },
+      answers: 0,
+      lastAnswer: '',
+      attachment: this.storageService.messageImages
+    };
+    try {
+      // Nachricht in die entsprechende Firestore-Sammlung pushen
+      const channelRef = this.referencesService.getChannelDocRefById(channelId); // Hole Channel-Referenz basierend auf der Channel-ID
+      const messagesCollection = collection(channelRef, 'messages'); // Nachrichten in der Channel-Nachrichten-Sammlung
+      const messageDocRef = await addDoc(messagesCollection, messageData);
+      // Message-ID aktualisieren
+      await this.updateMessageId(messageDocRef);
+      // Nachricht wurde erfolgreich gesendet
+      console.log(`Message sent to channel with ID ${channelId}`);
+      this.messagesUpdated.next(); // Aktualisiere die Nachrichtenliste
+      this.storageService.messageImages = []; // Angehängte Bilder zurücksetzen
+    } catch (error) {
+      console.error('Error sending message to channel:', error);
+    }
+  }
 
+  clearSelectedObjects(){
+    this.selectedObjects = [];
   }
 
 }
