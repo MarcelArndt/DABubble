@@ -432,5 +432,8 @@ async processSearchQuery(
 
   openWriteAMessage() {
     this.messageService.isWriteAMessage = true;
+    // for mobile:
+    this.mainContentService.closeNavBar();
+    this.mainContentService.makeChatAsTopLayer()
   }
 }

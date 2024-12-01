@@ -394,6 +394,7 @@ h3 {
     /* Custom scrollbar styling */
     &::-webkit-scrollbar {
         width: 6px; /* Breite der Scrollbar */
+        height: 6px;
     }
 
     &::-webkit-scrollbar-track {
@@ -523,7 +524,7 @@ h3 {
       @include nunito(400, 18px, var(--text-black));
       border-radius: 30px;
       border-top-left-radius: 4px;
-      width: 260px;
+      width: 100%;
       animation: fadeIn 0.125s ease-in-out;
       &::-webkit-scrollbar {
           width: 8px; 
@@ -649,4 +650,26 @@ h3 {
       position: absolute;
       right: 0px;
       bottom: 0px;
+  }
+
+  .mobileWriteAMessageButton{
+    position: absolute;
+    right: 16px;
+    bottom: 32px;
+    outline: none;
+    border: 0px solid ;
+    z-index: 10;
+    background-color: #444DF2;
+    @include padding(18px, 20px, 18px, 20px);
+    @include dFlex(center, center);
+    box-sizing: border-box;
+    border-radius: 100px;
+    transition: background-color 0.125s ease-in-out;
+    &:hover {
+        background-color: #535AF1;
+        cursor: pointer;
+    }
+    @include respond-to-minWidth(small){
+        display: none;
+    }
   }

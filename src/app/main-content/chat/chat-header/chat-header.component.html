@@ -59,7 +59,7 @@
                 </div>
                 <mat-icon (click)="messageService.clearSelectedObjects()" *ngIf="messageService.selectedObjects.length > 0" class="clearIcon">delete_forever</mat-icon>
 
-                <mat-icon>search</mat-icon>
+                <mat-icon class="displayNoneOnMobile">search</mat-icon>
             </div>
 
             <div class="dropdown" *ngIf="showDropdown">

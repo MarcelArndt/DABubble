@@ -228,6 +228,9 @@ mat-icon {
     &:hover{
         border: 1px solid var(--purple-3) !important;
     }
+    @include respond-to-maxWidth(small){
+        display: flex !important;
+    }
 }
 
 .dropdown{
@@ -240,6 +243,28 @@ mat-icon {
     gap: 2px;
     max-width: 100%;
     flex: auto;
+
+    @include respond-to-maxWidth(small){
+        max-height: 200px;
+        overflow: auto;
+    }
+        /* Custom scrollbar styling */
+        &::-webkit-scrollbar {
+            width: 8px; /* Breite des Scrollbalkens */
+            height: 8px; /* Breite des Scrollbalkens */
+        }
+        &::-webkit-scrollbar-track {
+            background-color: transparent; /* Transparenter Track */
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--purple-2); /* Farbe des Thumbs */
+            border-radius: 30px; /* Rundungen für den Thumb */
+            transition: background-color 0.125s ease; /* Sanfter Übergang beim Hover */
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: var(--purple-1); /* Hover-Farbe des Thumbs */
+            cursor: grab;
+        }
   }
   
   .chip {
@@ -286,4 +311,41 @@ mat-icon {
 
 .clearIcon{
     margin-right: 16px;
+    @include respond-to-maxWidth(small){
+        margin-top: 16px;
+        margin-bottom: 8px;
+    }
 }
+
+.displayNoneOnMobile{
+    @include respond-to-maxWidth(small){
+        display: none !important;
+    }
+}
+
+.inputFrame{
+    @include respond-to-maxWidth(small){
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+.searchbar{
+    @include respond-to-maxWidth(small){
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+input {
+    font-size: 1em; /* Gleiche Schriftgröße wie der Placeholder */
+    line-height: 1; /* Verhindert zusätzlichen Abstand durch Zeilenhöhe */
+    padding: 0.5em; /* Padding gleichmäßig definieren */
+    height: auto; /* Höhe wird automatisch angepasst */
+    box-sizing: border-box; /* Padding wird innerhalb der Höhe des Elements berücksichtigt */
+  }
+
+input::placeholder {
+    font-size: 1em; /* Gleiche Schriftgröße wie der Text im Input */
+    line-height: 1; /* Verhindert, dass der Placeholder zusätzlichen Platz benötigt */
+  }

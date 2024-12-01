@@ -104,13 +104,10 @@ export class SearchbarComponent {
       switchMap(currentMember => {
         if (!currentMember) {
           console.error('No current user is signed in.');
-          return of([]); // Rückgabe von leeren Ergebnissen, wenn der Benutzer nicht vorhanden ist
+          return of([]); 
         }
-
-        // Wenn der Benutzer verfügbar ist, lade Mitglieder und Kanäle
         const members$ = this.memberService.getAllMembersFromFirestoreObservable();
         const channels$ = this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember);
-
         return this.searchChanges$.pipe(
           debounceTime(300), 
           distinctUntilChanged(),
@@ -137,48 +134,47 @@ export class SearchbarComponent {
       this.messageService.isSearchForMessages = false;
       this.displayHints = true;
     } else {
-      // Wenn das Inputfeld nicht leer ist, blende die Hinweise aus
       this.displayHints = false;
     }
   }
   
   
-async processSearchQuery(
-  query: string, 
-  members$: Observable<Member[]>, 
-  channels$: Observable<Channel[]>
-) {
-  this.members = [];
-  this.channels = [];
-  this.messages = [];
+  async processSearchQuery(
+    query: string, 
+    members$: Observable<Member[]>, 
+    channels$: Observable<Channel[]>
+  ) {
+    this.members = [];
+    this.channels = [];
+    this.messages = [];
 
-  if (query.startsWith('@')) {
-    // Suche nach Mitgliedern
-    const members = await firstValueFrom(members$);
-    this.members = members.filter(member => 
-    member.name.toLowerCase().includes(query.slice(1).toLowerCase())
-    );
-  }  else if (query.startsWith('#')) {
-    // Suche nach Channels
-    const channels = await firstValueFrom(channels$);
-    this.channels = channels.filter(channel => 
-      channel.title.toLowerCase().includes(query.slice(1).toLowerCase()) &&
-      (!this.previousSearchChannel || channel.id !== this.previousSearchChannel.id) // Aktuellen Channel ausschließen
-    );
+    if (query.startsWith('@')) {
+      // Suche nach Mitgliedern
+      const members = await firstValueFrom(members$);
+      this.members = members.filter(member => 
+      member.name.toLowerCase().includes(query.slice(1).toLowerCase())
+      );
+    }  else if (query.startsWith('#')) {
+      // Suche nach Channels
+      const channels = await firstValueFrom(channels$);
+      this.channels = channels.filter(channel => 
+        channel.title.toLowerCase().includes(query.slice(1).toLowerCase()) &&
+        (!this.previousSearchChannel || channel.id !== this.previousSearchChannel.id) // Aktuellen Channel ausschließen
+      );
+    }
+    if (this.previousSearchChannel && query.includes(' ')) {
+      const channelTitle = this.previousSearchChannel.title.toLowerCase(); 
+      const searchQuery = query.toLowerCase().replace(`#${channelTitle}`, '').trim(); 
+      const allMessages = await this.messageService.loadInitialMessagesByChannelId(this.previousSearchChannel.id);
+      this.messages = allMessages.filter((message: Message) => 
+        message.message.toLowerCase().includes(searchQuery)
+      );
+      this.messageService.isSearchForMessages = true;
+      this.messageService.messages = this.messages;
+      this.messageService.searchQuery = searchQuery; 
+      this.messageService.messagesUpdated.next();
+    }
   }
-  if (this.previousSearchChannel && query.includes(' ')) {
-    const channelTitle = this.previousSearchChannel.title.toLowerCase(); 
-    const searchQuery = query.toLowerCase().replace(`#${channelTitle}`, '').trim(); 
-    const allMessages = await this.messageService.loadInitialMessagesByChannelId(this.previousSearchChannel.id);
-    this.messages = allMessages.filter((message: Message) => 
-      message.message.toLowerCase().includes(searchQuery)
-    );
-    this.messageService.isSearchForMessages = true;
-    this.messageService.messages = this.messages;
-    this.messageService.searchQuery = searchQuery; 
-    this.messageService.messagesUpdated.next();
-  }
-}
 
 
   showHints() {
