@@ -157,10 +157,12 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       this.addSelectedMembers();
       this.channel.isPublic = false;
       this.channel.membersId.push(this.authenticationService.getCurrentUserUid());
-      await this.channelService.addChannelIdToCurrentUser(this.channel.id);
       await this.channelService.addChannelIdToMembers(this.channel.membersId, this.channel.id);
     }
     await this.channelService.addChannelToFirebase(this.channel);
+    if(!this.selectAllPeople){
+      await this.channelService.addChannelIdToCurrentUser(this.channel.id);
+    }
     this.channelService.currentChannelId = this.channel.id;
     await this.messageService.readChannel();
     this.dialogRef.close();
