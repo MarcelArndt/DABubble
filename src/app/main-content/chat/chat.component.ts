@@ -132,7 +132,7 @@ export class ChatComponent {
   
    parseTime(time: { toDate: () => Date }): string {
     const date = time.toDate();
-    return this.isToday(date) ? `heute` : this.formatDate(date);
+    return this.isToday(date) ? `Today` : this.formatDate(date);
   }
 
 }
