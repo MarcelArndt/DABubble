@@ -161,11 +161,8 @@ export class DevspaceComponent implements OnInit {
     document.addEventListener('click', (event: MouseEvent) => {
       const inputElement = this.elRef.nativeElement.querySelector('input');
       const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
-      
       const clickedInsideInput = inputElement?.contains(event.target as Node);
       const clickedInsideDropdown = dropdownElement?.contains(event.target as Node);
-  
-      // Wenn weder auf das Eingabefeld noch auf das Dropdown geklickt wurde, Dropdown schließen
       if (!clickedInsideInput && !clickedInsideDropdown) {
         this.hideDropdown();
       }
@@ -175,7 +172,7 @@ export class DevspaceComponent implements OnInit {
     
   onDropdownItemClick(index: number) {
     this.activeDropdownIndex = index;
-    this.selectDropdownItem(); // Setzt die Logik fort, um das richtige Element auszuwählen
+    this.selectDropdownItem(); 
   }
 
   
@@ -187,7 +184,6 @@ export class DevspaceComponent implements OnInit {
           console.error('No current user is signed in.');
           return of([]); // Rückgabe von leeren Ergebnissen, wenn der Benutzer nicht vorhanden ist
         }
-
         // Wenn der Benutzer verfügbar ist, lade Mitglieder und Kanäle
         const members$ = this.memberService.getAllMembersFromFirestoreObservable();
         const channels$ = this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember);

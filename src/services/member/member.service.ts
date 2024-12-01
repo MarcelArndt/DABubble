@@ -37,7 +37,6 @@ export class MemberService {
     return new Observable((observer) => {
       this.getAllMembersFromFirestore((members: Member[]) => {
         observer.next(members);
-        observer.complete();
       });
     });
   }
