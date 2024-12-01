@@ -69,14 +69,24 @@ export class ShowMembersOfChannelComponent {
   
   openAddMembersToChannelDialog(): void {
     this.dialogRef.close();
+    if (window.innerWidth <= 450) {
+      const dialogRef = this.dialog.open(AddMembersChannelComponent, {
+        width: '280px',
+        height: 'auto',
+        position: { top: '300px', right: '16px'},
+        autoFocus: false,
+        panelClass: 'custom-dialog'
+      });
+      dialogRef.afterClosed().subscribe();
+    } else {
     const dialogRef = this.dialog.open(AddMembersChannelComponent, {
       width: '660px',
       height: 'auto',
       position: { top: '400px', right: '64px' },
       autoFocus: false,
       panelClass: 'custom-dialog'
-  });
+    });
     dialogRef.afterClosed().subscribe();
+    } 
   }
-  
 }

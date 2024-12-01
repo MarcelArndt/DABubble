@@ -48,6 +48,11 @@ export class MessagesService {
     // this.mainContentService.closeNavBar();
   }
 
+  async getCurrentChannelData(){
+    const channel = await getDoc(this.referencesService.getChannelDocRef());
+    return channel.data();
+  }
+
   async checkWindowAndOpenChannel(channel: Channel) {
     this.isWriteAMessage = false;
     this.mainContentService.hideThread();

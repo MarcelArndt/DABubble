@@ -22,6 +22,9 @@ mat-dialog-container,
     border-top-right-radius: 0px !important;
     flex-direction: unset !important;
     max-width: unset !important;
+    @include respond-to-maxWidth(small){
+        width: 294px !important;
+    }
 }
 
 .mdc-text-field--filled:not .mdc-text-field--disabled{
@@ -34,7 +37,11 @@ mat-dialog-container,
    gap: 16px; 
    flex-direction: column;
    border-top-right-radius: 0px !important;
-   width: 600px !important;
+   @include respond-to-maxWidth(small){
+    width: 294px !important;
+    @include padding(32px, 20px, 32px, 20px);
+
+    }
 }
 
 .closeButton {
@@ -90,7 +97,7 @@ h2{
 
 .addButton{
     width: fit-content;
-    background-color: var(--purple-1) !important;
+    background-color: #444DF2 !important;
     @include padding(12px, 25px, 12px, 25px,);
 }
 

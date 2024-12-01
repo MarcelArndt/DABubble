@@ -229,5 +229,11 @@ export class ChatMessageFieldComponent{
     this.handleSendMessage();
   }
 }
+
+getPlaceholder(): string {
+  return this.messageService.isWriteAMessage 
+    ? '' 
+    : `Message to #${this.auth.currentChannelData?.title || ''}`;
+}
 }
 

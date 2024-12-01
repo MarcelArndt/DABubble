@@ -235,25 +235,56 @@ export class ChatHeaderComponent implements OnInit {
   }
 
   addMembersToChannel(): void {
+    if (window.innerWidth <= 450) {
+      const dialogRef = this.dialog.open(AddMembersChannelComponent, {
+        width: '294px',
+        height: 'auto',
+        position: { top: '100px', right: '16px'},
+        autoFocus: false,
+        panelClass: 'custom-dialog'
+      });
+      dialogRef.afterClosed().subscribe();
+    } else {
     const dialogRef = this.dialog.open(AddMembersChannelComponent, {
       width: '660px',
       height: 'auto',
       position: { top: '400px', right: '64px' },
       autoFocus: false,
       panelClass: 'custom-dialog'
-  });
+    });
     dialogRef.afterClosed().subscribe();
+    } 
   }
 
   showMembersOfChannel(): void {
+    if (window.innerWidth <= 450) {
+      const dialogRef = this.dialog.open(ShowMembersOfChannelComponent, {
+        width: '260px',
+        height: 'auto',
+        position: { top: '40px', right: '16px'},
+        autoFocus: false,
+        panelClass: 'custom-dialog'
+      });
+      dialogRef.afterClosed().subscribe(); 
+    } else {
     const dialogRef = this.dialog.open(ShowMembersOfChannelComponent, {
       width: '400px',
       height: 'auto',
       position: { top: '200px', right: '64px' },
       autoFocus: false,
       panelClass: 'custom-dialog'
-  });
-    dialogRef.afterClosed().subscribe();
+    });
+    dialogRef.afterClosed().subscribe();      
+    }
+
+  }
+
+  handleClickToShowOrAddMembers(): void {
+    if (window.innerWidth <= 450) {
+      this.showMembersOfChannel();
+    } else {
+      this.addMembersToChannel();
+    }
   }
   
 }
