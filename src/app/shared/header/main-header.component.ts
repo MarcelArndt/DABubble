@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { SearchbarComponent } from "./searchbar/searchbar.component";
 import { ProfileNavigationComponent } from "./profile-navigation/profile-navigation.component";
 import { DarkModeService } from '../../../services/darkMode/dark-mode.service';
+import { MainContentService } from '../../../services/main-content/main-content.service';
 
 @Component({
   selector: 'app-main-header',
@@ -20,7 +21,11 @@ export class MainHeaderComponent {
 
   @Output() backToDevSpaceEvent = new EventEmitter();
 
-  constructor(private renderer: Renderer2, private elRef: ElementRef, public darkmode : DarkModeService){
+  constructor(
+    private renderer: Renderer2, 
+    private elRef: ElementRef, 
+    public darkmode : DarkModeService,
+    public mainContentService: MainContentService){
     this.updatePlaceholder();
   }
 

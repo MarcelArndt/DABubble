@@ -223,7 +223,7 @@ mat-icon {
     border: 1px solid var(--purple-2) !important;
     transition: border 0.125s ease-in-out;
     input {
-        height: unset !important;
+        height: 72px !important;
     }
     &:hover{
         border: 1px solid var(--purple-3) !important;
@@ -337,15 +337,20 @@ mat-icon {
     }
 }
 
-input {
-    font-size: 1em; /* Gleiche Schriftgröße wie der Placeholder */
-    line-height: 1; /* Verhindert zusätzlichen Abstand durch Zeilenhöhe */
-    padding: 0.5em; /* Padding gleichmäßig definieren */
-    height: auto; /* Höhe wird automatisch angepasst */
-    box-sizing: border-box; /* Padding wird innerhalb der Höhe des Elements berücksichtigt */
+.write-message-field {
+    font-size: 1em; 
+    line-height: 2; 
+    overflow-wrap: break-word; /* Lässt lange Wörter umbrechen */
+    white-space: normal;    
+    height: auto;
+    background-color: transparent !important;
+    height: 72px !important;
   }
 
-input::placeholder {
-    font-size: 1em; /* Gleiche Schriftgröße wie der Text im Input */
-    line-height: 1; /* Verhindert, dass der Placeholder zusätzlichen Platz benötigt */
+.write-message-field::placeholder {
+    font-size: 1em; 
+    line-height: 2; 
+    overflow-wrap: break-word; /* Lässt lange Wörter umbrechen */
+    white-space: normal;    
+    height: auto;
   }

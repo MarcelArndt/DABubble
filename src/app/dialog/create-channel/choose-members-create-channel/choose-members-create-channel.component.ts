@@ -169,7 +169,6 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   }
   
 
-
   isFormValid(): boolean {
       if (this.selectAllPeople) {
           return true; 

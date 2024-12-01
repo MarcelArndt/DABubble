@@ -1,10 +1,10 @@
 <div class="headerComponent" >
     <div class="headerMainWrapper">
         <div class="headerContentWrapper">
-            <div class="logo">
+            <div class="logo" [ngClass]="{'displayFlexOnMobile': mainContentService.devSpaceAsTopLayer$ | async}">
                 <img [src]="darkmode.isDarkMode() ? './img/main-assets/main-logo-dark.svg' : './img/main-assets/main-logo.svg'">
             </div>
-            <div class="serverAndBackToNavContainer" (click)="backToDevSpace()">
+            <div class="serverAndBackToNavContainer" (click)="backToDevSpace()" [ngClass]="{'displayNoneOnMobile': mainContentService.devSpaceAsTopLayer$ | async}">
                 <button class="backToSideNavButton">
                     <mat-icon>chevron_left</mat-icon>
                 </button>

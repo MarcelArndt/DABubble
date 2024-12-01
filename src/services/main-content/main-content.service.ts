@@ -11,7 +11,7 @@ export class MainContentService {
     // Use BehaviorSubject for each layer toggle to hold the current state and allow subscriptions
     private navBarIsClosedSubject = new BehaviorSubject<boolean>(true);
 
-    private devSpaceAsTopLayer$ = new BehaviorSubject<boolean>(true);
+    public devSpaceAsTopLayer$ = new BehaviorSubject<boolean>(true);
     private chatAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private threadAsTopLayer$ = new BehaviorSubject<boolean>(false);
     private threadIsOpen$ = new BehaviorSubject<boolean>(false);

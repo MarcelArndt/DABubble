@@ -74,3 +74,15 @@
 app-searchbar {
 width: 50%;
 }
+
+.displayFlexOnMobile {
+    @include respond-to-maxWidth(small){
+        display: flex !important;
+    }
+}
+
+.displayNoneOnMobile{
+    @include respond-to-maxWidth(small){
+        display: none !important;
+    }
+}
