@@ -333,16 +333,16 @@ async processSearchQuery(
     if (itemType === 'channel') {
       // Kanal auswählen
       this.previousSearchChannel = selectedItem as Channel;
-      this.searchQuery = `#${(selectedItem as Channel).title} `;
+      this.searchQuery = `#${(selectedItem as Channel).title}`;
       this.channelService.currentChannelId = (selectedItem as Channel).id;
-      this.messageService.readChannel(); // Lädt den ausgewählten Kanal
+      this.messageService.readChannel(); 
     } else if (itemType === 'member') {
       // Mitglied auswählen
-      this.searchQuery = `@${(selectedItem as Member).name} `;
-      this.memberService.openProfileUser((selectedItem as Member).id); // Öffnet das Profil
+      this.searchQuery = `@${(selectedItem as Member).name}`;
+      this.memberService.openProfileUser((selectedItem as Member).id);
     } if (itemType === 'message') {
       const selectedMessage = selectedItem as Message;
-      this.searchQuery = `#${(this.previousSearchChannel as Channel).title} ${selectedMessage.message}`; // Setzt die Nachricht als Suchabfrage
+      this.searchQuery = `#${(this.previousSearchChannel as Channel).title} ${selectedMessage.message}`; 
       this.onSearchInput(this.searchQuery);
     }
   }
