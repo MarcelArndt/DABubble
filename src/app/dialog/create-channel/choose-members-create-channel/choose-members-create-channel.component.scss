@@ -14,7 +14,11 @@ mat-icon{
     @include respond-to-maxWidth(small){
         @include padding(32px, 16px, 32px, 16px);
         width: 100%;
+        height: 100%;
+        @include dFlex(space-between, start);
+
     }
+    
 }
 
 .optionContainer{
@@ -25,7 +29,11 @@ mat-icon{
 }
 
 h3{
-    @include nunito(700, 24px, black)
+    @include nunito(700, 24px, black);
+    @include respond-to-maxWidth(small){
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
 }
 
 .closeIcon{
@@ -38,6 +46,9 @@ h3{
     transition: background-color 0.100s ease-in-out, color 0.100s ease-in-out, transform 0.100s ease-in-out;
     &:hover {
         background-color: var(--dg-btn-bg);
+    }
+    @include respond-to-maxWidth(small){
+        right: 16px;
     }
 }
 
@@ -69,6 +80,11 @@ mat-form-field {
     max-height: calc(24px * 3 + 36px);
     @include nunito(400, 18px, black);
     width: 100%;
+    @include respond-to-maxWidth(small){
+        margin-top: 20px;
+        width: 100%;
+        max-height: 240px;
+    }
 }
 
 form {
@@ -118,7 +134,7 @@ form {
 }
 
 .button{
-    background-color: var(--purple-1) !important;
+    background-color: #444DF2 !important;
     @include nunito(400, 18px, --text-black);
     @include padding(12px, 25px, 12px, 25px);
     @include dFlex(center, center);
@@ -250,4 +266,15 @@ form {
     @include respond-to-maxWidth(small){
         border-radius: 0 !important;  /* Entfernt die abgerundeten Ecken */
     };
+}
+
+.buttonAndProgressBarContainer{
+    @include dFlex(center, space-between);
+    width: 100%;
+}
+
+input {
+    @include respond-to-maxWidth(small){
+        margin-top: 20px;
+    }
 }

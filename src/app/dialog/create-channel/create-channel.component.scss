@@ -81,7 +81,7 @@ input, textarea {
 
 button{
     width: fit-content;
-    background-color: var(--purple-1) !important;
+    background-color: #444DF2 !important;
     font-size: 18px;
     font-weight: 400;
     padding: 12px 25px 12px 25px;
@@ -97,6 +97,9 @@ button{
     transition: background-color 0.100s ease-in-out, color 0.100s ease-in-out, transform 0.100s ease-in-out;
     &:hover {
         background-color: var(--dg-btn-bg);
+    }
+    @include respond-to-maxWidth(small){
+        right: 16px;
     }
 }
 

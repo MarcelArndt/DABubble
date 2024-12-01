@@ -20,6 +20,7 @@ import { MemberService } from '../../../../services/member/member.service';
 import { ChannelService } from '../../../../services/channel/channel.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @Component({
@@ -37,7 +38,8 @@ import { MessagesService } from '../../../../services/messages/messages.service'
     MatInputModule,
     MatOptionModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressBarModule
   ],
   templateUrl: './choose-members-create-channel.component.html',
   styleUrl: './choose-members-create-channel.component.scss'
@@ -50,6 +52,8 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
   selectAllPeople = true; 
   myControl = new FormControl('');
   filteredMembers$: Observable<Member[]> = new Observable<Member[]>(); 
+  processCreatingChannel = false;
+
 
   channel: Channel;
   members!: Member[];
@@ -150,6 +154,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
 
 
   async createChannel() {
+    this.processCreatingChannel = true;
     if (this.selectAllPeople) {
       this.selectedMembers = [];
       this.channel.isPublic = true;
@@ -166,6 +171,7 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     this.channelService.currentChannelId = this.channel.id;
     await this.messageService.readChannel();
     this.dialogRef.close();
+    this.processCreatingChannel = false;
   }
   
 
