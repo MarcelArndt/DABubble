@@ -38,12 +38,23 @@ export class CreateChannelComponent {
 
   openChooseMembers() {
     (document.activeElement as HTMLElement)?.blur();  // Fokus aufheben
+    if (window.innerWidth <= 450) {
+      const dialogRef = this.dialog.open(ChooseMembersCreateChannelComponent, {
+        data: this.channel,
+        width: '100vw',   
+        height: '100vh',    
+        maxWidth: '100vw',  
+        maxHeight: '100vh',  
+        position: { top: '0', left: '0' }, 
+        autoFocus: false,
+        panelClass: 'custom-dialog' 
+      });
+        dialogRef.afterClosed().subscribe();
+    } else {
+      const dialogRef = this.dialog.open(ChooseMembersCreateChannelComponent);
+      dialogRef.afterClosed().subscribe();
+    }
     this.dialogRef.close();
-
-    const dialogRef = this.dialog.open(ChooseMembersCreateChannelComponent, {
-        data: this.channel
-    });
-    dialogRef.afterClosed().subscribe();
   }
 
   handleButtonClick() {

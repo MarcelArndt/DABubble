@@ -103,3 +103,10 @@ button{
 .validation-error{
     @include nunito(400, 18px, rgba(255, 0, 0, 0.582));
 }
+
+
+::ng-deep .mat-mdc-dialog-surface{
+    @include respond-to-maxWidth(small){
+        border-radius: 0 !important;  /* Entfernt die abgerundeten Ecken */
+    };
+}

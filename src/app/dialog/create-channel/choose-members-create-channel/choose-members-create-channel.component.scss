@@ -11,6 +11,10 @@ mat-icon{
     gap: 20px;
     @include padding(40px, 40px, 40px, 40px);
     width: 560px;
+    @include respond-to-maxWidth(small){
+        @include padding(32px, 16px, 32px, 16px);
+        width: 100%;
+    }
 }
 
 .optionContainer{
@@ -234,9 +238,16 @@ form {
 ::ng-deep .mat-mdc-text-field-wrapper{
     overflow: auto !important;
     scrollbar-width: thin;
+
 }
 
 ::ng-deep .mdc-evolution-chip-set__chips{
     row-gap: 12px;
 }
 
+
+::ng-deep .mat-mdc-dialog-surface{
+    @include respond-to-maxWidth(small){
+        border-radius: 0 !important;  /* Entfernt die abgerundeten Ecken */
+    };
+}

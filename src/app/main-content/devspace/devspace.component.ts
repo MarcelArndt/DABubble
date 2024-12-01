@@ -418,9 +418,22 @@ async processSearchQuery(
   }
 
   openCreateChannelDialog() {
-    this.memberService.setCurrentMemberData()
-    const dialogRef = this.dialog.open(CreateChannelComponent);
-    dialogRef.afterClosed().subscribe();
+    this.memberService.setCurrentMemberData();
+    if (window.innerWidth <= 450) {
+      const dialogRef = this.dialog.open(CreateChannelComponent, {
+        width: '100vw',   
+        height: '100vh',    
+        maxWidth: '100vw',  
+        maxHeight: '100vh',  
+        position: { top: '0', left: '0' }, 
+        autoFocus: false,
+        panelClass: 'custom-dialog' 
+      });
+        dialogRef.afterClosed().subscribe();
+    } else {
+      const dialogRef = this.dialog.open(CreateChannelComponent);
+      dialogRef.afterClosed().subscribe();
+    }
   }
 
   openDirectMessage(memberId: any) {
@@ -428,6 +441,8 @@ async processSearchQuery(
     this.directMessageService.isDirectMessage = true;
     this.memberService.setCurrentMemberData();
     this.directMessageService.readDirectUserData(memberId)
+    this.mainContentService.closeNavBar();
+    this.mainContentService.makeChatAsTopLayer();
   }
 
   openWriteAMessage() {
