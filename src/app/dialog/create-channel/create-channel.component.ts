@@ -51,7 +51,9 @@ export class CreateChannelComponent {
       });
         dialogRef.afterClosed().subscribe();
     } else {
-      const dialogRef = this.dialog.open(ChooseMembersCreateChannelComponent);
+      const dialogRef = this.dialog.open(ChooseMembersCreateChannelComponent, {
+        data: this.channel,
+      });
       dialogRef.afterClosed().subscribe();
     }
     this.dialogRef.close();

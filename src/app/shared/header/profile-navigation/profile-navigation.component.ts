@@ -38,19 +38,30 @@ export class ProfileNavigationComponent {
     public darkMode: DarkModeService, 
     public auth: AuthenticationService,
   ) { 
-    this.currentMember$ = this.auth.currentMember$; // Reaktiver Zugriff
+    this.currentMember$ = this.auth.currentMember$;
   }
 
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(ProfileComponent, {
-      width: '360px',
-      height: 'auto',
-      position: { top: '482px', right: '64px' },
-      autoFocus: false,
-      panelClass: 'custom-dialog'
-    });
-    dialogRef.afterClosed().subscribe();
+    if (window.innerWidth <= 450) {
+      const dialogRef = this.dialog.open(ProfileComponent, {
+        width: '300px',
+        height: 'auto',
+        position: { top: '324px', right: '8px' },
+        autoFocus: false,
+        panelClass: 'custom-dialog'
+      });
+      dialogRef.afterClosed().subscribe();     
+    } else {
+      const dialogRef = this.dialog.open(ProfileComponent, {
+        width: '360px',
+        height: 'auto',
+        position: { top: '482px', right: '64px' },
+        autoFocus: false,
+        panelClass: 'custom-dialog'
+      });
+      dialogRef.afterClosed().subscribe();      
+    }
   }
 
   ngOnInit() {
@@ -76,6 +87,4 @@ export class ProfileNavigationComponent {
   signOutUser() {
     this.auth.signOutUser()
   }
-
-
 }

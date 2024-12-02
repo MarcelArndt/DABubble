@@ -8,12 +8,14 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 import { Member } from '../../../interface/message';
 import { StorageService } from '../../../services/storage/storage.service';
 import { MemberService } from '../../../services/member/member.service';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
+    CommonModule,
     MatButtonModule,
     MatCardModule,
     MatIcon,
@@ -24,22 +26,21 @@ import { MemberService } from '../../../services/member/member.service';
   encapsulation: ViewEncapsulation.None
 })
 export class ProfileComponent {
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;  // Zugriff auf das Input-Element
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   readonly dialogRef = inject(MatDialogRef<ProfileComponent>);
-  // readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-  // readonly member = model(this.data.member);
   editDialog: boolean = false;
-  // member: TestMember;
   previousMember: Member = {} as Member;
   currentMember: Member = {} as Member; 
   downloadURL?: File;
+  currentMember$;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    public authenticationService: AuthenticationService,
     private memberService: MemberService,
     private storageService: StorageService
   ){
     this.previousMember = this.currentMember;
+    this.currentMember$ = this.authenticationService.currentMember$;
   }
 
   async ngOnInit() {

@@ -18,6 +18,9 @@
     @include respond-to-maxWidth(large) {
         gap: 5%;
     }
+    @include respond-to-maxWidth(small) {
+        gap: 8px;
+    }
 }
 .logo{
     width: 100%;
@@ -52,8 +55,13 @@
     display: none;
     @include nunito(700, 20px, var(--text-black));
     @include respond-to-maxWidth(small){
-    @include dFlex(center, center);
-    gap: 8px;
+        @include dFlex(center, center);
+        gap: 4px;
+    }
+    span{
+        @include respond-to-maxWidth(small){
+            margin-left: 4px;
+        }
     }
     .backToSideNavButton {
         @include padding(10px, 10px, 10px, 10px);
@@ -62,6 +70,10 @@
         border: 0px solid;
         border-radius: 100px;
         background-color: transparent;
+        @include respond-to-maxWidth(small) {
+            @include padding(4px, 0px, 0px, 0px);
+            border-radius: 150px;
+        }
     }
     &:hover{
         cursor: pointer;

@@ -24,6 +24,17 @@
    gap: 38px; 
    flex-direction: column;
    border-top-right-radius: 0px !important;
+   @include respond-to-maxWidth(small){
+    @include padding(24px, 20px, 24px, 20px);
+    gap: 16px; 
+   }
+}
+
+.custom-dialog .mat-mdc-dialog-surface{
+        /* Custom scrollbar styling */
+        &::-webkit-scrollbar {
+            width: none;
+        }
 }
 
 .closeButton {
@@ -78,6 +89,12 @@ h2 {
     transition: background-color 0.125s ease-in-out;
 }
 
+.mdc-button{
+    padding: 8px !important;
+    min-width: 0px !important;
+    @include dFlex(center, center);
+}
+
 .mdc-button__label{
     transition: color 0.125s ease-in-out;
 }
@@ -90,6 +107,9 @@ h2 {
     background-color:  var(--purple-2);
     .mdc-button__label{
         color: white !important;
+    }
+    .edit-pen{
+        color: white;
     }
 }
 
@@ -138,7 +158,9 @@ a{
 .status,
 .emailTitle
 { 
-    @include nunito(600, 20px, black);
+    font-family: 'Nunito';
+    font-size: 20px;
+    font-weight: 600;
     margin-left: 8px;
 }
 
@@ -148,21 +170,23 @@ a{
     width: 100%;
     button{
         font-size: 18px !important;
-        @include padding(12px, 25px, 12px, 25px);
+        box-sizing: border-box !important;
+        padding: 12px 25px 12px 25px !important;
         transform: border 0.3s ease-in-out, background-color  0.3s ease-in-out, color 0.3s ease-in-out;
     }
     .cancelButton{
         background-color: white !important;
-        border: 1px solid #ADB0D9;
+        border: 1px solid #444DF2;
         color: var(--purple-1) !important;
         &:hover{
-            border: 1px solid var(--purple-1);
-            background-color: var(--purple-1) !important;
+            border: 1px solid #444DF2;
+            background-color: #444DF2 !important;
             color: white !important; 
         }
     }
     .saveButton{
-        background-color: var(--purple-1) !important;
+        background-color: #444DF2 !important;
+        transition: background-color 0.125s ease-in-out;
         &:hover{
             background-color: var(--purple-2);
         }
@@ -189,4 +213,20 @@ a{
   
   .fileInput button:hover mat-icon {
     color: #1a73e8; 
+  }
+
+  .edit-pen{
+    color: #3f51b5;
+  }
+
+  .mat-mdc-button>.mat-icon {
+    margin: 0px !important;
+  }
+  
+  .mat-typography h2{
+    @include nunito(600, 28px, black);
+  }
+  
+  .custom-dialog .mat-mdc-dialog-surface{
+    scrollbar-width: none;
   }

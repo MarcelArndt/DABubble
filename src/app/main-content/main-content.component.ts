@@ -29,8 +29,9 @@ export class MainContentComponent {
   chatAsTopLayer: boolean = false;
   threadAsTopLayer: boolean = false;
   threadIsOpen: boolean = false;
-
-  @ViewChild('devSpace') devSpace!: DevspaceComponent; // Zugriff auf die DevSpaceComponent
+  private alreadyResized: boolean = false; 
+  private isWidthAbove1285px: boolean = window.innerWidth > 1285;  
+  @ViewChild('devSpace') devSpace!: DevspaceComponent; 
 
 
   constructor(
@@ -55,6 +56,25 @@ export class MainContentComponent {
       this.threadIsOpen = value;
     });
     this.messageService.readChannel();
+    window.addEventListener('resize', this.onWindowResize.bind(this));
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.onWindowResize.bind(this));
+  }
+
+  onWindowResize() {
+    const currentWidth = window.innerWidth;
+
+    if (currentWidth < 1285 && this.isWidthAbove1285px && !this.alreadyResized) {
+      this.alreadyResized = true;
+      window.location.reload();
+    } else if (currentWidth >= 1285) {
+      this.isWidthAbove1285px = true;
+      this.alreadyResized = false;
+    } else {
+      this.isWidthAbove1285px = false;
+    }
   }
 
   

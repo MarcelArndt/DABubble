@@ -253,8 +253,7 @@ form {
 
 ::ng-deep .mat-mdc-text-field-wrapper{
     overflow: auto !important;
-    scrollbar-width: thin;
-
+    scrollbar-width: none;
 }
 
 ::ng-deep .mdc-evolution-chip-set__chips{
@@ -271,6 +270,8 @@ form {
 .buttonAndProgressBarContainer{
     @include dFlex(center, space-between);
     width: 100%;
+    flex-direction: column;
+    gap: 16px;
 }
 
 input {

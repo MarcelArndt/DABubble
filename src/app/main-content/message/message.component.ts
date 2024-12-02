@@ -27,7 +27,7 @@ import { DirectMessageService } from '../../../services/directMessage/direct-mes
 })
 export class MessageComponent {
   @Input() message: any;
-  @Input() index: any
+  @Input() index: any;
   @Input() thread: boolean = false;
   @Input() threadFirstMessage: boolean = false;
 
@@ -36,10 +36,15 @@ export class MessageComponent {
   isEdit: boolean = false;
   editMessageText: string = '';
 
+  currentMember$;
+
   constructor(
     public messageService: MessagesService,
     public directMessageService: DirectMessageService,
-    public auth: AuthenticationService) { }
+    public auth: AuthenticationService) { 
+      this.currentMember$ = auth.currentMember$
+    }
+
 
   resetHoverAndMenu() {
     this.isMessageHover = false;

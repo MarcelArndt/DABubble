@@ -37,6 +37,14 @@ export class MainContentService {
     this.navBarIsClosedSubject.next(false);
   }
 
+  closeNavBarForTabletOrMobile() {
+    if (window.innerWidth < 900) {
+      this.navBarIsClosedSubject.next(false);
+    } else {
+      return
+    }
+  }
+
   openNavBar() {
     if (window.innerWidth <= 450) {
       this.navBarIsClosedSubject.next(true);

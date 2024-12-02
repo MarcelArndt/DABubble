@@ -9,12 +9,14 @@
 
             <div class="row">
                 <h2>{{currentMember.name}}</h2>
-                <button mat-button tabindex="-1" (click)="editDialog = true">Edit</button>
+                <button mat-button tabindex="-1" (click)="editDialog = true"><mat-icon class="edit-pen">edit</mat-icon></button>
             </div>
 
             <div class="startRow">
-                <img src="/img/profile-pic/offline.svg" alt="Online status">
-                <span class="status">Offline</span>
+                <img [src]="(currentMember$ | async)?.status == true ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="Online status">
+                <span class="status" [ngStyle]="{'color': (currentMember$ | async)?.status ? '#92C83E' : '#A1A1A1'}" >
+                    {{(currentMember$ | async)?.status == true ? 'Online' : 'Offline'}}
+                </span>
             </div>    
 
             <div class="startRow">
@@ -31,14 +33,11 @@
 
             <div class="imgContainer">
                 <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/001.svg'">
-                <!-- Button to trigger file input -->
                 <button class="fileInput" mat-icon-button (click)="openFileDialog()">
                     <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*"/>
                     <mat-icon>attach_file</mat-icon>
                 </button>
             </div>
-
-
 
             <div>
                 <div>
@@ -59,7 +58,7 @@
 
 
             <div class="buttonRow">
-                <button class="cancelButton" mat-button (click)="this.dialogRef.close()">Cancel</button>
+                <button class="cancelButton" mat-button (click)="editDialog = false">Cancel</button>
                 <button class="saveButton" mat-flat-button (click)="save(currentMember)">Save</button>
             </div>
         }

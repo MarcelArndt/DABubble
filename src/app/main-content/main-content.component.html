@@ -15,13 +15,13 @@
                 'focus-app': chatAsTopLayer, 
                 'hidden': threadAsTopLayer
                 }"
-                (click)="this.mainContentService.closeNavBar()">
+                (click)="this.mainContentService.closeNavBarForTabletOrMobile()">
             </app-chat>
             <app-thread  [ngClass]="{
                 'focus-app-thread': threadAsTopLayer, 
                 'visible': threadIsOpen,
                 }"
-                (click)="this.mainContentService.closeNavBar()">
+                (click)="this.mainContentService.closeNavBarForTabletOrMobile()">
             </app-thread>
         </div>
     </div>

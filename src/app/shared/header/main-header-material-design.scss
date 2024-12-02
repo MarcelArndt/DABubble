@@ -69,24 +69,32 @@
         font-size: 21px !important;
     }
 
-    .matMenu-item{
+    .matMenu-item {
         @include dFlex;
         width: 100%;
-        mat-icon{
-            display: none;
-            @include  respond-to-maxWidth(large){  
-                display: flex;
+        mat-icon {
+          display: none;
+          transition: color 0.125s ease-in-out;
+      
+          @include respond-to-maxWidth(large) {
+            display: flex;
+          }
+        }
+        .outline {
+          @include materialSymbols;
+        }
+        &:hover {
+          mat-icon {
+            color: var(--purple-1);
+          }
+          button {
+            .mat-mdc-menu-item-text {
+              color: var(--purple-1);
             }
+          }
         }
-
-        .outline{
-            @include materialSymbols;
-        }
-
-        &:hover mat-icon{
-            color: var(--text-blue) ;
-        }
-    }
+      }
+      
 
     .mobilDekor{
         display: none;
