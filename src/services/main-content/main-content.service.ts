@@ -33,8 +33,10 @@ export class MainContentService {
     this.navBarIsClosedSubject.next(!currentState);
   }
 
+
   closeNavBar() {
     this.navBarIsClosedSubject.next(false);
+    // this.devSpaceAsTopLayer$.next(false);
   }
 
   closeNavBarForTabletOrMobile() {
@@ -86,7 +88,6 @@ export class MainContentService {
     this.threadIsOpen$.next(false);
   }
 
-    
   // Hilfsfunktion für die Überprüfung, ob das Objekt ein Member ist
   isMember(obj: any): obj is Member {
     return obj && typeof obj.id === 'string' && typeof obj.name === 'string' && typeof obj.email === 'string';
@@ -95,6 +96,10 @@ export class MainContentService {
   // Hilfsfunktion für die Überprüfung, ob das Objekt ein Channel ist
   isChannel(obj: any): obj is Channel {
     return obj && typeof obj.id === 'string' && typeof obj.title === 'string';
+  }
+
+  locationReload(){
+    location.reload();
   }
 
 }
