@@ -26,7 +26,6 @@ import { ThreadService } from '../../../services/thread/thread.service';
     trigger('toggleThread', [
       transition(':enter', [
         style({
-          // width: '0px',
           opacity: 0,
           overflow: 'hidden',
           transform: 'translateX(-100%)'
@@ -34,7 +33,6 @@ import { ThreadService } from '../../../services/thread/thread.service';
         animate(
           '125ms ease-out',
           style({
-            // width: '440px', 
             opacity: 1,
             transform: 'translateX(0)'
           })
@@ -52,7 +50,6 @@ import { ThreadService } from '../../../services/thread/thread.service';
         animate(
           '125ms ease-in',
           style({
-            // width: '0px', 
             opacity: 0,
             overflow: 'hidden',
             transform: 'translateX(100%)'

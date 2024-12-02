@@ -1,7 +1,7 @@
 @import '../../../mixin.scss';
 
 section {
-    @include heightWidth($w: 100%, $h: 100%);
+    @include heightWidth( $h: 100%);
     @include dFlex($jc: space-between);
     flex-direction: column;
     background-color: var(--secundary-bg);

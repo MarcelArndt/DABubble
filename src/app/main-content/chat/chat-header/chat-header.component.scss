@@ -78,7 +78,7 @@ section {
     padding: 5px 10px;
 
     @media(max-width: 660px) {
-        padding: 5px 0;
+        padding: 5px;
     }
 
     &:hover {
@@ -188,7 +188,9 @@ section {
     border-radius: 50px;
     @include dFlex($ai: center, $jc: space-between);
     transition: background-color 0.125s ease-in-out;
-
+    @media(max-width: 660px) {
+        @include padding(8px, 8px, 8px, 8px);
+    }
     p {
         transition: color 0.125s ease-in-out;
 
