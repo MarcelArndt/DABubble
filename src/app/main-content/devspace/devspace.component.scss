@@ -67,7 +67,7 @@
     position: fixed;
     transform: translateY(-30%);
     left: 0px;
-    bottom: 11vh;
+    bottom: 14vh;
     z-index: 5;
     transform: rotate(90deg) scaleX(-1) scaleY(-1);
     transform-origin: left top;
@@ -110,7 +110,7 @@
     }
     @include respond-to-maxWidth('smallMedium'){
         padding: 8px 26px 8px 26px;
-        bottom: 13vh;
+        bottom: 25vh;
     }
     @include respond-to-maxWidth(small){
         display: none;
@@ -398,6 +398,7 @@ h3 {
 .dropdown-content {
     flex: 1;
     overflow: auto;
+    overflow-x: hidden;
 }
 
 .dropdown-content,
