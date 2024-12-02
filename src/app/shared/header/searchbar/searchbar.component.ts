@@ -32,6 +32,7 @@ export class SearchbarComponent {
   activeDropdownIndex = -1; // Aktives Element im Dropdown
   previousSearchChannel: Channel | null = null;
   searchChanges$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  currentMember$;
 
   allHints = [
     "Type '@' to search for members.",
@@ -48,6 +49,7 @@ export class SearchbarComponent {
     private channelService: ChannelService,
     private messageService: MessagesService
   ) {
+    this.currentMember$ = this.authenticationService.currentMember$;
   }
 
   @Input() icon: string = 'search'; 

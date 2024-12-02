@@ -32,7 +32,13 @@
     <textarea *ngIf="editIsOpen" [(ngModel)]="newChannel.description" class="descriptionInput"></textarea>
     <p class="horizontalLine"></p>
     <h3>Created by</h3>
-    <p class="creator">{{channelCreator}}</p>
+    <p class="creator">
+      @if (this.previousChannel.id === 'uZaX2y9zpsBqyaOddLWh') {
+        {{this.previousChannel.admin}}
+      } @else {
+        {{this.channelCreator}}
+      }
+    </p>
   </div>
   <div class="buttonContainer">
     <button class="bottomButton" mat-flat-button [disabled]="previousChannel.id === 'uZaX2y9zpsBqyaOddLWh'" (click)="leaveChannel()">Leave channel</button>

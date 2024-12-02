@@ -100,6 +100,7 @@ export class DevspaceComponent implements OnInit {
   channels: Channel[] = [];
   messages: Message[] = [];
   currentMember?: Member | null = null;
+  currentMember$;
 
   searchbarChannel: Channel[] = [];
   searchbarMember: Member[] = [];
@@ -142,6 +143,7 @@ export class DevspaceComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private renderer: Renderer2,
     private elRef: ElementRef) {
+      this.currentMember$ = this.authenticationService.currentMember$;
   }
 
 

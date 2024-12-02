@@ -246,7 +246,7 @@ export class ChatHeaderComponent implements OnInit {
       dialogRef.afterClosed().subscribe();
     } else {
     const dialogRef = this.dialog.open(AddMembersChannelComponent, {
-      width: '660px',
+      width: '360px',
       height: 'auto',
       position: { top: '400px', right: '64px' },
       autoFocus: false,

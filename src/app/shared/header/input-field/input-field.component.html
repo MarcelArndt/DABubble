@@ -18,9 +18,8 @@
     }
 
     <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
-        @if(isPasswordfield){<button class="visibility-button" (click)="tooglePasswordVisibility()"><mat-icon class="icon-search" [innerHTML]="type === 'text' ? 'visibility' : 'visibility_off'"></mat-icon></button>}
+        @if(isPasswordfield){<button class="visibility-button" tabindex="-1" (click)="tooglePasswordVisibility()"><mat-icon class="icon-search" [innerHTML]="type === 'text' ? 'visibility' : 'visibility_off'"></mat-icon></button>}
         <input name="inputName" [formControl]="inputControl" [required]="required ? true: false" [type]="type" [minlength]="minlength" [placeholder]="placeholder" [pattern]="pattern"/>
         <mat-icon class="icon">{{icon}}</mat-icon>
     </div>
-
 </div>

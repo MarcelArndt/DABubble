@@ -34,7 +34,7 @@
               <img class="contactPicture" [src]="member.imageUrl" alt="User picture" *ngIf="member.imageUrl">
               <img class="onlineStatus" [src]="member.status ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="User picture" *ngIf="member.status !== undefined">
             </div>
-            <span class="searchBarSpan">{{ member.name }}</span>
+            <span class="searchBarSpan">{{ member.name }} @if(member.id === (this.currentMember$ | async )?.id) {(You)}</span>
           </div>
         </div>
       </div>
@@ -111,7 +111,7 @@
                     <img class="userImage" src="{{member.imageUrl}}" alt="Member image">
                     <img class="onlineStatus" [src]="member.status ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="Online status">
                 </div>
-                <span class="contactName">{{member.name}} @if(member.id === this.currentMember?.id) {(You)}</span>
+                <span class="contactName">{{member.name}} @if(member.id === (this.currentMember$ | async )?.id) {(You)}</span>
             </div>
         </div>
         }
