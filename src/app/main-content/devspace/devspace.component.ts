@@ -443,14 +443,17 @@ async processSearchQuery(
     this.directMessageService.isDirectMessage = true;
     this.memberService.setCurrentMemberData();
     this.directMessageService.readDirectUserData(memberId)
-    this.mainContentService.closeNavBar();
-    this.mainContentService.makeChatAsTopLayer();
+    if (window.innerWidth < 450) {
+      this.mainContentService.closeNavBar();
+      this.mainContentService.makeChatAsTopLayer();
+    }
   }
 
   openWriteAMessage() {
     this.messageService.isWriteAMessage = true;
-    // for mobile:
-    this.mainContentService.closeNavBar();
-    this.mainContentService.makeChatAsTopLayer()
+    if (window.innerWidth < 450) {
+      this.mainContentService.closeNavBar();
+      this.mainContentService.makeChatAsTopLayer()
+    }
   }
 }

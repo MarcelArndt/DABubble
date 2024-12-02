@@ -194,20 +194,18 @@ section {
     p {
         transition: color 0.125s ease-in-out;
 
-        @media(max-width: 660px) {
+        @include respond-to-maxWidth(small) {
             display: none;
         }
     }
+    // &:hover {
+    //     background-color: var(--primary-bg);
+    //     cursor: pointer;
 
-    &:hover {
-        background-color: var(--primary-bg);
-        cursor: pointer;
-
-        p {
-            color: var(--purple-1) !important;
-        }
-    }
-
+    //     p {
+    //         color: var(--purple-1) !important;
+    //     }
+    // }
 }
 
 mat-icon {

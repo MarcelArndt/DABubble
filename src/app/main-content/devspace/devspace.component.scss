@@ -30,7 +30,9 @@
     @include respond-to-maxWidth('XL') {
         @include padding(32px, 20px, 32px, 20px);
     }
-
+    @include respond-to-minWidth(large) {
+        min-width: unset ;
+    }
     @include respond-to-maxWidth(large) {
         max-height: 100%;
         position: absolute;
@@ -48,6 +50,10 @@
     }
     @include respond-to-minWidth(small) {
         z-index: 5;
+        min-width: 327px;
+    }
+    @include respond-to-minWidth(large) {
+        min-width: unset ;
     }
     @include respond-to-maxWidth(small) {
         @include padding(24px, 16px, 24px, 16px);

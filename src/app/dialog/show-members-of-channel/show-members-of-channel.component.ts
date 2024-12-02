@@ -41,7 +41,7 @@ export class ShowMembersOfChannelComponent {
   members: Member[] = [];
 
   constructor(
-    private memberService: MemberService,
+    public memberService: MemberService,
     private channelService: ChannelService,
   ) {
   }

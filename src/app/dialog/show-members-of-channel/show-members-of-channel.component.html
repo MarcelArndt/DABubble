@@ -11,7 +11,7 @@
                  [formControl]="myControl"
           >
           <div class="memberListContainer">
-            <div class="contact"  *ngFor="let member of (filteredMembers$ | async)">
+            <div class="contact" (click)="this.dialogRef.close(); memberService.openProfileUser(member.id)" *ngFor="let member of (filteredMembers$ | async)">
               <div class="contactPictureContainer">
                 <img class="contactPicture" [src]="member.imageUrl" alt="User picture">
                 <img class="onlineStatus" [src]="member.status ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="User status">

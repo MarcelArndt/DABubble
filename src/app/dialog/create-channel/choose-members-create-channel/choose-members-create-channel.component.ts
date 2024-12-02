@@ -21,6 +21,7 @@ import { ChannelService } from '../../../../services/channel/channel.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { MessagesService } from '../../../../services/messages/messages.service';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MainContentService } from '../../../../services/main-content/main-content.service';
 
 
 @Component({
@@ -67,7 +68,8 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
     private memberService: MemberService,
     private channelService: ChannelService,
     private authenticationService: AuthenticationService,
-    private messageService: MessagesService
+    private messageService: MessagesService,
+    private mainContentService: MainContentService
   ) {
     this.channel = data; 
   }
@@ -169,6 +171,8 @@ export class ChooseMembersCreateChannelComponent implements OnInit {
       await this.channelService.addChannelIdToCurrentUser(this.channel.id);
     }
     this.channelService.currentChannelId = this.channel.id;
+    this.mainContentService.hideThread();
+    this.mainContentService.makeChatAsTopLayer();    
     await this.messageService.readChannel();
     this.dialogRef.close();
     this.processCreatingChannel = false;
