@@ -28,6 +28,10 @@
     display: flex;
     flex-direction: column;
     @include respond-to-maxWidth('XL') {
+        @include padding(32px, 20px, 32px, 20px);
+    }
+
+    @include respond-to-maxWidth(large) {
         max-height: 100%;
         position: absolute;
         top: 72px;
@@ -132,15 +136,19 @@
 }
 
 h2 {
-    font-size: 24px;
+    @include nunito(700, 24px, var(--text-black));
     margin: 0px;
-    font-weight: 700;
-    font-family: 'Nunito';
+    @include respond-to-maxWidth('XL'){
+        font-size: 20px;
+    }
 }
 
 h3 {
     margin: 0px;
     font-size: 20px;
+    @include respond-to-maxWidth('XL'){
+        font-size: 18px;
+    }
 }
 
 .mat-drawer-inner-container {
@@ -196,7 +204,6 @@ h3 {
 }
 
 .dropDownArrow {
-    margin-right: 15px;
     padding: 10px;
     transform: rotate(-90deg);
 }
@@ -256,7 +263,7 @@ h3 {
 
 .channel,
 .contact {
-    margin-bottom: 25px;
+    margin-bottom: 8px;
     margin-left: 25px;
     transition: background-color 0.125s ease-in-out;
     border-radius: 20px;
@@ -307,7 +314,6 @@ h3 {
 }
 
 .channel {
-    margin-bottom: 15px; 
     margin-left: 0;
     transition: background-color 0.125s ease-in-out;
     border-radius: 50px; 

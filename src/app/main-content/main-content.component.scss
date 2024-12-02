@@ -61,7 +61,7 @@ app-devspace {
     flex: auto;
 
 
-    @include respond-to-maxWidth('XL') {
+    @include respond-to-maxWidth(large) {
         max-width: 302px;
         position: absolute;
         top: 0;
@@ -72,7 +72,7 @@ app-devspace {
         border-radius: 30px;
     }
     @include respond-to-maxWidth(large) {
-        bottom: 0px;
+        bottom: 20px;
         left: -20px;
     }
     @include respond-to-maxWidth(medium) {
@@ -90,8 +90,7 @@ app-devspace {
         right: 0;
         bottom: 0;
         z-index: 3;
-        box-shadow: rgba(255, 255, 255, 0) 0px 0px 0px !important;        
-
+        box-shadow: rgba(255, 255, 255, 0) 0px 0px 0px !important;
     }
 }
 
