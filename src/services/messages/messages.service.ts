@@ -103,7 +103,7 @@ export class MessagesService {
     const weekday = formatter.format(now);
     const day = now.getDate(); 
     const month = now.toLocaleString('en-US', { month: 'long' });
-    const createdAt = `${weekday}, ${day} ${month}`;
+    const createdAt = `${weekday}, ${day}. ${month}`;
 
     const messageData = {
       user: this.authenticationService.getCurrentUserUid(),
