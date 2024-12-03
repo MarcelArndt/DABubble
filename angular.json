@@ -40,6 +40,12 @@
           },
           "configurations": {
             "production": {
+              "sourceMap": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },
               "budgets": [
                 {
                   "type": "initial",
