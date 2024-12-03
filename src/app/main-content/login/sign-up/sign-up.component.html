@@ -34,7 +34,7 @@
                     </div>
             </div>
             </div>
-            <div class="set-right"> <button [disabled]="!myForm.valid " (click)="onSubmit()" >Go On</button> </div>
+            <div class="set-right"> <button [disabled]="areAllInputsTouched() || areAllInputsFilled() || !myForm.valid || myForm.pristine" (click)="onSubmit()" >Go On</button> </div>
         </form>
 
 </div>

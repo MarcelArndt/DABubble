@@ -78,10 +78,33 @@ export class SignUpComponent {
     };
   }
 
+  areAllInputsFilled():boolean{
+    let control;
+    for (let each in this.myForm.controls){
+      control = this.myForm.controls[each];
+      if(!control.value){
+        return true;
+      }
+    }
+    return false
+  }
+
+  areAllInputsTouched():boolean{
+    let control;
+    for (let each in this.myForm.controls){
+      control = this.myForm.controls[each];
+      if(control.untouched) return false;
+    }
+    return true
+  }
+
   fillValues(){
     this.signUp.fullName = this.myForm.value.fullName || '';
     this.signUp.userEmail = this.myForm.value.email || '';
     this.signUp.password = this.myForm.value.password || '';
+    this.myForm.value.fullName = '';
+    this.myForm.value.email = '';
+    this.myForm.value.password  = '';
   }
 
   registerUser() {
@@ -103,6 +126,13 @@ export class SignUpComponent {
         control?.markAsUntouched();
         control?.setErrors(null);
       });
+        // Wichtiger Schritt: Formular-Status manuell aktualisieren
+    this.myForm.updateValueAndValidity({ emitEvent: true });
+
+    // Sicherstellen, dass der Status des Formulars auch im Template erzwungen wird
+    setTimeout(() => {
+      this.myForm.updateValueAndValidity();
+    }, 50);
     }
   }
 }
