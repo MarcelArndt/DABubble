@@ -38,7 +38,7 @@ export class CreateChannelComponent {
 
   openChooseMembers() {
     (document.activeElement as HTMLElement)?.blur();  // Fokus aufheben
-    if (window.innerWidth <= 450) {
+    if (window.innerWidth <= 600) {
       const dialogRef = this.dialog.open(ChooseMembersCreateChannelComponent, {
         data: this.channel,
         width: '100vw',   

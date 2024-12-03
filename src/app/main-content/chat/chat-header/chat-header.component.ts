@@ -227,11 +227,24 @@ export class ChatHeaderComponent implements OnInit {
   }
   
 
- /////////////////
+  /////////////////
 
   openEditChannel(): void {
+    if (window.innerWidth <= 600) {
+      const dialogRef = this.dialog.open(EditChannelComponent, {
+        width: '100vw',   
+        height: '100vh',    
+        maxWidth: '100vw',  
+        maxHeight: '100vh',  
+        position: { top: '0', left: '0' }, 
+        autoFocus: false,
+        panelClass: 'custom-dialog' 
+      });
+        dialogRef.afterClosed().subscribe();
+    } else {
     const dialogRef = this.dialog.open(EditChannelComponent);
     dialogRef.afterClosed().subscribe();
+    }
   }
 
   addMembersToChannel(): void {

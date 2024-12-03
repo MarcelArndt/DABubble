@@ -421,7 +421,7 @@ async processSearchQuery(
 
   openCreateChannelDialog() {
     this.memberService.setCurrentMemberData();
-    if (window.innerWidth <= 450) {
+    if (window.innerWidth <= 600) {
       const dialogRef = this.dialog.open(CreateChannelComponent, {
         width: '100vw',   
         height: '100vh',    

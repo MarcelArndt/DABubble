@@ -13,6 +13,7 @@ import { MemberService } from '../../../services/member/member.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { Member } from '../../../interface/message';
 import { MessagesService } from '../../../services/messages/messages.service';
+import { ShowMembersOfChannelComponent } from '../show-members-of-channel/show-members-of-channel.component';
 
 @Component({
   selector: 'app-edit-channel',
@@ -24,7 +25,8 @@ import { MessagesService } from '../../../services/messages/messages.service';
     MatButtonModule, 
     MatDialogModule,
     CommonModule,
-    MatIcon
+    MatIcon,
+    ShowMembersOfChannelComponent
   ],
   templateUrl: './edit-channel.component.html',
   styleUrl: './edit-channel.component.scss'
@@ -98,5 +100,9 @@ export class EditChannelComponent {
     this.channelService.currentChannelId = 'uZaX2y9zpsBqyaOddLWh';
     await this.messageService.readChannel();
     this.dialogRef.close();
+  }
+
+  isWindowLowerThan600(){
+   return  window.innerWidth<= 600
   }
 }

@@ -98,7 +98,7 @@ button{
     &:hover {
         background-color: var(--dg-btn-bg);
     }
-    @include respond-to-maxWidth(small){
+    @include respond-to-maxWidth('smallMedium'){
         right: 16px;
     }
 }
@@ -109,7 +109,7 @@ button{
 
 
 ::ng-deep .mat-mdc-dialog-surface{
-    @include respond-to-maxWidth(small){
+    @include respond-to-maxWidth('smallMedium'){
         border-radius: 0 !important;  /* Entfernt die abgerundeten Ecken */
     };
 }

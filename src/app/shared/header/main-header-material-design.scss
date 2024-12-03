@@ -98,7 +98,7 @@
 
     .mobilDekor{
         display: none;
-        @include  respond-to-maxWidth(large){     
+        @include respond-to-maxWidth(large){     
             display: flex;   
             background-color: var(--border-light-purple);
             width: 75%;
