@@ -1,62 +1,8 @@
 <div  *ngIf="mainContentService.navBarIsClosed$ | async" @toggleNavBar class="serverNav nav-Bar">
     <div class="serverNavContent nav-item" mode="side">
-<div class="searchbar" [ngClass]="addClass">
-  <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
-    <input 
-      [placeholder]="placeholder" 
-      [(ngModel)]="searchQuery" 
-      (input)="onSearchInput(searchQuery)" 
-      (click)="onSearchInput(searchQuery)"
-      (keydown.arrowUp)="navigateDropdown(-1)" 
-      (keydown.arrowDown)="navigateDropdown(1)" 
-      (keydown.enter)="onSearchInput(searchQuery); selectDropdownItem(); closeDevSpaceAndOpenChatForMobile();" 
-      (focus)="showHints()" 
-      (blur)="hideDropdown()"
-    >
-    <mat-icon (click)="onSearchInput(searchQuery); closeDevSpaceAndOpenChatForMobile()"
-    >{{icon}}</mat-icon>
-  </div>
-  
-  <div class="dropdown" *ngIf="showDropdown || displayHints">
 
-    @if(this.displayHints){
-      <div class="dropDownItem" *ngFor="let hint of allHints; let i = index" 
-           [class.active]="i === activeDropdownIndex" 
-           (click)="selectDropdownItem()"
-           (mouseover)="setActiveDropdownIndex(i)">
-        <span class="basicSearchSpan"><mat-icon>info</mat-icon>{{ hint }}</span>
-      </div>
-    } @else {
-      <div *ngIf="members.length > 0">
-        <div class="dropDownItem" *ngFor="let member of searchbarMember; let i = index" [class.active]="i === activeDropdownIndex" (click)="onDropdownItemClick(i)">
-          <div class="searchBarContact">
-            <div class="contactPictureContainer">
-              <img class="contactPicture" [src]="member.imageUrl" alt="User picture" *ngIf="member.imageUrl">
-              <img class="onlineStatus" [src]="member.status ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="User picture" *ngIf="member.status !== undefined">
-            </div>
-            <span class="searchBarSpan">{{ member.name }} @if(member.id === (this.currentMember$ | async )?.id) {(You)}</span>
-          </div>
-        </div>
-      </div>
-    
-      <div *ngIf="searchbarChannel.length > 0">
-        <div class="dropDownItem" *ngFor="let channel of searchbarChannel; let i = index" [class.active]="i === activeDropdownIndex" (click)="onDropdownItemClick(i)">
-          <span class="basicSearchSpan">{{ channel.title }}</span>
-        </div>
-      </div>
-    
-      <div *ngIf="messages.length > 0">
-        <div class="dropDownItem" *ngFor="let message of messages; let i = index" [class.active]="i === activeDropdownIndex" (click)="onDropdownItemClick(i)">
-          <span class="basicSearchSpan">{{ message.message }}</span>
-        </div>
-      </div>
-    }
-
-  </div>
-</div>
-
-
-
+      <app-search-bar-for-devspace></app-search-bar-for-devspace>
+      
         <div class="titleRow">
             <div class="titleAndServerSvg">
                 <img src="/img/devspace/titleAndServerSvg.svg">
