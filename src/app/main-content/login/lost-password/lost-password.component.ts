@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter} from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';

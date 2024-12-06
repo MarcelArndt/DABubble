@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Member } from '../../interface/message';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QuerySnapshot, setDoc, updateDoc } from '@firebase/firestore';
-import { Auth, updateEmail, updateProfile } from '@angular/fire/auth';
+import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QuerySnapshot, updateDoc } from '@firebase/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { CurrentProfileComponent } from '../../app/dialog/current-profile/current-profile.component';
 

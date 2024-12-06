@@ -156,21 +156,20 @@ h2{
 }
 
 .cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above) div.mat-mdc-autocomplete-panel {
-    /* Custom scrollbar styling */
     &::-webkit-scrollbar {
-        width: 8px; /* Breite des Scrollbalkens */
+        width: 8px; 
         height: 8px;
     }
     &::-webkit-scrollbar-track {
-        background-color: transparent; /* Transparenter Track */
+        background-color: transparent; 
     }
     &::-webkit-scrollbar-thumb {
-        background-color: var(--purple-2); /* Farbe des Thumbs */
-        border-radius: 30px; /* Rundungen für den Thumb */
-        transition: background-color 0.125s ease; /* Sanfter Übergang beim Hover */
+        background-color: var(--purple-2); 
+        border-radius: 30px; 
+        transition: background-color 0.125s ease; 
     }
     &::-webkit-scrollbar-thumb:hover {
-        background-color: var(--purple-1); /* Hover-Farbe des Thumbs */
+        background-color: var(--purple-1); 
         cursor: grab;
     }
 }

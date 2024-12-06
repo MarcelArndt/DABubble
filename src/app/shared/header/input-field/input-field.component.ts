@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Renderer2, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, ElementRef, HostListener, Renderer2, Input, forwardRef } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, Validators, ReactiveFormsModule, NgControl  } from '@angular/forms';

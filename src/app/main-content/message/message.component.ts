@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MessageOptionsComponent } from './message-options/message-options.component';
 import { MessageReationComponent } from './message-reation/message-reation.component';
 import { MessageAnswerComponent } from './message-answer/message-answer.component';

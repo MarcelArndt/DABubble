@@ -1,6 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatFormFieldModule} from '@angular/material/form-field';
 import { DevspaceComponent } from '../../main-content/devspace/devspace.component';
 import {MatButtonModule} from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';

@@ -8,7 +8,6 @@ import { DarkModeService } from '../../../../services/darkMode/dark-mode.service
 import { ProfileComponent } from '../../../dialog/profile/profile.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
-import { Member } from '../../../../interface/message';
 import { CommonModule } from '@angular/common';
 
 @Component({

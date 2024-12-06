@@ -1,12 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Auth, verifyPasswordResetCode, confirmPasswordReset, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User } from '@angular/fire/auth';
 import { doc, getFirestore, setDoc } from '@angular/fire/firestore';
-import { RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Member } from '../../interface/message';
 import { getStorage } from '@angular/fire/storage';
 import { getDoc, onSnapshot, updateDoc } from '@firebase/firestore';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
-import { Channel } from '../../classes/channel.class';
 
 
 @Injectable({

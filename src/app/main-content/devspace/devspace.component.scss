@@ -698,4 +698,7 @@ h3 {
     @include respond-to-minWidth(small){
         display: none;
     }
+    mat-icon{
+        color: white;
+    }
   }

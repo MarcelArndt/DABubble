@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { collection, doc, DocumentReference } from '@firebase/firestore';
 import { ChannelService } from '../channel/channel.service';
-import { ThreadService } from '../thread/thread.service';
 
 @Injectable({
   providedIn: 'root'

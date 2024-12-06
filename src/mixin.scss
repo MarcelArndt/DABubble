@@ -9,21 +9,21 @@ $breakpoints: (
 );
 
 @mixin respond-to-maxWidth($breakpoint) {
-    $max-width: map-get($breakpoints, $breakpoint); // Wert aus der Map abrufen
+    $max-width: map-get($breakpoints, $breakpoint); 
 
     @if $max-width {
       @media (max-width: $max-width) {
-        @content; // Die Inhalte, die in das Mixin übergeben werden
+        @content; 
       }
     }
 }
 
 @mixin respond-to-minWidth($breakpoint) {
-    $min-width: map-get($breakpoints, $breakpoint); // Wert aus der Map abrufen
+    $min-width: map-get($breakpoints, $breakpoint); 
 
     @if $min-width {
       @media (min-width: $min-width) {
-        @content; // Die Inhalte, die in das Mixin übergeben werden
+        @content;
       }
     }
 }

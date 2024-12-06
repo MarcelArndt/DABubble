@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component} from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { StorageService } from '../../../../../services/storage/storage.service';
 

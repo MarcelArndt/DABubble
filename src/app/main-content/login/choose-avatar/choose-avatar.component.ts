@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { SignUpService } from '../../../../services/sign-up/sign-up.service';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';

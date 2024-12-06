@@ -7,8 +7,7 @@ import { animate, query, style, transition, trigger } from '@angular/animations'
 import { EventService } from '../../../services/event/event.service';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { MessageComponent } from "../message/message.component";
-import { Message, Thread } from '../../../interface/message';
-import { MessagesService } from '../../../services/messages/messages.service';
+import { Thread } from '../../../interface/message';
 import { ThreadService } from '../../../services/thread/thread.service';
 
 @Component({

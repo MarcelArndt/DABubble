@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { deleteObject, getDownloadURL, ref, uploadBytes, uploadBytesResumable } from '@firebase/storage';
+import { deleteObject, getDownloadURL, ref, uploadBytes } from '@firebase/storage';
 
 @Injectable({
   providedIn: 'root'

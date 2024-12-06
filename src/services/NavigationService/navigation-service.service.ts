@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Page } from '../../interface/pages';
 
 @Injectable({
   providedIn: 'root'

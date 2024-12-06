@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Channel } from '../../classes/channel.class';
 import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, serverTimestamp, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';

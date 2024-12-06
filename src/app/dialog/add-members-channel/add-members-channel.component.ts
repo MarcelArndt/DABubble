@@ -1,7 +1,7 @@
-import { Component, Inject, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ChatHeaderComponent } from '../../main-content/chat/chat-header/chat-header.component';
@@ -35,7 +35,6 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatAutocompleteModule,
     ReactiveFormsModule
-
   ],
   templateUrl: './add-members-channel.component.html',
   styleUrls: ['../../dialog/create-channel/choose-members-create-channel/choose-members-create-channel.component.scss', './add-members-channel.component.scss' ],

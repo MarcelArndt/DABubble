@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, AfterViewInit, ViewChild, Input } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, Input } from '@angular/core';
 import { InputFieldComponent } from '../../../shared/header/input-field/input-field.component';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink, RouterModule } from '@angular/router';

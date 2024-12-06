@@ -9,7 +9,6 @@ import { Channel } from '../../../../classes/channel.class';
 import { Member, Message } from '../../../../interface/message';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, firstValueFrom, Observable, of, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { CurrentProfileComponent } from '../../../dialog/current-profile/current-profile.component';
 
 @Component({
   selector: 'app-searchbar',
