@@ -263,7 +263,7 @@ h3 {
     max-height: 40%;
     transition: max-height 0.3s ease; 
     @include respond-to-minWidth(small){
-        padding-left: 24px;
+        padding-left: 16px;
     }
 }
 
