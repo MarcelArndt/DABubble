@@ -1,8 +1,6 @@
 <div  *ngIf="mainContentService.navBarIsClosed$ | async" @toggleNavBar class="serverNav nav-Bar">
     <div class="serverNavContent nav-item" mode="side">
-
-      <app-search-bar-for-devspace></app-search-bar-for-devspace>
-      
+        <app-search-bar-for-devspace></app-search-bar-for-devspace>
         <div class="titleRow">
             <div class="titleAndServerSvg">
                 <img src="/img/devspace/titleAndServerSvg.svg">
@@ -12,55 +10,20 @@
                 <mat-icon>edit_square</mat-icon>
             </button>
         </div>
-
-        <div class="dropwDownTopRow">
-            <div class="dFlex" (click)="dropChannels()">
-                <mat-icon class="dropDownArrow" [ngClass]="{'rotateArrow': channelsAreVisible}">arrow_drop_down</mat-icon>
-                <mat-icon  class="channelsIcon">workspaces</mat-icon>
-                <h3 class="folderTitle">Channels</h3>
-            </div>
-            <button class="addChannelPlus" (click)="openCreateChannelDialog()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path
-                        d="M7 14C6.71667 14 6.47933 13.904 6.288 13.712C6.096 13.5207 6 13.2833 6 13V8H1C0.716667 8 0.479 7.904 0.287 7.712C0.0956668 7.52067 0 7.28333 0 7C0 6.71667 0.0956668 6.479 0.287 6.287C0.479 6.09567 0.716667 6 1 6H6V1C6 0.716667 6.096 0.479 6.288 0.287C6.47933 0.0956668 6.71667 0 7 0C7.28333 0 7.521 0.0956668 7.713 0.287C7.90433 0.479 8 0.716667 8 1V6H13C13.2833 6 13.5207 6.09567 13.712 6.287C13.904 6.479 14 6.71667 14 7C14 7.28333 13.904 7.52067 13.712 7.712C13.5207 7.904 13.2833 8 13 8H8V13C8 13.2833 7.90433 13.5207 7.713 13.712C7.521 13.904 7.28333 14 7 14Z"
-                        fill="black" />
-                </svg>
-            </button>
-        </div>
-        @if (channelsAreVisible) {
-            <div class="dropDownChannelSection" @slideDown>
-                <div
-                  class="channel"
-                  *ngFor="let channel of channels; let i = index"
-                  (click)="messageService.checkWindowAndOpenChannel(channel)"
-                >
-                  <mat-icon>tag</mat-icon>
-                  <span class="channel-text">{{ channel.title }}</span>
-                </div>
-            </div>              
-        <div class="addChannelButton" (click)="openCreateChannelDialog()">
-            <mat-icon class="material-icons">add_circle_outline</mat-icon>
-            Add Channel
-        </div>
-        }
-        <div class="dropwDownTopRow" (click)="dropContacts()">
-            <div class="dFlex">
-                <mat-icon class="dropDownArrow" [ngClass]="{'rotateArrow': contactsAreVisible}">arrow_drop_down</mat-icon>
-                <mat-icon class="userIcon">account_circle</mat-icon>
-                <h3 class="folderTitle">Direct messages</h3>
-            </div>
-        </div>
-        @if (contactsAreVisible) {
-        <div class="dropDownContacts" @slideDown class="dropdown-content">
-            <div class="contact" *ngFor="let member of members; let i = index" (click)="openDirectMessage(member.id)">
-                <div class="contactPicture">
-                    <img class="userImage" src="{{member.imageUrl}}" alt="Member image">
-                    <img class="onlineStatus" [src]="member.status ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="Online status">
-                </div>
-                <span class="contactName">{{member.name}} @if(member.id === (this.currentMember$ | async )?.id) {(You)}</span>
-            </div>
-        </div>
-        }
+        <app-channel-list
+        [channels]="channels"
+        [channelsAreVisible]="channelsAreVisible"
+        (toggleChannels)="dropChannels()"
+        (createChannel)="openCreateChannelDialog()"
+        (selectChannel)="messageService.checkWindowAndOpenChannel($event)"
+        ></app-channel-list>
+        <app-contact-list
+        [contactsAreVisible]="contactsAreVisible"
+        [members]="members"
+        [currentMember]="currentMember"
+        (toggleContacts)="dropContacts()"
+        (selectContact)="openDirectMessage($event)">
+        </app-contact-list>
     </div>
 </div>
 

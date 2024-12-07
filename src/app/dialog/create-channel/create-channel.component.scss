@@ -4,12 +4,21 @@ mat-icon{
     @include materialSymbols()
 }
 
+::ng-deep .cdk-global-scrollblock{
+    @include respond-to-maxWidth(small){
+        overflow: hidden !important;
+    }
+}
+
 .dialogWindow{
     @include padding(40px, 40px, 40px, 40px);
     display: flex;
     flex-direction: column;
     gap: 20px;
     font-family: 'Nunito';
+    @include respond-to-maxWidth(small){
+        @include padding(32px, 16px, 32px, 16px);
+    }
 }
 
 h2{

@@ -16,6 +16,8 @@ import { DirectMessageService } from '../../../services/directMessage/direct-mes
 import { combineLatest } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SearchBarComponentDevSpace } from './search-bar/search-bar.component';
+import { ChannelListComponent } from "./channel-list/channel-list.component";
+import { ContactListComponent } from "./contact-list/contact-list.component";
 
 
 @Component({
@@ -27,20 +29,13 @@ import { SearchBarComponentDevSpace } from './search-bar/search-bar.component';
     MatIcon,
     MatDialogModule,
     FormsModule,
-    SearchBarComponentDevSpace
-  ],
+    SearchBarComponentDevSpace,
+    ChannelListComponent,
+    ContactListComponent
+],
   templateUrl: './devspace.component.html',
   styleUrl: './devspace.component.scss',
   animations: [
-    trigger('slideDown', [
-      transition(':enter', [
-        style({ height: 0, opacity: 0, overflow: 'hidden' }),
-        animate('125ms ease-out', style({ height: '*', opacity: 1 }))
-      ]),
-      transition(':leave', [
-        animate('125ms ease-in', style({ height: 0, opacity: 0, overflow: 'hidden' }))
-      ])
-    ]),
     trigger('toggleNavBar', [
       transition(':enter', [
         style({
