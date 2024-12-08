@@ -5,9 +5,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "purifycss": "purifycss ./dist/**/*.html ./dist/**/*.js --minify --output ./dist/styles.css",
-    "build-and-purify": "ng build --configuration production && npm run purifycss"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
