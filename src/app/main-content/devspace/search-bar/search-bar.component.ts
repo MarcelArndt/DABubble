@@ -81,7 +81,8 @@ export class SearchBarComponentDevSpace implements OnInit {
     public mainContentService: MainContentService,
     private authenticationService: AuthenticationService,
     private renderer: Renderer2,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private directMessageService: DirectMessageService
   ){
     this.currentMember$ = this.authenticationService.currentMember$;
   }
@@ -274,6 +275,7 @@ export class SearchBarComponentDevSpace implements OnInit {
 
   handleChannelSelection(item: Channel): void {
     this.messageService.isWriteAMessage = false;
+    this.directMessageService.isDirectMessage = false;
     this.searchQuery = `#${item.title}`;
     this.previousSearchChannel = item;
     this.channelService.currentChannelId = item.id;
@@ -283,6 +285,7 @@ export class SearchBarComponentDevSpace implements OnInit {
 
   handleMessageSelection(item: Message): void {
     this.messageService.isWriteAMessage = false;
+    this.directMessageService.isDirectMessage = false;
     const selectedMessage = item;
     this.searchQuery = `#${(this.previousSearchChannel as Channel).title} ${selectedMessage.message}`;
     this.onSearchInput(this.searchQuery);

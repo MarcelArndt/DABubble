@@ -174,6 +174,7 @@ export class DevspaceComponent implements OnInit {
   }
 
   openDirectMessage(memberId: any) {
+    this.channelService.currentChannelId = '';
     this.messageService.isWriteAMessage = false;
     this.directMessageService.isDirectMessage = true;
     this.memberService.setCurrentMemberData();

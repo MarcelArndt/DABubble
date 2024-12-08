@@ -9,6 +9,7 @@ import { Channel } from '../../../../classes/channel.class';
 import { Member, Message } from '../../../../interface/message';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, firstValueFrom, Observable, of, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { DirectMessageService } from '../../../../services/directMessage/direct-message.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -46,7 +47,8 @@ export class SearchbarComponent {
     public memberService: MemberService,
     private authenticationService: AuthenticationService,
     private channelService: ChannelService,
-    private messageService: MessagesService
+    private messageService: MessagesService,
+    private directMessageService: DirectMessageService
   ) {
     this.currentMember$ = this.authenticationService.currentMember$;
   }
@@ -187,8 +189,6 @@ export class SearchbarComponent {
     );
   }
   
-  
-
 
   showHints() {
     if (!this.searchQuery.trim()) {
@@ -290,6 +290,7 @@ export class SearchbarComponent {
   
   handleChannelSelection(selectedChannel: Channel): void {
     this.messageService.isWriteAMessage = false;
+    this.directMessageService.isDirectMessage = false;    
     this.previousSearchChannel = selectedChannel;
     this.searchQuery = `#${selectedChannel.title} `;
     this.channelService.currentChannelId = selectedChannel.id;
@@ -305,6 +306,7 @@ export class SearchbarComponent {
   
   handleMessageSelection(selectedMessage: Message): void {
     this.messageService.isWriteAMessage = false;
+    this.directMessageService.isDirectMessage = false;    
     this.searchQuery = `#${this.previousSearchChannel?.title} ${selectedMessage.message}`;
     this.onSearchInput(this.searchQuery);
   }

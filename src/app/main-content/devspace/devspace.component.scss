@@ -185,3 +185,14 @@ app-contact-list{
     max-height: 100%;
     overflow: hidden;
 }
+
+.writeMessageButton{
+    @include dFlex(center, center);
+    transition: background-color 0.125s ease-in-out;
+    mat-icon{
+        color: var(--text-black);
+    }
+    &:hover{
+        background-color: var(--primary-bg);
+    }
+}
