@@ -14,7 +14,6 @@ export class StorageService {
   uploadMultipleImages(files: FileList, folderName: string = 'User') {
     Array.from(files).forEach((file, index) => {
       const fileRef = ref(this.auth.storage, `${folderName}/${this.auth.getCurrentUserUid()}/${file.name}`);
-      console.log('herllo')
       uploadBytes(fileRef, file).then((snapshot) => {
         console.log(`Datei ${index + 1} hochgeladen: ${file.name}`);
       }).catch(error => {
@@ -33,22 +32,20 @@ export class StorageService {
 
     return uploadBytes(fileRef, file)
       .then(() => {
-        console.log('File uploaded:', file);
-        // Abrufen der Download-URL nach erfolgreichem Upload
         return getDownloadURL(fileRef);
       })
       .catch(error => {
         console.error('Error uploading file:', error);
-        throw error; // Weitergeben des Fehlers zur Fehlerbehandlung
+        throw error; 
       });
   }
+
   async uploadImageMessage(file: File): Promise<string> {
     const fileRef = ref(this.auth.storage, `messagesImages/${this.auth.getCurrentUserUid()}/${file.name}`);
   
     return uploadBytes(fileRef, file)
       .then(() => getDownloadURL(fileRef))
       .then((url) => {
-        console.log('File uploaded and URL retrieved:', url);
         this.messageImages.push(url);
         return url;
       })
@@ -57,13 +54,13 @@ export class StorageService {
         throw error;
       });
   }
+
   async uploadImageMessageThread(file: File): Promise<string> {
     const fileRef = ref(this.auth.storage, `messagesImages/${this.auth.getCurrentUserUid()}/${file.name}`);
   
     return uploadBytes(fileRef, file)
       .then(() => getDownloadURL(fileRef))
       .then((url) => {
-        console.log('File uploaded and URL retrieved:', url);
         this.messageImagesThread.push(url);
         return url; 
       })
@@ -89,7 +86,6 @@ export class StorageService {
     return Promise.all(uploadPromises);
   }
 
-
   async deleteMessageImages(downloadUrl: string) {
     try {
       const regex = /\/o\/(.*?)\?/;
@@ -100,10 +96,7 @@ export class StorageService {
   
         const storageRef =  this.auth.storage;
         const desertRef = ref(storageRef, decodedPath);
-        console.log(desertRef)
-
         await deleteObject(desertRef);
-        console.log('Bild erfolgreich gelöscht.');
       } else {
         console.error('Speicherpfad konnte nicht aus der URL extrahiert werden.');
       }
