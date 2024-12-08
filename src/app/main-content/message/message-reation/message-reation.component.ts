@@ -12,7 +12,6 @@ import { ThreadService } from '../../../../services/thread/thread.service';
   imports: [
     CommonModule,
     FormsModule,
-
   ],
   templateUrl: './message-reation.component.html',
   styleUrl: './message-reation.component.scss'
@@ -20,6 +19,7 @@ import { ThreadService } from '../../../../services/thread/thread.service';
 export class MessageReationComponent {
   @Input() message: any;
   @Input() isThread: boolean = false;
+  cachedReactions: { name: string; count: number }[] = [];
 
   constructor(
     public messageService: MessagesService,
@@ -27,7 +27,12 @@ export class MessageReationComponent {
     public directMessage: DirectMessageService,
     private threadService: ThreadService) { }
 
+    ngOnInit() {
+      this.updateReactions(); // Initiale Berechnung
+    }
+
   reactionMessage(reaction: string) {
+    console.log(reaction)
     if (this.isThread) {
       this.threadService.reaction(reaction, this.message.threadId)
     } else if (this.directMessage.isDirectMessage) {
@@ -37,10 +42,10 @@ export class MessageReationComponent {
     }
   }
 
-  check() {
+  updateReactions() {
     const re = this.message.reactions;
-    return Object.keys(re)
-      .filter(key => key !== "rocket" && key !== "like")
+    this.cachedReactions = Object.keys(re)
+      .filter(key => key !== 'rocket' && key !== 'like')
       .map(key => ({ name: key, count: re[key].length }));
   }
 
