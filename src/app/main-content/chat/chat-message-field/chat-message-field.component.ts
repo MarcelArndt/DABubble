@@ -161,11 +161,13 @@ export class ChatMessageFieldComponent{
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
     if (lastAtSignIndex > -1) {
       const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
-      if (searchQuery && !searchQuery.includes(' ')) {
+      if (!searchQuery.includes(' ')) {
         this.filteredUsers = this.users.filter(user =>
           user.toLowerCase().startsWith(searchQuery.toLowerCase())
         );
-        this.showUserList = this.filteredUsers.length > 0;
+        this.users = this.memberService.allMembersNames;
+        this.filteredUsers = this.users;
+        this.showUserList = true;
         this.selectedIndex = 0;
       } else {
         this.showUserList = false;
