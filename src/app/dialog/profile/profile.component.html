@@ -5,7 +5,7 @@
                 <mat-icon class="closeButton" (click)="this.dialogRef.close()">close</mat-icon>
             </div>
 
-            <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/006.svg'">
+            <img class="profileImage" [src]="currentMember.imageUrl || './img/profile-pic/006.svg'">
 
             <div class="row">
                 <h2>{{currentMember.name}}</h2>
@@ -13,7 +13,7 @@
             </div>
 
             <div class="startRow">
-                <img [src]="(currentMember$ | async)?.status == true ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="Online status">
+                <img [src]="(currentMember$ | async)?.status == true ? './img/profile-pic/online.svg' : './img/profile-pic/offline.svg'" alt="Online status">
                 <span class="status" [ngStyle]="{'color': (currentMember$ | async)?.status ? '#92C83E' : '#A1A1A1'}" >
                     {{(currentMember$ | async)?.status == true ? 'Online' : 'Offline'}}
                 </span>
@@ -32,7 +32,7 @@
             </div>
 
             <div class="imgContainer">
-                <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/006.svg'">
+                <img class="profileImage" [src]="currentMember.imageUrl || './img/profile-pic/006.svg'">
                 <button class="fileInput" mat-icon-button (click)="openFileDialog()">
                     <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*"/>
                     <mat-icon>attach_file</mat-icon>

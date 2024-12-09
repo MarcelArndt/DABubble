@@ -72,8 +72,6 @@ export class AuthenticationService {
     return member;
   }
   
-  
-
   async updateLoginStatus(boolean: boolean) {
     const washingtonRef = doc(this.getReference(), "member", this.getCurrentUserUid());
     await updateDoc(washingtonRef, {
@@ -138,7 +136,6 @@ export class AuthenticationService {
     });
   }
   
-
   async updateAuthProfileData(currentMember: Member): Promise<void> {
     try {
       const user = this.auth.currentUser;
@@ -193,7 +190,6 @@ export class AuthenticationService {
       }
     });
   }
-
 
   // Lost Password
   async resetPassword(email: string) {
