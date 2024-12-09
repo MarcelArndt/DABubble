@@ -28,11 +28,10 @@ export class MessageReationComponent {
     private threadService: ThreadService) { }
 
     ngOnInit() {
-      this.updateReactions(); // Initiale Berechnung
+      this.updateReactions();
     }
 
   reactionMessage(reaction: string) {
-    console.log(reaction)
     if (this.isThread) {
       this.threadService.reaction(reaction, this.message.threadId)
     } else if (this.directMessage.isDirectMessage) {
