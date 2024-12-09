@@ -14,6 +14,9 @@
 
             <div class="startRow">
                 <img [src]="(currentMember$ | async)?.status == true ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="Online status">
+                <span class="status" [ngStyle]="{'color': (currentMember$ | async)?.status ? '#92C83E' : '#A1A1A1'}" >
+                    {{(currentMember$ | async)?.status == true ? 'Online' : 'Offline'}}
+                </span>
             </div>
 
             <div class="startRow">
