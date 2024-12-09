@@ -5,6 +5,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, getDocs, onSnapshot, QuerySnapshot, updateDoc } from '@firebase/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { CurrentProfileComponent } from '../../app/dialog/current-profile/current-profile.component';
+import { updateProfile } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -165,12 +166,26 @@ export class MemberService {
   }
 
 
-  async updateProfileImageOfUser(downloadURL: string) {
-    const userId = this.authenticationService.getCurrentUserUid();
-    await updateDoc(doc(this.authenticationService.getReference(), "member", userId), {
-      imageUrl: downloadURL
-    });
+  async updateProfileImageOfUser(newImageUrl: string): Promise<void> {
+    const user = this.authenticationService.auth.currentUser; 
+    if (user) {
+      try {
+        // Aktualisiere Firebase Authentication
+        await updateProfile(user, { photoURL: newImageUrl });
+  
+        // Aktualisiere Firestore
+        const memberDoc = doc(this.authenticationService.getReference(), 'member', user.uid);
+        await updateDoc(memberDoc, { imageUrl: newImageUrl });
+        } catch (error) {
+        console.error('Fehler beim Aktualisieren des Profilbildes:', error);
+      }
+    } else {
+      console.error('Kein authentifizierter Benutzer gefunden.');
+    }
   }
+  
+  
+  
 
   async allMembersName() {
     this.allMembersNames = [];

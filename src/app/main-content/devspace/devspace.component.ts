@@ -95,16 +95,15 @@ export class DevspaceComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.initializeMemberAndChannels(); 
+    this.initializeMembers(); 
     this.initializePublicChannels(); 
     this.authenticationService.observerUser();
   }
   
 
-  initializeMemberAndChannels(): void {
+  initializeMembers(): void {
     const members$ = this.memberService.getAllMembersFromFirestoreObservable();
     const currentMember$ = this.authenticationService.currentMember$;
-  
     combineLatest([members$, currentMember$]).subscribe(([updatedMembers, currentMember]) => {
       this.currentMember = currentMember;
       this.members = this.memberService.prioritizeCurrentMember(updatedMembers, this.currentMember);

@@ -3,7 +3,7 @@ import { Channel } from '../../classes/channel.class';
 import { arrayRemove, arrayUnion, collection, doc, DocumentData, getDoc, onSnapshot, QuerySnapshot, serverTimestamp, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Member } from '../../interface/message';
-import { Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,30 +19,24 @@ export class ChannelService {
   }
 
   getAllAccessableChannelsFromFirestoreObservable(currentMember: Member): Observable<Channel[]> {
-    return new Observable((observer) => {
-      // Speicher für öffentliche und exklusive Channels
-      let publicChannels: Channel[] = [];
-      let privateChannels: Channel[] = [];
-  
-      // Lade öffentliche Channels
-      this.getAllPublicChannelsFromFirestore((channels: Channel[]) => {
-        publicChannels = channels;
-  
-        // Lade exklusive Channels des aktuellen Members
-        this.getAllChannelsWithChannelIdsFromCurrentUser(currentMember, (channels: Channel[]) => {
-          privateChannels = channels;
-  
-          // Kombiniere öffentliche und exklusive Channels
-          const allChannels = [...publicChannels, ...privateChannels];
-          observer.next(allChannels); // Sende die kombinierten Channels an den Observer
-          observer.complete();
-        });
+    const publicChannels$ = new Observable<Channel[]>((observer) => {
+      this.getAllPublicChannelsFromFirestore((channels) => {
+        observer.next(channels);
+        observer.complete();
       });
     });
+    const privateChannels$ = new Observable<Channel[]>((observer) => {
+      this.getAllChannelsWithChannelIdsFromCurrentUser(currentMember, (channels) => {
+        observer.next(channels);
+        observer.complete();
+      });
+    });
+    return combineLatest([publicChannels$, privateChannels$]).pipe(
+      map(([publicChannels, privateChannels]) => [...publicChannels, ...privateChannels])
+    );
   }
   
   
-
   async removeMemberIdFromChannel(channelId: string, memberId: string) {
     const channelRef = doc(this.authenticationService.getReference(), 'channels', channelId);
     await updateDoc(channelRef, {
@@ -73,6 +67,7 @@ export class ChannelService {
     });
   }
   
+
   private getTimestampAsDate(timestamp: any): Date {
     if (timestamp && typeof timestamp.toDate === 'function') {
       return timestamp.toDate(); 
@@ -157,6 +152,27 @@ export class ChannelService {
     }, (error) => {
       console.error('Fehler beim Abrufen der Channels: ', error);
     });
+  }
+
+
+  getAllChannelsFromFirestore(): void {
+    const channelsCollection = collection(this.authenticationService.getReference(), 'channels');
+    onSnapshot(channelsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+      const channels: Channel[] = snapshot.docs
+        .map((doc) => {
+          const data = doc.data();
+          return {
+            id: data['id'],
+            title: data['title'],
+            messages: data['messages'],
+            membersId: data['membersId'],
+            admin: data['admin'],
+            description: data['description'],
+            isPublic: data['isPublic'],
+            createdAt: data['createdAt'] || '',
+          };
+        })
+      })
   }
   
 

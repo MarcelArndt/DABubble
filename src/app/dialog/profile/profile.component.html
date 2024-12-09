@@ -1,11 +1,11 @@
-<div class="card" appearance="outlined">
+<div class="card" [ngClass]="{'cardOnEdit': editDialog}" appearance="outlined">
         @if (!editDialog) {
             <div class="row">
                 <h3>Profile</h3>
                 <mat-icon class="closeButton" (click)="this.dialogRef.close()">close</mat-icon>
             </div>
 
-            <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/001.svg'">
+            <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/006.svg'">
 
             <div class="row">
                 <h2>{{currentMember.name}}</h2>
@@ -14,10 +14,7 @@
 
             <div class="startRow">
                 <img [src]="(currentMember$ | async)?.status == true ? '/img/profile-pic/online.svg' : '/img/profile-pic/offline.svg'" alt="Online status">
-                <span class="status" [ngStyle]="{'color': (currentMember$ | async)?.status ? '#92C83E' : '#A1A1A1'}" >
-                    {{(currentMember$ | async)?.status == true ? 'Online' : 'Offline'}}
-                </span>
-            </div>    
+            </div>
 
             <div class="startRow">
                 <mat-icon class="mailIcon">mail</mat-icon>
@@ -32,7 +29,7 @@
             </div>
 
             <div class="imgContainer">
-                <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/001.svg'">
+                <img class="profileImage" [src]="currentMember.imageUrl || '/img/profile-pic/006.svg'">
                 <button class="fileInput" mat-icon-button (click)="openFileDialog()">
                     <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*"/>
                     <mat-icon>attach_file</mat-icon>
@@ -47,13 +44,22 @@
                     </div>
                     <input class="textInput" [(ngModel)]="currentMember.name" placeholder="{{currentMember.name}}" >                 
                 </div>
-                <div>
+                <!-- <div>
                     <div class="editRow m-t-16">
                         <mat-icon class="icon">mail</mat-icon>
                         <h4>Email</h4>
                     </div>
                     <input class="textInput" [(ngModel)]="currentMember.email" placeholder="{{currentMember.email}}">                
-                </div>                
+                </div>                 -->
+                <div class="emailEditWindowSection">
+                    <div class="startRow">
+                        <mat-icon class="mailIcon">mail</mat-icon>
+                        <span class="emailTitle">E-Mail-Adress</span>
+                    </div>
+                    
+                    <a href="mailto:email.adress@example.com"  tabindex="-1">{{currentMember.email}}</a>
+                </div>
+
             </div>
 
 

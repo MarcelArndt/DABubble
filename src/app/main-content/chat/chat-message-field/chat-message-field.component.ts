@@ -74,45 +74,84 @@ export class ChatMessageFieldComponent{
     this.imagePreviews = [];
   }
 
-  async handleSendMessage() {
+  async handleSendMessage(): Promise<void> {
     if (this.messageService.isWriteAMessage) {
-      const members = await firstValueFrom(this.memberService.getAllMembersFromFirestoreObservable());
-      const currentMember = await this.auth.getCurrentMemberSafe();
-      if (!currentMember) {
-        console.log('No current member in handleSendMessage');
-        return;
-      }
-      const channels = await firstValueFrom(this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember));
-  
-      // Über alle ausgewählten Objekte iterieren
-      for (const selectedObject of this.messageService.selectedObjects) {
-        if (selectedObject.type === 'email' || selectedObject.type === 'member') {
-          const member = selectedObject.value as Member;
-          if (members.some(m => m.id === member.id)) {
-            await this.handleSendDirectMessageForChatHeader(member.id, this.messageField);
-          }
-        } else if (selectedObject.type === 'channel') {
-          const channel = selectedObject.value as Channel;
-          if (channels.some(c => c.id === channel.id)) {
-            await this.messageService.sendMessageToChannel(channel.id, this.messageField, currentMember);
-          }
-        }
-      }
-      this.messageField = '';  // Eingabefeld zurücksetzen
-      this.auth.enableInfoBanner('Message(s) have been sent.');
+      await this.handleWriteAMessage();
     } else {
-      // Fallback: Falls keine Objekte ausgewählt wurden, reguläre Nachrichtenlogik ausführen
-      if (this.messageField.trim() || this.storageService.messageImages.length > 0) {
-        this.messageSent.emit();
-        if (this.directMessageService.isDirectMessage) {
-          await this.sendDirectMessage();
-        } else {
-          await this.sendMessage();
-        }
+      await this.handleFallbackSendMessage();
+    }
+  }
+  
+
+  async handleWriteAMessage(): Promise<void> {
+    const members = await firstValueFrom(this.memberService.getAllMembersFromFirestoreObservable());
+    const currentMember = await this.auth.getCurrentMemberSafe();
+    
+    if (!currentMember) {
+      console.log('No current member in handleWriteAMessage');
+      return;
+    }
+  
+    const channels = await firstValueFrom(this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember));
+  
+    for (const selectedObject of this.messageService.selectedObjects) {
+      await this.processSelectedObject(selectedObject, members, channels, currentMember);
+    }
+  
+    this.resetMessageField();
+    this.auth.enableInfoBanner('Message(s) have been sent.');
+  }
+  
+
+  async processSelectedObject(
+    selectedObject: any, 
+    members: Member[], 
+    channels: Channel[], 
+    currentMember: Member
+  ): Promise<void> {
+    if (selectedObject.type === 'email' || selectedObject.type === 'member') {
+      await this.handleSelectedMember(selectedObject, members);
+    } else if (selectedObject.type === 'channel') {
+      await this.handleSelectedChannel(selectedObject, channels, currentMember);
+    }
+  }
+  
+
+  async handleSelectedMember(selectedObject: any, members: Member[]): Promise<void> {
+    const member = selectedObject.value as Member;
+    if (members.some(m => m.id === member.id)) {
+      await this.handleSendDirectMessageForChatHeader(member.id, this.messageField);
+    }
+  }
+  
+
+  async handleSelectedChannel(
+    selectedObject: any, 
+    channels: Channel[], 
+    currentMember: Member
+  ): Promise<void> {
+    const channel = selectedObject.value as Channel;
+    if (channels.some(c => c.id === channel.id)) {
+      await this.messageService.sendMessageToChannel(channel.id, this.messageField, currentMember);
+    }
+  }
+  
+
+  async handleFallbackSendMessage(): Promise<void> {
+    if (this.messageField.trim() || this.storageService.messageImages.length > 0) {
+      this.messageSent.emit();
+      if (this.directMessageService.isDirectMessage) {
+        await this.sendDirectMessage();
+      } else {
+        await this.sendMessage();
       }
     }
   }
   
+
+  resetMessageField(): void {
+    this.messageField = '';
+  }
   
 
   async handleSendDirectMessageForChatHeader(targetMemberId: string, message: string) {

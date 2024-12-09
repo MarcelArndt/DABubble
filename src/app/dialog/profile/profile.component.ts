@@ -75,7 +75,6 @@ export class ProfileComponent {
 }
 
 
-
   openFileDialog() {
     this.fileInput.nativeElement.click(); 
   }
