@@ -15,6 +15,7 @@ import { DarkModeService } from '../../../services/darkMode/dark-mode.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 import { LightboxService } from '../../../services/lightbox/lightbox.service';
 import { NavigationServiceService } from '../../../services/NavigationService/navigation-service.service';
+import { IndicatorForScrollingComponent } from '../../shared/indicator-for-scrolling/indicator-for-scrolling.component';
 
 
 interface Page {
@@ -39,6 +40,7 @@ interface Page {
     SignInComponent,
     ChooseAvatarComponent, 
     LostPasswordComponent, 
+    IndicatorForScrollingComponent,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss', './login-animation.scss']

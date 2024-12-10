@@ -5,7 +5,7 @@
     @include figtree($fw: 500, $fs: 18px, $c: var(--text-black));
     @include respond-to-maxWidth(medium) {
         text-align: center;
-        padding: 48px 0px 48px 0px;
+        padding: 0px 0px 48px 0px;
     }
 }
 
@@ -118,13 +118,15 @@ strong{
     }
 
     @include respond-to-maxWidth(medium) {
-        width: 75%;
-        height: 75%;
-        min-height: 120px;
-        min-width: 120px;
         aspect-ratio: 1/1;
         padding-top: 24px;
         padding-bottom: 24px;
+
+        img{
+            width: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
     }
 
     @include respond-to-maxWidth(semiMedium) {
