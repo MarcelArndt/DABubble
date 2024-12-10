@@ -155,8 +155,32 @@ export class SearchbarComponent {
     } 
     else if (query.startsWith('#')) {
       this.channels = await this.searchChannels(query, channels$);
+    } 
+    else {
+      await this.processMessagesForCurrentChannel(query);
     }
     await this.processMessagesForChannel(query);
+  }
+
+  async processMessagesForCurrentChannel(query: string): Promise<void> {
+    try {
+      const currentChannelId = this.channelService.currentChannelId;
+      if (!currentChannelId) {
+        console.warn('Kein aktueller Channel verfügbar.');
+        return;
+      }
+      const allMessages = await this.messageService.loadInitialMessagesByChannelId(currentChannelId);
+      const searchQuery = query.toLowerCase().trim();
+      this.messages = allMessages.filter((message: Message) =>
+        message.message.toLowerCase().includes(searchQuery)
+      );
+      this.messageService.isSearchForMessages = true;
+      this.messageService.messages = this.messages;
+      this.messageService.searchQuery = searchQuery;
+      this.messageService.messagesUpdated.next();
+    } catch (error) {
+      console.error('Error while searching for messages in the current channel:', error);
+    }
   }
 
   async processMessagesForChannel(query: string): Promise<void> {
@@ -178,7 +202,7 @@ export class SearchbarComponent {
     const channels = await firstValueFrom(channels$);
     return channels.filter(channel =>
       channel.title.toLowerCase().includes(query.slice(1).toLowerCase()) &&
-      (!this.previousSearchChannel || channel.id !== this.previousSearchChannel.id) // Aktuellen Channel ausschließen
+      (!this.previousSearchChannel || channel.id !== this.previousSearchChannel.id) 
     );
   }
 
@@ -307,7 +331,11 @@ export class SearchbarComponent {
   handleMessageSelection(selectedMessage: Message): void {
     this.messageService.isWriteAMessage = false;
     this.directMessageService.isDirectMessage = false;    
-    this.searchQuery = `#${this.previousSearchChannel?.title} ${selectedMessage.message}`;
+    if (!this.searchQuery.includes('@')) {
+      this.searchQuery = `${selectedMessage.message}`;
+    } else {
+      this.searchQuery = `#${this.previousSearchChannel?.title} ${selectedMessage.message}`;
+    }
     this.onSearchInput(this.searchQuery);
   }
   
