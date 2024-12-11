@@ -89,6 +89,9 @@ export class SearchBarComponentDevSpace implements OnInit {
 
   async ngOnInit() {
     this.authenticationService.observerUser();
+  }
+
+  onFocus(){
     this.initializeSearchListeners();
   }
 

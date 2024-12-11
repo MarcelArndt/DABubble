@@ -1,6 +1,8 @@
 <div class="searchbar" [ngClass]="addClass">
   <div class="inputFrame" [ngClass]="{'align-reverse' : !align_reverse}">
     <input 
+      (focus)="onFocus()"
+      tabindex="-1"
       [placeholder]="placeholder" 
       [(ngModel)]="searchQuery" 
       (input)="onSearchInput(searchQuery)" 

@@ -70,7 +70,11 @@ export class SearchbarComponent {
     this.renderer.removeClass(parent, 'active');
   }
 
-  ngOnInit() {
+  // ngOnInit() {
+  //   this.initializeSearchListeners();
+  // }
+
+  onFocus(){
     this.initializeSearchListeners();
   }
 
@@ -162,11 +166,12 @@ export class SearchbarComponent {
     await this.processMessagesForChannel(query);
   }
 
+
   async processMessagesForCurrentChannel(query: string): Promise<void> {
     try {
       const currentChannelId = this.channelService.currentChannelId;
       if (!currentChannelId) {
-        console.warn('Kein aktueller Channel verfügbar.');
+        console.warn('No current channel accessable.');
         return;
       }
       const allMessages = await this.messageService.loadInitialMessagesByChannelId(currentChannelId);
@@ -183,6 +188,7 @@ export class SearchbarComponent {
     }
   }
 
+
   async processMessagesForChannel(query: string): Promise<void> {
     if (this.previousSearchChannel && query.includes(' ')) {
       const channelTitle = this.previousSearchChannel.title.toLowerCase(); 
@@ -198,6 +204,7 @@ export class SearchbarComponent {
     }
   }
   
+
   async searchChannels(query: string, channels$: Observable<Channel[]>): Promise<Channel[]> {
     const channels = await firstValueFrom(channels$);
     return channels.filter(channel =>
@@ -205,6 +212,7 @@ export class SearchbarComponent {
       (!this.previousSearchChannel || channel.id !== this.previousSearchChannel.id) 
     );
   }
+
 
   async searchMembers(query: string, members$: Observable<Member[]>): Promise<Member[]> {
     const members = await firstValueFrom(members$);
