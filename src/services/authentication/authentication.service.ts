@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, verifyPasswordResetCode, confirmPasswordReset, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User } from '@angular/fire/auth';
+import { Auth, verifyPasswordResetCode, confirmPasswordReset, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updateProfile, sendPasswordResetEmail, updatePassword, User, Unsubscribe } from '@angular/fire/auth';
 import { doc, getFirestore, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Member } from '../../interface/message';
@@ -26,6 +26,9 @@ export class AuthenticationService {
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
   loginFailed = false;
+  private authSubscription?: Unsubscribe;
+  private memberDocSubscription?: Unsubscribe;
+
 
   constructor(
     private router: Router,
@@ -109,7 +112,8 @@ export class AuthenticationService {
 
 
   observerUser(): void {
-    onAuthStateChanged(this.auth, async (user) => {
+    this.authSubscription?.();
+    this.authSubscription = onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         this.memberId = user.uid;
         const memberDoc = doc(this.getReference(), 'member', user.uid);
@@ -118,7 +122,8 @@ export class AuthenticationService {
           this.initializeCurrentMember();
           return;
         }
-        onSnapshot(memberDoc, (docSnap) => {
+        this.memberDocSubscription?.(); 
+        this.memberDocSubscription = onSnapshot(memberDoc, (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
             const member: Member = {
@@ -130,10 +135,10 @@ export class AuthenticationService {
               channelIds: data['channelIds'] || [],
               ignoreList: data['ignoreList'] || [],
             };
-            this.currentMemberSubject.next(member); 
-          } 
+            this.currentMemberSubject.next(member);
+          }
         });
-      } 
+      }
     });
   }
   

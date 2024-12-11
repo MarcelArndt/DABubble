@@ -14,6 +14,8 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 import { Member } from '../../../interface/message';
 import { MessagesService } from '../../../services/messages/messages.service';
 import { ShowMembersOfChannelComponent } from '../show-members-of-channel/show-members-of-channel.component';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { doc, getDoc } from '@firebase/firestore';
 
 @Component({
   selector: 'app-edit-channel',
@@ -86,17 +88,13 @@ export class EditChannelComponent {
   }
 
   async leaveChannel() {
-    this.authenticationService.currentMember$.subscribe(async (currentMember) => {
-      if (!currentMember || !this.previousChannel) {
-        return;
-      }
-      if (!this.previousChannel.isPublic) {
-        await this.memberService.removeChannelIdFromMember(currentMember.id, this.previousChannel.id);
-        await this.channelService.removeMemberIdFromChannel(currentMember.id, this.previousChannel.id);
-      } else {
-        await this.memberService.addChannelIdToIgnoreList(currentMember.id, this.previousChannel.id);
-      }
-    });
+    const currentMember = await firstValueFrom(this.authenticationService.currentMember$);
+    if (!this.previousChannel.isPublic && currentMember) {
+      await this.memberService.removeChannelIdFromMember(currentMember.id, this.previousChannel.id);
+      await this.channelService.removeMemberIdFromChannel(currentMember.id, this.previousChannel.id);
+    } else if (currentMember) {
+      await this.memberService.addChannelIdToIgnoreList(currentMember.id, this.previousChannel.id);
+    } 
     this.channelService.currentChannelId = 'uZaX2y9zpsBqyaOddLWh';
     await this.messageService.readChannel();
     this.dialogRef.close();

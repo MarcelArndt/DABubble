@@ -37,12 +37,18 @@ export class ChannelService {
   }
   
   
-  async removeMemberIdFromChannel(channelId: string, memberId: string) {
+  async removeMemberIdFromChannel(memberId: string, channelId: string) {
     const channelRef = doc(this.authenticationService.getReference(), 'channels', channelId);
-    await updateDoc(channelRef, {
-      membersId: arrayRemove(memberId),
-    });
+    const channelSnap = await getDoc(channelRef);
+    if (channelSnap.exists()) {
+      await updateDoc(channelRef, {
+        membersId: arrayRemove(memberId),
+      });
+    } else {
+      console.error('Channel document does not exist:', channelId);
+    }
   }
+  
   
 
   async updateChannelDetails(channelId: string, updates: Partial<Channel>) {

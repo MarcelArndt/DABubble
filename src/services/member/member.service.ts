@@ -43,17 +43,37 @@ export class MemberService {
 
   async addChannelIdToIgnoreList(memberId: string, channelId: string) {
     const memberRef = doc(this.authenticationService.getReference(), 'member', memberId);
-    await updateDoc(memberRef, {
-      ignoreList: arrayUnion(channelId),
-    });
+    const memberSnap = await getDoc(memberRef);
+    
+    if (memberSnap.exists()) {
+      await updateDoc(memberRef, {
+        ignoreList: arrayUnion(channelId || ''),
+      });
+    } else {
+      console.error('Member document does not exist:', memberId);
+    }
   }
 
   async removeChannelIdFromMember(memberId: string, channelId: string) {
     const memberRef = doc(this.authenticationService.getReference(), 'member', memberId);
-    await updateDoc(memberRef, {
-      channelIds: arrayRemove(channelId),
-    });
+    const memberSnap = await getDoc(memberRef);
+    
+    if (memberSnap.exists()) {
+      const channelRef = doc(this.authenticationService.getReference(), 'channels', channelId);
+      const channelSnap = await getDoc(channelRef);
+      
+      if (!channelSnap.exists()) {
+        console.warn(`Channel ${channelId} does not exist. Removing stale reference.`);
+      } else {
+        await updateDoc(memberRef, {
+          channelIds: arrayRemove(channelId),
+        });
+      }
+    } else {
+      console.error('Member document does not exist:', memberId);
+    }
   }
+  
 
 
   getAllMembersFromFirestore(onMembersUpdated: (members: Member[]) => void): void {
