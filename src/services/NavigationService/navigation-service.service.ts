@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewChild, ElementRef } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -6,6 +6,9 @@ import { Injectable } from '@angular/core';
 export class NavigationServiceService {
 
   constructor() { }
+  @ViewChild('whiteBoxElement') whiteBoxElement!: ElementRef;
+
+  isScrollable = false;
   currentNavIndex:number = 0;
   lastIndex:number = 0;
   nextIndex:number = 0;
@@ -20,7 +23,6 @@ export class NavigationServiceService {
   getCurrentIndex(){
     return this.currentNavIndex;
   }
-
 
   navToPage(hierarchieIndex:number = 0){
     this.isUntouched = false;
@@ -49,4 +51,12 @@ export class NavigationServiceService {
     this.fadeLeftIndex = 0;
     this.movingForwards = true;
   }
+
+  checkScrollStatus(){
+    this.isScrollable = false;
+    const whiteBox = document.getElementById('whiteBox');
+    setTimeout(() => {
+      this.isScrollable = whiteBox!.scrollHeight > whiteBox!.clientHeight;
+    },250);
+   }
 }

@@ -5,18 +5,18 @@
     --arrow-thickness: 5px;
     --arrow-color: var(--purple-2);
     --animation-time: 1.5s;
-    --animation-height: 220px;
-    --animation-counter: 5;
+    --animation-height: 25vh;
+    --animation-counter: 1;
     ////////////////////////////////
 
     z-index: 999;
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: calc((100% - var(--animation-height)) / 2);
-    right: 24px;
+    top: calc((100% - var(--animation-height) - 20px) / 2);
+    right: 12px;
     height: calc(var(--animation-height) + 20px);
     width: 42px;
     background-color: transparent;
@@ -56,7 +56,7 @@
     margin-left: 0px;
     position: absolute;
     top: 0px;
-    height: var(--animation-height);
+    height: calc(var(--animation-height) + 5px);
     width: var(--arrow-thickness);
     background-color: var(--arrow-color);
     animation: moving-arrow-body var(--animation-time) ease-in-out infinite;
@@ -75,11 +75,11 @@
 
     75%{
         top:90px;
-        height: calc( var(--animation-height) - 90px - var(--arrow-thickness) - 2px );
+        height: calc( var(--animation-height) - 90px - var(--arrow-thickness) - 1px );
     }
     100%{
         top:90px;
-        height:calc( var(--animation-height) - 90px - var(--arrow-thickness) - 2px);
+        height:calc( var(--animation-height) - 90px - var(--arrow-thickness) - 1px);
     }
  }
 
@@ -134,10 +134,4 @@
         height: calc(var(--animation-height) + 20px); 
         opacity: 0;
     }
-}
-
-@media screen and (max-height: 950px) {
-        .indicator-wrapper{
-            display: flex;
-        }
 }

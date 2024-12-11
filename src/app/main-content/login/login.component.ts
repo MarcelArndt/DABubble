@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { LoginAnimationComponent } from './login-animation/login-animation.component';
 import { LoginAnimationInsideComponent } from './login-animation-inside/login-animation-inside.component';
 import { RouterModule } from '@angular/router';
@@ -47,7 +47,7 @@ interface Page {
 })
 
 export class LoginComponent {
-  constructor(public auth: AuthenticationService, public darkmode: DarkModeService, public lightbox: LightboxService, private navigation: NavigationServiceService){
+  constructor(public auth: AuthenticationService, public darkmode: DarkModeService, public lightbox: LightboxService, public navigation: NavigationServiceService){
   }
 
   pageNumber:number = 0;
@@ -58,7 +58,6 @@ export class LoginComponent {
     {index: 1, type: 'register', subPages: [{ index: 1.1, type: 'registerStep-1'}, { index: 1.2, type: 'registerStep-2'}]},
     {index: 2, type: 'lostPassword', subPages: [{ index: 2.1, type: 'lostPassword-1'}, { index: 2.2, type: 'lostPassword-2'}]},
   ]
-
 
   setAnimationToken(){
     let token = sessionStorage.getItem("dabubbleStartAnimation");
@@ -73,8 +72,10 @@ export class LoginComponent {
 
   ngOnInit(){
     this.setAnimationToken();
+    this.navigation.checkScrollStatus();
   }
-  
+
+
   setNavigationAnimationClass(currentHierarchyIndex:number = 0){
     let newClass = 'still-deactive';
     if(this.navigation.isUntouched && currentHierarchyIndex == 0){
