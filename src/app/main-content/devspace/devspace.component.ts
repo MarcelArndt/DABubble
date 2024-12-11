@@ -155,6 +155,8 @@ export class DevspaceComponent implements OnInit {
 
   openCreateChannelDialog() {
     this.memberService.setCurrentMemberData();
+    const buttonElement = document.activeElement as HTMLElement; 
+    buttonElement.blur(); 
     if (window.innerWidth <= 600) {
       const dialogRef = this.dialog.open(CreateChannelComponent, {
         width: '100vw',   
@@ -167,6 +169,8 @@ export class DevspaceComponent implements OnInit {
       });
         dialogRef.afterClosed().subscribe();
     } else {
+      const buttonElement = document.activeElement as HTMLElement; 
+      buttonElement.blur(); 
       const dialogRef = this.dialog.open(CreateChannelComponent);
       dialogRef.afterClosed().subscribe();
     }

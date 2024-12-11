@@ -96,6 +96,8 @@ export class CreateChannelComponent {
     this.showError = true;
     await this.validateChannelBeforeSubmit();
     if (this.channelForm.valid && !this.channelAlreadyExists) {
+      const buttonElement = document.activeElement as HTMLElement; 
+      buttonElement.blur(); 
       this.openChooseMembers();
     } else {
       return;

@@ -25,8 +25,9 @@ export class MemberService {
   }
 
   openDialog(): void {
+    const buttonElement = document.activeElement as HTMLElement;
+    buttonElement.blur(); 
     const dialogRef = this.dialog.open(CurrentProfileComponent);
-
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
       }

@@ -42,6 +42,8 @@ export class ProfileNavigationComponent {
 
 
   openDialog(): void {
+    const buttonElement = document.activeElement as HTMLElement; 
+    buttonElement.blur(); 
     if (window.innerWidth <= 450) {
       const dialogRef = this.dialog.open(ProfileComponent, {
         width: '300px',

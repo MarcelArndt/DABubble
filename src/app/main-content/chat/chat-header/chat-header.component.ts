@@ -248,6 +248,8 @@ export class ChatHeaderComponent implements OnInit {
   /////////////////
 
   openEditChannel(): void {
+    const buttonElement = document.activeElement as HTMLElement; 
+    buttonElement.blur();
     if (window.innerWidth <= 600) {
       const dialogRef = this.dialog.open(EditChannelComponent, {
         width: '100vw',   
@@ -266,6 +268,8 @@ export class ChatHeaderComponent implements OnInit {
   }
 
   addMembersToChannel(): void {
+    const buttonElement = document.activeElement as HTMLElement;
+    buttonElement.blur(); 
     if (window.innerWidth <= 450) {
       const dialogRef = this.dialog.open(AddMembersChannelComponent, {
         width: '294px',
@@ -288,6 +292,8 @@ export class ChatHeaderComponent implements OnInit {
   }
 
   showMembersOfChannel(): void {
+    const buttonElement = document.activeElement as HTMLElement;
+    buttonElement.blur(); 
     if (window.innerWidth <= 450) {
       const dialogRef = this.dialog.open(ShowMembersOfChannelComponent, {
         width: '260px',
@@ -307,7 +313,6 @@ export class ChatHeaderComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe();      
     }
-
   }
 
   handleClickToShowOrAddMembers(): void {
