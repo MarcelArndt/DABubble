@@ -9,6 +9,7 @@ export class NavigationServiceService {
   @ViewChild('whiteBoxElement') whiteBoxElement!: ElementRef;
 
   isScrollable = false;
+  isScrollableTrahshold = 20;
   currentNavIndex:number = 0;
   lastIndex:number = 0;
   nextIndex:number = 0;
@@ -16,6 +17,7 @@ export class NavigationServiceService {
   fadeRightIndex:number = 0; 
   fadeLeftIndex:number = 0;
   movingForwards:boolean = true;
+ 
 
   /*            0            1                 2                3      */
   PageMap = ['Login', 'Create Accoutn', 'Choose Profil', 'Lost Password']
@@ -56,7 +58,7 @@ export class NavigationServiceService {
     this.isScrollable = false;
     const whiteBox = document.getElementById('whiteBox');
     setTimeout(() => {
-      this.isScrollable = whiteBox!.scrollHeight > whiteBox!.clientHeight;
+      this.isScrollable = whiteBox!.scrollHeight - this.isScrollableTrahshold > whiteBox!.clientHeight;
     },250);
    }
 }

@@ -44,18 +44,19 @@ export class AuthenticationService {
     }, 1750)
   }
 
-  signInUser(email: string, password: string) {
+  signInUser(email: string, password: string, showText:boolean = true) {
+    let countDown = showText? 1750 : 0;
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         this.loginFailed = false;
-        this.enableInfoBanner('Sign-In Succesfully');
+        if(showText)this.enableInfoBanner('Sign-In Succesfully');
         this.initializeCurrentMember(); 
       })
       .then(() => {
         setTimeout(() => {
           this.router.navigate(['start']);
           this.updateLoginStatus(true);
-        }, 1750);
+        }, countDown);
       })
       .catch((error) => {
         this.loginFailed = true;

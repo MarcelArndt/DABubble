@@ -74,12 +74,15 @@ export class ChooseAvatarComponent {
     }
   }
 
-  onSubmit(){
+  async onSubmit(){
     this.auth.infoBannerIsSubmit = true;
     this.signUp.image = this.selectedImage as File;
-    this.signUp.signUpUser();
+    await this.signUp.signUpUser();
     this.auth.enableInfoBanner('Account is created');
-    this.navigation.navToPage(0);
+    setTimeout(()=>{
+      this.auth.signInUser(this.signUp.userEmail, this.signUp.password, false)
+    }, 1750);
+    //this.navigation.navToPage(0);
   }
 
   ngOnInit(){
