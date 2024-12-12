@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Renderer2, Input} from '@angular/core';
+import { Component, ElementRef, HostListener, Renderer2, Input, ViewChild} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MemberService } from '../../../../services/member/member.service';
@@ -23,6 +23,9 @@ import { DirectMessageService } from '../../../../services/directMessage/direct-
   styleUrl: './searchbar.component.scss'
 })
 export class SearchbarComponent {
+  @ViewChild('searchInput') searchInputElement!: ElementRef<HTMLInputElement>;
+
+  nothingFound: boolean = false;
   searchQuery = ''; 
   members: Member[] = [];
   channels: Channel[] = [];
@@ -75,6 +78,7 @@ export class SearchbarComponent {
   // }
 
   onFocus(){
+    this.showHints();
     this.initializeSearchListeners();
   }
 
@@ -132,13 +136,13 @@ export class SearchbarComponent {
     this.searchChanges$.next(this.searchQuery);
     this.displayHints = !this.searchQuery.trim(); 
     this.toggleHintsBasedOnInput(query);
+    this.checkIfSomethingFound();
   }
   
 
   toggleHintsBasedOnInput(query: string) {
     if (query === '') {
       this.messageService.readChannel();
-      this.messageService.isSearchForMessages = false;
       this.displayHints = true;
     } else {
       this.displayHints = false;
@@ -161,9 +165,14 @@ export class SearchbarComponent {
       this.channels = await this.searchChannels(query, channels$);
     } 
     else {
-      await this.processMessagesForCurrentChannel(query);
+      if (!this.directMessageService.isDirectMessage) {
+        await this.processMessagesForCurrentChannel(query);
+      } else {
+        await this.processDirectMessagesForCurrentDirectMessagesChannel(query);
+      }
     }
     await this.processMessagesForChannel(query);
+    this.checkIfSomethingFound();
   }
 
 
@@ -179,10 +188,29 @@ export class SearchbarComponent {
       this.messages = allMessages.filter((message: Message) =>
         message.message.toLowerCase().includes(searchQuery)
       );
-      this.messageService.isSearchForMessages = true;
       this.messageService.messages = this.messages;
       this.messageService.searchQuery = searchQuery;
       this.messageService.messagesUpdated.next();
+    } catch (error) {
+      console.error('Error while searching for messages in the current channel:', error);
+    }
+  }
+
+  async processDirectMessagesForCurrentDirectMessagesChannel(query: string): Promise<void> {
+    try {
+      const currentChannelId = this.directMessageService.directMessageChannelId;
+      if (!currentChannelId) {
+        console.warn('No current channel accessable.');
+        return;
+      }
+      const allMessages = await this.directMessageService.loadInitialDirectMessagesByDirectChannelId(currentChannelId);
+      const searchQuery = query.toLowerCase().trim();
+      this.messages = allMessages.filter((message: Message) =>
+        message.message.toLowerCase().includes(searchQuery)
+      );
+      this.directMessageService.allDirectMessages = this.messages;
+      this.messageService.searchQuery = searchQuery;
+      this.directMessageService.messagesUpdated.next();
     } catch (error) {
       console.error('Error while searching for messages in the current channel:', error);
     }
@@ -197,7 +225,6 @@ export class SearchbarComponent {
       this.messages = allMessages.filter((message: Message) =>
         message.message.toLowerCase().includes(searchQuery)
       );
-      this.messageService.isSearchForMessages = true;
       this.messageService.messages = this.messages;
       this.messageService.searchQuery = searchQuery;
       this.messageService.messagesUpdated.next();
@@ -359,5 +386,24 @@ export class SearchbarComponent {
   }
   
   
+  checkIfSomethingFound() {
+    const isNothingFound = this.members.length === 0 
+                          && this.channels.length === 0 
+                          && this.messages.length === 0
+                          && !(this.searchQuery === '');
+    if (isNothingFound) {
+      this.nothingFound = true;
+      return;
+    } else {
+      this.nothingFound = false;
+    }
+  }
 
+  emptyInput(){
+    this.searchInputElement.nativeElement.focus();
+    this.nothingFound = false;
+    this.showDropdown= false;
+    this.displayHints = false;
+    this.searchQuery = '';
+  }
 }

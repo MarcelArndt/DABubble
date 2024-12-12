@@ -86,18 +86,17 @@ export class ChatMessageFieldComponent{
   async handleWriteAMessage(): Promise<void> {
     const members = await firstValueFrom(this.memberService.getAllMembersFromFirestoreObservable());
     const currentMember = await this.auth.getCurrentMemberSafe();
-    
-    if (!currentMember) {
-      console.log('No current member in handleWriteAMessage');
+    if (this.messageService.selectedObjects.length === 0 || this.messageField === '') {
+      this.auth.enableInfoBanner('Please choose a connection.');
       return;
     }
-  
+    if (!currentMember) {
+      return;
+    }
     const channels = await firstValueFrom(this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember));
-  
     for (const selectedObject of this.messageService.selectedObjects) {
       await this.processSelectedObject(selectedObject, members, channels, currentMember);
     }
-  
     this.resetMessageField();
     this.auth.enableInfoBanner('Message(s) have been sent.');
   }

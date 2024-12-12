@@ -181,7 +181,7 @@ export class DevspaceComponent implements OnInit {
     this.messageService.isWriteAMessage = false;
     this.directMessageService.isDirectMessage = true;
     this.memberService.setCurrentMemberData();
-    this.directMessageService.readDirectUserData(memberId)
+    this.directMessageService.readDirectUserData(memberId);
     if (window.innerWidth < 450) {
       this.mainContentService.closeNavBar();
       this.mainContentService.makeChatAsTopLayer();

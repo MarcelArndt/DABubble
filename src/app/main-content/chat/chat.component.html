@@ -4,7 +4,7 @@
 
     <div class="main-message-container" #messageContainer (scroll)="onScroll()">
 
-        @if (!messageService.isWriteAMessage && !messageService.isSearchForMessages) {
+        @if (!messageService.isWriteAMessage) {
         <div *ngIf="!directMessageService.isDirectMessage" class="mesage-container">
             <ng-container *ngIf="isLoading; else messageList">
                 <div class="loader">Load ...</div>
@@ -60,11 +60,13 @@
             </div>
 
         </div>
-        } @else if (messageService.isWriteAMessage && !messageService.isSearchForMessages){
+        } @else if (messageService.isWriteAMessage){
         @if(auth.infoBannerIsSubmit){
         <app-info-banner class="info-banner" [text]=auth.infoBannertext [icon]=auth.infoBannerIcon></app-info-banner>
         }
-        } @else if (messageService.isSearchForMessages){
+        } 
+
+        <!-- @else if (messageService.nothingFound){
         <div *ngIf="!directMessageService.isDirectMessage" class="mesage-container">
             <ng-container *ngIf="isLoading; else messageList">
                 <div class="loader">Load...</div>
@@ -85,7 +87,7 @@
                 </app-message>
             </ng-template>
         </div>
-        }
+        } -->
     </div>
 
 
