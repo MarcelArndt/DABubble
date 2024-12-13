@@ -9,6 +9,7 @@ import { AuthenticationService } from '../../../../services/authentication/authe
 import { ThreadService } from '../../../../services/thread/thread.service';
 import { MemberService } from '../../../../services/member/member.service';
 import { StorageService } from '../../../../services/storage/storage.service';
+import { MessagesService } from '../../../../services/messages/messages.service';
 
 @Component({
   selector: 'app-thread-message-field',
@@ -44,7 +45,8 @@ export class ThreadMessageFieldComponent  implements OnInit{
     public auth: AuthenticationService,
     private memberService: MemberService,
     public threadService: ThreadService,
-    public storageService: StorageService
+    public storageService: StorageService,
+    public messageService: MessagesService
   ) {
     this.allUsers()
   }
@@ -100,22 +102,45 @@ export class ThreadMessageFieldComponent  implements OnInit{
     this.openEmojis = false;
   }
 
-  onInput(event: any) {
+  async onInput(event: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
-    if (lastAtSignIndex > -1) {
-      const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
-      if (searchQuery && !searchQuery.includes(' ')) {
-        this.filteredUsers = this.users.filter(user =>
-          user.toLowerCase().startsWith(searchQuery.toLowerCase())
-        );
-        this.showUserList = this.filteredUsers.length > 0;
-        this.selectedIndex = 0;
-      } else {
-        this.showUserList = false;
-      }
-    } else {
-      this.showUserList = false; 
+    const lastAtHashIndex = this.messageField.lastIndexOf('#');
+    if (event.inputType === 'insertText' && event.data === ' ') {
+      this.showUserList = false;
+      return;
     }
+    if (lastAtSignIndex > lastAtHashIndex && lastAtSignIndex > -1) {
+      this.handleUserMention(lastAtSignIndex);
+    } else if (lastAtHashIndex > lastAtSignIndex && lastAtHashIndex > -1) {
+      await this.handleChannelMention(lastAtHashIndex);
+    } else {
+      this.showUserList = false;
+    }
+  }
+  
+  private handleUserMention(lastAtSignIndex: number) {
+    const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
+    if (!searchQuery.includes(' ')) {
+      this.users = this.memberService.allMembersNames; 
+      this.filteredUsers = this.users.filter(user =>
+        user.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+      this.showUserList = true;
+      this.selectedIndex = 0;
+    } else {
+      this.showUserList = false;
+    }
+  }
+  
+  private async handleChannelMention(lastAtHashIndex: number) {
+    const searchQuery = this.messageField.substring(lastAtHashIndex + 1).trim();
+    if (searchQuery.includes(' ')) {
+      this.showUserList = false;
+      return;
+    }
+    this.showUserList = true;
+    let allChannels = await this.messageService.hashChannels();
+    this.filteredUsers = allChannels;
   }
 
   selectUser(user: any) {
@@ -135,6 +160,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
+    this.checkEnterKey(event);
     if (!this.showUserList) return;
 
     if (event.key === 'ArrowDown') {
@@ -163,6 +189,10 @@ export class ThreadMessageFieldComponent  implements OnInit{
   }
 
   checkEnterKey(event: KeyboardEvent): void {
+    if (this.showUserList && this.selectedIndex >= 0) {
+      event.preventDefault();
+      return;
+    }
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       this.sendMessage();

@@ -198,7 +198,10 @@ export class ChatMessageFieldComponent {
   async onInput(event: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
     const lastAtHashIndex = this.messageField.lastIndexOf('#');
-  
+    if (event.inputType === 'insertText' && event.data === ' ') {
+      this.showUserList = false;
+      return;
+    }
     if (lastAtSignIndex > lastAtHashIndex && lastAtSignIndex > -1) {
       this.handleUserMention(lastAtSignIndex);
     } else if (lastAtHashIndex > lastAtSignIndex && lastAtHashIndex > -1) {
@@ -211,7 +214,7 @@ export class ChatMessageFieldComponent {
   private handleUserMention(lastAtSignIndex: number) {
     const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
     if (!searchQuery.includes(' ')) {
-      this.users = this.memberService.allMembersNames; // Lade Nutzernamen
+      this.users = this.memberService.allMembersNames; 
       this.filteredUsers = this.users.filter(user =>
         user.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
@@ -223,10 +226,16 @@ export class ChatMessageFieldComponent {
   }
   
   private async handleChannelMention(lastAtHashIndex: number) {
+    const searchQuery = this.messageField.substring(lastAtHashIndex + 1).trim();
+    if (searchQuery.includes(' ')) {
+      this.showUserList = false;
+      return;
+    }
     this.showUserList = true;
-    let allChannels = await this.messageService.hashChannels(); // Lade Kanäle
+    let allChannels = await this.messageService.hashChannels();
     this.filteredUsers = allChannels;
   }
+  
 
   allUsers() {
     this.memberService.allMembersName();
@@ -235,13 +244,9 @@ export class ChatMessageFieldComponent {
   selectUser(user: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
     const lastAtHashIndex = this.messageField.lastIndexOf('#');
-
-    // Prüfen, welches Zeichen zuletzt vorkommt
     if (lastAtSignIndex > lastAtHashIndex) {
-      // @-Zeichen
       this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
     } else if (lastAtHashIndex > -1) {
-      // #-Zeichen
       this.messageField = this.messageField.substring(0, lastAtHashIndex + 1) + user + ' ';
     }
 
@@ -259,6 +264,7 @@ export class ChatMessageFieldComponent {
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
+    this.checkEnterKey(event);
     if (!this.showUserList) return;
 
     if (event.key === 'ArrowDown') {
@@ -272,7 +278,7 @@ export class ChatMessageFieldComponent {
     } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
       this.selectUser(this.filteredUsers[this.selectedIndex]);
       event.preventDefault();
-    } else if (event.key === ' ') {  // Leerzeichen schließt die Liste
+    } else if (event.key === ' ') {
       this.showUserList = false;
     }
   }
@@ -287,6 +293,10 @@ export class ChatMessageFieldComponent {
   }
 
   checkEnterKey(event: KeyboardEvent): void {
+    if (this.showUserList && this.selectedIndex >= 0) {
+      event.preventDefault();
+      return;
+    }
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       this.handleSendMessage();
