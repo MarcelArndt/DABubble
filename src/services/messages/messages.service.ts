@@ -248,7 +248,7 @@ export class MessagesService {
   }
 
   async hashChannels() {
-    let allMyChannels = ['Welcome Channel'];
+    let allMyChannels = ['Welcome Channel', 'Frontend'];
     const querySnapshot = await getDocs(collection(this.authenticationService.getReference(), "channels"));
     querySnapshot.forEach((doc) => {
       this.authenticationService.currentMember$.subscribe((myChannels) => {
