@@ -41,7 +41,6 @@ export class ChatMessageFieldComponent {
   public isDirectMessage: boolean = true;
 
   users: string[] = [];
-  channels: string[] = [];
   showUserList: boolean = false;
   filteredUsers: string[] = [];
   selectedIndex = -1;
