@@ -32,7 +32,7 @@ import { MainContentService } from '../../../../services/main-content/main-conte
   templateUrl: './chat-message-field.component.html',
   styleUrl: './chat-message-field.component.scss'
 })
-export class ChatMessageFieldComponent{
+export class ChatMessageFieldComponent {
   openEmojis: boolean = false;
   messageField: string = ''
   openData: boolean = false;
@@ -81,31 +81,31 @@ export class ChatMessageFieldComponent{
       await this.handleFallbackSendMessage();
     }
   }
-  
+
 
   async handleWriteAMessage(): Promise<void> {
     const members = await firstValueFrom(this.memberService.getAllMembersFromFirestoreObservable());
     const currentMember = await this.auth.getCurrentMemberSafe();
-    if (this.messageService.selectedObjects.length === 0 || this.messageField === '') {
-      this.auth.enableInfoBanner('Please choose a connection.');
-      return;
-    }
+    
     if (!currentMember) {
       return;
     }
+  
     const channels = await firstValueFrom(this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember));
+  
     for (const selectedObject of this.messageService.selectedObjects) {
       await this.processSelectedObject(selectedObject, members, channels, currentMember);
     }
+  
     this.resetMessageField();
     this.auth.enableInfoBanner('Message(s) have been sent.');
   }
-  
+
 
   async processSelectedObject(
-    selectedObject: any, 
-    members: Member[], 
-    channels: Channel[], 
+    selectedObject: any,
+    members: Member[],
+    channels: Channel[],
     currentMember: Member
   ): Promise<void> {
     if (selectedObject.type === 'email' || selectedObject.type === 'member') {
@@ -114,7 +114,7 @@ export class ChatMessageFieldComponent{
       await this.handleSelectedChannel(selectedObject, channels, currentMember);
     }
   }
-  
+
 
   async handleSelectedMember(selectedObject: any, members: Member[]): Promise<void> {
     const member = selectedObject.value as Member;
@@ -122,11 +122,11 @@ export class ChatMessageFieldComponent{
       await this.handleSendDirectMessageForChatHeader(member.id, this.messageField);
     }
   }
-  
+
 
   async handleSelectedChannel(
-    selectedObject: any, 
-    channels: Channel[], 
+    selectedObject: any,
+    channels: Channel[],
     currentMember: Member
   ): Promise<void> {
     const channel = selectedObject.value as Channel;
@@ -134,7 +134,7 @@ export class ChatMessageFieldComponent{
       await this.messageService.sendMessageToChannel(channel.id, this.messageField, currentMember);
     }
   }
-  
+
 
   async handleFallbackSendMessage(): Promise<void> {
     if (this.messageField.trim() || this.storageService.messageImages.length > 0) {
@@ -146,12 +146,12 @@ export class ChatMessageFieldComponent{
       }
     }
   }
-  
+
 
   resetMessageField(): void {
     this.messageField = '';
   }
-  
+
 
   async handleSendDirectMessageForChatHeader(targetMemberId: string, message: string) {
     try {
@@ -180,7 +180,7 @@ export class ChatMessageFieldComponent{
     if (input && input.files) {
       Array.from(input.files).forEach(file => {
         this.storageService.uploadImageMessage(file)
-        
+
         const reader = new FileReader();
         reader.onload = () => {
           this.imagePreviews.push(reader.result);
@@ -197,6 +197,14 @@ export class ChatMessageFieldComponent{
 
   onInput(event: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
+    const lastAtHashIndex = this.messageField.lastIndexOf('#');
+
+    if (lastAtHashIndex > -1) {
+      this.showUserList = true;
+      let allChannels = this.messageService.hashChannels();
+      console.log(allChannels)
+    }
+
     if (lastAtSignIndex > -1) {
       const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
       if (!searchQuery.includes(' ')) {
@@ -264,16 +272,16 @@ export class ChatMessageFieldComponent{
   }
 
   checkEnterKey(event: KeyboardEvent): void {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    this.handleSendMessage();
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.handleSendMessage();
+    }
   }
-}
 
-getPlaceholder(): string {
-  return this.messageService.isWriteAMessage 
-    ? '' 
-    : `Message to #${this.auth.currentChannelData?.title || ''}`;
-}
+  getPlaceholder(): string {
+    return this.messageService.isWriteAMessage
+      ? ''
+      : `Message to #${this.auth.currentChannelData?.title || ''}`;
+  }
 }
 
