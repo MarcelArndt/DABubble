@@ -22,12 +22,14 @@ export class AuthenticationService {
   infoBannerIcon: string = '';
   currentMember!: Member;
   currentChannelData: any = {};
+  currentChannelData$ = new BehaviorSubject<any | null>(null); 
   auth = inject(Auth);
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
   loginFailed = false;
   private authSubscription?: Unsubscribe;
   private memberDocSubscription?: Unsubscribe;
+
 
 
   constructor(

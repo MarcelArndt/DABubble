@@ -18,13 +18,13 @@
             <div class="welcome-message" *ngIf="!isLoading && messageService.messages.length == 0 && !this.messageService.nothingFound">
                 <div>
                     <mat-icon class="hashtag">tag</mat-icon>
-                    <h2>{{auth.currentChannelData.title}}</h2>
+                    <h2>{{(this.auth.currentChannelData$ | async)?.title || auth.currentChannelData.title}}</h2>
                 </div>
                 <p>{{ checkUserAdmin(auth.currentChannelData.admin)
                     ? 'You created this channel  ' + parseTime(auth.currentChannelData.createdAt) + '.'
                     : auth.currentChannelData.adminName + ' created this channel ' +
                     parseTime(auth.currentChannelData.createdAt) + '.' }} This is the beginning of the channel.
-                    <span># {{auth.currentChannelData.title}}</span>
+                    <span># {{(this.auth.currentChannelData$ | async)?.title || auth.currentChannelData.title}}</span>
                 </p>
             </div>
 

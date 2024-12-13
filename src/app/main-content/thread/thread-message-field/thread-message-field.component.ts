@@ -41,6 +41,9 @@ export class ThreadMessageFieldComponent  implements OnInit{
   @Output() messageSent = new EventEmitter<void>();
   @Output() messagesUpdated = new EventEmitter<void>();
 
+  currentChannelTitle: string | null = null;
+
+
   constructor(
     public auth: AuthenticationService,
     private memberService: MemberService,
@@ -57,6 +60,11 @@ export class ThreadMessageFieldComponent  implements OnInit{
  
   ngOnInit(): void {
     this.memberService.setCurrentMemberData();
+    this.auth.currentChannelData$.subscribe(data => {
+      if (data) {
+        this.currentChannelTitle = data.title;
+      }
+    });
   }
 
   async sendMessage() {
@@ -202,5 +210,12 @@ export class ThreadMessageFieldComponent  implements OnInit{
       this.sendMessage();
     }
   }
+
+  getPlaceholder(): string {
+    return this.messageService.isWriteAMessage
+      ? ''
+      : `Message to #${this.currentChannelTitle || this.auth.currentChannelData?.title}`;
+  }
+
 }
 

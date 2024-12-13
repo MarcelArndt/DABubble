@@ -45,11 +45,12 @@ export class MessagesService {
     if (channel.exists()) {
       await this.loadInitialMessages(this.channelService.currentChannelId);
       this.listenToMessages(this.channelService.currentChannelId);
-      this.authenticationService.currentChannelData = channel.data();
+      const channelData = channel.data();
+      this.authenticationService.currentChannelData = channelData;
       await this.memberService.allMembersInChannel();
     }
-    // this.mainContentService.closeNavBar();
   }
+
 
   async getCurrentChannelData() {
     const channel = await getDoc(this.referencesService.getChannelDocRef());

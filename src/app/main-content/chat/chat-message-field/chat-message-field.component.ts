@@ -47,6 +47,9 @@ export class ChatMessageFieldComponent {
   @ViewChild('userListContainer') userListContainer!: ElementRef;
   @Output() messageSent = new EventEmitter<void>();
 
+  currentChannelTitle: string | null = null;
+
+
   constructor(
     public auth: AuthenticationService,
     public memberService: MemberService,
@@ -57,6 +60,14 @@ export class ChatMessageFieldComponent {
     public mainContentService: MainContentService
   ) {
     this.allUsers()
+  }
+
+  ngOnInit() {
+    this.auth.currentChannelData$.subscribe(data => {
+      if (data) {
+        this.currentChannelTitle = data.title;
+      }
+    });
   }
 
   async sendMessage() {
@@ -308,7 +319,8 @@ export class ChatMessageFieldComponent {
   getPlaceholder(): string {
     return this.messageService.isWriteAMessage
       ? ''
-      : `Message to #${this.auth.currentChannelData?.title || ''}`;
+      : `Message to #${this.currentChannelTitle || this.auth.currentChannelData?.title}`;
   }
+  
 }
 
