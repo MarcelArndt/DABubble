@@ -48,7 +48,7 @@ export class MessagesService {
     // this.mainContentService.closeNavBar();
   }
 
-  async getCurrentChannelData(){
+  async getCurrentChannelData() {
     const channel = await getDoc(this.referencesService.getChannelDocRef());
     return channel.data();
   }
@@ -58,7 +58,7 @@ export class MessagesService {
     this.mainContentService.hideThread();
     this.directMessageService.isDirectMessage = false;
     this.channelService.currentChannelId = channel.id;
-    if (window.innerWidth <= 1285 ) {
+    if (window.innerWidth <= 1285) {
       this.mainContentService.openChannelForMobile()
     };
     await this.readChannel();
@@ -74,7 +74,7 @@ export class MessagesService {
     this.messagesUpdated.next();
     return this.messages;
   }
-  
+
 
   async loadInitialMessages(channelId: string) {
     const querySnapshot = await getDocs(this.referencesService.getCollectionMessage());
@@ -101,7 +101,7 @@ export class MessagesService {
     const now = new Date();
     const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
     const weekday = formatter.format(now);
-    const day = now.getDate(); 
+    const day = now.getDate();
     const month = now.toLocaleString('en-US', { month: 'long' });
     const createdAt = `${weekday}, ${day}. ${month}`;
 
@@ -204,7 +204,7 @@ export class MessagesService {
     const now = new Date();
     const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
     const weekday = formatter.format(now);
-    const day = now.getDate(); 
+    const day = now.getDate();
     const month = now.toLocaleString('en-US', { month: 'long' });
     const createdAt = `${weekday}, ${day} ${month}`;
     // Nachrichtendaten erstellen
@@ -240,8 +240,25 @@ export class MessagesService {
     }
   }
 
-  clearSelectedObjects(){
+  clearSelectedObjects() {
     this.selectedObjects = [];
   }
+
+  async hashChannels() {
+    let allMyChannels = ['Welcome Channel'];
+    const querySnapshot = await getDocs(collection(this.authenticationService.getReference(), "channels"));
+    querySnapshot.forEach((doc) => {
+      this.authenticationService.currentMember$.subscribe((myChannels) => {
+        const channelIds = myChannels!['channelIds'];
+        channelIds.forEach(ids => {
+          if (ids == doc.id) {
+            allMyChannels.push(doc.data()['title']);
+          }
+        });
+      });
+    });
+   return allMyChannels;
+  }
+
 
 }
