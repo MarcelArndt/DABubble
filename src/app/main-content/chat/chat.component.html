@@ -15,7 +15,7 @@
                 </app-message>
             </ng-template>
 
-            <div class="welcome-message" *ngIf="!isLoading && messageService.messages.length == 0">
+            <div class="welcome-message" *ngIf="!isLoading && messageService.messages.length == 0 && !this.messageService.nothingFound">
                 <div>
                     <mat-icon class="hashtag">tag</mat-icon>
                     <h2>{{auth.currentChannelData.title}}</h2>
@@ -42,7 +42,7 @@
             </ng-template>
 
             <div class="welcome-direct-message"
-                *ngIf="!isLoading && directMessageService.allDirectMessages.length == 0">
+                *ngIf="!isLoading && directMessageService.allDirectMessages.length == 0 && !this.messageService.nothingFound">
                 <div>
                     <img src="{{directMessageService.directMessageUserData.imageUrl}}">
                     <h2>{{directMessageService.directMessageUserData.name}}</h2>
@@ -65,29 +65,6 @@
         <app-info-banner class="info-banner" [text]=auth.infoBannertext [icon]=auth.infoBannerIcon></app-info-banner>
         }
         } 
-
-        <!-- @else if (messageService.nothingFound){
-        <div *ngIf="!directMessageService.isDirectMessage" class="mesage-container">
-            <ng-container *ngIf="isLoading; else messageList">
-                <div class="loader">Load...</div>
-            </ng-container>
-            <ng-template #messageList>
-                <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i">
-                </app-message>
-            </ng-template>
-        </div>
-
-        <div *ngIf="directMessageService.isDirectMessage" class="direct-message-container">
-            <ng-container *ngIf="isLoading; else messageList">
-                <div class="loader">Load ...</div>
-            </ng-container>
-            <ng-template #messageList>
-                <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg"
-                    [index]="i">
-                </app-message>
-            </ng-template>
-        </div>
-        } -->
     </div>
 
 

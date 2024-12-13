@@ -56,9 +56,6 @@ export class ChatComponent {
       this.isLoading = false;
       this.shouldScroll = true;
     });
-    this.subscription = this.messageService.nothingFound$.subscribe((value: boolean) => {
-      this.nothingFound = value;
-    });
   }
 
   onMessagesUpdated() {

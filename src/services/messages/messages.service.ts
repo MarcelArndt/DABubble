@@ -21,8 +21,8 @@ export class MessagesService {
   isWriteAMessage: boolean = false;
   searchQuery: string = '';
   nothingFound: boolean = false;
-  private nothingFoundSubject = new BehaviorSubject<boolean>(false);
-  nothingFound$ = this.nothingFoundSubject.asObservable();
+  // private nothingFoundSubject = new BehaviorSubject<boolean>(false);
+  // nothingFound$ = this.nothingFoundSubject.asObservable();
 
   // selectedObject?: Member | Channel;
   selectedObjects: Array<{ label: string, type: string, value: Member | Channel }> = [];
@@ -38,9 +38,6 @@ export class MessagesService {
     private directMessageService: DirectMessageService
   ) { }
 
-  setNothingFound(value: boolean): void {
-    this.nothingFoundSubject.next(value);
-  }
 
 
   async readChannel() {

@@ -91,11 +91,8 @@ export class SearchbarComponent {
     document.addEventListener('click', (event: MouseEvent) => {
       const inputElement = this.elRef.nativeElement.querySelector('input');
       const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown');
-      
       const clickedInsideInput = inputElement?.contains(event.target as Node);
       const clickedInsideDropdown = dropdownElement?.contains(event.target as Node);
-  
-      // Wenn weder auf das Eingabefeld noch auf das Dropdown geklickt wurde, Dropdown schließen
       if (!clickedInsideInput && !clickedInsideDropdown) {
         this.hideDropdown();
       }
@@ -393,9 +390,11 @@ export class SearchbarComponent {
                           && !(this.searchQuery === '');
     if (isNothingFound) {
       this.nothingFound = true;
+      this.messageService.nothingFound = true;
       return;
     } else {
       this.nothingFound = false;
+      this.messageService.nothingFound = false;
     }
   }
 
