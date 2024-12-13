@@ -79,7 +79,7 @@ $breakpoints: (
 
 @mixin image($br: 0) {
     border-radius: $br;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
     position: relative;
 }

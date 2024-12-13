@@ -55,6 +55,8 @@
     img{
         @include image($br: 50%);
         height: 100%;
+        object-fit: cover !important;
+        width: 100%;
     }
     .statusSymbol{
         position: absolute;

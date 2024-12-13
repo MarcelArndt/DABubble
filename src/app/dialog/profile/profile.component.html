@@ -5,10 +5,10 @@
                 <mat-icon class="closeButton" (click)="this.dialogRef.close()">close</mat-icon>
             </div>
 
-            <img class="profileImage" [src]="currentMember.imageUrl || './img/profile-pic/006.svg'">
+            <img class="profileImage" [src]="(currentMember$ | async)?.imageUrl || './img/profile-pic/004.svg'">
 
             <div class="row">
-                <h2>{{currentMember.name}}</h2>
+                <h2>{{(currentMember$ | async)?.name}}</h2>
                 <button mat-button tabindex="-1" (click)="editDialog = true"><mat-icon class="edit-pen">edit</mat-icon></button>
             </div>
 
@@ -32,7 +32,7 @@
             </div>
 
             <div class="imgContainer">
-                <img class="profileImage" [src]="currentMember.imageUrl || './img/profile-pic/006.svg'">
+                <img class="profileImage" [src]="currentMember.imageUrl || './img/profile-pic/004.svg'">
                 <button class="fileInput" mat-icon-button (click)="openFileDialog()">
                     <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*"/>
                     <mat-icon>attach_file</mat-icon>
@@ -48,7 +48,7 @@
                     <input 
                     class="textInput" 
                     [(ngModel)]="currentMember.name" 
-                    placeholder="{{currentMember.name}}" 
+                    placeholder="{{currentMember.name}}"
                     required
                     name="currentMemberName"
                     #nameInput="ngModel"
@@ -69,12 +69,11 @@
                     
                     <a href="mailto:email.adress@example.com"  tabindex="-1">{{currentMember.email}}</a>
                 </div>
-
             </div>
 
 
             <div class="buttonRow">
-                <button class="cancelButton" mat-button (click)="editDialog = false">Cancel</button>
+                <button class="cancelButton" mat-button (click)="cancelEdit()">Cancel</button>
                 <button class="saveButton" [disabled]="currentMemberForm.invalid" mat-flat-button (click)="save(currentMember)">Save</button>
             </div>
         }
