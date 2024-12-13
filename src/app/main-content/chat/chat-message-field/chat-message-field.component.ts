@@ -41,6 +41,7 @@ export class ChatMessageFieldComponent {
   public isDirectMessage: boolean = true;
 
   users: string[] = [];
+  channels: string[] = [];
   showUserList: boolean = false;
   filteredUsers: string[] = [];
   selectedIndex = -1;
@@ -86,17 +87,17 @@ export class ChatMessageFieldComponent {
   async handleWriteAMessage(): Promise<void> {
     const members = await firstValueFrom(this.memberService.getAllMembersFromFirestoreObservable());
     const currentMember = await this.auth.getCurrentMemberSafe();
-    
+
     if (!currentMember) {
       return;
     }
-  
+
     const channels = await firstValueFrom(this.channelService.getAllAccessableChannelsFromFirestoreObservable(currentMember));
-  
+
     for (const selectedObject of this.messageService.selectedObjects) {
       await this.processSelectedObject(selectedObject, members, channels, currentMember);
     }
-  
+
     this.resetMessageField();
     this.auth.enableInfoBanner('Message(s) have been sent.');
   }
@@ -195,32 +196,37 @@ export class ChatMessageFieldComponent {
     this.openEmojis = false;
   }
 
-  onInput(event: any) {
+  async onInput(event: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
     const lastAtHashIndex = this.messageField.lastIndexOf('#');
-
-    if (lastAtHashIndex > -1) {
-      this.showUserList = true;
-      let allChannels = this.messageService.hashChannels();
-      console.log(allChannels)
-    }
-
-    if (lastAtSignIndex > -1) {
-      const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
-      if (!searchQuery.includes(' ')) {
-        this.filteredUsers = this.users.filter(user =>
-          user.toLowerCase().startsWith(searchQuery.toLowerCase())
-        );
-        this.users = this.memberService.allMembersNames;
-        this.filteredUsers = this.users;
-        this.showUserList = true;
-        this.selectedIndex = 0;
-      } else {
-        this.showUserList = false;
-      }
+  
+    if (lastAtSignIndex > lastAtHashIndex && lastAtSignIndex > -1) {
+      this.handleUserMention(lastAtSignIndex);
+    } else if (lastAtHashIndex > lastAtSignIndex && lastAtHashIndex > -1) {
+      await this.handleChannelMention(lastAtHashIndex);
     } else {
       this.showUserList = false;
     }
+  }
+  
+  private handleUserMention(lastAtSignIndex: number) {
+    const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
+    if (!searchQuery.includes(' ')) {
+      this.users = this.memberService.allMembersNames; // Lade Nutzernamen
+      this.filteredUsers = this.users.filter(user =>
+        user.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+      this.showUserList = true;
+      this.selectedIndex = 0;
+    } else {
+      this.showUserList = false;
+    }
+  }
+  
+  private async handleChannelMention(lastAtHashIndex: number) {
+    this.showUserList = true;
+    let allChannels = await this.messageService.hashChannels(); // Lade Kanäle
+    this.filteredUsers = allChannels;
   }
 
   allUsers() {
@@ -229,7 +235,17 @@ export class ChatMessageFieldComponent {
 
   selectUser(user: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
-    this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
+    const lastAtHashIndex = this.messageField.lastIndexOf('#');
+
+    // Prüfen, welches Zeichen zuletzt vorkommt
+    if (lastAtSignIndex > lastAtHashIndex) {
+      // @-Zeichen
+      this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
+    } else if (lastAtHashIndex > -1) {
+      // #-Zeichen
+      this.messageField = this.messageField.substring(0, lastAtHashIndex + 1) + user + ' ';
+    }
+
     this.showUserList = false;
     this.selectedIndex = -1;
   }
