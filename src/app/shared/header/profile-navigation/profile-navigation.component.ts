@@ -57,7 +57,7 @@ export class ProfileNavigationComponent {
       const dialogRef = this.dialog.open(ProfileComponent, {
         width: '360px',
         height: 'auto',
-        position: { top: '482px', right: '64px' },
+        position: { top: '382px', right: '64px' },
         autoFocus: false,
         panelClass: 'custom-dialog'
       });

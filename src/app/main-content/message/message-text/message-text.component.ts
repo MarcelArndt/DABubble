@@ -83,9 +83,12 @@ export class MessageTextComponent {
     });
     // Highlight searchQuery
     const searchQuery = this.messageService.searchQuery; 
-    if (searchQuery) {
+    if (searchQuery && searchQuery !== '') {
       const regexSearchQuery = new RegExp(`(${searchQuery})`, 'gi'); 
       highlightedText = highlightedText.replace(regexSearchQuery, '<span class="highlight">$1</span>');
+    } else {
+      const regexSearchQuery = new RegExp(`(${searchQuery})`, 'gi'); 
+      highlightedText = highlightedText.replace(regexSearchQuery, '<span class="">$1</span>');
     }
     return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
   }
