@@ -198,10 +198,13 @@ export class ChatMessageFieldComponent {
   async onInput(event: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
     const lastAtHashIndex = this.messageField.lastIndexOf('#');
-    if (event.inputType === 'insertText' && event.data === ' ') {
+  
+    if (this.messageField.trim() === '') {
       this.showUserList = false;
       return;
     }
+  
+    // Behandlung für @ und #
     if (lastAtSignIndex > lastAtHashIndex && lastAtSignIndex > -1) {
       this.handleUserMention(lastAtSignIndex);
     } else if (lastAtHashIndex > lastAtSignIndex && lastAtHashIndex > -1) {
@@ -232,10 +235,9 @@ export class ChatMessageFieldComponent {
       return;
     }
     this.showUserList = true;
-    let allChannels = await this.messageService.hashChannels();
+    let allChannels = await this.messageService.hashChannels(); 
     this.filteredUsers = allChannels;
   }
-  
 
   allUsers() {
     this.memberService.allMembersName();
@@ -264,7 +266,6 @@ export class ChatMessageFieldComponent {
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    this.checkEnterKey(event);
     if (!this.showUserList) return;
 
     if (event.key === 'ArrowDown') {
@@ -293,8 +294,9 @@ export class ChatMessageFieldComponent {
   }
 
   checkEnterKey(event: KeyboardEvent): void {
-    if (this.showUserList && this.selectedIndex >= 0) {
+    if (this.showUserList && this.selectedIndex >= 0 && event.key === 'Enter') {
       event.preventDefault();
+      this.selectUser(this.filteredUsers[this.selectedIndex]);
       return;
     }
     if (event.key === 'Enter' && !event.shiftKey) {

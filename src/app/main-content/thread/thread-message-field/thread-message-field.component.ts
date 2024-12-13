@@ -105,10 +105,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   async onInput(event: any) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
     const lastAtHashIndex = this.messageField.lastIndexOf('#');
-    if (event.inputType === 'insertText' && event.data === ' ') {
-      this.showUserList = false;
-      return;
-    }
+  
     if (lastAtSignIndex > lastAtHashIndex && lastAtSignIndex > -1) {
       this.handleUserMention(lastAtSignIndex);
     } else if (lastAtHashIndex > lastAtSignIndex && lastAtHashIndex > -1) {
@@ -121,7 +118,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
   private handleUserMention(lastAtSignIndex: number) {
     const searchQuery = this.messageField.substring(lastAtSignIndex + 1).trim();
     if (!searchQuery.includes(' ')) {
-      this.users = this.memberService.allMembersNames; 
+      this.users = this.memberService.allMembersNames;
       this.filteredUsers = this.users.filter(user =>
         user.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
@@ -139,13 +136,20 @@ export class ThreadMessageFieldComponent  implements OnInit{
       return;
     }
     this.showUserList = true;
-    let allChannels = await this.messageService.hashChannels();
+    let allChannels = await this.messageService.hashChannels(); 
     this.filteredUsers = allChannels;
   }
 
-  selectUser(user: any) {
+  selectUser(user: string) {
     const lastAtSignIndex = this.messageField.lastIndexOf('@');
-    this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
+    const lastAtHashIndex = this.messageField.lastIndexOf('#');
+  
+    if (lastAtSignIndex > lastAtHashIndex) {
+      this.messageField = this.messageField.substring(0, lastAtSignIndex + 1) + user + ' ';
+    } else if (lastAtHashIndex > -1) {
+      this.messageField = this.messageField.substring(0, lastAtHashIndex) + '#' + user + ' ';
+    }
+  
     this.showUserList = false;
     this.selectedIndex = -1;
   }
@@ -160,7 +164,6 @@ export class ThreadMessageFieldComponent  implements OnInit{
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    this.checkEnterKey(event);
     if (!this.showUserList) return;
 
     if (event.key === 'ArrowDown') {
@@ -174,7 +177,7 @@ export class ThreadMessageFieldComponent  implements OnInit{
     } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
       this.selectUser(this.filteredUsers[this.selectedIndex]);
       event.preventDefault();
-    } else if (event.key === ' ') {  // Leerzeichen schließt die Liste
+    } else if (event.key === ' ') {
       this.showUserList = false;
     }
   }
@@ -189,8 +192,9 @@ export class ThreadMessageFieldComponent  implements OnInit{
   }
 
   checkEnterKey(event: KeyboardEvent): void {
-    if (this.showUserList && this.selectedIndex >= 0) {
+    if (this.showUserList && this.selectedIndex >= 0 && event.key === 'Enter') {
       event.preventDefault();
+      this.selectUser(this.filteredUsers[this.selectedIndex]);
       return;
     }
     if (event.key === 'Enter' && !event.shiftKey) {
