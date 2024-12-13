@@ -3,7 +3,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
 import { MemberService } from '../member/member.service';
 import { ChannelService } from '../channel/channel.service';
-import { firstValueFrom, Subject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Subject } from 'rxjs';
 import { ReferencesService } from '../references/references.service';
 import { StorageService } from '../storage/storage.service';
 import { Channel } from '../../classes/channel.class';
@@ -19,11 +19,13 @@ export class MessagesService {
   messagesUpdated = new Subject<void>();
   editMessageText: string = '';
   isWriteAMessage: boolean = false;
-  isSearchForMessages: boolean = false;
   searchQuery: string = '';
+  nothingFound: boolean = false;
+  private nothingFoundSubject = new BehaviorSubject<boolean>(false);
+  nothingFound$ = this.nothingFoundSubject.asObservable();
+
   // selectedObject?: Member | Channel;
   selectedObjects: Array<{ label: string, type: string, value: Member | Channel }> = [];
-
 
 
   constructor(
@@ -35,6 +37,10 @@ export class MessagesService {
     private mainContentService: MainContentService,
     private directMessageService: DirectMessageService
   ) { }
+
+  setNothingFound(value: boolean): void {
+    this.nothingFoundSubject.next(value);
+  }
 
 
   async readChannel() {
@@ -69,7 +75,7 @@ export class MessagesService {
     const messagesCollection = collection(channelRef, "messages");
     const querySnapshot = await getDocs(messagesCollection);
     this.messages = querySnapshot.docs
-      .map(doc => doc.data() as Message) // Typkonvertierung
+      .map(doc => doc.data() as Message) 
       .sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
     this.messagesUpdated.next();
     return this.messages;

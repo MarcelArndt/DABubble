@@ -182,8 +182,12 @@ app-channel-list{
 app-contact-list{
     display: flex;
     flex-direction: column;
-    max-height: 40%;
+    max-height: 100%;
     overflow: hidden;
+}
+
+.min-height-160px{
+    min-height: 160px;
 }
 
 .stretch{

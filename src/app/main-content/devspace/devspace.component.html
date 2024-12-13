@@ -11,6 +11,7 @@
             </button>
         </div>
         <app-channel-list
+        [ngClass]="{'min-height-160px': channelsAreVisible}"
         [channels]="channels"
         [channelsAreVisible]="channelsAreVisible"
         (toggleChannels)="dropChannels()"
