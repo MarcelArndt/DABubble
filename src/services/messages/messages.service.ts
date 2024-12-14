@@ -21,6 +21,7 @@ export class MessagesService {
   isWriteAMessage: boolean = false;
   searchQuery: string = '';
   nothingFound: boolean = false;
+  private focusEvent = new Subject<void>();
   // private nothingFoundSubject = new BehaviorSubject<boolean>(false);
   // nothingFound$ = this.nothingFoundSubject.asObservable();
 
@@ -38,7 +39,13 @@ export class MessagesService {
     private directMessageService: DirectMessageService
   ) { }
 
+  getFocusEvent() {
+    return this.focusEvent.asObservable();
+  }
 
+  triggerFocus() {
+    this.focusEvent.next();
+  }
 
   async readChannel() {
     const channel = await getDoc(this.referencesService.getChannelDocRef());
@@ -58,6 +65,7 @@ export class MessagesService {
   }
 
   async checkWindowAndOpenChannel(channel: Channel) {
+    this.triggerFocus();
     this.isWriteAMessage = false;
     this.mainContentService.hideThread();
     this.directMessageService.isDirectMessage = false;

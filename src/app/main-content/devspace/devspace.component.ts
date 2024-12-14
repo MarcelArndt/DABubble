@@ -188,10 +188,12 @@ export class DevspaceComponent implements OnInit {
       this.mainContentService.closeNavBar();
       this.mainContentService.makeChatAsTopLayer();
     }
+    this.messageService.triggerFocus();
   }
 
   openWriteAMessage() {
     this.messageService.isWriteAMessage = true;
+    this.messageService.triggerFocus();
     if (window.innerWidth < 450) {
       this.mainContentService.closeNavBar();
       this.mainContentService.makeChatAsTopLayer()

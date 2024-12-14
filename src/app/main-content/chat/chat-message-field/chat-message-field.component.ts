@@ -46,6 +46,7 @@ export class ChatMessageFieldComponent {
   selectedIndex = -1;
   @ViewChild('userListContainer') userListContainer!: ElementRef;
   @Output() messageSent = new EventEmitter<void>();
+  @ViewChild('messageInput') messageInput!: ElementRef;
 
   currentChannelTitle: string | null = null;
 
@@ -62,11 +63,20 @@ export class ChatMessageFieldComponent {
     this.allUsers()
   }
 
+  setFocus(): void {
+    if (this.messageInput) {
+      this.messageInput.nativeElement.focus();
+    }
+  }
+
   ngOnInit() {
     this.auth.currentChannelData$.subscribe(data => {
       if (data) {
         this.currentChannelTitle = data.title;
       }
+    });
+    this.messageService.getFocusEvent().subscribe(() => {
+      this.setFocus();
     });
   }
 
