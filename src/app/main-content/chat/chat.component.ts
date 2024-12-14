@@ -10,6 +10,7 @@ import { MatIcon } from '@angular/material/icon';
 import { DirectMessageService } from '../../../services/directMessage/direct-message.service';
 import { InfoBannerComponent } from "../../shared/info-banner/info-banner.component";
 import { Subscription } from 'rxjs';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 
@@ -22,7 +23,8 @@ import { Subscription } from 'rxjs';
     CommonModule,
     MessageComponent,
     MatIcon,
-    InfoBannerComponent
+    InfoBannerComponent,
+    MatProgressSpinnerModule
 ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'

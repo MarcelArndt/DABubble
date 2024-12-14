@@ -6,9 +6,9 @@
 
         @if (!messageService.isWriteAMessage) {
         <div *ngIf="!directMessageService.isDirectMessage" class="mesage-container">
-            <ng-container *ngIf="isLoading; else messageList">
-                <div class="loader">Load ...</div>
-            </ng-container>
+            <div class="spinnerContainer" *ngIf="isLoading; else messageList">
+                <div class="spinner"></div>
+            </div>
 
             <ng-template #messageList>
                 <app-message *ngFor="let msg of message; index as i" [message]="msg" [index]="i">
@@ -31,9 +31,9 @@
         </div>
 
         <div *ngIf="directMessageService.isDirectMessage" class="direct-message-container">
-            <ng-container *ngIf="isLoading; else messageList">
-                <div class="loader">Load...</div>
-            </ng-container>
+            <div class="spinnerContainer" *ngIf="isLoading; else messageList">
+                <div class="spinner"></div>
+            </div>
 
             <ng-template #messageList>
                 <app-message *ngFor="let msg of directMessageService.allDirectMessages; index as i" [message]="msg"
