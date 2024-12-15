@@ -82,7 +82,6 @@ export class ChooseAvatarComponent {
     setTimeout(()=>{
       this.auth.signInUser(this.signUp.userEmail, this.signUp.password, false)
     }, 1750);
-    //this.navigation.navToPage(0);
   }
 
   ngOnInit(){
