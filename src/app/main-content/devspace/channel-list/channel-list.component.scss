@@ -238,6 +238,8 @@ h3 {
     max-height: 100%;
     min-height: 50%;
     transition: max-height 0.3s ease; 
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 1px inset, rgba(0, 0, 0, 0.02) 0px 1px 2px inset, rgba(0, 0, 0, 0.04) 0px 1px 1px, rgba(0, 0, 0, 0.04) 0px 1px 1px inset, rgba(0, 0, 0, 0.07) 0px 1px 2px inset;
+    border-radius: 10px;
     @include respond-to-minWidth(small){
         padding-left: 16px;
     }

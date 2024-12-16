@@ -26,9 +26,9 @@ mat-icon{
 .titleContainer{
     @include dFlex(space-between, center);
     width: 100%;
-    @include respond-to-maxWidth('smallMedium'){
-    display: none;
-    }
+    // @include respond-to-maxWidth('smallMedium'){
+    // display: none;
+    // }
 }
 
 .box {
