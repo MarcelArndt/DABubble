@@ -22,7 +22,7 @@ export class AuthenticationService {
   infoBannerIcon: string = '';
   currentMember!: Member;
   currentChannelData: any = {};
-  currentChannelData$ = new BehaviorSubject<any | null>(null); 
+  currentChannelData$ = new BehaviorSubject<any | null>(null);
   auth = inject(Auth);
   private currentMemberSubject = new BehaviorSubject<Member | null>(null);
   currentMember$ = this.currentMemberSubject.asObservable();
@@ -37,7 +37,7 @@ export class AuthenticationService {
   ) {
     this.provider = new GoogleAuthProvider();
     this.storage = getStorage();
-    this.observerUser(); 
+    this.observerUser();
   }
 
   enableInfoBanner(text: string, icon: string = '', time: number = 3000,) {
@@ -49,13 +49,13 @@ export class AuthenticationService {
     }, 1750)
   }
 
-  signInUser(email: string, password: string, showText:boolean = true) {
-    let countDown = showText? 1750 : 0;
+  signInUser(email: string, password: string, showText: boolean = true) {
+    let countDown = showText ? 1750 : 0;
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         this.loginFailed = false;
-        if(showText)this.enableInfoBanner('Sign-In Succesfully');
-        this.initializeCurrentMember(); 
+        if (showText) this.enableInfoBanner('Sign-In Succesfully');
+        this.initializeCurrentMember();
       })
       .then(() => {
         setTimeout(() => {
@@ -73,11 +73,11 @@ export class AuthenticationService {
     const member = await firstValueFrom(this.currentMember$);
     if (!member) {
       console.error('Aktueller Benutzer ist nicht verfügbar.');
-      return null; 
+      return null;
     }
     return member;
   }
-  
+
   async updateLoginStatus(boolean: boolean) {
     const washingtonRef = doc(this.getReference(), "member", this.getCurrentUserUid());
     await updateDoc(washingtonRef, {
@@ -106,7 +106,6 @@ export class AuthenticationService {
         };
         this.currentMemberSubject.next(member);
       } else {
-        console.log('Mitgliedsdaten nicht gefunden!');
         this.currentMemberSubject.next(null);
       }
     });
@@ -124,7 +123,7 @@ export class AuthenticationService {
           this.initializeCurrentMember();
           return;
         }
-        this.memberDocSubscription?.(); 
+        this.memberDocSubscription?.();
         this.memberDocSubscription = onSnapshot(memberDoc, (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
@@ -143,7 +142,7 @@ export class AuthenticationService {
       }
     });
   }
-  
+
   async updateAuthProfileData(currentMember: Member): Promise<void> {
     try {
       const user = this.auth.currentUser;
@@ -159,8 +158,8 @@ export class AuthenticationService {
     }
   }
 
- async signOutUser() {
-   await this.updateLoginStatus(false);
+  async signOutUser() {
+    await this.updateLoginStatus(false);
     signOut(this.auth).then(() => {
       this.router.navigate(['login']);
     }).catch((error) => {

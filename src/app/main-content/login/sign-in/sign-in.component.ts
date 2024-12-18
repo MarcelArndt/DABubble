@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { SignUpService } from '../../../../services/sign-up/sign-up.service';
-import { GoogleAuthProvider, signInWithPopup} from '@angular/fire/auth';
+import { GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { NavigationServiceService } from '../../../../services/NavigationService/navigation-service.service';
 
 
@@ -12,7 +12,7 @@ import { NavigationServiceService } from '../../../../services/NavigationService
   selector: 'app-sign-in',
   standalone: true,
   imports: [
-    InputFieldComponent, 
+    InputFieldComponent,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
@@ -24,7 +24,7 @@ export class SignInComponent {
   email: string = '';
   password: string = '';
 
-  constructor(public auth: AuthenticationService, private router: Router, public signUp: SignUpService, public navigation: NavigationServiceService ) {}
+  constructor(public auth: AuthenticationService, private router: Router, public signUp: SignUpService, public navigation: NavigationServiceService) { }
 
   myFormLogin = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -43,15 +43,11 @@ export class SignInComponent {
 
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
-      event.preventDefault(); 
+      event.preventDefault();
       if (this.myFormLogin.valid) {
         this.signInUser();
       }
     }
-  }
-
-  sendClickToParentPageCounter(index: number = 0) {
-    this.eventInSignIn.emit(index);
   }
 
   signInUser() {
@@ -60,40 +56,39 @@ export class SignInComponent {
     this.auth.signInUser(this.email, this.password);
   }
 
-  fillValues(){
+  fillValues() {
     this.email = this.myFormLogin.value.email || '';
     this.password = this.myFormLogin.value.password || '';
   }
 
-  async checkAlreadySignIn(){
-    if(!await this.signUp.checkIsEmailAlreadyExists(this.signUp.userEmail)){
-      this.sendClickToParentPageCounter(2);
+  async checkAlreadySignIn() {
+    let isAccAlreadySignIn = await this.signUp.checkIsEmailAlreadyExists(this.signUp.userEmail);
+    if (!isAccAlreadySignIn) {
+      this.navigation.navToPage(2);
     } else {
-      
       this.router.navigate(['start']);
     }
   }
 
-  async guestLogin(){
+  async guestLogin() {
     this.fillValues();
     this.navigation.reset();
     this.auth.signInUser('guest@example.de', '9867534210');
   }
 
-  async googleSignIn(){
+  async googleSignIn() {
     this.navigation.reset();
     this.signUp.isGoogleAcc = true;
     signInWithPopup(this.auth.auth, this.signUp.googleProvider)
-    .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const user = result.user;
-      this.signUp.userEmail = user.email || '';
-      this.signUp.fullName = user.displayName || '';
-      this.signUp.password = '123456';
-      this.checkAlreadySignIn();
-    }).catch((error) => {
-    });
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const user = result.user;
+        this.signUp.userEmail = user.email || '';
+        this.signUp.fullName = user.displayName || '';
+        this.signUp.password = 'leftEmpty';
+        this.checkAlreadySignIn();
+      }).catch((error) => {
+      });
   }
-
 
 }

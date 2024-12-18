@@ -1,6 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
@@ -9,12 +8,12 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const firebaseConfig = {
-  "projectId": "dabubble-2a6f6",
-  "appId": "1:192907769965:web:a81d0541d7297d673ea764",
-  "storageBucket": "dabubble-2a6f6.appspot.com",
-  "apiKey": "AIzaSyAhm5cFWdasUGKr8ujq9Mp45pCnZteW34c",
-  "authDomain": "dabubble-2a6f6.firebaseapp.com",
-  "messagingSenderId": "192907769965"
+  "projectId": "project-dabubble-ma",
+  "appId": "1:891794878471:web:4645b847fddd5fbbe43aa2",
+  "storageBucket": "project-dabubble-ma.firebasestorage.app",
+  "apiKey": "AIzaSyDDTfexRUg7qWc2S-objYt5zK4PHcOY7cw",
+  "authDomain": "project-dabubble-ma.firebaseapp.com",
+  "messagingSenderId": "891794878471"
 }
 
 export const appConfig: ApplicationConfig = {
