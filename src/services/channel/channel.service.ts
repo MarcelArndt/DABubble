@@ -10,12 +10,11 @@ import { combineLatest, map, Observable } from 'rxjs';
 })
 export class ChannelService {
 
-  currentChannelId: string = 'uZaX2y9zpsBqyaOddLWh';
-
+  currentChannelId: string = 'LqoRgWxH3BgshbeQkVn3';
 
   constructor(
     private authenticationService: AuthenticationService,
-  ){
+  ) {
   }
 
   getAllAccessableChannelsFromFirestoreObservable(currentMember: Member): Observable<Channel[]> {
@@ -35,8 +34,7 @@ export class ChannelService {
       map(([publicChannels, privateChannels]) => [...publicChannels, ...privateChannels])
     );
   }
-  
-  
+
   async removeMemberIdFromChannel(memberId: string, channelId: string) {
     const channelRef = doc(this.authenticationService.getReference(), 'channels', channelId);
     const channelSnap = await getDoc(channelRef);
@@ -48,8 +46,6 @@ export class ChannelService {
       console.error('Channel document does not exist:', channelId);
     }
   }
-  
-  
 
   async updateChannelDetails(channelId: string, updates: Partial<Channel>) {
     if (!channelId) {
@@ -64,23 +60,20 @@ export class ChannelService {
     }
   }
 
-
   sortChannelsByDate(channels: Channel[]): Channel[] {
     return channels.sort((a, b) => {
       const dateA = this.getTimestampAsDate(a.createdAt).getTime();
       const dateB = this.getTimestampAsDate(b.createdAt).getTime();
-      return dateB - dateA; 
+      return dateB - dateA;
     });
   }
-  
 
   private getTimestampAsDate(timestamp: any): Date {
     if (timestamp && typeof timestamp.toDate === 'function') {
-      return timestamp.toDate(); 
+      return timestamp.toDate();
     }
-    return new Date(timestamp); 
+    return new Date(timestamp);
   }
-  
 
   async getChannelById(channelId: string): Promise<Channel | null> {
     try {
@@ -107,7 +100,6 @@ export class ChannelService {
       return null;
     }
   }
-  
 
   async getAllPublicChannelsFromFirestore(onChannelsUpdated: (channels: Channel[]) => void): Promise<void> {
     const channelsCollection = collection(this.authenticationService.getReference(), 'channels');
@@ -125,13 +117,12 @@ export class ChannelService {
           createdAt: data['createdAt'] || '',
         };
       })
-      .filter((channel) => channel.isPublic === true); 
+        .filter((channel) => channel.isPublic === true);
       onChannelsUpdated(channels);
     }, (error) => {
       console.error("Fehler beim Abrufen der Channels: ", error);
     });
   }
-
 
   getAllChannelsWithChannelIdsFromCurrentUser(
     currentMember: Member,
@@ -153,13 +144,12 @@ export class ChannelService {
             createdAt: data['createdAt'] || '',
           };
         })
-        .filter((channel) => currentMember.channelIds.includes(channel.id)); 
-      onChannelsUpdated(channels); 
+        .filter((channel) => currentMember.channelIds.includes(channel.id));
+      onChannelsUpdated(channels);
     }, (error) => {
       console.error('Fehler beim Abrufen der Channels: ', error);
     });
   }
-
 
   getAllChannelsFromFirestore(): void {
     const channelsCollection = collection(this.authenticationService.getReference(), 'channels');
@@ -178,9 +168,8 @@ export class ChannelService {
             createdAt: data['createdAt'] || '',
           };
         })
-      })
+    })
   }
-  
 
   async addChannelToFirebase(channel: Channel) {
     const firestore = this.authenticationService.getReference(); // Firestore-Instanz
@@ -204,19 +193,18 @@ export class ChannelService {
     });
   }
 
-
   async addChannelIdToMembers(memberIds: string[], channelId: string) {
     const firestore = this.authenticationService.getReference();
     const batch = writeBatch(firestore);
     memberIds.forEach((memberId) => {
-      const memberRef = doc(firestore, "member", memberId); 
+      const memberRef = doc(firestore, "member", memberId);
       batch.update(memberRef, {
         channelIds: arrayUnion(channelId),
       });
     });
     await batch.commit();
   }
-  
+
 
   async addChannelIdToCurrentUser(docRefid: string) {
     const userUid = this.authenticationService.getCurrentUserUid();
@@ -228,9 +216,8 @@ export class ChannelService {
       channelIds: arrayUnion(docRefid),
     });
   }
-  
 
-  async updateMemberIdsToChannel(channelId: string, memberIds: string[]) {  
+  async updateMemberIdsToChannel(channelId: string, memberIds: string[]) {
     if (!channelId) {
       throw new Error("Invalid channelId provided.");
     };
@@ -241,5 +228,5 @@ export class ChannelService {
     });
     await batch.commit();
   }
-  
+
 }

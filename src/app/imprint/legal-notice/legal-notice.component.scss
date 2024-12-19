@@ -1,37 +1,44 @@
 @import '../../../mixin.scss';
 
-.impressum{
+.impressum {
     width: 100%;
     @include figtree($fw: 500, $fs: 18px, $c: var(--text-black));
+
     @include respond-to-maxWidth(medium) {
         text-align: center;
         padding: 0px 0px 48px 0px;
     }
 }
 
-h1{
+h1 {
     @include figtree($fw: 500, $fs: clamp(46px, 4vw, 62px), $c: var(--text-blue));
     padding-bottom: 12px;
+
     @include respond-to-maxWidth(medium) {
         text-align: center;
     }
 }
 
-a{
-    @include figtree($fw: 400, $fs: 16px, $c: var(--text-blue)) ;
-    color:var(--text-blue) !important;
+a {
+    @include figtree($fw: 400, $fs: 16px, $c: var(--text-blue));
+    color: var(--text-blue) !important;
     text-wrap: nowrap;
+
     &:hover {
         cursor: pointer;
         color: var(--purple-2) !important;
     }
 }
 
-strong{
-    @include figtree($fw:400, $fs: 24px, $c: var(--text-blue));
+strong {
+    @include figtree($fw: 400, $fs: 24px, $c: var(--text-blue));
 }
 
-.info-card{
+.margin-top-extra {
+    margin-top: 32px;
+}
+
+.info-card {
     min-height: 335px;
     width: 30%;
     height: auto;
@@ -40,22 +47,14 @@ strong{
     text-align: center;
     @include dFlex($jc: center, $ai: center);
     flex-direction: column;
-    @include figtree($fw: 500, $fs:16px, $c: var(--text-black));
-    strong{
+    @include figtree($fw: 500, $fs: 16px, $c: var(--text-black));
+
+    strong {
         @include figtree($fw: 500, $fs: 18px, $c: var(--text-blue));
         padding-bottom: 12px;
     }
-    @include respond-to-maxWidth(medium) {
-        padding-left: 24px;
-        flex-direction: row;
-        justify-content: start;
-        gap: 5%;
-        margin: 12px 0px 0px -24px;
-        width: calc(80% - 24px);
-        min-height: auto;
-    }
 
-    @include respond-to-maxWidth(semiMedium) {
+    @include respond-to-maxWidth(medium) {
         padding-left: 0px;
         padding-right: 0px;
         flex-direction: column;
@@ -65,53 +64,50 @@ strong{
     }
 }
 
-.profil-content{
+.profil-content {
     width: 100%;
 
     @include respond-to-maxWidth(medium) {
-        text-align: left;
-    }
-
-    @include respond-to-maxWidth(semiMedium) {
         text-align: center;
     }
- 
 }
 
-.card-holder-wrapper{
-    margin-bottom: 16px;
+.card-holder-wrapper {
     width: 100%;
-    @include dFlex($jc: center, $ai: center);
+    @include dFlex($jc: start, $ai: start);
     gap: 5%;
     flex-wrap: wrap;
+
     @include respond-to-maxWidth(medium) {
-        display: flex;
+        @include dFlex($jc: center, $ai: center);
         margin-left: 0px;
-        gap: 32px;
+        gap: 0px;
+        max-width: 300px;
     }
 
     @include respond-to-maxWidth(semiMedium) {
-        margin-left: 12px;
         padding: 0px;
         margin-bottom: 48px;
+        max-width: 100%;
     }
 }
 
-.black{ 
+.black {
     font-weight: 500;
     color: var(--text-black) !important;
 }
 
-.profil-pic{
+.profil-pic {
     padding-bottom: 12px;
     width: 120px;
     height: 120px;
     aspect-ratio: 1/1;
-    img{
+
+    img {
         width: 120px;
         height: 120px;
         aspect-ratio: 1 / 1;
-        border: 3px solid var(--purple-3) ;
+        border: 3px solid var(--purple-3);
         border-radius: 50%;
         width: 100%;
         object-fit: contain;
@@ -122,7 +118,7 @@ strong{
         padding-top: 24px;
         padding-bottom: 24px;
 
-        img{
+        img {
             width: 100%;
             object-fit: cover;
             object-position: center;
@@ -134,39 +130,5 @@ strong{
         height: 120px;
         width: 120px;
         aspect-ratio: 1/1;
-    }
-}
-
-.reverse{
-    @include respond-to-maxWidth(medium) {
-        flex-direction: row-reverse;
-        text-align: right;
-        .profil-pic{
-            margin-right: 32px;
-        }
-        .profil-content{
-            @include dFlex($jc: end, $ai: end);
-            flex-direction: column;
-            text-align: right;
-            width: 100%;
-        }
-    }
-
-    @include respond-to-maxWidth(semiMedium) {
-
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        .profil-pic{
-            margin-right: 0px;
-        }
-
-        .profil-content{
-            @include dFlex($jc: center, $ai: center);
-            flex-direction: column;
-            text-align: center;
-            width: 100%;
-        }
     }
 }

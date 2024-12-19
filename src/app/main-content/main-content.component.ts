@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { MainHeaderComponent } from '../shared/header/main-header.component';
 import { ChatComponent } from "./chat/chat.component";
 import { ThreadComponent } from "./thread/thread.component";
@@ -17,8 +18,9 @@ import { MessagesService } from '../../services/messages/messages.service';
     ChatComponent,
     ThreadComponent,
     DevspaceComponent,
-    CommonModule
-],
+    CommonModule,
+    RouterModule
+  ],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss'
 })
@@ -28,20 +30,25 @@ export class MainContentComponent {
   chatAsTopLayer: boolean = false;
   threadAsTopLayer: boolean = false;
   threadIsOpen: boolean = false;
-  private alreadyResized: boolean = false; 
-  private isWidthAbove1285px: boolean = window.innerWidth > 1285;  
-  @ViewChild('devSpace') devSpace!: DevspaceComponent; 
+  private alreadyResized: boolean = false;
+  private isWidthAbove1285px: boolean = window.innerWidth > 1285;
+  @ViewChild('devSpace') devSpace!: DevspaceComponent;
 
 
   constructor(
-    private auth: AuthenticationService, 
+    private auth: AuthenticationService,
     public messageService: MessagesService,
     public mainContentService: MainContentService,
+    public router: Router,
   ) {
     auth.observerUser();
   }
 
   ngOnInit() {
+    if (!this.auth.getCurrentUserId()) {
+      this.router.navigate(['login']);
+      return
+    }
     this.mainContentService.devSpaceAsTopLayerObs.subscribe(value => {
       this.devSpaceAsTopLayer = value;
     });
@@ -77,5 +84,5 @@ export class MainContentComponent {
     }
   }
 
-  
+
 }

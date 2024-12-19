@@ -1,4 +1,4 @@
-<div  *ngIf="mainContentService.navBarIsClosed$ | async" @toggleNavBar class="serverNav nav-Bar">
+<div *ngIf="mainContentService.navBarIsClosed$ | async" @toggleNavBar class="serverNav nav-Bar">
     <div class="serverNavContent nav-item" mode="side">
         <app-search-bar-for-devspace></app-search-bar-for-devspace>
         <div class="titleRow">
@@ -10,25 +10,18 @@
                 <mat-icon>edit_square</mat-icon>
             </button>
         </div>
-        <app-channel-list
-        [ngClass]="{'min-height-160px': channelsAreVisible}"
-        [channels]="channels"
-        [channelsAreVisible]="channelsAreVisible"
-        (toggleChannels)="dropChannels()"
-        (createChannel)="openCreateChannelDialog()"
-        (selectChannel)="messageService.checkWindowAndOpenChannel($event)"
-        ></app-channel-list>
+        <app-channel-list [ngClass]="{'min-height-160px': channelsAreVisible}" [channels]="channels"
+            [channelsAreVisible]="channelsAreVisible" (toggleChannels)="dropChannels()"
+            (createChannel)="openCreateChannelDialog()"
+            (selectChannel)="messageService.checkWindowAndOpenChannel($event)"></app-channel-list>
         <div *ngIf="channelsAreVisible" class="addChannelButton" (click)="openCreateChannelDialog()">
             <mat-icon class="material-icons">add_circle_outline</mat-icon>
             Add Channel
         </div>
-        <app-contact-list
-        [ngClass]="{'stretch': !channelsAreVisible}"
-        [contactsAreVisible]="contactsAreVisible"
-        [members]="members"
-        [currentMember]="currentMember"
-        (toggleContacts)="dropContacts()"
-        (selectContact)="openDirectMessage($event)">
+        <hr>
+        <app-contact-list [ngClass]="{'stretch': !channelsAreVisible}" [contactsAreVisible]="contactsAreVisible"
+            [members]="members" [currentMember]="currentMember" (toggleContacts)="dropContacts()"
+            (selectContact)="openDirectMessage($event)">
         </app-contact-list>
     </div>
 </div>
@@ -40,7 +33,8 @@
     } @else {
     <span>Close workspace menu</span>
     }
-    <svg [ngStyle]="{'transform': (mainContentService.navBarIsClosed$ | async) ? 'rotate(90deg)' : 'rotate(-90deg)'}" xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+    <svg [ngStyle]="{'transform': (mainContentService.navBarIsClosed$ | async) ? 'rotate(90deg)' : 'rotate(-90deg)'}"
+        xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
         <rect x="1" y="1.5" width="16" height="16" rx="1" stroke="black" stroke-width="2" />
         <path d="M6.71436 1.49997V17.5" stroke="black" stroke-width="2" />
         <path d="M10.143 11.7857L12.0752 9.85354C12.2704 9.65828 12.2704 9.3417 12.0752 9.14644L10.143 7.21428"
@@ -48,6 +42,7 @@
     </svg>
 </button>
 
-<button *ngIf="mainContentService.navBarIsClosed$ | async" class="mobileWriteAMessageButton" (click)="openWriteAMessage()">
-  <mat-icon class="editSquareIconAtMobileWriteAMessageButton">edit_square</mat-icon>
+<button *ngIf="mainContentService.navBarIsClosed$ | async" class="mobileWriteAMessageButton"
+    (click)="openWriteAMessage()">
+    <mat-icon class="editSquareIconAtMobileWriteAMessageButton">edit_square</mat-icon>
 </button>
